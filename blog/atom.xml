@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Eduardo&#39;s blog</title>
+  <link href="https://ebellani.github.io/blog/"/>
+  
+    <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
+  
+  <updated>2023-05-01T13:39:01Z</updated>
+  <author>
+    <name>Eduardo Bellani</name>
+    
+  </author>
+  <generator>Hugo</generator>
+  <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>first post</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2020/first-post/"/>
+    <id>https://ebellani.github.io/blog/2020/first-post/</id>
+    <published>2020-03-01T00:00:00Z</published>
+    <updated>2020-03-01T00:00:00Z</updated>
+    <summary>you write text here
+  this how you use an image. the sides can be either left, right and center and it will be resized based on the user&amp;rsquo;s screen size. (original)    and here more text
+🗒️ alerts can be info
+ ⚠️ alerts can be warning
+ ❗ alerts can be danger
+ ✅ alerts can be success
+ </summary>
+    <content type="html">&lt;p&gt;you write text here&lt;/p&gt;
+
+
+
+
+
+
+
+
+&lt;div class=&#34;image image-center&#34;&gt;
+  &lt;figure&gt;
+    &lt;img
+      sizes=&#34;(min-width: 35em) 1500px, 100vw&#34;
+
+      
+      srcset=&#39;
+        
+          
+        
+          
+        
+          
+        
+          
+        &#39;
+
+      
+      
+      
+        src=&#34;https://ebellani.github.io/img/ebellani.jpg&#34;
+      
+      alt=&#34;
+this how you use an image. the sides can be either left, right and
+center and it will be resized based on the user&amp;#39;s screen size.
+&#34; loading=&#34;lazy&#34;/&gt;
+
+    &lt;figcaption&gt;
+      
+        &lt;em&gt;this how you use an image. the sides can be either left, right and
+center and it will be resized based on the user&amp;rsquo;s screen size.&lt;/em&gt;
+      
+      (&lt;a href=&#34;https://ebellani.github.io/img/ebellani.jpg&#34;&gt;original&lt;/a&gt;)
+    &lt;/figcaption&gt;
+  &lt;/figure&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and here more text&lt;/p&gt;
+&lt;div class=&#34;alert alert-info&#34;&gt;
+  &lt;p&gt;🗒️ alerts can be info&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;alert alert-warning&#34;&gt;
+  &lt;p&gt;⚠️ alerts can be warning&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;alert alert-danger&#34;&gt;
+  &lt;p&gt;❗ alerts can be danger&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;alert alert-success&#34;&gt;
+  &lt;p&gt;✅ alerts can be success&lt;/p&gt;
+&lt;/div&gt;
+
+</content>
+    
+    <category term="ataghere"/>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
+  
+</feed>

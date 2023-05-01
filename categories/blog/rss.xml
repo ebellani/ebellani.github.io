@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blog on Eduardo&#39;s blog</title>
+    <link>https://ebellani.github.io/categories/blog/</link>
+    <description>Recent content in blog on Eduardo&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 01 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>first post</title>
+      <link>https://ebellani.github.io/blog/2020/first-post/</link>
+      <pubDate>Sun, 01 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2020/first-post/</guid>
+      <description>you write text here
+  this how you use an image. the sides can be either left, right and center and it will be resized based on the user&amp;rsquo;s screen size. (original)    and here more text
+🗒️ alerts can be info
+ ⚠️ alerts can be warning
+ ❗ alerts can be danger
+ ✅ alerts can be success
+ </description>
+    </item>
+    
+    <item>
+      <title>blog section title</title>
+      <link>https://ebellani.github.io/blog/</link>
+      <pubDate>Thu, 01 Jan 1970 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
