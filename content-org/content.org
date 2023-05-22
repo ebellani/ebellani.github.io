@@ -58,7 +58,7 @@ description of first post
 
 you write text here
 
-#+attr_shortcode: :src /img/ebellani.jpg :side center
+#+attr_shortcode: :src /img/triqueta.svg :side center
 #+begin_image
 this how you use an image. the sides can be either left, right and
 center and it will be resized based on the user's screen size.
