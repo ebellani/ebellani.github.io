@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-05-01T13:39:01Z</updated>
+  <updated>2023-05-23T01:48:21Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -55,7 +55,7 @@
       
       
       
-        src=&#34;https://ebellani.github.io/img/ebellani.jpg&#34;
+        src=&#34;https://ebellani.github.io/img/triqueta.png&#34;
       
       alt=&#34;
 this how you use an image. the sides can be either left, right and
@@ -67,7 +67,7 @@ center and it will be resized based on the user&amp;#39;s screen size.
         &lt;em&gt;this how you use an image. the sides can be either left, right and
 center and it will be resized based on the user&amp;rsquo;s screen size.&lt;/em&gt;
       
-      (&lt;a href=&#34;https://ebellani.github.io/img/ebellani.jpg&#34;&gt;original&lt;/a&gt;)
+      (&lt;a href=&#34;https://ebellani.github.io/img/triqueta.png&#34;&gt;original&lt;/a&gt;)
     &lt;/figcaption&gt;
   &lt;/figure&gt;
 &lt;/div&gt;
