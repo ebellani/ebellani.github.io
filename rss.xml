@@ -22,14 +22,5 @@
  </description>
     </item>
     
-    <item>
-      <title>about title</title>
-      <link>https://ebellani.github.io/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/about/</guid>
-      <description>Write about yourself.</description>
-    </item>
-    
   </channel>
 </rss>
