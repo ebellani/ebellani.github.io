@@ -9,15 +9,6 @@
 :EXPORT_HUGO_SECTION: /
 :END:
 
-** About
-:PROPERTIES:
-:EXPORT_TITLE: about title
-:EXPORT_FILE_NAME: about
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :description About this site and me.
-:END:
-
-Write about yourself.
-
 ** Home
 :PROPERTIES:
 :EXPORT_TITLE: homepage title
@@ -30,8 +21,22 @@ Write about yourself.
 eduardo's blog description
 #+end_description
 
-this is your home page
+If you are a knowledge worker seeking to find a friend that believes
+truth exists and that parts of it can be reached via our rational
+powers, you are my audience.
 
+My name is Eduardo Bellani. My main interests with this page is to write
+about computer science, programming, philosophy from a moderate realist
+tradition, and leadership.
+
+I have been involved in the world of technology startups for more than
+15 years. As developer, manager, entrepreneur, director. Mostly with
+functional programming and research oriented projects/companies.
+
+
+- Disclaimer :: The opinions expressed herein are those of the author,
+  and should not be construed as representing the views of any
+  employers, past or present, of mine.
 
 * Blog                                                                :@blog:
 :PROPERTIES:
