@@ -1,5 +1,4 @@
 #+TITLE: eduardo's website title
-#+AUTHOR: eduardo bellani author
 
 #+HUGO_BASE_DIR: ../
 #+HUGO_PAIRED_SHORTCODES: alert image
@@ -46,50 +45,70 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_TITLE: blog section title
 :EXPORT_FILE_NAME: _index
-:EXPORT_DATE: 1970-01-01
 :END:
 #+begin_description
 this is the description of the blog section
 #+end_description
-** first post                                                      :ataghere:
+** An illustrated way to enable openVPN on Qubes OS 4.1.2         :security:
 :PROPERTIES:
-:EXPORT_FILE_NAME: first-post
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug first-post
-:EXPORT_DATE: 2020-03-01
+:EXPORT_FILE_NAME: vpn-qubes
+:EXPORT_DATE: 2023-07-01
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug vpn-qubes
 :END:
 #+begin_description
 description of first post
 #+end_description
 
-you write text here
+In my view, Qubes OS lives up to its motto: ~A reasonably secure
+operating system~. I use it for work and personal matters every day.
 
-#+attr_shortcode: :src /img/triquetra.png :side center
-#+begin_image
-this how you use an image. the sides can be either left, right and
-center and it will be resized based on the user's screen size.
-#+end_image
+One challenging bit, when you use it in a work setting specially, is to
+set up a VPN qube for your [[https://www.qubes-os.org/doc/glossary/#app-qube][app qubes]].
 
-and here more text
+There are probably other ways to do this, but the way I chose to
+structure my setup was the following:
 
-#+attr_shortcode: :class info
-#+begin_alert
-alerts can be info
-#+end_alert
+#+caption: VPN network structure on Qubes
+#+begin_src plantuml :file vpn_qubes.png :exports results :cache yes
+  @startuml
 
-#+attr_shortcode: :class warning
-#+begin_alert
-alerts can be warning
-#+end_alert
+  agent "sys-net" as sys_net      #Red
+  agent "sys-firewall" as sys_firewall #Green
+  agent "personal" as personal     #Yellow
+  agent "work-vpn" as work_vpn     #Green
+  agent "work" as work         #Blue
 
-#+attr_shortcode: :class danger
-#+begin_alert
-alerts can be danger
-#+end_alert
+  personal     -up-> sys_firewall
+  work         -up-> work_vpn
+  work_vpn     -up-> sys_firewall
+  sys_firewall -up-> sys_net
 
-#+attr_shortcode: :class success
-#+begin_alert
-alerts can be success
-#+end_alert
+  @enduml
+#+end_src
 
+#+attr_shortcode: :src vpn_qubes.png :side left
+#+RESULTS[92b96011d1891496217bb07761ac26457b642d99]:
+[[file:vpn_qubes.png]]
+
+After you create your [[https://www.qubes-os.org/doc/glossary/#app-qube][app qube]] for the VPN and assuming your template is
+Debian, go to the template terminal (Debian 11) and run:
+
+#+begin_src shell
+  $ sudo apt install openvpn network-manager-openvpn-gnome
+#+end_src
+
+After this you should enable the network-manager service:
+
+[[./vpn-network-service.png]]
+
+Here comes the (for me) obscure trick: after importing your opvn file
+through the network manager:
+
+1. Go to IPv4 Settings tab
+2. Click to the ~Routes...~ button
+3. Select the ~Use this connection only for resources on its network~
+
+
+Why does it work? I don't know. If you do, please email me.
 
 * Footnotes
