@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>blog on Eduardo&#39;s blog</title>
-    <link>https://ebellani.github.io/categories/blog/</link>
-    <description>Recent content in blog on Eduardo&#39;s blog</description>
+    <title>security on Eduardo&#39;s blog</title>
+    <link>https://ebellani.github.io/tags/security/</link>
+    <description>Recent content in security on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/tags/security/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>
       <link>https://ebellani.github.io/blog/2023/vpn-qubes/</link>
@@ -17,15 +17,6 @@
 One challenging bit, when you use it in a work setting specially, is to set up a VPN qube for your app qubes.
 There are probably other ways to do this, but the way I chose to structure my setup was the following:
  After you create your app qube for the VPN and assuming your template is Debian, go to the template terminal (Debian 11) and run:</description>
-    </item>
-    
-    <item>
-      <title>blog section title</title>
-      <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/</guid>
-      <description></description>
     </item>
     
   </channel>

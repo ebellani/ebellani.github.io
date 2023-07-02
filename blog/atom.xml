@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-05-27T02:55:15Z</updated>
+  <updated>2023-07-02T00:27:52Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -14,84 +14,41 @@
   <id>https://ebellani.github.io/blog/</id>
   
   <entry>
-    <title>first post</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2020/first-post/"/>
-    <id>https://ebellani.github.io/blog/2020/first-post/</id>
-    <published>2020-03-01T00:00:00Z</published>
-    <updated>2020-03-01T00:00:00Z</updated>
-    <summary>you write text here
-  this how you use an image. the sides can be either left, right and center and it will be resized based on the user&amp;rsquo;s screen size. (original)    and here more text
-🗒️ alerts can be info
- ⚠️ alerts can be warning
- ❗ alerts can be danger
- ✅ alerts can be success
- </summary>
-    <content type="html">&lt;p&gt;you write text here&lt;/p&gt;
+    <title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/vpn-qubes/"/>
+    <id>https://ebellani.github.io/blog/2023/vpn-qubes/</id>
+    <published>2023-07-01T00:00:00Z</published>
+    <updated>2023-07-01T00:00:00Z</updated>
+    <summary>In my view, Qubes OS lives up to its motto: A reasonably secure operating system. I use it for work and personal matters every day.
+One challenging bit, when you use it in a work setting specially, is to set up a VPN qube for your app qubes.
+There are probably other ways to do this, but the way I chose to structure my setup was the following:
+ After you create your app qube for the VPN and assuming your template is Debian, go to the template terminal (Debian 11) and run:</summary>
+    <content type="html">&lt;p&gt;In my view, Qubes OS lives up to its motto: &lt;code&gt;A reasonably secure operating system&lt;/code&gt;. I use it for work and personal matters every day.&lt;/p&gt;
+&lt;p&gt;One challenging bit, when you use it in a work setting specially, is to
+set up a VPN qube for your &lt;a href=&#34;https://www.qubes-os.org/doc/glossary/#app-qube&#34;&gt;app qubes&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;There are probably other ways to do this, but the way I chose to
+structure my setup was the following:&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/vpn_qubes.png&#34;/&gt;
+&lt;/figure&gt;
 
+&lt;p&gt;After you create your &lt;a href=&#34;https://www.qubes-os.org/doc/glossary/#app-qube&#34;&gt;app qube&lt;/a&gt; for the VPN and assuming your template is
+Debian, go to the template terminal (Debian 11) and run:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  $ sudo apt install openvpn network-manager-openvpn-gnome
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After this you should enable the network-manager service:&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/vpn-network-service.png&#34;/&gt;
+&lt;/figure&gt;
 
-
-
-
-
-
-
-&lt;div class=&#34;image image-center&#34;&gt;
-  &lt;figure&gt;
-    &lt;img
-      sizes=&#34;(min-width: 35em) 1500px, 100vw&#34;
-
-      
-      srcset=&#39;
-        
-          
-        
-          
-        
-          
-        
-          
-        &#39;
-
-      
-      
-      
-        src=&#34;https://ebellani.github.io/img/triquetra.png&#34;
-      
-      alt=&#34;
-this how you use an image. the sides can be either left, right and
-center and it will be resized based on the user&amp;#39;s screen size.
-&#34; loading=&#34;lazy&#34;/&gt;
-
-    &lt;figcaption&gt;
-      
-        &lt;em&gt;this how you use an image. the sides can be either left, right and
-center and it will be resized based on the user&amp;rsquo;s screen size.&lt;/em&gt;
-      
-      (&lt;a href=&#34;https://ebellani.github.io/img/triquetra.png&#34;&gt;original&lt;/a&gt;)
-    &lt;/figcaption&gt;
-  &lt;/figure&gt;
-&lt;/div&gt;
-
-&lt;p&gt;and here more text&lt;/p&gt;
-&lt;div class=&#34;alert alert-info&#34;&gt;
-  &lt;p&gt;🗒️ alerts can be info&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;alert alert-warning&#34;&gt;
-  &lt;p&gt;⚠️ alerts can be warning&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;alert alert-danger&#34;&gt;
-  &lt;p&gt;❗ alerts can be danger&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;alert alert-success&#34;&gt;
-  &lt;p&gt;✅ alerts can be success&lt;/p&gt;
-&lt;/div&gt;
-
+&lt;p&gt;Here comes the (for me) obscure trick: after importing your opvn file
+through the network manager:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Go to IPv4 Settings tab&lt;/li&gt;
+&lt;li&gt;Click to the &lt;code&gt;Routes...&lt;/code&gt; button&lt;/li&gt;
+&lt;li&gt;Select the &lt;code&gt;Use this connection only for resources on its network&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Why does it work? I don&amp;rsquo;t know. If you do, please email me.&lt;/p&gt;
 </content>
     
-    <category term="ataghere"/>
+    <category term="security"/>
     
     
     <category term="blog"/>
