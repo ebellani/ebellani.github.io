@@ -5,13 +5,90 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-07-02T00:27:52Z</updated>
+  <updated>2023-07-12T00:57:09Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/ai-intellectual-act/"/>
+    <id>https://ebellani.github.io/blog/2023/ai-intellectual-act/</id>
+    <published>2023-07-11T00:00:00Z</published>
+    <updated>2023-07-11T00:00:00Z</updated>
+    <summary>I have come across people claiming to fear being replaced by bots, specially the given the novelty of chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
+The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
+ Figure 1: Rudolph, Conrad.</summary>
+    <content type="html">&lt;p&gt;I have come across people claiming to fear being replaced by bots,
+specially the given the novelty of chatGPT and other &lt;code&gt;large language models (LLM)&lt;/code&gt;. In this article I&amp;rsquo;ll take such statements at face value,
+despite my reservations about the sincerity of many of them.&lt;/p&gt;
+&lt;p&gt;The short answer is to the question in the title is no, you will not get
+replaced. The longer answer is below.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/mystic-ark-hires-1.jpg&#34;
+         alt=&#34;Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;In order to understand if a LLM &lt;code&gt;can&lt;/code&gt; replace you, you need to
+understand what it is, since &lt;em&gt;agere sequitur esse&lt;/em&gt; (action follows
+being). Here&amp;rsquo;s what an authoritative source has to say about it:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The basic concept of ChatGPT is at some level rather simple. Start from
+a huge sample of human-created text from the web, books, etc. Then train
+a neural net to generate text that’s “like this”. And in particular,
+make it able to start from a “prompt” and then continue with text that’s
+“like what it’s been trained with”.&lt;/p&gt;
+&lt;p&gt;As we’ve seen, the actual neural net in ChatGPT is made up of very
+simple elements—though billions of them. And the basic operation of the
+neural net is also very simple, consisting essentially of passing input
+derived from the text it’s generated so far “once through its elements”
+(without any loops, etc.) for every new word (or part of a word) that it
+generates. (Wolfram, Stephen, 2023)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;What it &lt;code&gt;does&lt;/code&gt; is basically statistical correlation. So, what the
+intellectual act of a person consists of? My summary of
+(Antônio Donato Paulo Rosa, 1993):&lt;/p&gt;
+&lt;p&gt;The intellectual act is a spiritual act, in contrast to a material
+one. It consists in abstracting the essential form from individual
+sensible perception. Grasping the universals out of particulars.&lt;/p&gt;
+&lt;p&gt;The last point is what I think underlies the actual fear. We live in a
+nominalist age, such that(De Wulf, Maurice, 1911) it&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; denies the existence of abstract and universal concepts, and refuses to
+admit that the intellect has the power of engendering them.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Therein lies the confusion that generates the fear. The correct
+interpretation of reality is what has been traditionally called Moderate
+Realism(De Wulf, Maurice, 1911):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Moderate Realism, finally, declares that there are universal concepts
+representing faithfully realities that are not universal.&lt;/p&gt;
+&lt;p&gt;How can there be harmony between the former and the latter? The latter
+are particular, but we have the power of representing them to ourselves
+abstractly. Now the abstract type, when the intellect considers it
+reflectively and contrasts it with the particular subjects in which it
+is realized or capable of being realized, is attributable indifferently
+to any and all of them. This applicability of the abstract type to the
+individuals is its universality.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Fear not them, and trust in what you are analogous to, which is the
+Intellect itself&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;p&gt;Antônio Donato Paulo Rosa (1993). &lt;em&gt;A Educação segundo a Filosofia Perene&lt;/em&gt;, USP.&lt;/p&gt;
+&lt;p&gt;De Wulf, Maurice (1911). &lt;em&gt;Nominalism, Realism, Conceptualism&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Wolfram, Stephen (2023). &lt;em&gt;What Is ChatGPT Doing &amp;hellip; and Why Does It Work?&lt;/em&gt;, Stephen Wolfram Writings.&lt;/p&gt;
+</content>
+    
+    <category term="philosophy"/>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>

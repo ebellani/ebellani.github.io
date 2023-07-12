@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
+      <link>https://ebellani.github.io/blog/2023/ai-intellectual-act/</link>
+      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2023/ai-intellectual-act/</guid>
+      <description>I have come across people claiming to fear being replaced by bots, specially the given the novelty of chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
+The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
+ Figure 1: Rudolph, Conrad.</description>
+    </item>
+    
     <item>
       <title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>
       <link>https://ebellani.github.io/blog/2023/vpn-qubes/</link>
