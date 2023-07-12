@@ -2,6 +2,7 @@
 #+bibliography: ./refs.bib
 #+HUGO_BASE_DIR: ../
 #+HUGO_PAIRED_SHORTCODES: alert image
+#+AUTHOR: eduardo bellani
 
 * Pages
 :PROPERTIES:
