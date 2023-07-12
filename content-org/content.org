@@ -1,5 +1,5 @@
 #+TITLE: eduardo's website title
-
+#+bibliography: ./refs.bib
 #+HUGO_BASE_DIR: ../
 #+HUGO_PAIRED_SHORTCODES: alert image
 
@@ -49,6 +49,82 @@ functional programming and research oriented projects/companies.
 #+begin_description
 this is the description of the blog section
 #+end_description
+** Is chatGPT replacing you? or: The nature of the intellectual act :philosophy:
+:PROPERTIES:
+:EXPORT_FILE_NAME: ai-intellectual-act
+:EXPORT_DATE: 2023-07-11
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug ai-intellectual-act
+:END:
+
+I have come across people claiming to fear being replaced by bots,
+specially the given the novelty of chatGPT and other ~large language
+models (LLM)~. In this article I'll take such statements at face value,
+despite my reservations about the sincerity of many of them.
+
+The short answer is to the question in the title is no, you will not get
+replaced. The longer answer is below.
+
+#+attr_shortcode: :side left
+#+caption: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.
+[[./mystic-ark-hires-1.jpg]]
+
+In order to understand if a LLM ~can~ replace you, you need to
+understand what it is, since /agere sequitur esse/ (action follows
+being). Here's what an authoritative source has to say about it:
+
+#+begin_quote
+The basic concept of ChatGPT is at some level rather simple. Start from
+a huge sample of human-created text from the web, books, etc. Then train
+a neural net to generate text that’s “like this”. And in particular,
+make it able to start from a “prompt” and then continue with text that’s
+“like what it’s been trained with”.
+
+As we’ve seen, the actual neural net in ChatGPT is made up of very
+simple elements—though billions of them. And the basic operation of the
+neural net is also very simple, consisting essentially of passing input
+derived from the text it’s generated so far “once through its elements”
+(without any loops, etc.) for every new word (or part of a word) that it
+generates. [cite:@chat_gpt_wolfram_2023]
+#+end_quote
+
+What it ~does~ is basically statistical correlation. So, what the
+intellectual act of a person consists of? My summary of
+[cite:@don_educ_fil]:
+
+The intellectual act is a spiritual act, in contrast to a material
+one. It consists in abstracting the essential form from individual
+sensible perception. Grasping the universals out of particulars.
+
+The last point is what I think underlies the actual fear. We live in a
+nominalist age, such that[cite:@wulf_universals] it
+
+#+begin_quote
+... denies the existence of abstract and universal concepts, and refuses to
+admit that the intellect has the power of engendering them.
+#+end_quote
+
+Therein lies the confusion that generates the fear. The correct
+interpretation of reality is what has been traditionally called Moderate
+Realism[cite:@wulf_universals]:
+
+#+begin_quote
+Moderate Realism, finally, declares that there are universal concepts
+representing faithfully realities that are not universal.
+
+How can there be harmony between the former and the latter? The latter
+are particular, but we have the power of representing them to ourselves
+abstractly. Now the abstract type, when the intellect considers it
+reflectively and contrasts it with the particular subjects in which it
+is realized or capable of being realized, is attributable indifferently
+to any and all of them. This applicability of the abstract type to the
+individuals is its universality.
+#+end_quote
+
+Fear not them, and trust in what you are analogous to, which is the
+Intellect itself
+
+#+print_bibliography:
+
 ** An illustrated way to enable openVPN on Qubes OS 4.1.2         :security:
 :PROPERTIES:
 :EXPORT_FILE_NAME: vpn-qubes
