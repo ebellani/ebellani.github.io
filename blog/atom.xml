@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-07-12T01:12:12Z</updated>
+  <updated>2023-07-30T00:32:40Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -14,17 +14,72 @@
   <id>https://ebellani.github.io/blog/</id>
   
   <entry>
+    <title>What is a good manager?</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/what-is-a-good-manager/"/>
+    <id>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</id>
+    <published>2023-07-29T00:00:00Z</published>
+    <updated>2023-07-29T00:00:00Z</updated>
+    <summary>It is hard to do science without proper definitions. So what is a manager?
+Abstracting from (Horstman 2016), my definition of a manager is the following:
+A manager balances present output with creating the conditions of future output.
+ Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
+  As one can see, this definition is the same as the one for an investor. That is correct.</summary>
+    <content type="html">&lt;p&gt;It is hard to do science without proper definitions. So what is a manager?&lt;/p&gt;
+&lt;p&gt;Abstracting from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Horstman 2016&lt;/a&gt;), my definition of a
+manager is the following:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;A manager balances present output with creating the conditions of future output.&lt;/code&gt;&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/good-shepherd.png&#34;
+         alt=&#34;Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The Good Sheperd, emblem found in a Roman catacomb, sec III&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;As one can see, this definition is the same as the one for an
+investor. That is correct. A manager is an investor of company&amp;rsquo;s
+resources (human or otherwise). He deploys them with the expectation of
+generating results in the present. If he is good, he deploys them in
+such a way as to create conditions to generate &lt;strong&gt;more&lt;/strong&gt; results in the
+future.&lt;/p&gt;
+&lt;p&gt;As an illustration, a manager can usually deliver more results in the
+present by burning up people. It probably will increase turnover in the
+future. Is it the right choice? Only with a holistic view and sound
+judgement can one decide correctly.&lt;/p&gt;
+&lt;p&gt;Given this definition, one can easily see that a good manager is &lt;strong&gt;not&lt;/strong&gt;
+some things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;An extrovert&lt;/li&gt;
+&lt;li&gt;A good communicator&lt;/li&gt;
+&lt;li&gt;A frequent yeller&lt;/li&gt;
+&lt;li&gt;Someone who cares&lt;/li&gt;
+&lt;li&gt;Someone who is agreeable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;PS: A complicating factor for the manager is that he is trying to
+balance a system over time, but the balancing point itself changes.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Horstman, M. 2016. &lt;i&gt;The Effective Manager&lt;/i&gt;. Wiley. &lt;a href=&#34;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&#34;&gt;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    <category term="management"/>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
+  
+  <entry>
     <title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
     <link rel="alternate" href="https://ebellani.github.io/blog/2023/ai-intellectual-act/"/>
     <id>https://ebellani.github.io/blog/2023/ai-intellectual-act/</id>
     <published>2023-07-11T00:00:00Z</published>
     <updated>2023-07-11T00:00:00Z</updated>
-    <summary>I have come across people claiming to fear being replaced by bots, specially the given the novelty of chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
+    <summary>I have come across people claiming to fear being replaced by bots, specially chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
 The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
- Figure 1: Rudolph, Conrad.</summary>
+ Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.</summary>
     <content type="html">&lt;p&gt;I have come across people claiming to fear being replaced by bots,
-specially the given the novelty of chatGPT and other &lt;code&gt;large language models (LLM)&lt;/code&gt;. In this article I&amp;rsquo;ll take such statements at face value,
-despite my reservations about the sincerity of many of them.&lt;/p&gt;
+specially chatGPT and other &lt;code&gt;large language models (LLM)&lt;/code&gt;. In this
+article I&amp;rsquo;ll take such statements at face value, despite my reservations
+about the sincerity of many of them.&lt;/p&gt;
 &lt;p&gt;The short answer is to the question in the title is no, you will not get
 replaced. The longer answer is below.&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/ox-hugo/mystic-ark-hires-1.jpg&#34;
@@ -47,23 +102,23 @@ simple elements—though billions of them. And the basic operation of the
 neural net is also very simple, consisting essentially of passing input
 derived from the text it’s generated so far “once through its elements”
 (without any loops, etc.) for every new word (or part of a word) that it
-generates. (Wolfram, Stephen, 2023)&lt;/p&gt;
+generates. (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Wolfram 2023&lt;/a&gt;)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;What it &lt;code&gt;does&lt;/code&gt; is basically statistical correlation. So, what the
 intellectual act of a person consists of? My summary of
-(Antônio Donato Paulo Rosa, 1993):&lt;/p&gt;
+(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Rosa 1993&lt;/a&gt;):&lt;/p&gt;
 &lt;p&gt;The intellectual act is a spiritual act, in contrast to a material
 one. It consists in abstracting the essential form from individual
 sensible perception. Grasping the universals out of particulars.&lt;/p&gt;
 &lt;p&gt;The last point is what I think underlies the actual fear. We live in a
-nominalist age, such that(De Wulf, Maurice, 1911) it&lt;/p&gt;
+nominalist age, such that(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;) it&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&amp;hellip; denies the existence of abstract and universal concepts, and refuses to
 admit that the intellect has the power of engendering them.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Therein lies the confusion that generates the fear. The correct
 interpretation of reality is what has been traditionally called Moderate
-Realism(De Wulf, Maurice, 1911):&lt;/p&gt;
+Realism(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;):&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Moderate Realism, finally, declares that there are universal concepts
 representing faithfully realities that are not universal.&lt;/p&gt;
@@ -78,10 +133,11 @@ individuals is its universality.&lt;/p&gt;
 &lt;p&gt;Fear not them, and trust in what you are analogous to, which is the
 Intellect itself&lt;/p&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;p&gt;Antônio Donato Paulo Rosa (1993). &lt;em&gt;A Educação segundo a Filosofia Perene&lt;/em&gt;, USP.&lt;/p&gt;
-&lt;p&gt;De Wulf, Maurice (1911). &lt;em&gt;Nominalism, Realism, Conceptualism&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Wolfram, Stephen (2023). &lt;em&gt;What Is ChatGPT Doing &amp;hellip; and Why Does It Work?&lt;/em&gt;, Stephen Wolfram Writings.&lt;/p&gt;
-</content>
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Rosa, Antônio Donato Paulo. 1993. “A Educação Segundo a Filosofia Perene.” USP. &lt;a href=&#34;http://www.cristianismo.org.br/efp-ind.htm&#34;&gt;http://www.cristianismo.org.br/efp-ind.htm&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Wolfram, Stephen. 2023. “What Is Chatgpt Doing . and Why Does It Work?” Stephen Wolfram Writings. &lt;a href=&#34;https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/&#34;&gt;https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
     
     <category term="philosophy"/>
     

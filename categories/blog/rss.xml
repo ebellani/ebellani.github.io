@@ -6,14 +6,27 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 11 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 29 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 29 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>What is a good manager?</title>
+      <link>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</link>
+      <pubDate>Sat, 29 Jul 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</guid>
+      <description>It is hard to do science without proper definitions. So what is a manager?
+Abstracting from (Horstman 2016), my definition of a manager is the following:
+A manager balances present output with creating the conditions of future output.
+ Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
+  As one can see, this definition is the same as the one for an investor. That is correct.</description>
     </item>
     
     <item>
@@ -22,9 +35,9 @@
       <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/2023/ai-intellectual-act/</guid>
-      <description>I have come across people claiming to fear being replaced by bots, specially the given the novelty of chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
+      <description>I have come across people claiming to fear being replaced by bots, specially chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
 The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
- Figure 1: Rudolph, Conrad.</description>
+ Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.</description>
     </item>
     
     <item>
