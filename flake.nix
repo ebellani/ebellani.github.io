@@ -23,7 +23,8 @@
         customEmacs = (emacsPackagesFor emacs-nox).emacsWithPackages
           (epkgs: with epkgs.melpaPackages; [
             ox-hugo
-            org-roam
+            citeproc
+
           ]
           ++ (with epkgs.elpaPackages; [
             org

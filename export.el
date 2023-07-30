@@ -42,8 +42,14 @@ Example usage in Emacs Lisp: (ox-hugo/export-all \"~/org\")."
             (setq cnt (1+ cnt))))
         (message "Done!")))))
 
+(require 'oc-csl)
+
 (setq org-id-locations-file ".orgids"
-      org-src-preserve-indentation t)
+      org-src-preserve-indentation t
+      org-cite-export-processors '((latex biblatex)
+                                   (moderncv basic)
+                                   (html csl)
+                                   (t csl)))
 
 (ox-hugo/export-all "content-org" t)
 

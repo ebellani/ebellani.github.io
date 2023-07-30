@@ -10,7 +10,7 @@ clean:
 	rm -rf site.tar.gz
 
 content:
-	emacs $(pwd) --batch -load export.el
+	emacs $(pwd) --batch --load export.el
 
 public: content
 	hugo
