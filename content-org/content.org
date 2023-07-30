@@ -55,23 +55,22 @@ It is hard to do science without proper definitions. So what is a manager?
 Abstracting from [cite:@horstman2016effective], my definition of a
 manager is the following:
 
-~A manager balances present output with creating the conditions of
-future output.~
+#+begin_quote
+A manager continuously balances present output with creating the
+conditions of future output.
+#+end_quote
 
 
 #+caption: The Good Sheperd, emblem found in a Roman catacomb, sec III
 [[./good-shepherd.png]]
 
-As one can see, this definition is the same as the one for an
-investor. That is correct. A manager is an investor of company's
-resources (human or otherwise). He deploys them with the expectation of
-generating results in the present. If he is good, he deploys them in
-such a way as to create conditions to generate *more* results in the
-future.
+As one can see, this definition is similar to an investor. That is
+expected, since a manager is an investor of a company's
+resources. [fn:1]
 
 As an illustration, a manager can usually deliver more results in the
-present by burning up people. It probably will increase turnover in the
-future. Is it the right choice? Only with a holistic view and sound
+present by burning up people. This probably will increase turnover in
+the future. Is it the right choice? Only with a holistic view and sound
 judgement can one decide correctly.
 
 Given this definition, one can easily see that a good manager is *not*
@@ -82,10 +81,6 @@ some things:
 - A frequent yeller
 - Someone who cares
 - Someone who is agreeable
-
-
-PS: A complicating factor for the manager is that he is trying to
-balance a system over time, but the balancing point itself changes.
 
 #+print_bibliography:
 
@@ -236,3 +231,6 @@ Why does it work? I don't know. If you do, please email me.
 this is the description of the blog section
 #+end_description
 * Footnotes
+
+[fn:1] The manager can be seen as a vicarious owner of company
+resources.
