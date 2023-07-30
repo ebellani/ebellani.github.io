@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-07-30T00:32:40Z</updated>
+  <updated>2023-07-30T18:33:02Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -21,28 +21,28 @@
     <updated>2023-07-29T00:00:00Z</updated>
     <summary>It is hard to do science without proper definitions. So what is a manager?
 Abstracting from (Horstman 2016), my definition of a manager is the following:
-A manager balances present output with creating the conditions of future output.
- Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
-  As one can see, this definition is the same as the one for an investor. That is correct.</summary>
+ A manager continuously balances present output with creating the conditions of future output.
+  Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
+  As one can see, this definition is similar to an investor. That is expected, since a manager is an investor of a company&amp;rsquo;s resources.</summary>
     <content type="html">&lt;p&gt;It is hard to do science without proper definitions. So what is a manager?&lt;/p&gt;
 &lt;p&gt;Abstracting from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Horstman 2016&lt;/a&gt;), my definition of a
 manager is the following:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;A manager balances present output with creating the conditions of future output.&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A manager continuously balances present output with creating the
+conditions of future output.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;figure&gt;&lt;img src=&#34;/ox-hugo/good-shepherd.png&#34;
          alt=&#34;Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III&#34;/&gt;&lt;figcaption&gt;
             &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The Good Sheperd, emblem found in a Roman catacomb, sec III&lt;/p&gt;
         &lt;/figcaption&gt;
 &lt;/figure&gt;
 
-&lt;p&gt;As one can see, this definition is the same as the one for an
-investor. That is correct. A manager is an investor of company&amp;rsquo;s
-resources (human or otherwise). He deploys them with the expectation of
-generating results in the present. If he is good, he deploys them in
-such a way as to create conditions to generate &lt;strong&gt;more&lt;/strong&gt; results in the
-future.&lt;/p&gt;
+&lt;p&gt;As one can see, this definition is similar to an investor. That is
+expected, since a manager is an investor of a company&amp;rsquo;s
+resources. &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;As an illustration, a manager can usually deliver more results in the
-present by burning up people. It probably will increase turnover in the
-future. Is it the right choice? Only with a holistic view and sound
+present by burning up people. This probably will increase turnover in
+the future. Is it the right choice? Only with a holistic view and sound
 judgement can one decide correctly.&lt;/p&gt;
 &lt;p&gt;Given this definition, one can easily see that a good manager is &lt;strong&gt;not&lt;/strong&gt;
 some things:&lt;/p&gt;
@@ -53,12 +53,20 @@ some things:&lt;/p&gt;
 &lt;li&gt;Someone who cares&lt;/li&gt;
 &lt;li&gt;Someone who is agreeable&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;PS: A complicating factor for the manager is that he is trying to
-balance a system over time, but the balancing point itself changes.&lt;/p&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Horstman, M. 2016. &lt;i&gt;The Effective Manager&lt;/i&gt;. Wiley. &lt;a href=&#34;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&#34;&gt;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;</content>
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;The manager can be seen as a vicarious owner of company
+resources.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
     
     <category term="management"/>
     
