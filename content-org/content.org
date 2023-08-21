@@ -42,6 +42,56 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** Lessons from data science startup using F# and dotnet in a developing country :management:
+:PROPERTIES:
+:EXPORT_FILE_NAME: what-is-a-good-manager
+:EXPORT_DATE: 2023-07-29
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug what-is-a-good-manager
+:END:
+*** Script                                                       :noexport:
+
+  - Hero :: Leftwing normie programmer.
+  - Problem
+    + External :: Our tools are not adopted by 3th world countries
+    + Internal :: I feel guilty about my money
+    + Philosophical :: Tech should be a tool for equality
+    + Villain :: Rich SV capitalist
+  - Mentor ::
+    - Authority :: Done it
+    - Sympathy ::  I want Brazil to succeed too
+  - Process ::
+    1) Understand recruitment & selection filtering
+    2) Understand the results
+    3) thoughts on the future
+  - Promises ::
+    - You hear what it was like from a CTO point of view
+    - You will see the results
+  - Success :: See how to expand your joy and virtue signal
+  - Failure :: Get blamed
+
+*** Article
+
+
+What happens when you have to rebuild the whole tech area of a data
+science company and you have the authority to drop python and JS?
+Dotnet and F#, that's what (at least for me, it was).
+
+This talk is my tale of being the CTO of a data science consultancy and:
+
+- Deciding to drop the existing investment on typescript and python and
+  going on F# and dotnet;
+- Having to grow a team from ~4 to ~12 in the span of a year;
+- While facing the usual chaotic environment of a startup.
+
+
+What I promise with this talk is:
+
+1. How it was to grow a high performing functional programming team in a developing country;
+2. What was the impact that dotnet and F# brought to the table.
+
+
+
+
 ** What is a good manager?   :management:
 :PROPERTIES:
 :EXPORT_FILE_NAME: what-is-a-good-manager
