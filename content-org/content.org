@@ -42,6 +42,78 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+
+** Recruitment and Selection of high performing programmers
+
+
+
+*** Why care about high performing developers and teams instead of methodologies?
+
+Why care about high performing developers and teams instead of methodologies?
+
+I'll let the numbers speak for themselves. Here are the typical
+variations in:[cite:@diagram_variation_performance]
+
+- Individual performance :: 20 to 1,
+
+- Team performance :: 10 to 1,
+
+- Method performance :: 1.2 to 1.
+
+
+One can a very compelling illustration of these data on
+[cite:@wilson-making-soft]. Two organizations, similar resources,
+similar goal, vastly different performance:
+
+- Microsoft excel 3 :: 649000 Lines of Code (Loc) in 50 Man Years (MY) = /12980/
+- Lotus 123 :: 400000 LoC in 260 MY = /1538/
+
+
+**** References
+
+#+print_bibliography:
+
+
+**** Razões                                                 :B_block:BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :BEAMER_env: block
+    :END:
+
+   - Sinais vs barulho
+   - Paixão
+   - Cultura
+**** Recursos                                               :B_block:BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :BEAMER_env: block
+    :END:
+
+   - [[https://www.amazon.com/Coders-Work-Reflections-Craft-Programming/dp/1430219483/][Coders at Work: Reflections on the Craft of Programming]]
+   - [[https://www.amazon.com/Hackers-Computer-Revolution-Steven-Levy/dp/1449388396/][Hackers: Heroes of the Computer Revolution]]
+   - [[https://www.amazon.com/Programmers-Work-Interviews-Computer-Industry/dp/1556152116/][Programmers at Work: Interviews With 19 Programmers Who Shaped the Computer
+     Industry]]
+   - [[https://www.amazon.com/Hackers-Painters-Big-Ideas-Computer/dp/1449389554][Hackers & Painters: Big Ideas from the Computer Age]]
+   - [[https://www.amazon.com/Dealers-Lightning-Xerox-PARC-Computer/dp/0887309895/][Dealers of Lightning: Xerox PARC and the Dawn of the Computer Age]]
+
+
+
+**** Seleção
+
+   #+caption: Validity of selection methods \footnote{The Validity and Utility of Selection Methods in Personnel Psychology: Practical and Theoretical Implications of 100 Years of Research Findings}
+   | Procedure                           | Validity(r) | Multiple(R) | % gain |
+   |-------------------------------------+-------------+-------------+--------|
+   | GMA tests                           |         .65 |             |        |
+   | Integrity tests                     |         .46 |         .78 |    20% |
+   | Employment interviews (structured)  |         .58 |         .76 |    18% |
+   | Employment interviews               |         .58 |         .73 |    13% |
+   | Interests                           |         .31 |         .71 |    10% |
+   | Phone-based interviews (structured) |         .46 |         .70 |     9% |
+   | Conscientiousness                   |         .22 |         .70 |     8% |
+   | Reference checks                    |         .26 |         .70 |     8% |
+   | Openness to Experience              |         .04 |         .69 |     6% |
+   | Biographical data                   |         .35 |         .68 |     6% |
+   | Job experience (years)              |         .16 |         .68 |     5% |
 ** What is a good manager?   :management:
 :PROPERTIES:
 :EXPORT_FILE_NAME: what-is-a-good-manager
