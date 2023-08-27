@@ -5,13 +5,166 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-07-30T18:33:02Z</updated>
+  <updated>2023-08-27T02:40:46Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Recruitment and Selection of high performing programmers</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/rec-sel-programmers/"/>
+    <id>https://ebellani.github.io/blog/2023/rec-sel-programmers/</id>
+    <published>2023-08-26T00:00:00Z</published>
+    <updated>2023-08-26T00:00:00Z</updated>
+    <summary>What could be more important for a technology company than great software? High performing software developers and their teams. After all, they are the ones who actually create and maintain that great software.
+But do they really make a difference? I&amp;rsquo;ll let the numbers speak for themselves. Here are the typical variations in:(Steve 2014)
+ Individual performance 20 to 1, Team performance 10 to 1, Method performance 1.2 to 1.  One can a very compelling illustration of these data on (Oram and Wilson 2010).</summary>
+    <content type="html">&lt;p&gt;What could be more important for a technology company than great
+software? High performing software developers and their teams. After
+all, they are the ones who actually create and maintain that great
+software.&lt;/p&gt;
+&lt;h2 id=&#34;but-do-they-really-make-a-difference&#34;&gt;But do they really make a difference?&lt;/h2&gt;
+&lt;p&gt;I&amp;rsquo;ll let the numbers speak for themselves. Here are the typical
+variations in:(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Steve 2014&lt;/a&gt;)&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Individual performance&lt;/dt&gt;
+&lt;dd&gt;20 to 1,&lt;/dd&gt;
+&lt;dt&gt;Team performance&lt;/dt&gt;
+&lt;dd&gt;10 to 1,&lt;/dd&gt;
+&lt;dt&gt;Method performance&lt;/dt&gt;
+&lt;dd&gt;1.2 to 1.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;One can a very compelling illustration of these data on
+(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Oram and Wilson 2010&lt;/a&gt;). Two organizations, similar resources,
+similar goal, vastly different performance:&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Microsoft excel 3&lt;/dt&gt;
+&lt;dd&gt;649000 Lines of Code (Loc) in 50 Man Years (MY) = &lt;em&gt;12980&lt;/em&gt;&lt;/dd&gt;
+&lt;dt&gt;Lotus 123&lt;/dt&gt;
+&lt;dd&gt;400000 LoC in 260 MY = &lt;em&gt;1538&lt;/em&gt;&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;recruitment-and-selection&#34;&gt;Recruitment and selection&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Recruitment is the process of finding potential candidates to apply for
+a job position, whereas selection is the process of identifying the best
+candidate to hire. (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Team 2023&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To find high performing candidates, you need to find markers of
+belonging to some high performing culture. Usually something that is
+very hard to master and that the marketplace ignores is a good bet. As
+an exapmle, for backend developers, one might look for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Haskell or other functional programming language not in widespread
+use;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Relational theory and other rigorous discipline misunderstood by the
+majority of the marketplace,&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To filter them, I&amp;rsquo;d advise using a combination of the following methods
+(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Schmidt 2016&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&#34;table-caption&#34;&gt;
+  &lt;span class=&#34;table-number&#34;&gt;Table 1:&lt;/span&gt;
+  Validity of selection methods
+&lt;/div&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Procedure&lt;/th&gt;
+&lt;th&gt;Validity(r)&lt;/th&gt;
+&lt;th&gt;Multiple(R)&lt;/th&gt;
+&lt;th&gt;% gain&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;GMA tests&lt;/td&gt;
+&lt;td&gt;.65&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Integrity tests&lt;/td&gt;
+&lt;td&gt;.46&lt;/td&gt;
+&lt;td&gt;.78&lt;/td&gt;
+&lt;td&gt;20%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Employment interviews (structured)&lt;/td&gt;
+&lt;td&gt;.58&lt;/td&gt;
+&lt;td&gt;.76&lt;/td&gt;
+&lt;td&gt;18%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Employment interviews&lt;/td&gt;
+&lt;td&gt;.58&lt;/td&gt;
+&lt;td&gt;.73&lt;/td&gt;
+&lt;td&gt;13%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Interests&lt;/td&gt;
+&lt;td&gt;.31&lt;/td&gt;
+&lt;td&gt;.71&lt;/td&gt;
+&lt;td&gt;10%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Phone-based interviews (structured)&lt;/td&gt;
+&lt;td&gt;.46&lt;/td&gt;
+&lt;td&gt;.70&lt;/td&gt;
+&lt;td&gt;9%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Conscientiousness&lt;/td&gt;
+&lt;td&gt;.22&lt;/td&gt;
+&lt;td&gt;.70&lt;/td&gt;
+&lt;td&gt;8%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Reference checks&lt;/td&gt;
+&lt;td&gt;.26&lt;/td&gt;
+&lt;td&gt;.70&lt;/td&gt;
+&lt;td&gt;8%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Openness to Experience&lt;/td&gt;
+&lt;td&gt;.04&lt;/td&gt;
+&lt;td&gt;.69&lt;/td&gt;
+&lt;td&gt;6%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Biographical data&lt;/td&gt;
+&lt;td&gt;.35&lt;/td&gt;
+&lt;td&gt;.68&lt;/td&gt;
+&lt;td&gt;6%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Job experience (years)&lt;/td&gt;
+&lt;td&gt;.16&lt;/td&gt;
+&lt;td&gt;.68&lt;/td&gt;
+&lt;td&gt;5%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;For instance, a (GMA + Integrity + Conscientiousness + Structured
+interview + Work Sample) combo should take at most 3 hours from the
+candidate and 1 from your team.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Oram, A., and G. Wilson. 2010. &lt;i&gt;Making Software: What Really Works, and Why We Believe It&lt;/i&gt;. O’Reilly Media.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Schmidt, Frank. 2016. “The Validity and Utility of Selection Methods in Personnel Psychology: Practical and Theoretical Implications of 100 Years of Research Findings.”&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Steve, McConnell; 2014. “Seven Diagrams Every Software Professional Should Understand.” &lt;a href=&#34;url{https://youtu.be/zTKi4ijEsH0?t=2566}&#34;&gt;url{https://youtu.be/zTKi4ijEsH0?t=2566}&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Team, Indeed Editorial. 2023. “Recruitment Vs. Selection: What’s the Difference?” &lt;a href=&#34;https://www.indeed.com/career-advice/career-development/recruitment-vs-selection&#34;&gt;https://www.indeed.com/career-advice/career-development/recruitment-vs-selection&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>What is a good manager?</title>

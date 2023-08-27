@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 26 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Recruitment and Selection of high performing programmers</title>
+      <link>https://ebellani.github.io/blog/2023/rec-sel-programmers/</link>
+      <pubDate>Sat, 26 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2023/rec-sel-programmers/</guid>
+      <description>What could be more important for a technology company than great software? High performing software developers and their teams. After all, they are the ones who actually create and maintain that great software.
+But do they really make a difference? I&amp;rsquo;ll let the numbers speak for themselves. Here are the typical variations in:(Steve 2014)
+ Individual performance 20 to 1, Team performance 10 to 1, Method performance 1.2 to 1.  One can a very compelling illustration of these data on (Oram and Wilson 2010).</description>
+    </item>
+    
     <item>
       <title>What is a good manager?</title>
       <link>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</link>
