@@ -67,7 +67,7 @@ variations in:[cite:@diagram_variation_performance]
 - Method performance :: 1.2 to 1.
 
 
-One can a very compelling illustration of these data on
+One can find a compelling illustration of these data on
 [cite:@wilson-making-soft]. Two organizations, similar resources,
 similar goal, vastly different performance:
 
