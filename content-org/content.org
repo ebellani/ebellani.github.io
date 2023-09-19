@@ -43,6 +43,22 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** How to stand out in your career, the shortest version I know
+:PROPERTIES:
+:EXPORT_FILE_NAME: stand-out-short
+:EXPORT_DATE: 2023-09-18
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug stand-out-short
+:END:
+
+Someone asked me about this, so I feel it might help people out there.
+
+The short, no nonsense advise I give to people on standing out as a
+programmer:
+
+1. Generate results
+2. Make your boss look good
+3. Join a relevant open source project
+
 ** Recruitment and Selection of high performing programmers
 :PROPERTIES:
 :EXPORT_FILE_NAME: rec-sel-programmers
