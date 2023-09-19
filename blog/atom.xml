@@ -5,13 +5,37 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-08-27T02:59:44Z</updated>
+  <updated>2023-09-19T02:50:38Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>How to stand out in your career, the shortest version I know</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/stand-out-short/"/>
+    <id>https://ebellani.github.io/blog/2023/stand-out-short/</id>
+    <published>2023-09-18T00:00:00Z</published>
+    <updated>2023-09-18T00:00:00Z</updated>
+    <summary>Someone asked me about this, so I feel it might help people out there.
+The short, no nonsense advise I give to people on standing out as a programmer:
+ Generate results Make your boss look good Join a relevant open source project  </summary>
+    <content type="html">&lt;p&gt;Someone asked me about this, so I feel it might help people out there.&lt;/p&gt;
+&lt;p&gt;The short, no nonsense advise I give to people on standing out as a
+programmer:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Generate results&lt;/li&gt;
+&lt;li&gt;Make your boss look good&lt;/li&gt;
+&lt;li&gt;Join a relevant open source project&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Recruitment and Selection of high performing programmers</title>

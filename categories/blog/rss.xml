@@ -6,14 +6,25 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 26 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Sat, 26 Aug 2023 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 18 Sep 2023 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>How to stand out in your career, the shortest version I know</title>
+      <link>https://ebellani.github.io/blog/2023/stand-out-short/</link>
+      <pubDate>Mon, 18 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2023/stand-out-short/</guid>
+      <description>Someone asked me about this, so I feel it might help people out there.
+The short, no nonsense advise I give to people on standing out as a programmer:
+ Generate results Make your boss look good Join a relevant open source project  </description>
     </item>
     
     <item>
