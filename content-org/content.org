@@ -43,6 +43,97 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** CQRS as nominalism
+:PROPERTIES:
+:EXPORT_FILE_NAME: cqrs-nominalism
+:EXPORT_DATE: 2023-11-04
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug cqrs-nominalism
+:END:
+
+
+A theme that I think is important to understand a lot of modernity and
+the IT sector in particular, is nominalism.[fn:2]
+
+So, what is Nominalism, and why does it matter? I'll start with a
+concrete case and work my way to the abstract definition.
+
+What is CQRS? Here is an authoritative word on it[cite:@cqrs_young]:
+
+#+begin_quote
+Command and Query Responsibility Segregation (CQRS) originated with
+Bertrand Meyer’s Command and Query Separation Principle
+
+...
+
+It states that every method should either be a command that performs an
+action, or a query that returns data to the caller, but not both. In
+other words, asking a question should not change the answer. More
+formally, methods should return a value only if they are referentially
+transparent and hence possess no side effects.
+
+...
+
+Basically it boils down to. If you have a return value you cannot mutate
+state. If you mutate state your return type must be void.
+
+...
+
+in CQRS objects are split into two objects, one containing the Commands
+one containing the Queries.
+#+end_quote
+
+CQRS is basically then an extension on CQS, but played on objects
+instead of methods. It leverages the notions of immutable and mutable
+objects, or, renaming (notice this pattern) to a DDD terminology value
+objects and entities [cite:@evans_ddd_ref].
+
+#+caption: CQRS/Traditional computer science term mapping
+| CQRS         | Traditional         | Interpretation                                                                                       |
+|--------------+---------------------+------------------------------------------------------------------------------------------------------|
+| Entity       | Variable            | A symbol that represents a value of a given type. Can represent  different values on different calls |
+| Value Object | Value               | An element of a set                                                                                  |
+| Command      | assignment operator | Change the value of a variable                                                                       |
+| Query        | function call       | Derive values from values                                                                            |
+
+
+As this table shows, we have new names for old things, and people think
+that because of that they *are* different things. My point is that this
+is because of a nominalist position of the people on the CQRS community,
+even if they are unaware of that. Why? Here's what nominalism is:
+
+#+begin_quote
+Nominalism ... denies the existence of abstract and universal concepts,
+and refuses to admit that the intellect has the power of engendering
+them. What are called general ideas are only names, mere verbal
+designations, serving as labels for a collection of things or a series
+of particular events. [cite:@wulf_universals]
+#+end_quote
+
+When you don't believe that general ideas exist as such, you have a
+strong (inevitable?) tendency to mistake names for things, like the
+CQRS community did here.
+
+
+#+print_bibliography:
+
+** On belts and value
+:PROPERTIES:
+:EXPORT_FILE_NAME: stand-out-short
+:EXPORT_DATE: 2023-09-18
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug stand-out-short
+:END:
+
+Someone asked me about this, so I feel it might help people out there.
+
+The short, no nonsense advise I give to people on standing out as a
+programmer:
+
+1. Generate results
+2. Make your boss look good
+3. Join a relevant open source project
+
+
+
 ** How to stand out in your career, the shortest version I know
 :PROPERTIES:
 :EXPORT_FILE_NAME: stand-out-short
@@ -325,6 +416,7 @@ Why does it work? I don't know. If you do, please email me.
 this is the description of the blog section
 #+end_description
 * Footnotes
+[fn:2] You will probably see me return to this topic in other
 
 [fn:1] The manager can be seen as a vicarious owner of company
 resources.
