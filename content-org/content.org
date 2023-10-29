@@ -59,6 +59,33 @@ programmer:
 2. Make your boss look good
 3. Join a relevant open source project
 
+*** Questionaire
+
+| Question                                                                      | Strongly disagree | Disagree | Neutral | Agree | Strongly Agree |
+|-------------------------------------------------------------------------------+-------------------+----------+---------+-------+----------------|
+| I was relatively inexperienced as a programmer when I started at Datarisk.    |                   |          |         |       |                |
+| F# was at least as easy as any other language I knew to become productive at. |                   |          |         |       |                |
+| F# made changing code easier and safer                                        |                   |          |         |       |                |
+| F# helped us ship fewer bugs                                                  |                   |          |         |       |                |
+| We spent less than 10% of our time re-working things due to bugs              |                   |          |         |       |                |
+| Less than 5% of our changes in the code produced bugs                         |                   |          |         |       |                |
+
+** How to stand out in your career, the shortest version I know
+:PROPERTIES:
+:EXPORT_FILE_NAME: stand-out-short
+:EXPORT_DATE: 2023-09-18
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug stand-out-short
+:END:
+
+Someone asked me about this, so I feel it might help people out there.
+
+The short, no nonsense advise I give to people on standing out as a
+programmer:
+
+1. Generate results
+2. Make your boss look good
+3. Join a relevant open source project
+
 ** Recruitment and Selection of high performing programmers
 :PROPERTIES:
 :EXPORT_FILE_NAME: rec-sel-programmers

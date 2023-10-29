@@ -1,0 +1,111 @@
+#+TITLE: Lessons from a data science startup using F# and dotnet in a developing country
+#+AUTHOR:    Eduardo Bellani
+#+EMAIL:     ebellani@gmail.com
+#+LANGUAGE: pt-br
+#+OPTIONS: H:1 toc:nil num:t author:nil date:nil
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation]
+#+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\frametitle{Tópicos}\tableofcontents[currentsection]\end{frame}}
+# get rid of small books on the references page.
+#+latex_header: \setbeamertemplate{bibliography item}{\insertbiblabel}
+#+latex_header: \beamertemplatenavigationsymbolsempty
+#+latex_header: \usepackage[backend=bibtex, style=authoryear]{biblatex}
+#+bibliography: ../content-org/refs.bib
+
+* Why are you here?
+
+My hope is that
+
+1. You will get excited about F# as a plataform for building value,
+2. That you will be able to justify to yourself and other why this is so.
+
+* How will that happen?
+
+1. Experiences on building a F# team,
+2. What kind of business impact this had,
+3. And why such impact happened.
+
+* Context
+
+1. New CTO
+2. Data Science Product/Consultancy
+3. Legacy systems and a small team
+
+* Strategy
+
+Leverage the need to rebuild the product to attract a world class team.
+
+The instrument for that was F#, since:
+
+1. Allowed me to attract talented functional programmers,
+2. Has a Data Science history,
+3. Has C# as an alternative to de-risk its adoption.
+
+* The team
+
+1. Went from 3 -> 12 devs in around 6 months
+2. Only 2 were not juniors
+3. The vision for all of them was
+*** Purpose (Reputation)
+
+To leverage truth and science into business value for the company.
+
+*** Mission (Identity)
+
+To be the best pound for pound technology unit on the planet.
+
+
+* Consultancy
+
+
+
+[21:35, 10/18/2023] Thales Zirbel: I will take a look on my docs to see if I find anything yep
+[21:35, 10/18/2023] Thales Zirbel: One major thing is always the lack of need for maintanaince
+[21:36, 10/18/2023] Thales Zirbel: We tweaked things two months after and thye never needed support afterwards
+
+* Datapi (API & data integration)
+
+p
+
+* Neomaril (MLOps)
+
+F# + Python runners.
+
+20kLoc running for more than 6months. 2 bugs in production.
+
+F# as enabler for fewer bugs
+
+* The trick, risk compensation
+
+#+begin_quote
+people typically adjust their behavior in response to perceived levels
+of risk, becoming more careful where they sense greater risk and less
+careful if they feel more protected
+#+end_quote
+
+
+
+* Takeaways
+F# allows you to profit from
+
+1. Risk compensation
+2. Decrease of re-work time
+3. Increase maintainability
+
+* Thanks
+
+- To [[https://www.datarisk.io/][Datarisk.io]] for allowing me to use their case. Seriously, if you
+  have data issues, send them an email,
+- To all devs there that had to bear with my risky ideas,
+- To all of you!
+
+
+* Referências
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks
+:END:
+#+LATEX: \tiny
+#+print_bibliography:
+
+* COMMENT Customization
+Local Variables: org-latex-pdf-process: ("latexmk %f -bibtex -f -pdf -interaction=nonstopmode -output-directory=%o") End:
