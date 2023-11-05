@@ -55,7 +55,8 @@ A theme that I think is important to understand a lot of modernity and
 the IT sector in particular, is nominalism.[fn:2]
 
 So, what is Nominalism, and why does it matter? I'll start with a
-concrete case and work my way to the abstract definition.
+concrete case and work my way to the abstract definition. The case in
+point is a somewhat popular architecture tactic, CQRS.
 
 What is CQRS? Here is an authoritative word on it[cite:@cqrs_young]:
 
@@ -84,16 +85,16 @@ one containing the Queries.
 
 CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
-objects, or, renaming (notice this pattern) to a DDD terminology value
-objects and entities [cite:@evans_ddd_ref].
+objects, a feature it shares with a more encompassing approach,
+DDD[cite:@evans_ddd_ref]. Here is a mapping of the terminology.
 
-#+caption: CQRS/Traditional computer science term mapping
-| CQRS         | Traditional         | Interpretation                                                                                       |
-|--------------+---------------------+------------------------------------------------------------------------------------------------------|
-| Entity       | Variable            | A symbol that represents a value of a given type. Can represent  different values on different calls |
-| Value Object | Value               | An element of a set                                                                                  |
-| Command      | assignment operator | Change the value of a variable                                                                       |
-| Query        | function call       | Derive values from values                                                                            |
+#+caption: CQRS/DDD/Traditional computer science terms mapping
+| CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
+|--------------+---------------------------+---------------------+------------------------------------------------------------------------------------------------------|
+| Domain model | Entity                    | Variable            | A symbol that represents a value of a given type. Can represent  different values on different calls |
+| Read model   | Value Object              | Value               | An element of a set                                                                                  |
+| Command      | Aggregate command         | assignment operator | Change the value of a variable                                                                       |
+| Query        | Side effect free function | function call       | Derive values from values                                                                            |
 
 
 As this table shows, we have new names for old things, and people think
@@ -113,6 +114,9 @@ When you don't believe that general ideas exist as such, you have a
 strong (inevitable?) tendency to mistake names for things, like the
 CQRS community did here.
 
+/PS/: Any implementation patterns that apply to CQRS would also apply to
+the tradional concepts, since my point here is to show that *they are
+the same thing*.
 
 #+print_bibliography:
 
