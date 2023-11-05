@@ -12,6 +12,24 @@
 #+latex_header: \usepackage[backend=bibtex, style=authoryear]{biblatex}
 #+bibliography: ../content-org/refs.bib
 
+* Description                                                      :noexport:
+
+What happens when you have to rebuild the whole tech area of a data
+science company and you have the authority to drop python and JS? Dotnet
+and F#, that's what (at least for me, it was).
+
+This talk is my tale of being the CTO of a data science consultancy and:
+
+- Deciding to drop the existing investment on typescript and python and going on F# and dotnet;
+- Having to grow a team from ~4 to ~12 in the span of a year;
+- While facing the usual chaotic environment of a startup.
+
+What I promise with this talk is:
+
+1. How it was to grow a high performing functional programming team in a
+   developing country;
+2. What was the impact that dotnet and F# brought to the table.
+
 * Why are you here?
 
 My hope is that
@@ -31,66 +49,124 @@ My hope is that
 2. Data Science Product/Consultancy
 3. Legacy systems and a small team
 
-* Strategy
-
-Leverage the need to rebuild the product to attract a world class team.
-
-The instrument for that was F#, since:
-
-1. Allowed me to attract talented functional programmers,
-2. Has a Data Science history,
-3. Has C# as an alternative to de-risk its adoption.
-
 * The team
 
 1. Went from 3 -> 12 devs in around 6 months
 2. Only 2 were not juniors
 3. The vision for all of them was
-*** Purpose (Reputation)
 
-To leverage truth and science into business value for the company.
+* Team results
 
-*** Mission (Identity)
+Highly effective team that improved as the year progressed, as evidenced
+by the scores on the team assessment survey
+(TAS)[cite:@Curphy_Gordon2019-11-03]:
 
-To be the best pound for pound technology unit on the planet.
+| Quarter        | Total score (1->5) |
+|----------------+--------------------|
+| 2021Q3         |                3.9 |
+| 2021Q4         |                4.4 |
+|----------------+--------------------|
+| Total increase |              12.8% |
+#+TBLFM: @>$>=(@3$2*100/@2$2)-100;%.1f%%
 
+Now, for some concrete business results:
 
-* Consultancy
+* Project results
+:PROPERTIES:
+:BEAMER_opt: allowframebreaks=0.5,label=
+:END:
 
+** Big Consultancy
 
+ #+begin_quote
 
-[21:35, 10/18/2023] Thales Zirbel: I will take a look on my docs to see if I find anything yep
-[21:35, 10/18/2023] Thales Zirbel: One major thing is always the lack of need for maintanaince
-[21:36, 10/18/2023] Thales Zirbel: We tweaked things two months after and thye never needed support afterwards
+One major thing is always the lack of need for maintanaince. We tweaked
+things two months after and *they never needed support afterwards*
 
-* Datapi (API & data integration)
+-- tech leader of the project
+ #+end_quote
 
-p
-
-* Neomaril (MLOps)
-
-F# + Python runners.
-
-20kLoc running for more than 6months. 2 bugs in production.
-
-F# as enabler for fewer bugs
-
-* The trick, risk compensation
-
-#+begin_quote
-people typically adjust their behavior in response to perceived levels
-of risk, becoming more careful where they sense greater risk and less
-careful if they feel more protected
-#+end_quote
+ (This project had a 6 month support contract)
 
 
+** API & Data integration product
 
-* Takeaways
-F# allows you to profit from
+- 30k LoC project running for an year. 2 bugs in production.
+- F#, Postgres, Fable, integration with APIs
+- Key: Information-rich Programming, since they
 
-1. Risk compensation
-2. Decrease of re-work time
-3. Increase maintainability
+  #+begin_quote
+... eliminate barriers to working with diverse information sources that
+are available[cite:@syme2016_fsharp]
+  #+end_quote
+
+** MLOps product
+
+- 15k LoC project running for more than 6months. 2 bugs in production.
+- F#, Postgres, Fable, integration with APIs
+- Key: Functional programming, powerful type system, .net concurrency
+
+* Survey data                                                      :noexport:
+
+| Timestamp                                                                     | 10/29/2023 16:19:52 | 10/29/2023 20:42:36 | 10/31/2023 13:30:04 | Mean | Coef. Var |
+|-------------------------------------------------------------------------------+---------------------+---------------------+---------------------+------+-----------|
+| I was relatively inexperienced as a programmer when I started at Datarisk.    |                   2 |                   3 |                   2 |  2.3 |       0.2 |
+| F# was at least as easy as any other language I knew to become productive at. |                   2 |                   3 |                   4 |  3.0 |       0.3 |
+| F# made changing code easier and safer                                        |                   5 |                   5 |                   5 |  5.0 |       0.0 |
+| F# helped us ship fewer bugs                                                  |                   4 |                   4 |                   5 |  4.3 |       0.1 |
+| We spent less than 10% of our time re-working things due to bugs              |                   4 |                   4 |                   4 |  4.0 |       0.0 |
+| Less than 5% of our changes in the code produced bugs                         |                   4 |                   3 |                   5 |  4.0 |       0.2 |
+#+TBLFM: $>>=vmean($<<..$>>>);%.1f::$>=vsdev($<<..$>>>)/$>>;%.1f
+
+* Survey
+   :PROPERTIES:
+   :END:
+
+| What (1- little, 5- A lot)               | Mean | Coef. Var |
+|------------------------------------------+------+-----------|
+| I was inexperienced                      |  2.3 |       0.2 |
+| How easy F# was                          |  3.0 |       0.3 |
+| F# made changing code easier and safer   |  5.0 |       0.0 |
+| F# helped us ship fewer bugs             |  4.3 |       0.1 |
+| less than 10% re-working things   [fn:1] |  4.0 |       0.0 |
+| Less than 5% of changes  produced bugs[fn:2]   |  4.0 |       0.2 |
+
+
+* Business Strategy
+
+Leverage:
+1. The need to rebuild the product to attract a world class team,
+2. F# type system and information-rich features to cut costs and increase time to market,
+3. F# as a possible data science path,
+4. .NET as a safe narrative for the C-level.
+
+* Economic strategy
+:PROPERTIES:
+:END:
+
+1. The cost of developing most systems is largely the cost of debugging
+   them, [cite:@Press_Yourdon2008-01-17]
+2. If you factor in user feedback, this becomes (cost of debugging +
+   cost of making changes),
+3. Allows faster time to market because of risk compensation,
+4. Support contracts become a major source of profit.
+
+* Human strategy
+:PROPERTIES:
+:END:
+
+1. Everyone is motivated by the balance getting ahead and getting along
+2. This happens in some cosmos, or a global narrative, if you will.
+3. So, your task as a manager is:
+   1. Help each person to have a narrative
+   2. Help connect their work to it
+   3. Help them be effective in getting ahead and along in such narrative.
+
+Think of each like this: You will succeed if everyone in your team can
+see themselves as Frodo in their own Lord of the Rings, and their team
+mates as their fellowship of the ring.
+
+In the case of my team, *F# as a means to use science and truth for career improvement.*
 
 * Thanks
 
@@ -100,7 +176,7 @@ F# allows you to profit from
 - To all of you!
 
 
-* Referências
+* References
 :PROPERTIES:
 :BEAMER_opt: allowframebreaks
 :END:
@@ -109,3 +185,9 @@ F# allows you to profit from
 
 * COMMENT Customization
 Local Variables: org-latex-pdf-process: ("latexmk %f -bibtex -f -pdf -interaction=nonstopmode -output-directory=%o") End:
+
+* Footnotes
+
+[fn:1] 20% unnecessary rework appears to be a goal in line with the best performance studied.  [cite:@dora_roi_2017]
+
+[fn:2] 5% is the rate of top performing teams [cite:@dora_standards_2023]
