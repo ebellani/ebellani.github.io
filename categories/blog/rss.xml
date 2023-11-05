@@ -23,7 +23,7 @@
       
       <guid>https://ebellani.github.io/blog/2023/cqrs-nominalism/</guid>
       <description>A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition.
+So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
 What is CQRS? Here is an authoritative word on it(Young 2010):
  Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle</description>
     </item>

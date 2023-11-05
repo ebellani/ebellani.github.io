@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-11-05T02:52:13Z</updated>
+  <updated>2023-11-05T22:43:46Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -20,13 +20,14 @@
     <published>2023-11-04T00:00:00Z</published>
     <updated>2023-11-04T00:00:00Z</updated>
     <summary>A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition.
+So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
 What is CQRS? Here is an authoritative word on it(Young 2010):
  Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle</summary>
     <content type="html">&lt;p&gt;A theme that I think is important to understand a lot of modernity and
 the IT sector in particular, is nominalism.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a
-concrete case and work my way to the abstract definition.&lt;/p&gt;
+concrete case and work my way to the abstract definition. The case in
+point is a somewhat popular architecture tactic, CQRS.&lt;/p&gt;
 &lt;p&gt;What is CQRS? Here is an authoritative word on it(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Young 2010&lt;/a&gt;):&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Command and Query Responsibility Segregation (CQRS) originated with
@@ -46,38 +47,43 @@ one containing the Queries.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
-objects, or, renaming (notice this pattern) to a DDD terminology value
-objects and entities (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Evans 2015&lt;/a&gt;).&lt;/p&gt;
+objects, a feature it shares with a more encompassing approach,
+DDD(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Evans 2015&lt;/a&gt;). Here is a mapping of the terminology.&lt;/p&gt;
 &lt;div class=&#34;table-caption&#34;&gt;
   &lt;span class=&#34;table-number&#34;&gt;Table 1:&lt;/span&gt;
-  CQRS/Traditional computer science term mapping
+  CQRS/DDD/Traditional computer science terms mapping
 &lt;/div&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;CQRS&lt;/th&gt;
+&lt;th&gt;DDD&lt;/th&gt;
 &lt;th&gt;Traditional&lt;/th&gt;
 &lt;th&gt;Interpretation&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
+&lt;td&gt;Domain model&lt;/td&gt;
 &lt;td&gt;Entity&lt;/td&gt;
 &lt;td&gt;Variable&lt;/td&gt;
 &lt;td&gt;A symbol that represents a value of a given type. Can represent  different values on different calls&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
+&lt;td&gt;Read model&lt;/td&gt;
 &lt;td&gt;Value Object&lt;/td&gt;
 &lt;td&gt;Value&lt;/td&gt;
 &lt;td&gt;An element of a set&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Command&lt;/td&gt;
+&lt;td&gt;Aggregate command&lt;/td&gt;
 &lt;td&gt;assignment operator&lt;/td&gt;
 &lt;td&gt;Change the value of a variable&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Query&lt;/td&gt;
+&lt;td&gt;Side effect free function&lt;/td&gt;
 &lt;td&gt;function call&lt;/td&gt;
 &lt;td&gt;Derive values from values&lt;/td&gt;
 &lt;/tr&gt;
@@ -97,6 +103,9 @@ of particular events. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911
 &lt;p&gt;When you don&amp;rsquo;t believe that general ideas exist as such, you have a
 strong (inevitable?) tendency to mistake names for things, like the
 CQRS community did here.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;PS&lt;/em&gt;: Any implementation patterns that apply to CQRS would also apply to
+the tradional concepts, since my point here is to show that &lt;strong&gt;they are
+the same thing&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;

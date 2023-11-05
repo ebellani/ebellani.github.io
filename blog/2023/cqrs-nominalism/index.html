@@ -10,7 +10,7 @@
     
     <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="CQRS as nominalism" />
 <meta property="og:description" content="A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&rsquo;ll start with a concrete case and work my way to the abstract definition.
+So, what is Nominalism, and why does it matter? I&rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
 What is CQRS? Here is an authoritative word on it(Young 2010):
  Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle" />
 <meta property="og:type" content="article" />
@@ -43,7 +43,8 @@ What is CQRS? Here is an authoritative word on it(Young 2010):
   </h2><p>A theme that I think is important to understand a lot of modernity and
 the IT sector in particular, is nominalism.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <p>So, what is Nominalism, and why does it matter? I&rsquo;ll start with a
-concrete case and work my way to the abstract definition.</p>
+concrete case and work my way to the abstract definition. The case in
+point is a somewhat popular architecture tactic, CQRS.</p>
 <p>What is CQRS? Here is an authoritative word on it(<a href="#citeproc_bib_item_3">Young 2010</a>):</p>
 <blockquote>
 <p>Command and Query Responsibility Segregation (CQRS) originated with
@@ -63,38 +64,43 @@ one containing the Queries.</p>
 </blockquote>
 <p>CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
-objects, or, renaming (notice this pattern) to a DDD terminology value
-objects and entities (<a href="#citeproc_bib_item_2">Evans 2015</a>).</p>
+objects, a feature it shares with a more encompassing approach,
+DDD(<a href="#citeproc_bib_item_2">Evans 2015</a>). Here is a mapping of the terminology.</p>
 <div class="table-caption">
   <span class="table-number">Table 1:</span>
-  CQRS/Traditional computer science term mapping
+  CQRS/DDD/Traditional computer science terms mapping
 </div>
 <table>
 <thead>
 <tr>
 <th>CQRS</th>
+<th>DDD</th>
 <th>Traditional</th>
 <th>Interpretation</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>Domain model</td>
 <td>Entity</td>
 <td>Variable</td>
 <td>A symbol that represents a value of a given type. Can represent  different values on different calls</td>
 </tr>
 <tr>
+<td>Read model</td>
 <td>Value Object</td>
 <td>Value</td>
 <td>An element of a set</td>
 </tr>
 <tr>
 <td>Command</td>
+<td>Aggregate command</td>
 <td>assignment operator</td>
 <td>Change the value of a variable</td>
 </tr>
 <tr>
 <td>Query</td>
+<td>Side effect free function</td>
 <td>function call</td>
 <td>Derive values from values</td>
 </tr>
@@ -114,6 +120,9 @@ of particular events. (<a href="#citeproc_bib_item_1">De Wulf 1911</a>)</p>
 <p>When you don&rsquo;t believe that general ideas exist as such, you have a
 strong (inevitable?) tendency to mistake names for things, like the
 CQRS community did here.</p>
+<p><em>PS</em>: Any implementation patterns that apply to CQRS would also apply to
+the tradional concepts, since my point here is to show that <strong>they are
+the same thing</strong>.</p>
 <h2 id="references">References</h2>
 <style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. <a href="https://www.newadvent.org/cathen/11090c.htm">https://www.newadvent.org/cathen/11090c.htm</a>.</div>
