@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-11-05T22:43:46Z</updated>
+  <updated>2023-11-06T00:03:05Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -48,7 +48,8 @@ one containing the Queries.&lt;/p&gt;
 &lt;p&gt;CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
-DDD(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Evans 2015&lt;/a&gt;). Here is a mapping of the terminology.&lt;/p&gt;
+DDD(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Evans 2014&lt;/a&gt;). Here is a mapping of the
+terminology.&lt;/p&gt;
 &lt;div class=&#34;table-caption&#34;&gt;
   &lt;span class=&#34;table-number&#34;&gt;Table 1:&lt;/span&gt;
   CQRS/DDD/Traditional computer science terms mapping
@@ -109,7 +110,7 @@ the same thing&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Evans, Eric. 2015. “Domain-Driven Design Reference.”&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Evans, Eric. 2014. &lt;i&gt;Domain-driven design reference: Definitions and pattern summaries&lt;/i&gt;. Paperback. Dog Ear Pub Llc.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Young, Greg. 2010. “Cqrs Documents by Greg Young.” &lt;a href=&#34;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#34;&gt;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
