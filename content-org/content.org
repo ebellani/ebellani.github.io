@@ -86,7 +86,8 @@ one containing the Queries.
 CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
-DDD[cite:@evans_ddd_ref]. Here is a mapping of the terminology.
+DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
+terminology.
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
