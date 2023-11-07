@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-11-06T00:03:05Z</updated>
+  <updated>2023-11-07T12:47:45Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -28,7 +28,7 @@ the IT sector in particular, is nominalism.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a
 &lt;p&gt;So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a
 concrete case and work my way to the abstract definition. The case in
 point is a somewhat popular architecture tactic, CQRS.&lt;/p&gt;
-&lt;p&gt;What is CQRS? Here is an authoritative word on it(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Young 2010&lt;/a&gt;):&lt;/p&gt;
+&lt;p&gt;What is CQRS? Here is an authoritative word on it(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Young 2010&lt;/a&gt;):&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Command and Query Responsibility Segregation (CQRS) originated with
 Bertrand Meyer’s Command and Query Separation Principle&lt;/p&gt;
@@ -48,8 +48,8 @@ one containing the Queries.&lt;/p&gt;
 &lt;p&gt;CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
-DDD(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Evans 2014&lt;/a&gt;). Here is a mapping of the
-terminology.&lt;/p&gt;
+DDD(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Evans 2014&lt;/a&gt;). Here is a mapping of the
+terminology. &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;div class=&#34;table-caption&#34;&gt;
   &lt;span class=&#34;table-number&#34;&gt;Table 1:&lt;/span&gt;
   CQRS/DDD/Traditional computer science terms mapping
@@ -99,7 +99,7 @@ even if they are unaware of that. Why? Here&amp;rsquo;s what nominalism is:&lt;/
 and refuses to admit that the intellect has the power of engendering
 them. What are called general ideas are only names, mere verbal
 designations, serving as labels for a collection of things or a series
-of particular events. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;)&lt;/p&gt;
+of particular events. (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;De Wulf 1911&lt;/a&gt;)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;When you don&amp;rsquo;t believe that general ideas exist as such, you have a
 strong (inevitable?) tendency to mistake names for things, like the
@@ -109,15 +109,20 @@ the tradional concepts, since my point here is to show that &lt;strong&gt;they a
 the same thing&lt;/strong&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Evans, Eric. 2014. &lt;i&gt;Domain-driven design reference: Definitions and pattern summaries&lt;/i&gt;. Paperback. Dog Ear Pub Llc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Young, Greg. 2010. “Cqrs Documents by Greg Young.” &lt;a href=&#34;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#34;&gt;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Date, C.J. 2003. &lt;i&gt;An Introduction to Database Systems&lt;/i&gt;. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Evans, Eric. 2014. &lt;i&gt;Domain-driven design reference: Definitions and pattern summaries&lt;/i&gt;. Paperback. Dog Ear Pub Llc.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Young, Greg. 2010. “Cqrs Documents by Greg Young.” &lt;a href=&#34;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#34;&gt;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;You will probably see me return to this topic in other&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You will probably see me return to this topic in other posts.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;I got the idea of such table from a similar table found on
+chapter 25 of  (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2003&lt;/a&gt;)&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
