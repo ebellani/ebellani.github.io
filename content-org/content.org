@@ -43,6 +43,21 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** What is wrong with dynamically typed languages?
+:PROPERTIES:
+:EXPORT_FILE_NAME: what-is-wrong-w-dynamic
+:EXPORT_DATE: 2023-11-20
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug what-is-wrong-w-dynamic
+:END:
+
+
+#+begin_quote
+... rather than affording the freedom to ignore types, they instead
+impose the bondage of restricting attention to a single type.
+#+end_quote
+[[https://existentialtype.wordpress.com/2011/03/19/dynamic-languages-are-static-languages/][from the great professor Harper]]
+
+
 ** How to stand out in your career, the shortest version I know
 :PROPERTIES:
 :EXPORT_FILE_NAME: stand-out-short
