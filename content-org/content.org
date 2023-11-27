@@ -43,6 +43,61 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Themes of the Elite Private School Curriculum
+:PROPERTIES:
+:EXPORT_FILE_NAME: theme-elite-schooling
+:EXPORT_DATE: 2023-11-26
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug theme-elite-schooling
+:END:
+
+I think its fair to say that one can significantly improve one's chances
+of being materially successful in life by learning John Taylor Gatto’s
+14 Themes of the Elite Private School Curriculum[fn:1]:
+
+1. A theory of human nature (as embodied in history, philosophy, theology,
+   literature and law).
+
+2. Skill in the active literacies (writing, public speaking).
+
+3. Insight into the major institutional forms (courts, corporations, military,
+   education).
+
+4. Repeated exercises in the forms of good manners and politeness; based on
+   the notion that they are the foundation of all future relationships, all
+   future alliances, and access to places that you might want to go.
+
+5. Independent work.
+
+6. Energetic physical sports are the only way to confer grace on the human
+   presence, and that that grace translates into power and money later on. Also,
+   they teach you practice in handling pain, and in dealing with emergencies.
+
+7. A complete theory of access to any place and any person.
+
+8. Responsibility as an utterly essential part of the curriculum; always to
+   grab it when it is offered and always to deliver more than is asked for.
+
+9. Arrival at a personal code of standards (in production, behavior and
+   morality).
+
+10. To have a familiarity with, and to be at ease with, the fine
+    arts. (cultural capital)
+
+11. The power of accurate observation and recording. For example, sharpen the
+    perception by being able to draw accurately.
+
+12. The ability to deal with challenges of all sorts.
+
+13. A habit of caution in reasoning to conclusions.
+
+14. The constant development and testing of prior judgements: you make
+    judgements, you discriminate value, and then you follow up and “keep an eye”
+    on your predictions to see how far skewed, or how consistent, your
+    predictions were.
+
+
+
+
 ** CQRS as nominalism
 :PROPERTIES:
 :EXPORT_FILE_NAME: cqrs-nominalism
@@ -51,7 +106,7 @@ functional programming and research oriented projects/companies.
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:1]
+the IT sector in particular, is nominalism.[fn:2]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -86,7 +141,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:2]
+terminology. [fn:3]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -255,7 +310,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:3]
+resources. [fn:4]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -422,10 +477,12 @@ this is the description of the blog section
 
 * Footnotes
 
-[fn:1] You will probably see me return to this topic in other posts.
+[fn:1] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:2] I got the idea of such table from a similar table found on
+[fn:2] You will probably see me return to this topic in other posts.
+
+[fn:3] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:3] The manager can be seen as a vicarious owner of company
+[fn:4] The manager can be seen as a vicarious owner of company
 resources.
