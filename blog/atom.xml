@@ -5,13 +5,98 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2023-11-07T12:47:45Z</updated>
+  <updated>2023-11-27T02:16:54Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Themes of the Elite Private School Curriculum</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/theme-elite-schooling/"/>
+    <id>https://ebellani.github.io/blog/2023/theme-elite-schooling/</id>
+    <published>2023-11-26T00:00:00Z</published>
+    <updated>2023-11-26T00:00:00Z</updated>
+    <summary>I think its fair to say that one can significantly improve one&amp;rsquo;s chances of being materially successful in life by learning John Taylor Gatto’s 14 Themes of the Elite Private School Curriculum1:
+  A theory of human nature (as embodied in history, philosophy, theology, literature and law).
+  Skill in the active literacies (writing, public speaking).
+  Insight into the major institutional forms (courts, corporations, military, education).</summary>
+    <content type="html">&lt;p&gt;I think its fair to say that one can significantly improve one&amp;rsquo;s chances
+of being materially successful in life by learning John Taylor Gatto’s
+14 Themes of the Elite Private School Curriculum&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;A theory of human nature (as embodied in history, philosophy, theology,
+literature and law).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Skill in the active literacies (writing, public speaking).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Insight into the major institutional forms (courts, corporations, military,
+education).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Repeated exercises in the forms of good manners and politeness; based on
+the notion that they are the foundation of all future relationships, all
+future alliances, and access to places that you might want to go.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Independent work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Energetic physical sports are the only way to confer grace on the human
+presence, and that that grace translates into power and money later on. Also,
+they teach you practice in handling pain, and in dealing with emergencies.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A complete theory of access to any place and any person.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Responsibility as an utterly essential part of the curriculum; always to
+grab it when it is offered and always to deliver more than is asked for.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Arrival at a personal code of standards (in production, behavior and
+morality).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To have a familiarity with, and to be at ease with, the fine
+arts. (cultural capital)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The power of accurate observation and recording. For example, sharpen the
+perception by being able to draw accurately.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The ability to deal with challenges of all sorts.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A habit of caution in reasoning to conclusions.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;The constant development and testing of prior judgements: you make
+judgements, you discriminate value, and then you follow up and “keep an eye”
+on your predictions to see how far skewed, or how consistent, your
+predictions were.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;As listed in &lt;a href=&#34;https://www.youtube.com/watch?v=IZBdv2yznmI&#34;&gt;The Ultimate History Lesson&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>CQRS as nominalism</title>
