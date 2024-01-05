@@ -43,6 +43,141 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** A dangerous book
+:PROPERTIES:
+:EXPORT_FILE_NAME: dangerous-book
+:EXPORT_DATE: 2024-01-04
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug dangerous-book
+:END:
+
+I recently [[https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29][commented]] on how the book [cite:@Kleppmann_Martin2017-05-02]
+is a dangerous book, due to a subtle error on how it defines data
+models. I suppose it's my burden to further clarify this point, and for
+that I'll use Hayek's critical methodological maxim:
+
+#+begin_quote
+We must first explain how an economy can possibly work right before we
+can meaningfully ask what might go wrong
+#+end_quote
+
+*** What is a data model?
+
+Here are 3 definitions, in increasing level of detail:
+
+#+begin_quote
+A data model is an abstract, self-contained, logical definition of the
+objects, operators, and so forth, that together constitute the abstract
+machine with which users interact. The objects allow us to model the
+structure of data. The operators allow us to model its behavior.
+[cite:@10.5555/861613]:
+#+end_quote
+
+#+begin_quote
+1) a collection of data structure types (the building blocks of any
+   database that conforms to the model);
+2) a collection of operators or inferencing rules, which can be applied
+   to any valid instances of the data types listed in (i), to retrieve
+   or derive data from any parts of those structures in any combinations
+   desired;
+3) a collection of general integrity rules, which implicitly or
+   explicitly define the set of consistent database states or changes of
+   state or both -- these rules may sometimes be expressed as
+   insert-update-delete rules.
+
+[cite:@10.1145/960124.806891]
+#+end_quote
+
+In particular, the Relational Data Model
+
+#+begin_quote
+1) An open-ended collection of scalar types, including type BOOLEAN in
+   particular
+2) A type generator and an intended interpretation for relations of
+   types generated thereby
+3) Facilities for defining variables of such generated
+   relation types
+4) A assignment operator for assigning values to such variables
+5) A complete (but otherwise open-ended) collection of generic operators
+   for deriving values from other values
+[cite:@Date_Chris2015-12-15]
+#+end_quote
+
+
+Unfortunately, in our industry, it almost exclusively means a model of
+which information is relevant to particular business cases. Those used
+to be called Conceptual Schemas. It is part of the classic data model
+progression[cite:@Steel1975b]:
+
+Conceptual schema -> Logical schema -> Physical schema [fn:1]
+
+What are those? I can't do better than [cite:@pascal_guide]
+
+#+begin_quote
+Think of a conceptual model as the territory, the logical model as its
+symbolic representation on the map and the map print and medium (paper,
+plastic, screen) as the physical model.
+#+end_quote
+
+How about the Data Model, how does it fit in this metaphor?
+
+#+begin_quote
+The data model is the map legend that provides the mapping symbols and
+their correspondence to the elements of the territory (e.g., cities,
+highways, forests and so on) they symbolize on the map.
+#+end_quote
+
+*** What is wrong with the book's definition?
+
+
+[cite:@Kleppmann_Martin2017-05-02] does not provide an explicit
+definition. The closest he has is this paragraph:
+
+#+begin_quote
+Most applications are built by layering one data model on top of
+another. For each layer, the key question is: how is it represented in
+terms of the next-lower layer?
+#+end_quote
+
+My translation of this, given the rest of the book's chapter on Data
+Models, is that a Data Model for the author is any particular
+implementation of a higher abstraction in a lower abstraction would
+count as a Data Model. So, the author refers to all 4 models (and any
+concrete instance of them) using the same term.
+
+*** Why does this matter?
+
+I hope that the consequences of such confusion would be clear to the
+reader. If not, consider the advice of [cite:@pascal_guide]
+
+#+begin_quote
+Referring to all four as data models, or using the terms interchangeably
+blurs the important differences, reflecting common confusion of levels
+of representation, namely
+
+- Conceptual-logical conflation (CLC);
+- Logical-physical confusion (LPC).
+
+with costly consequences.
+#+end_quote
+
+A single example from the book should suffice, I think:
+
+#+begin_quote
+There are several driving forces behind the adoption of NoSQL databases,
+including:
+
+- A need for greater scalability than relational databases can easily
+  achieve, including very large datasets or very high write throughput
+  ...
+#+end_quote
+
+Here, the author is confusing a Data Model (the relational data model)
+with physical concerns (scalability and throughput), which might lead to
+wrong (and very costly) technology and business decisions.
+
+
+#+print_bibliography:
+
 ** Themes of the Elite Private School Curriculum
 :PROPERTIES:
 :EXPORT_FILE_NAME: theme-elite-schooling
@@ -52,7 +187,7 @@ functional programming and research oriented projects/companies.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum[fn:1]:
+14 Themes of the Elite Private School Curriculum[fn:2]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -106,7 +241,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:2]
+the IT sector in particular, is nominalism.[fn:3]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -141,7 +276,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:3]
+terminology. [fn:4]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -310,7 +445,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:4]
+resources. [fn:5]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -477,12 +612,14 @@ this is the description of the blog section
 
 * Footnotes
 
-[fn:1] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:1] (schemas are synonymous to models in this context)
 
-[fn:2] You will probably see me return to this topic in other posts.
+[fn:2] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:3] I got the idea of such table from a similar table found on
+[fn:3] You will probably see me return to this topic in other posts.
+
+[fn:4] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:4] The manager can be seen as a vicarious owner of company
+[fn:5] The manager can be seen as a vicarious owner of company
 resources.
