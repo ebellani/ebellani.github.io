@@ -43,12 +43,91 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Renaming, not abstraction, is the problem of our industry
+:PROPERTIES:
+:EXPORT_FILE_NAME: renaming-not-abstraction
+:EXPORT_DATE: 2024-01-30
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug renaming-not-abstraction
+:END:
+
+#+begin_quote
+abstraction (n.) (Latin abs, from trahere, to draw).
+#+end_quote
+
+I've seen people I consider good software engineers complaining that
+over-abstraction is a (the?) major problem in our industry today. Such
+points are usually raised when discussing software architecture in
+particular (one example: [cite:@arch_evolution]).
+
+I'd like to defend abstraction, and how I don't think it is possible to
+have over abstraction (in the same sense you cannot be overly good, or
+overly healthy).
+
+The definition I'd like to use for abstraction is this:
+
+#+begin_quote
+The most eminent Scholastics, however, following Aristotle, ascribe to
+the mind in its higher aspect a power (called the Active Intellect)
+which abstracts from the representations of concrete things or qualities
+the typical, ideal, essential elements, leaving behind those that are
+material and particular.  [cite:@deffy_abstraction]
+#+end_quote
+
+As one can see from such definition, the process is to select the
+essentials from what its concrete manifestation. On software
+engineering, that means picking out the right form for your
+requirements, functional or otherwise.
+
+What I think people are complaining about is renaming/rebranding
+concepts, which is rife in our industry (see the table on [[#cqrs-nominalism][CQRS as
+nominalism]] for an example).
+
+What to do then, as a software engineer? Go beyond names, and meditate
+on the essences of your craft. What is a function, what is a relation,
+what is a number? It will then not matter (to you at least) if someone
+calls a function an object, or a relation a table.
+
+
+#+print_bibliography:
+
+** Measure, don’t guess.
+:PROPERTIES:
+:EXPORT_FILE_NAME: measure-dont-guess
+:EXPORT_DATE: 2023-12-09
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug measure-dont-guess
+:END:
+
+
+#+begin_quote
+... when you trade safety for performance, you may get
+neither. Especially when it comes to concurrency, the intuition of many
+developers about where a performance problem lies or which approach will
+be faster or more scalable is often incorrect.
+
+It is therefore imperative that any performance tuning exercise be
+accompanied by concrete performance requirements (so you know both when
+to tune and when to stop tuning) and with a measurement program in place
+using a realistic configuration and load profile.
+
+
+Measure again after tuning to verify that you’ve achieved the desired
+improvements. The safety and maintenance risks associated with many
+optimizations are bad enough—you don’t want to pay these costs if you
+don’t need to—and you definitely don’t want to pay them if you don’t
+even get the desired benefit. [cite:@goetz2006java]
+#+end_quote
+
+
+
+#+print_bibliography:
+
 ** A dangerous book
 :PROPERTIES:
 :EXPORT_FILE_NAME: dangerous-book
 :EXPORT_DATE: 2024-01-04
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug dangerous-book
 :END:
+
 
 I recently [[https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29][commented]] on how the book [cite:@Kleppmann_Martin2017-05-02]
 is a dangerous book, due to a subtle error on how it defines data
@@ -176,8 +255,6 @@ with physical concerns (scalability and throughput), which might lead to
 wrong (and very costly) technology and business decisions.
 
 
-#+print_bibliography:
-
 ** Themes of the Elite Private School Curriculum
 :PROPERTIES:
 :EXPORT_FILE_NAME: theme-elite-schooling
@@ -238,6 +315,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :EXPORT_FILE_NAME: cqrs-nominalism
 :EXPORT_DATE: 2023-11-04
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug cqrs-nominalism
+:CUSTOM_ID: cqrs-nominalism
 :END:
 
 A theme that I think is important to understand a lot of modernity and
