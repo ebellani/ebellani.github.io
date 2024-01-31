@@ -74,9 +74,9 @@ material and particular.  [cite:@deffy_abstraction]
 #+end_quote
 
 As one can see from such definition, the process is to select the
-essentials from what its concrete manifestation. On software
-engineering, that means picking out the right form for your
-requirements, functional or otherwise.
+essentials from its concrete manifestation. On software engineering,
+that means picking out the right form for your requirements, functional
+or otherwise.
 
 What I think people are complaining about is renaming/rebranding
 concepts, which is rife in our industry (see the table on [[#cqrs-nominalism][CQRS as
