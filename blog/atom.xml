@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-01-31T03:09:44Z</updated>
+  <updated>2024-01-31T03:26:01Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -41,9 +41,9 @@ the typical, ideal, essential elements, leaving behind those that are
 material and particular.  (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Duffy 1907&lt;/a&gt;)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;As one can see from such definition, the process is to select the
-essentials from what its concrete manifestation. On software
-engineering, that means picking out the right form for your
-requirements, functional or otherwise.&lt;/p&gt;
+essentials from its concrete manifestation. On software engineering,
+that means picking out the right form for your requirements, functional
+or otherwise.&lt;/p&gt;
 &lt;p&gt;What I think people are complaining about is renaming/rebranding
 concepts, which is rife in our industry (see the table on &lt;a href=&#34;/blog/2023/cqrs-nominalism/&#34;&gt;CQRS as
 nominalism&lt;/a&gt; for an example).&lt;/p&gt;
