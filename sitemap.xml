@@ -2,20 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://ebellani.github.io/categories/blog/</loc>
+    <lastmod>2024-01-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ebellani.github.io/blog/</loc>
+    <lastmod>2024-01-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ebellani.github.io/categories/</loc>
+    <lastmod>2024-01-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ebellani.github.io/</loc>
+    <lastmod>2024-01-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</loc>
+    <lastmod>2024-01-30T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://ebellani.github.io/blog/2024/dangerous-book/</loc>
     <lastmod>2024-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://ebellani.github.io/categories/blog/</loc>
-    <lastmod>2024-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://ebellani.github.io/blog/</loc>
-    <lastmod>2024-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://ebellani.github.io/categories/</loc>
-    <lastmod>2024-01-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://ebellani.github.io/</loc>
-    <lastmod>2024-01-04T00:00:00+00:00</lastmod>
+    <loc>https://ebellani.github.io/blog/2023/measure-dont-guess/</loc>
+    <lastmod>2023-12-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://ebellani.github.io/blog/2023/theme-elite-schooling/</loc>
     <lastmod>2023-11-26T00:00:00+00:00</lastmod>

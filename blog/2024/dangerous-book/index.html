@@ -39,7 +39,7 @@
 
 
     </small>
-  </h2><p>I recently <a href="https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29">commented</a> on how the book (<a href="#citeproc_bib_item_4">Kleppmann 2017</a>)
+  </h2><p>I recently <a href="https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29">commented</a> on how the book (Kleppmann 2017)
 is a dangerous book, due to a subtle error on how it defines data
 models. I suppose it&rsquo;s my burden to further clarify this point, and for
 that I&rsquo;ll use Hayek&rsquo;s critical methodological maxim:</p>
@@ -54,7 +54,7 @@ can meaningfully ask what might go wrong</p>
 objects, operators, and so forth, that together constitute the abstract
 machine with which users interact. The objects allow us to model the
 structure of data. The operators allow us to model its behavior.
-(<a href="#citeproc_bib_item_2">Date 2003</a>):</p>
+(Date 2003):</p>
 </blockquote>
 <!--quoteend-->
 <blockquote>
@@ -70,7 +70,7 @@ explicitly define the set of consistent database states or changes of
 state or both &ndash; these rules may sometimes be expressed as
 insert-update-delete rules.</li>
 </ol>
-<p>(<a href="#citeproc_bib_item_1">Codd 1980</a>)</p>
+<p>(Codd 1980)</p>
 </blockquote>
 <p>In particular, the Relational Data Model</p>
 <blockquote>
@@ -85,14 +85,14 @@ relation types</li>
 <li>A complete (but otherwise open-ended) collection of generic operators
 for deriving values from other values</li>
 </ol>
-<p>(<a href="#citeproc_bib_item_3">Date 2015</a>)</p>
+<p>(Date 2015)</p>
 </blockquote>
 <p>Unfortunately, in our industry, it almost exclusively means a model of
 which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
-progression(<a href="#citeproc_bib_item_6">Steel 1975</a>):</p>
+progression(Steel 1975):</p>
 <p>Conceptual schema -&gt; Logical schema -&gt; Physical schema <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p>What are those? I can&rsquo;t do better than (<a href="#citeproc_bib_item_5">Pascal 2016</a>)</p>
+<p>What are those? I can&rsquo;t do better than (Pascal 2016)</p>
 <blockquote>
 <p>Think of a conceptual model as the territory, the logical model as its
 symbolic representation on the map and the map print and medium (paper,
@@ -105,7 +105,7 @@ their correspondence to the elements of the territory (e.g., cities,
 highways, forests and so on) they symbolize on the map.</p>
 </blockquote>
 <h2 id="what-is-wrong-with-the-book-s-definition">What is wrong with the book&rsquo;s definition?</h2>
-<p>(<a href="#citeproc_bib_item_4">Kleppmann 2017</a>) does not provide an explicit
+<p>(Kleppmann 2017) does not provide an explicit
 definition. The closest he has is this paragraph:</p>
 <blockquote>
 <p>Most applications are built by layering one data model on top of
@@ -119,7 +119,7 @@ count as a Data Model. So, the author refers to all 4 models (and any
 concrete instance of them) using the same term.</p>
 <h2 id="why-does-this-matter">Why does this matter?</h2>
 <p>I hope that the consequences of such confusion would be clear to the
-reader. If not, consider the advice of (<a href="#citeproc_bib_item_5">Pascal 2016</a>)</p>
+reader. If not, consider the advice of (Pascal 2016)</p>
 <blockquote>
 <p>Referring to all four as data models, or using the terms interchangeably
 blurs the important differences, reflecting common confusion of levels
@@ -143,15 +143,6 @@ achieve, including very large datasets or very high write throughput
 <p>Here, the author is confusing a Data Model (the relational data model)
 with physical concerns (scalability and throughput), which might lead to
 wrong (and very costly) technology and business decisions.</p>
-<h2 id="references">References</h2>
-<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
-  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Codd, E. F. 1980. “Data Models in Database Management.” <i>Sigplan Not.</i> 16 (1): 112–14. <a href="https://doi.org/10.1145/960124.806891">https://doi.org/10.1145/960124.806891</a>.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Date, C.J. 2003. <i>An Introduction to Database Systems</i>. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Date, Chris. 2015. <i>Sql and relational theory: How to write accurate sql code</i>. Paperback. O’Reilly Media.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Kleppmann, Martin. 2017. <i>Designing data-intensive applications: The big ideas behind reliable, scalable, and maintainable systems</i>. Paperback. O’Reilly Media.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Pascal, Fabian. 2016. <i>The Dbdebunk Guide to Misconceptions About Data Fundamentals</i>. DATABASE DEBUNKINGS.</div>
-  <div class="csl-entry"><a id="citeproc_bib_item_6"></a>Steel, Thomas B. Jr., ed. 1975. “Interim Report: Ansi/X3/Sparc Study Group on Data Base Management Systems 75-02-08.” <i>Bulletin of Acm Sigmod</i> 7 (2): 1–140. <a href="http://portal.acm.org/toc.cfm?id=984332">http://portal.acm.org/toc.cfm?id=984332</a>.</div>
-</div>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -162,6 +153,10 @@ wrong (and very costly) technology and business decisions.</p>
 </div>
 
 
+
+   
+
+   
 
    
 

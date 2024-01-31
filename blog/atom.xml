@@ -5,13 +5,62 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-01-05T18:52:01Z</updated>
+  <updated>2024-01-31T03:09:44Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Renaming, not abstraction, is the problem of our industry</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/renaming-not-abstraction/"/>
+    <id>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</id>
+    <published>2024-01-30T00:00:00Z</published>
+    <updated>2024-01-30T00:00:00Z</updated>
+    <summary>abstraction (n.) (Latin abs, from trahere, to draw).
+ I&amp;rsquo;ve seen people I consider good software engineers complaining that over-abstraction is a (the?) major problem in our industry today. Such points are usually raised when discussing software architecture in particular (one example: (iamprovidence 2023)).
+I&amp;rsquo;d like to defend abstraction, and how I don&amp;rsquo;t think it is possible to have over abstraction (in the same sense you cannot be overly good, or overly healthy).</summary>
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;abstraction (n.) (Latin abs, from trahere, to draw).&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;ve seen people I consider good software engineers complaining that
+over-abstraction is a (the?) major problem in our industry today. Such
+points are usually raised when discussing software architecture in
+particular (one example: (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;iamprovidence 2023&lt;/a&gt;)).&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;d like to defend abstraction, and how I don&amp;rsquo;t think it is possible to
+have over abstraction (in the same sense you cannot be overly good, or
+overly healthy).&lt;/p&gt;
+&lt;p&gt;The definition I&amp;rsquo;d like to use for abstraction is this:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The most eminent Scholastics, however, following Aristotle, ascribe to
+the mind in its higher aspect a power (called the Active Intellect)
+which abstracts from the representations of concrete things or qualities
+the typical, ideal, essential elements, leaving behind those that are
+material and particular.  (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Duffy 1907&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;As one can see from such definition, the process is to select the
+essentials from what its concrete manifestation. On software
+engineering, that means picking out the right form for your
+requirements, functional or otherwise.&lt;/p&gt;
+&lt;p&gt;What I think people are complaining about is renaming/rebranding
+concepts, which is rife in our industry (see the table on &lt;a href=&#34;/blog/2023/cqrs-nominalism/&#34;&gt;CQRS as
+nominalism&lt;/a&gt; for an example).&lt;/p&gt;
+&lt;p&gt;What to do then, as a software engineer? Go beyond names, and meditate
+on the essences of your craft. What is a function, what is a relation,
+what is a number? It will then not matter (to you at least) if someone
+calls a function an object, or a relation a table.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Duffy, F. 1907. “Abstraction.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;http://www.newadvent.org/cathen/01074a.htm&#34;&gt;http://www.newadvent.org/cathen/01074a.htm&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;iamprovidence. 2023. “Backend Side Architecture Evolution (N-Layered, Ddd, Hexagon, Onion, Clean Architecture).” &lt;a href=&#34;https://web.archive.org/web/20230721054753/https://medium.com/@iamprovidence/backend-side-architecture-evolution-n-layered-ddd-hexagon-onion-clean-architecture-643d72444ce4&#34;&gt;https://web.archive.org/web/20230721054753/https://medium.com/@iamprovidence/backend-side-architecture-evolution-n-layered-ddd-hexagon-onion-clean-architecture-643d72444ce4&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>A dangerous book</title>
@@ -22,7 +71,7 @@
     <summary>I recently commented on how the book (Kleppmann 2017) is a dangerous book, due to a subtle error on how it defines data models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:
  We must first explain how an economy can possibly work right before we can meaningfully ask what might go wrong
  What is a data model? Here are 3 definitions, in increasing level of detail:</summary>
-    <content type="html">&lt;p&gt;I recently &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29&#34;&gt;commented&lt;/a&gt; on how the book (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kleppmann 2017&lt;/a&gt;)
+    <content type="html">&lt;p&gt;I recently &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29&#34;&gt;commented&lt;/a&gt; on how the book (Kleppmann 2017)
 is a dangerous book, due to a subtle error on how it defines data
 models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for
 that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:&lt;/p&gt;
@@ -37,7 +86,7 @@ can meaningfully ask what might go wrong&lt;/p&gt;
 objects, operators, and so forth, that together constitute the abstract
 machine with which users interact. The objects allow us to model the
 structure of data. The operators allow us to model its behavior.
-(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Date 2003&lt;/a&gt;):&lt;/p&gt;
+(Date 2003):&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;!--quoteend--&gt;
 &lt;blockquote&gt;
@@ -53,7 +102,7 @@ explicitly define the set of consistent database states or changes of
 state or both &amp;ndash; these rules may sometimes be expressed as
 insert-update-delete rules.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Codd 1980&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;(Codd 1980)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;In particular, the Relational Data Model&lt;/p&gt;
 &lt;blockquote&gt;
@@ -68,14 +117,14 @@ relation types&lt;/li&gt;
 &lt;li&gt;A complete (but otherwise open-ended) collection of generic operators
 for deriving values from other values&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Date 2015&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;(Date 2015)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Unfortunately, in our industry, it almost exclusively means a model of
 which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
-progression(&lt;a href=&#34;#citeproc_bib_item_6&#34;&gt;Steel 1975&lt;/a&gt;):&lt;/p&gt;
+progression(Steel 1975):&lt;/p&gt;
 &lt;p&gt;Conceptual schema -&amp;gt; Logical schema -&amp;gt; Physical schema &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;What are those? I can&amp;rsquo;t do better than (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;What are those? I can&amp;rsquo;t do better than (Pascal 2016)&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Think of a conceptual model as the territory, the logical model as its
 symbolic representation on the map and the map print and medium (paper,
@@ -88,7 +137,7 @@ their correspondence to the elements of the territory (e.g., cities,
 highways, forests and so on) they symbolize on the map.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;what-is-wrong-with-the-book-s-definition&#34;&gt;What is wrong with the book&amp;rsquo;s definition?&lt;/h2&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kleppmann 2017&lt;/a&gt;) does not provide an explicit
+&lt;p&gt;(Kleppmann 2017) does not provide an explicit
 definition. The closest he has is this paragraph:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Most applications are built by layering one data model on top of
@@ -102,7 +151,7 @@ count as a Data Model. So, the author refers to all 4 models (and any
 concrete instance of them) using the same term.&lt;/p&gt;
 &lt;h2 id=&#34;why-does-this-matter&#34;&gt;Why does this matter?&lt;/h2&gt;
 &lt;p&gt;I hope that the consequences of such confusion would be clear to the
-reader. If not, consider the advice of (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
+reader. If not, consider the advice of (Pascal 2016)&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Referring to all four as data models, or using the terms interchangeably
 blurs the important differences, reflecting common confusion of levels
@@ -126,15 +175,6 @@ achieve, including very large datasets or very high write throughput
 &lt;p&gt;Here, the author is confusing a Data Model (the relational data model)
 with physical concerns (scalability and throughput), which might lead to
 wrong (and very costly) technology and business decisions.&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Codd, E. F. 1980. “Data Models in Database Management.” &lt;i&gt;Sigplan Not.&lt;/i&gt; 16 (1): 112–14. &lt;a href=&#34;https://doi.org/10.1145/960124.806891&#34;&gt;https://doi.org/10.1145/960124.806891&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Date, C.J. 2003. &lt;i&gt;An Introduction to Database Systems&lt;/i&gt;. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Date, Chris. 2015. &lt;i&gt;Sql and relational theory: How to write accurate sql code&lt;/i&gt;. Paperback. O’Reilly Media.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Kleppmann, Martin. 2017. &lt;i&gt;Designing data-intensive applications: The big ideas behind reliable, scalable, and maintainable systems&lt;/i&gt;. Paperback. O’Reilly Media.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_6&#34;&gt;&lt;/a&gt;Steel, Thomas B. Jr., ed. 1975. “Interim Report: Ansi/X3/Sparc Study Group on Data Base Management Systems 75-02-08.” &lt;i&gt;Bulletin of Acm Sigmod&lt;/i&gt; 7 (2): 1–140. &lt;a href=&#34;http://portal.acm.org/toc.cfm?id=984332&#34;&gt;http://portal.acm.org/toc.cfm?id=984332&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
@@ -144,6 +184,39 @@ wrong (and very costly) technology and business decisions.&lt;/p&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Measure, don’t guess.</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2023/measure-dont-guess/"/>
+    <id>https://ebellani.github.io/blog/2023/measure-dont-guess/</id>
+    <published>2023-12-09T00:00:00Z</published>
+    <updated>2023-12-09T00:00:00Z</updated>
+    <summary>&amp;hellip; when you trade safety for performance, you may get neither. Especially when it comes to concurrency, the intuition of many developers about where a performance problem lies or which approach will be faster or more scalable is often incorrect.
+It is therefore imperative that any performance tuning exercise be accompanied by concrete performance requirements (so you know both when to tune and when to stop tuning) and with a measurement program in place using a realistic configuration and load profile.</summary>
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; when you trade safety for performance, you may get
+neither. Especially when it comes to concurrency, the intuition of many
+developers about where a performance problem lies or which approach will
+be faster or more scalable is often incorrect.&lt;/p&gt;
+&lt;p&gt;It is therefore imperative that any performance tuning exercise be
+accompanied by concrete performance requirements (so you know both when
+to tune and when to stop tuning) and with a measurement program in place
+using a realistic configuration and load profile.&lt;/p&gt;
+&lt;p&gt;Measure again after tuning to verify that you’ve achieved the desired
+improvements. The safety and maintenance risks associated with many
+optimizations are bad enough—you don’t want to pay these costs if you
+don’t need to—and you definitely don’t want to pay them if you don’t
+even get the desired benefit. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Goetz 2006&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Goetz, B. 2006. &lt;i&gt;Java Concurrency in Practice&lt;/i&gt;. Addison-Wesley.&lt;/div&gt;
+&lt;/div&gt;</content>
     
     
     <category term="blog"/>

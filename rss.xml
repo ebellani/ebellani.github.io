@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Renaming, not abstraction, is the problem of our industry</title>
+      <link>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</link>
+      <pubDate>Tue, 30 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</guid>
+      <description>abstraction (n.) (Latin abs, from trahere, to draw).
+ I&amp;rsquo;ve seen people I consider good software engineers complaining that over-abstraction is a (the?) major problem in our industry today. Such points are usually raised when discussing software architecture in particular (one example: (iamprovidence 2023)).
+I&amp;rsquo;d like to defend abstraction, and how I don&amp;rsquo;t think it is possible to have over abstraction (in the same sense you cannot be overly good, or overly healthy).</description>
+    </item>
+    
     <item>
       <title>A dangerous book</title>
       <link>https://ebellani.github.io/blog/2024/dangerous-book/</link>
@@ -16,6 +27,16 @@
       <description>I recently commented on how the book (Kleppmann 2017) is a dangerous book, due to a subtle error on how it defines data models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:
  We must first explain how an economy can possibly work right before we can meaningfully ask what might go wrong
  What is a data model? Here are 3 definitions, in increasing level of detail:</description>
+    </item>
+    
+    <item>
+      <title>Measure, don’t guess.</title>
+      <link>https://ebellani.github.io/blog/2023/measure-dont-guess/</link>
+      <pubDate>Sat, 09 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2023/measure-dont-guess/</guid>
+      <description>&amp;hellip; when you trade safety for performance, you may get neither. Especially when it comes to concurrency, the intuition of many developers about where a performance problem lies or which approach will be faster or more scalable is often incorrect.
+It is therefore imperative that any performance tuning exercise be accompanied by concrete performance requirements (so you know both when to tune and when to stop tuning) and with a measurement program in place using a realistic configuration and load profile.</description>
     </item>
     
     <item>
