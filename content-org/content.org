@@ -254,7 +254,7 @@ Here, the author is confusing a Data Model (the relational data model)
 with physical concerns (scalability and throughput), which might lead to
 wrong (and very costly) technology and business decisions.
 
-
+#+print_bibliography:
 ** Themes of the Elite Private School Curriculum
 :PROPERTIES:
 :EXPORT_FILE_NAME: theme-elite-schooling
