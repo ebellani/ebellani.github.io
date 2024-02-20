@@ -43,6 +43,17 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Performance and safety
+:PROPERTIES:
+:EXPORT_FILE_NAME: performance-and-safety
+:EXPORT_DATE: 2024-02-20
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug performance-and-safety
+:END:
+
+1. The human mind is limited in its capacity to understand complexity.
+2. Concurrent software systems are among the most complex of all human creations.
+3. Therefore, when you trade safety for performance, you will probably get neither.
+
 ** Renaming, not abstraction, is the problem of our industry
 :PROPERTIES:
 :EXPORT_FILE_NAME: renaming-not-abstraction
