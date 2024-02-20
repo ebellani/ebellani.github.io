@@ -5,13 +5,32 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-02-06T03:19:41Z</updated>
+  <updated>2024-02-20T03:35:06Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Performance and safety</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/performance-and-safety/"/>
+    <id>https://ebellani.github.io/blog/2024/performance-and-safety/</id>
+    <published>2024-02-20T00:00:00Z</published>
+    <updated>2024-02-20T00:00:00Z</updated>
+    <summary> The human mind is limited in its capacity to understand complexity. Concurrent software systems are among the most complex of all human creations. Therefore, when you trade safety for performance, you will probably get neither.  </summary>
+    <content type="html">&lt;ol&gt;
+&lt;li&gt;The human mind is limited in its capacity to understand complexity.&lt;/li&gt;
+&lt;li&gt;Concurrent software systems are among the most complex of all human creations.&lt;/li&gt;
+&lt;li&gt;Therefore, when you trade safety for performance, you will probably get neither.&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Renaming, not abstraction, is the problem of our industry</title>

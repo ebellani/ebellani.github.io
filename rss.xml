@@ -6,7 +6,16 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Jan 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Performance and safety</title>
+      <link>https://ebellani.github.io/blog/2024/performance-and-safety/</link>
+      <pubDate>Tue, 20 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/performance-and-safety/</guid>
+      <description> The human mind is limited in its capacity to understand complexity. Concurrent software systems are among the most complex of all human creations. Therefore, when you trade safety for performance, you will probably get neither.  </description>
+    </item>
+    
     <item>
       <title>Renaming, not abstraction, is the problem of our industry</title>
       <link>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</link>
