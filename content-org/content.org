@@ -43,6 +43,20 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Measurable behaviors of a leader
+:PROPERTIES:
+:EXPORT_FILE_NAME: performance-and-safety
+:EXPORT_DATE: 2024-02-20
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug performance-and-safety
+:END:
+
+- building and maintaining a team
+- providing direction through a vision
+- creating realistic plans based on such vision
+- getting the resources needed to execute the plan
+- providing actionable feedback
+- explaining how they make decisions
+
 ** Performance and safety
 :PROPERTIES:
 :EXPORT_FILE_NAME: performance-and-safety
