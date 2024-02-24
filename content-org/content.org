@@ -43,6 +43,102 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** How I do development on PostgreSQL over Emacs
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-to-do-development-on-postgresql-over-emacs
+:EXPORT_DATE: 2024-02-24
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug how-to-do-development-on-postgresql-over-emacs
+:END:
+
+These days I'm doing quite a lot of work in PostgreSql. Given that my
+tool of choice is Emacs, I had to learn how to make do. This post's goal
+is to document that.
+
+First, I set up a connection
+
+#+begin_src elisp
+  (add-to-list 'sql-connection-alist
+               `(production-read-only (sql-product 'postgres)
+                                      (sql-user    "prod_user")
+                                      (sql-server "data-aurora.cluster-ro.us-east-1.rds.amazonaws.com")
+                                      (sql-database   "ProdDB")))
+#+end_src
+
+Since this uses psql under the covers and I want to not to have to type
+passwords all the time, I store the passwords in ~~/.pgpass~.
+
+#+begin_src shell
+  # hostname:port:database:username:password
+  data-aurora.cluster-ro.us-east-1.rds.amazonaws.com:5432:ProdDB:prod_user:the_password
+#+end_src
+
+In order to make life a bit better over at psql's prompt, I have a
+~.psqlrc~ file with the following:
+
+#+begin_src shell
+  \set QUIET 1
+
+  \set PROMPT1 '(%n@%m) [%/] > '
+  \set PROMPT2 ''
+
+  \pset null '[null]'
+  \set COMP_KEYWORD_CASE upper
+  \set HISTSIZE 2000
+  \set VERBOSITY verbose
+  \pset linestyle unicode
+  \pset border 2
+  \pset format wrapped
+
+  \set QUIET 0
+#+end_src
+
+Finally, I'd like to keep the history of commands. Here is how I enable that on comint-mode:
+
+#+begin_src elisp
+  (use-package comint
+    ;; This is based on
+    ;; https://oleksandrmanzyuk.wordpress.com/2011/10/23/a-persistent-command-history-in-emacs/
+    ;; The idea is to store sessions of comint based modes. For example, to enable
+    ;; reading/writing of command history in, say, inferior-haskell-mode buffers,
+    ;; simply add turn-on-comint-history to inferior-haskell-mode-hook by adding
+    ;; it to the :hook directive
+    :config
+    (defun comint-write-history-on-exit (process event)
+      (comint-write-input-ring)
+      (let ((buf (process-buffer process)))
+        (when (buffer-live-p buf)
+          (with-current-buffer buf
+            (insert (format "\nProcess %s %s" process event))))))
+
+    (defun turn-on-comint-history ()
+      (let ((process (get-buffer-process (current-buffer))))
+        (when process
+          (setq comint-input-ring-file-name
+                (format "~/.emacs.d/inferior-%s-history"
+                        (process-name process)))
+          (comint-read-input-ring)
+          (set-process-sentinel process
+                                #'comint-write-history-on-exit))))
+
+    (defun mapc-buffers (fn)
+      (mapc (lambda (buffer)
+              (with-current-buffer buffer
+                (funcall fn)))
+            (buffer-list)))
+
+    (defun comint-write-input-ring-all-buffers ()
+      (mapc-buffers 'comint-write-input-ring))
+
+    (add-hook 'kill-emacs-hook 'comint-write-input-ring-all-buffers)
+    (add-hook 'kill-buffer-hook 'comint-write-input-ring))
+
+  (use-package sql
+    :after comint
+    :config
+    (add-hook 'sql-interactive-mode-hook 'turn-on-comint-history)
+    (setq sql-password-wallet (list "~/.authinfo.gpg")))
+#+end_src
+
 ** Measurable behaviors of a leader
 :PROPERTIES:
 :EXPORT_FILE_NAME: performance-and-safety
