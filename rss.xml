@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How I do development on PostgreSQL over Emacs</title>
+      <link>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</link>
+      <pubDate>Sat, 24 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</guid>
+      <description>These days I&amp;rsquo;m doing quite a lot of work in PostgreSql. Given that my tool of choice is Emacs, I had to learn how to make do. This post&amp;rsquo;s goal is to document that.
+First, I set up a connection
+(add-to-list &amp;#39;sql-connection-alist `(production-read-only (sql-product &amp;#39;postgres) (sql-user &amp;#34;prod_user&amp;#34;) (sql-server &amp;#34;data-aurora.cluster-ro.us-east-1.rds.amazonaws.com&amp;#34;) (sql-database &amp;#34;ProdDB&amp;#34;))) Since this uses psql under the covers and I want to not to have to type passwords all the time, I store the passwords in ~/.</description>
+    </item>
+    
     <item>
       <title>Performance and safety</title>
       <link>https://ebellani.github.io/blog/2024/performance-and-safety/</link>
