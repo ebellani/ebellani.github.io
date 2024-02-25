@@ -5,13 +5,47 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-02-24T03:22:47Z</updated>
+  <updated>2024-02-25T02:07:58Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>What is database normalization and why should you do it?</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/"/>
+    <id>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</id>
+    <published>2024-02-25T00:00:00Z</published>
+    <updated>2024-02-25T00:00:00Z</updated>
+    <summary>A fully normalized database means one thing, and only one thing: your relations corresponds only one predicate under a given interpretation (i.e. your business rules).
+You should properly normalize your database because it:
+  Simplifies integrity enforcement and data manipulation; Avoids data redundancy and the risk of database inconsistency; Guarantees semantic correctness: no update anomalies. (Pascal 2016)   PS: As an example of the impact to the bottom line, think of it means to have to trust, but verify every piece of data you have.</summary>
+    <content type="html">&lt;p&gt;A fully normalized database means one thing, and &lt;strong&gt;only&lt;/strong&gt; one thing: your
+relations corresponds only one predicate &lt;strong&gt;under a given interpretation
+(i.e. your business rules)&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;You should properly normalize your database because it:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Simplifies integrity enforcement and data manipulation;&lt;/li&gt;
+&lt;li&gt;Avoids data redundancy and the risk of database inconsistency;&lt;/li&gt;
+&lt;li&gt;Guarantees semantic correctness: no update
+anomalies. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;PS: As an example of the impact to the bottom line, think of it means to
+have to &lt;code&gt;trust, but verify&lt;/code&gt; every piece of data you have. How many
+checks, and in how many places? What if you forget one of those?&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>How I do development on PostgreSQL over Emacs</title>

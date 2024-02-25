@@ -6,14 +6,25 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 24 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 25 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Sat, 24 Feb 2024 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>What is database normalization and why should you do it?</title>
+      <link>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</link>
+      <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</guid>
+      <description>A fully normalized database means one thing, and only one thing: your relations corresponds only one predicate under a given interpretation (i.e. your business rules).
+You should properly normalize your database because it:
+  Simplifies integrity enforcement and data manipulation; Avoids data redundancy and the risk of database inconsistency; Guarantees semantic correctness: no update anomalies. (Pascal 2016)   PS: As an example of the impact to the bottom line, think of it means to have to trust, but verify every piece of data you have.</description>
     </item>
     
     <item>
