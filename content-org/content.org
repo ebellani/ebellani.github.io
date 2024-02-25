@@ -43,6 +43,32 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** What is database normalization and why should you do it?
+:PROPERTIES:
+:EXPORT_FILE_NAME: what-is-database-normalization-and-why-should-you-do-it
+:EXPORT_DATE: 2024-02-25
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug what-is-database-normalization-and-why-should-you-do-it
+:END:
+
+A fully normalized database means one thing, and *only* one thing: your
+relations corresponds only one predicate *under a given interpretation
+(i.e. your business rules)*.
+
+You should properly normalize your database because it:
+
+#+begin_quote
+- Simplifies integrity enforcement and data manipulation;
+- Avoids data redundancy and the risk of database inconsistency;
+- Guarantees semantic correctness: no update
+  anomalies. [cite:@pascal_guide]
+#+end_quote
+
+PS: As an example of the impact to the bottom line, think of it means to
+have to ~trust, but verify~ every piece of data you have. How many
+checks, and in how many places? What if you forget one of those?
+
+#+print_bibliography:
+
 ** How I do development on PostgreSQL over Emacs
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-do-development-on-postgresql-over-emacs
