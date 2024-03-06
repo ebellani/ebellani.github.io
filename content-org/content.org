@@ -43,6 +43,24 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Microservices as reification
+:PROPERTIES:
+:EXPORT_FILE_NAME: microservices-as-reification
+:EXPORT_DATE: 2024-03-05
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug microservices-as-reification
+:END:
+
+https://www.cs.cmu.edu/~wing/publications/Wing02a.pdf
+
+refication
+
+microservices
+
+CAP theorem
+
+Actor
+
+
 ** What is database normalization and why should you do it?
 :PROPERTIES:
 :EXPORT_FILE_NAME: what-is-database-normalization-and-why-should-you-do-it
