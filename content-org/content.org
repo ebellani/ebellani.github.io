@@ -67,6 +67,8 @@ PS: As an example of the impact to the bottom line, think of it means to
 have to ~trust, but verify~ every piece of data you have. How many
 checks, and in how many places? What if you forget one of those?
 
+[[./287615-rose-window-strasbourg-cathedral-strasbourg-france.jpg]]
+
 #+print_bibliography:
 
 ** How I do development on PostgreSQL over Emacs
