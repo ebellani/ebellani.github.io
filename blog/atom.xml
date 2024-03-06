@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-02-25T02:07:58Z</updated>
+  <updated>2024-03-06T02:54:03Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -37,6 +37,9 @@ anomalies. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2016&lt;/a&gt;)&
 &lt;p&gt;PS: As an example of the impact to the bottom line, think of it means to
 have to &lt;code&gt;trust, but verify&lt;/code&gt; every piece of data you have. How many
 checks, and in how many places? What if you forget one of those?&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/287615-rose-window-strasbourg-cathedral-strasbourg-france.jpg&#34;/&gt;
+&lt;/figure&gt;
+
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
