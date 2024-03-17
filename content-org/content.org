@@ -43,15 +43,71 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** Microservices as reification
+** Unjustified adoption of microservices
 :PROPERTIES:
 :EXPORT_FILE_NAME: microservices-as-reification
 :EXPORT_DATE: 2024-03-05
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug microservices-as-reification
 :END:
 
-https://www.cs.cmu.edu/~wing/publications/Wing02a.pdf
+#+begin_quote
+Reification, the treatment of something abstract as a material or
+concrete thing, as in the following lines from Matthew Arnold’s poem
+“Dover Beach”: [cite:@refification_britannica]
+#+begin_verse
+/The Sea of Faith
+Was once, too, at the full, and round earth’s shore
+Lay like the folds of a bright girdle furled./
+#+end_verse
 
+#+end_quote
+
+
+The microservice architecture has taken a deep hold in the collective
+immagination of the software engineering comunity since 2014[fn:1]. This
+has happened despite significant well documented [[*The drawbacks][drawbacks]]. I'll call
+this phenomena the unjustified adoption of microservices(UAM). UAM calls
+for an explanation. A sketch of such explanation is my intent here, both
+of the origin of the phenomena and what it is.
+
+UAM is a reification of abstract processes[cite:@refification_britannica], where
+
+1. X is Y
+
+2. A is B.
+
+Its origins are:
+
+3. The desire to take advantage of the cloud computing offerings that
+   started to be available at the time
+4.
+
+
+*** The drawbacks
+#+begin_quote
+- It hurts performance. The overhead of serializing data and sending it
+  across the network is increasingly becoming a bottleneck . When
+  developers over-split their applications, these overheads compound.
+- It hurts correctness. It is extremely challenging to reason about the
+  interactions between every deployed version of every microservice. In
+  a case study of over 100 catastrophic failures of eight widely used
+  systems, two-thirds of failures were caused by the interactions
+  between multiple versions of a system.
+- It is hard to manage. Rather than having a single binary to build,
+  test, and deploy, developers have to manage 𝑛 different binaries, each
+  on their own release schedule. Running end-to-end tests with a local
+  instance of the application becomes an engineering feat.
+- It freezes APIs. Once a microservice establishes an API, it becomes
+  hard to change without breaking the other services that consume the
+  API. Legacy APIs linger around, and new APIs are patched on top.
+- It slows down application development. When making changes that affect
+  multiple microservices, developers cannot implement and deploy the
+  changes atomically. They have to carefully plan how to introduce the
+  change across 𝑛 microservices with their own release schedules.
+  [cite:@10.1145/3593856.3595909]
+#+end_quote
+
+My go
 refication
 
 microservices
@@ -60,6 +116,7 @@ CAP theorem
 
 Actor
 
+#+print_bibliography:
 
 ** What is database normalization and why should you do it?
 :PROPERTIES:
@@ -354,7 +411,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:1]
+Conceptual schema -> Logical schema -> Physical schema [fn:2]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -431,7 +488,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum[fn:2]:
+14 Themes of the Elite Private School Curriculum[fn:3]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -486,7 +543,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:3]
+the IT sector in particular, is nominalism.[fn:4]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -521,7 +578,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:4]
+terminology. [fn:5]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -690,7 +747,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:5]
+resources. [fn:6]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -857,14 +914,16 @@ this is the description of the blog section
 
 * Footnotes
 
-[fn:1] (schemas are synonymous to models in this context)
+[fn:1] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:2] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:2] (schemas are synonymous to models in this context)
 
-[fn:3] You will probably see me return to this topic in other posts.
+[fn:3] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:4] I got the idea of such table from a similar table found on
+[fn:4] You will probably see me return to this topic in other posts.
+
+[fn:5] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:5] The manager can be seen as a vicarious owner of company
+[fn:6] The manager can be seen as a vicarious owner of company
 resources.
