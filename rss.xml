@@ -6,7 +6,17 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 25 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pots, kettles and databases</title>
+      <link>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</link>
+      <pubDate>Sun, 17 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</guid>
+      <description>Sometimes you stumble upon small insights that illuminate a good chunk of things. Recently I think I have stumbled upon what I believe is a case of that, on the Hibernate manual(King 2024), of all places. The author of the manual itself makes it clear that it is a special section of the manual:
+ In this section, we’re going to give you our opinion. If you’re only interested in facts, or if you prefer not to read things that might undermine the opinion you currently hold, please feel free to skip straight to the next chapter.</description>
+    </item>
+    
     <item>
       <title>What is database normalization and why should you do it?</title>
       <link>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</link>

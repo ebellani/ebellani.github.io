@@ -5,13 +5,75 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-03-06T02:54:03Z</updated>
+  <updated>2024-03-17T18:05:53Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Pots, kettles and databases</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/pots-kettles-and-databases/"/>
+    <id>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</id>
+    <published>2024-03-17T00:00:00Z</published>
+    <updated>2024-03-17T00:00:00Z</updated>
+    <summary>Sometimes you stumble upon small insights that illuminate a good chunk of things. Recently I think I have stumbled upon what I believe is a case of that, on the Hibernate manual(King 2024), of all places. The author of the manual itself makes it clear that it is a special section of the manual:
+ In this section, we’re going to give you our opinion. If you’re only interested in facts, or if you prefer not to read things that might undermine the opinion you currently hold, please feel free to skip straight to the next chapter.</summary>
+    <content type="html">&lt;p&gt;Sometimes you stumble upon small insights that illuminate a good chunk
+of things. Recently I think I have stumbled upon what I believe is a
+case of that, on the Hibernate manual(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;King 2024&lt;/a&gt;), of
+all places. The author of the manual itself makes it clear that it is a
+special section of the manual:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In this section, we’re going to give you our opinion. If you’re only
+interested in facts, or if you prefer not to read things that might
+undermine the opinion you currently hold, please feel free to skip
+straight to the next chapter.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The section can be summarized in the following recommendation and
+image(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;King 2024&lt;/a&gt;):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;we’re not sure you need a separate persistence layer at all&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/hibernate-architecture.png&#34;
+         alt=&#34;Figure 1: Hibernate&amp;amp;rsquo;s manual suggested architecture&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Hibernate&amp;rsquo;s manual suggested architecture&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;What I found very interesting is that the core of the author&amp;rsquo;s point is
+that it was misguided to believe the following:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Eventually, some folks came to believe that their DAOs shielded their
+program from depending in a hard way on ORM, allowing them to &amp;ldquo;swap out&amp;rdquo;
+Hibernate, and replace it with JDBC, or with something else. In fact,
+this was never really true—there’s quite a deep difference between the
+programming model of JDBC, where every interaction with the database is
+explicit and synchronous, and the programming model of stateful sessions
+in Hibernate, where updates are implicit, and SQL statements are
+executed asynchronously.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;But the same argument applies to Hibernate itself! Why call a
+transaction/Hibernate layer at all? Why not just call directly the DBMS?
+So that you can &lt;strong&gt;swap DBMSes?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The following is an image that I think summarizes this article:&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Charles_Henry_Bennett_-_The_Pot_Calling_The_Kettle_Black_%28coloured_engraving%29_-_%28MeisterDrucke-969630%29.jpg&#34;
+         alt=&#34;Figure 2: Charles H. Bennett&amp;amp;rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &amp;amp;ldquo;The pot calling the kettle black&amp;amp;rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them.&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 2: &lt;/span&gt;Charles H. Bennett&amp;rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &amp;ldquo;The pot calling the kettle black&amp;rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them.&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;King, Gavin. 2024. &lt;i&gt;An Introduction to Hibernate 6&lt;/i&gt;. 6.4. &lt;a href=&#34;https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html&#34;&gt;https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>What is database normalization and why should you do it?</title>

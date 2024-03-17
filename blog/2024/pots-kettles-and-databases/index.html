@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  Pots, kettles and databases
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Pots, kettles and databases" />
+<meta property="og:description" content="Sometimes you stumble upon small insights that illuminate a good chunk of things. Recently I think I have stumbled upon what I believe is a case of that, on the Hibernate manual(King 2024), of all places. The author of the manual itself makes it clear that it is a special section of the manual:
+ In this section, we’re going to give you our opinion. If you’re only interested in facts, or if you prefer not to read things that might undermine the opinion you currently hold, please feel free to skip straight to the next chapter." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2024/pots-kettles-and-databases/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-03-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-03-17T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>Pots, kettles and databases
+    <small>
+      <time>March 17, 2024</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p>Sometimes you stumble upon small insights that illuminate a good chunk
+of things. Recently I think I have stumbled upon what I believe is a
+case of that, on the Hibernate manual(<a href="#citeproc_bib_item_1">King 2024</a>), of
+all places. The author of the manual itself makes it clear that it is a
+special section of the manual:</p>
+<blockquote>
+<p>In this section, we’re going to give you our opinion. If you’re only
+interested in facts, or if you prefer not to read things that might
+undermine the opinion you currently hold, please feel free to skip
+straight to the next chapter.</p>
+</blockquote>
+<p>The section can be summarized in the following recommendation and
+image(<a href="#citeproc_bib_item_1">King 2024</a>):</p>
+<blockquote>
+<p>we’re not sure you need a separate persistence layer at all</p>
+</blockquote>
+<figure><img src="/ox-hugo/hibernate-architecture.png"
+         alt="Figure 1: Hibernate&amp;rsquo;s manual suggested architecture"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Hibernate&rsquo;s manual suggested architecture</p>
+        </figcaption>
+</figure>
+
+<p>What I found very interesting is that the core of the author&rsquo;s point is
+that it was misguided to believe the following:</p>
+<blockquote>
+<p>Eventually, some folks came to believe that their DAOs shielded their
+program from depending in a hard way on ORM, allowing them to &ldquo;swap out&rdquo;
+Hibernate, and replace it with JDBC, or with something else. In fact,
+this was never really true—there’s quite a deep difference between the
+programming model of JDBC, where every interaction with the database is
+explicit and synchronous, and the programming model of stateful sessions
+in Hibernate, where updates are implicit, and SQL statements are
+executed asynchronously.</p>
+</blockquote>
+<p>But the same argument applies to Hibernate itself! Why call a
+transaction/Hibernate layer at all? Why not just call directly the DBMS?
+So that you can <strong>swap DBMSes?</strong></p>
+<p>The following is an image that I think summarizes this article:</p>
+<figure><img src="/ox-hugo/Charles_Henry_Bennett_-_The_Pot_Calling_The_Kettle_Black_%28coloured_engraving%29_-_%28MeisterDrucke-969630%29.jpg"
+         alt="Figure 2: Charles H. Bennett&amp;rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &amp;ldquo;The pot calling the kettle black&amp;rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them."/><figcaption>
+            <p><span class="figure-number">Figure 2: </span>Charles H. Bennett&rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &ldquo;The pot calling the kettle black&rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them.</p>
+        </figcaption>
+</figure>
+
+<h2 id="references">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>King, Gavin. 2024. <i>An Introduction to Hibernate 6</i>. 6.4. <a href="https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html">https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html</a>.</div>
+</div>
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>
