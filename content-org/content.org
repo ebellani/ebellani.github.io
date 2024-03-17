@@ -43,6 +43,61 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Pots, kettles and databases
+:PROPERTIES:
+:EXPORT_FILE_NAME: pots-kettles-and-databases
+:EXPORT_DATE: 2024-03-17
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug pots-kettles-and-databases
+:END:
+
+Sometimes you stumble upon small insights that illuminate a good chunk
+of things. Recently I think I have stumbled upon what I believe is a
+case of that, on the Hibernate manual[cite:@king24:_introd_hiber], of
+all places. The author of the manual itself makes it clear that it is a
+special section of the manual:
+
+#+begin_quote
+In this section, we’re going to give you our opinion. If you’re only
+interested in facts, or if you prefer not to read things that might
+undermine the opinion you currently hold, please feel free to skip
+straight to the next chapter.
+#+end_quote
+
+The section can be summarized in the following recommendation and
+image[cite:@king24:_introd_hiber]:
+
+#+begin_quote
+we’re not sure you need a separate persistence layer at all
+#+end_quote
+
+#+caption: Hibernate's manual suggested architecture
+[[./hibernate-architecture.png]]
+
+
+What I found very interesting is that the core of the author's point is
+that it was misguided to believe the following:
+
+#+begin_quote
+Eventually, some folks came to believe that their DAOs shielded their
+program from depending in a hard way on ORM, allowing them to "swap out"
+Hibernate, and replace it with JDBC, or with something else. In fact,
+this was never really true—there’s quite a deep difference between the
+programming model of JDBC, where every interaction with the database is
+explicit and synchronous, and the programming model of stateful sessions
+in Hibernate, where updates are implicit, and SQL statements are
+executed asynchronously.
+#+end_quote
+
+But the same argument applies to Hibernate itself! Why call a
+transaction/Hibernate layer at all? Why not just call directly the DBMS?
+So that you can *swap DBMSes?*
+
+The following is an image that I think summarizes this article:
+
+#+caption: Charles H. Bennett's coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of "The pot calling the kettle black". A street light throws the shadow of the kitchen implements on the wall behind them.
+[[./Charles_Henry_Bennett_-_The_Pot_Calling_The_Kettle_Black_(coloured_engraving)_-_(MeisterDrucke-969630).jpg]]
+
+#+print_bibliography:
 ** What is database normalization and why should you do it?
 :PROPERTIES:
 :EXPORT_FILE_NAME: what-is-database-normalization-and-why-should-you-do-it
