@@ -43,6 +43,31 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Principles of reliable applications
+:PROPERTIES:
+:EXPORT_FILE_NAME: principles-of-reliable-applications
+:EXPORT_DATE: 2024-03-19
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug principles-of-reliable-applications
+:END:
+
+The following are adapted from[cite:@Perry_Michael_L_2020-07-15], using
+a more database centric approach:
+
+
+| Principle             | Implementation                                     |
+|-----------------------+----------------------------------------------------|
+| Idempotence           | Client side ids; Session ids                       |
+| Immutability          | Insert only DBMSes (system time in SQL 2016)       |
+| Location independence | Natural keys                                       |
+| Versioning            | Additive structures; Temporal dimension on schemas |
+
+
+#+caption: Gargoyles of Notre-Dame de Paris
+#+attr_html: :width 50%
+[[./notre-dame-gargoyle.jpg]]
+
+#+print_bibliography:
+
 ** Pots, kettles and databases
 :PROPERTIES:
 :EXPORT_FILE_NAME: pots-kettles-and-databases
@@ -905,3 +930,4 @@ chapter 25 of  [cite:@10.5555/861613]
 
 [fn:5] The manager can be seen as a vicarious owner of company
 resources.
+##+
