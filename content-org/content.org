@@ -42,6 +42,31 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** Who should rule
+:PROPERTIES:
+:EXPORT_FILE_NAME: who-should-rule
+:EXPORT_DATE: 2024-03-21
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug who-should-rule
+:END:
+
+If you want to become a (better) leader, you should master the four
+essential characteristics for leaders: integrity, judgment, competence,
+and vision[cite:@doi:10.1037/1089-2680.9.2.169]:
+
+
+1. *Integrity*. A leader must be trusted to be followed.
+2. *Decisiveness*. Making reasonable decisions in a timely manner.
+3. *Competence*. Both your followers and your stakeholders must know
+   that you not only mean well but that you can deliver.
+4. *Vision*. Setting goals under the right strategy is vital for team
+   and company success against its competition.
+
+#+caption: The nave of the Saint-Sulpice Church in Paris
+#+attr_html: :width 80%
+[[./Saint-Sulpice-Nave-Paris.jpg]]
+
+
+#+print_bibliography:
 
 ** Principles of reliable applications
 :PROPERTIES:
