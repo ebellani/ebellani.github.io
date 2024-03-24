@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-03-24T21:09:28Z</updated>
+  <updated>2024-03-24T21:12:49Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -29,7 +29,7 @@
 &lt;dt&gt;The law of excluded middle&lt;/dt&gt;
 &lt;dd&gt;&amp;lsquo;Everything must either be or not be.&amp;rsquo; (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Russell 1912&lt;/a&gt;)&lt;/dd&gt;
 &lt;/dl&gt;
-&lt;figure&gt;&lt;img src=&#34;./chartres-rose-window.jpg&#34;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/chartres-rose-window.jpg&#34;
          alt=&#34;Figure 1: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&#34; width=&#34;50%&#34;/&gt;&lt;figcaption&gt;
             &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&lt;/p&gt;
         &lt;/figcaption&gt;
