@@ -5,13 +5,45 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-03-21T09:31:42Z</updated>
+  <updated>2024-03-24T21:09:28Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>The three traditional laws of being</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/"/>
+    <id>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</id>
+    <published>2024-03-24T00:00:00Z</published>
+    <updated>2024-03-24T00:00:00Z</updated>
+    <summary>The law of identity &amp;lsquo;Whatever is, is.&amp;rsquo; The law of non-contradiction &amp;lsquo;Nothing can both be and not be.&amp;rsquo; The law of excluded middle &amp;lsquo;Everything must either be or not be.&amp;rsquo; (Russell 1912)   Figure 1: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.
+  References .csl-entry{text-indent: -1.5em; margin-left: 1.5em;}Russell, Bertrand.</summary>
+    <content type="html">&lt;dl&gt;
+&lt;dt&gt;The law of identity&lt;/dt&gt;
+&lt;dd&gt;&amp;lsquo;Whatever is, is.&amp;rsquo;&lt;/dd&gt;
+&lt;dt&gt;The law of non-contradiction&lt;/dt&gt;
+&lt;dd&gt;&amp;lsquo;Nothing can both be and not be.&amp;rsquo;&lt;/dd&gt;
+&lt;dt&gt;The law of excluded middle&lt;/dt&gt;
+&lt;dd&gt;&amp;lsquo;Everything must either be or not be.&amp;rsquo; (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Russell 1912&lt;/a&gt;)&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;figure&gt;&lt;img src=&#34;./chartres-rose-window.jpg&#34;
+         alt=&#34;Figure 1: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&#34; width=&#34;50%&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Russell, Bertrand. 1912. &lt;i&gt;The Problems of Philosophy&lt;/i&gt;. Oxford University Press UK.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Who should rule</title>
@@ -965,85 +997,6 @@ resources.
 </content>
     
     <category term="management"/>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/ai-intellectual-act/"/>
-    <id>https://ebellani.github.io/blog/2023/ai-intellectual-act/</id>
-    <published>2023-07-11T00:00:00Z</published>
-    <updated>2023-07-11T00:00:00Z</updated>
-    <summary>I have come across people claiming to fear being replaced by bots, specially chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
-The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
- Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.</summary>
-    <content type="html">&lt;p&gt;I have come across people claiming to fear being replaced by bots,
-specially chatGPT and other &lt;code&gt;large language models (LLM)&lt;/code&gt;. In this
-article I&amp;rsquo;ll take such statements at face value, despite my reservations
-about the sincerity of many of them.&lt;/p&gt;
-&lt;p&gt;The short answer is to the question in the title is no, you will not get
-replaced. The longer answer is below.&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/mystic-ark-hires-1.jpg&#34;
-         alt=&#34;Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;In order to understand if a LLM &lt;code&gt;can&lt;/code&gt; replace you, you need to
-understand what it is, since &lt;em&gt;agere sequitur esse&lt;/em&gt; (action follows
-being). Here&amp;rsquo;s what an authoritative source has to say about it:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The basic concept of ChatGPT is at some level rather simple. Start from
-a huge sample of human-created text from the web, books, etc. Then train
-a neural net to generate text that’s “like this”. And in particular,
-make it able to start from a “prompt” and then continue with text that’s
-“like what it’s been trained with”.&lt;/p&gt;
-&lt;p&gt;As we’ve seen, the actual neural net in ChatGPT is made up of very
-simple elements—though billions of them. And the basic operation of the
-neural net is also very simple, consisting essentially of passing input
-derived from the text it’s generated so far “once through its elements”
-(without any loops, etc.) for every new word (or part of a word) that it
-generates. (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Wolfram 2023&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;What it &lt;code&gt;does&lt;/code&gt; is basically statistical correlation. So, what the
-intellectual act of a person consists of? My summary of
-(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Rosa 1993&lt;/a&gt;):&lt;/p&gt;
-&lt;p&gt;The intellectual act is a spiritual act, in contrast to a material
-one. It consists in abstracting the essential form from individual
-sensible perception. Grasping the universals out of particulars.&lt;/p&gt;
-&lt;p&gt;The last point is what I think underlies the actual fear. We live in a
-nominalist age, such that(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;) it&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; denies the existence of abstract and universal concepts, and refuses to
-admit that the intellect has the power of engendering them.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Therein lies the confusion that generates the fear. The correct
-interpretation of reality is what has been traditionally called Moderate
-Realism(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;):&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Moderate Realism, finally, declares that there are universal concepts
-representing faithfully realities that are not universal.&lt;/p&gt;
-&lt;p&gt;How can there be harmony between the former and the latter? The latter
-are particular, but we have the power of representing them to ourselves
-abstractly. Now the abstract type, when the intellect considers it
-reflectively and contrasts it with the particular subjects in which it
-is realized or capable of being realized, is attributable indifferently
-to any and all of them. This applicability of the abstract type to the
-individuals is its universality.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Fear not them, and trust in what you are analogous to, which is the
-Intellect itself&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Rosa, Antônio Donato Paulo. 1993. “A Educação Segundo a Filosofia Perene.” USP. &lt;a href=&#34;http://www.cristianismo.org.br/efp-ind.htm&#34;&gt;http://www.cristianismo.org.br/efp-ind.htm&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Wolfram, Stephen. 2023. “What Is Chatgpt Doing . and Why Does It Work?” Stephen Wolfram Writings. &lt;a href=&#34;https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/&#34;&gt;https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;</content>
-    
-    <category term="philosophy"/>
     
     
     <category term="blog"/>
