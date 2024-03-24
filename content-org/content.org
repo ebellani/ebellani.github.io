@@ -42,6 +42,26 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** The three traditional laws of being
+:PROPERTIES:
+:EXPORT_FILE_NAME:  the-three-traditional-laws-of-being
+:EXPORT_DATE: 2024-03-24
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug the-three-traditional-laws-of-being
+:END:
+
+- The law of identity :: 'Whatever is, is.'
+- The law of non-contradiction :: 'Nothing can both be and not be.'
+- The law of excluded middle :: 'Everything must either be or not be.' [cite:@russell12]
+
+
+#+caption: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.
+#+attr_html: :width 50%
+[[./chartres-rose-window.jpg]]
+
+
+#+print_bibliography:
+
+
 ** Who should rule
 :PROPERTIES:
 :EXPORT_FILE_NAME: who-should-rule
