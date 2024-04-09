@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 24 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 08 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What is really the matter with the &#39;database&#39;?</title>
+      <link>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</link>
+      <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</guid>
+      <description>How can we talk straight about a concept when the term that should signify it is equivocated all the time?
+I think this is a big part of the problem on discussions about databases. Here are some ways that the term database is widely used in the tech industry:
+ A server I&#39;ll access the database in prod. An instance of a DBMS We are running PG 9.3 locally. A design My database will have a user table and a product table.</description>
+    </item>
+    
     <item>
       <title>The three traditional laws of being</title>
       <link>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</link>

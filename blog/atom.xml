@@ -5,13 +5,67 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-03-24T21:12:49Z</updated>
+  <updated>2024-04-09T00:31:35Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>What is really the matter with the &#39;database&#39;?</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/"/>
+    <id>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</id>
+    <published>2024-04-08T00:00:00Z</published>
+    <updated>2024-04-08T00:00:00Z</updated>
+    <summary>How can we talk straight about a concept when the term that should signify it is equivocated all the time?
+I think this is a big part of the problem on discussions about databases. Here are some ways that the term database is widely used in the tech industry:
+ A server I&#39;ll access the database in prod. An instance of a DBMS We are running PG 9.3 locally. A design My database will have a user table and a product table.</summary>
+    <content type="html">&lt;p&gt;How can we talk straight about a concept when the term that should
+signify it is equivocated all the time?&lt;/p&gt;
+&lt;p&gt;I think this is a big part of the problem on discussions about
+&lt;code&gt;databases&lt;/code&gt;. Here are some ways that the term &lt;code&gt;database&lt;/code&gt; is widely used
+in the tech industry:&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;A server&lt;/dt&gt;
+&lt;dd&gt;&lt;code&gt;I&#39;ll access the database in prod.&lt;/code&gt;&lt;/dd&gt;
+&lt;dt&gt;An instance of a  DBMS&lt;/dt&gt;
+&lt;dd&gt;&lt;code&gt;We are running PG 9.3 locally.&lt;/code&gt;&lt;/dd&gt;
+&lt;dt&gt;A design&lt;/dt&gt;
+&lt;dd&gt;&lt;code&gt;My database will have a user table and a product table.&lt;/code&gt;&lt;/dd&gt;
+&lt;dt&gt;A DBMS&lt;/dt&gt;
+&lt;dd&gt;&lt;code&gt;Let&#39;s use MongoDB as a database!&lt;/code&gt;&lt;/dd&gt;
+&lt;dt&gt;A group of propositions&lt;/dt&gt;
+&lt;dd&gt;(ok, almost no one uses it like this, but
+it is what &lt;code&gt;database&lt;/code&gt; &lt;strong&gt;should&lt;/strong&gt; mean).&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;Here is a more authoritative source saying the same thing:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;you should be aware that people often use the term database when they
+really mean DBMS (in either of the foregoing senses). Here is a typical
+example: “Vendor X&amp;rsquo;s database outperformed vendor T s database by a
+factor of two to one.” This usage is sloppy, and deprecated, but very,
+very common. (The problem is: If we call the DBMS the database, what do
+we call the database? Caveat lector!)
+(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2003&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;How can we solve this problem if we don&amp;rsquo;t start by correcting ourselves?&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/800px-Cologne_Cathedral_stands_intact_amidst_the_destruction_caused_by_Allied_air_raids,_9_March_1945._CL2169.jpg&#34;
+         alt=&#34;Figure 1: Cologne Cathedral stands intact amidst the destruction caused by Allied air raids, 9 March 1945&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Cologne Cathedral stands intact amidst the destruction caused by Allied air raids, 9 March 1945&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Date, C.J. 2003. &lt;i&gt;An Introduction to Database Systems&lt;/i&gt;. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>The three traditional laws of being</title>
@@ -934,69 +988,6 @@ candidate and 1 from your team.&lt;/p&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Steve, McConnell; 2014. “Seven Diagrams Every Software Professional Should Understand.” &lt;a href=&#34;url{https://youtu.be/zTKi4ijEsH0?t=2566}&#34;&gt;url{https://youtu.be/zTKi4ijEsH0?t=2566}&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Team, Indeed Editorial. 2023. “Recruitment Vs. Selection: What’s the Difference?” &lt;a href=&#34;https://www.indeed.com/career-advice/career-development/recruitment-vs-selection&#34;&gt;https://www.indeed.com/career-advice/career-development/recruitment-vs-selection&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>What is a good manager?</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/what-is-a-good-manager/"/>
-    <id>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</id>
-    <published>2023-07-29T00:00:00Z</published>
-    <updated>2023-07-29T00:00:00Z</updated>
-    <summary>It is hard to do science without proper definitions. So what is a manager?
-Abstracting from (Horstman 2016), my definition of a manager is the following:
- A manager continuously balances present output with creating the conditions of future output.
-  Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
-  As one can see, this definition is similar to an investor. That is expected, since a manager is an investor of a company&amp;rsquo;s resources.</summary>
-    <content type="html">&lt;p&gt;It is hard to do science without proper definitions. So what is a manager?&lt;/p&gt;
-&lt;p&gt;Abstracting from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Horstman 2016&lt;/a&gt;), my definition of a
-manager is the following:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A manager continuously balances present output with creating the
-conditions of future output.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/good-shepherd.png&#34;
-         alt=&#34;Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The Good Sheperd, emblem found in a Roman catacomb, sec III&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;p&gt;As one can see, this definition is similar to an investor. That is
-expected, since a manager is an investor of a company&amp;rsquo;s
-resources. &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;As an illustration, a manager can usually deliver more results in the
-present by burning up people. This probably will increase turnover in
-the future. Is it the right choice? Only with a holistic view and sound
-judgement can one decide correctly.&lt;/p&gt;
-&lt;p&gt;Given this definition, one can easily see that a good manager is &lt;strong&gt;not&lt;/strong&gt;
-some things:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;An extrovert&lt;/li&gt;
-&lt;li&gt;A good communicator&lt;/li&gt;
-&lt;li&gt;A frequent yeller&lt;/li&gt;
-&lt;li&gt;Someone who cares&lt;/li&gt;
-&lt;li&gt;Someone who is agreeable&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Horstman, M. 2016. &lt;i&gt;The Effective Manager&lt;/i&gt;. Wiley. &lt;a href=&#34;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&#34;&gt;https://www.wiley.com/en-us/The+Effective+Manager-p-9781119244608&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;The manager can be seen as a vicarious owner of company
-resources.
-##+&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
-    
-    <category term="management"/>
     
     
     <category term="blog"/>
