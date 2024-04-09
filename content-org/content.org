@@ -60,6 +60,7 @@ in the tech industry:
 - An instance of a  DBMS :: ~We are running PG 9.3 locally.~
 - A design :: ~My database will have a user table and a product table.~
 - A DBMS :: ~Let's use MongoDB as a database!~
+- A storage strategy :: ~I'll store these as protobufs in my database, it will be faster!~
 - A group of propositions :: (ok, almost no one uses it like this, but
   it is what ~database~ *should* mean).
 
