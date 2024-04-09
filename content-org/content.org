@@ -42,6 +42,47 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** What is really the matter with the 'database'?
+:PROPERTIES:
+:EXPORT_FILE_NAME:  what-is-really-the-matter-with-the-database
+:EXPORT_DATE: 2024-04-08
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug what-is-really-the-matter-with-the-database
+:END:
+
+How can we talk straight about a concept when the term that should
+signify it is equivocated all the time?
+
+I think this is a big part of the problem on discussions about
+~databases~. Here are some ways that the term ~database~ is widely used
+in the tech industry:
+
+- A server :: ~I'll access the database in prod.~
+- An instance of a  DBMS :: ~We are running PG 9.3 locally.~
+- A design :: ~My database will have a user table and a product table.~
+- A DBMS :: ~Let's use MongoDB as a database!~
+- A group of propositions :: (ok, almost no one uses it like this, but
+  it is what ~database~ *should* mean).
+
+
+Here is a more authoritative source saying the same thing:
+
+#+begin_quote
+you should be aware that people often use the term database when they
+really mean DBMS (in either of the foregoing senses). Here is a typical
+example: “Vendor X's database outperformed vendor T s database by a
+factor of two to one.” This usage is sloppy, and deprecated, but very,
+very common. (The problem is: If we call the DBMS the database, what do
+we call the database? Caveat lector!)
+[cite:@10.5555/861613]
+#+end_quote
+
+How can we solve this problem if we don't start by correcting ourselves?
+
+#+caption: Cologne Cathedral stands intact amidst the destruction caused by Allied air raids, 9 March 1945
+[[./800px-Cologne_Cathedral_stands_intact_amidst_the_destruction_caused_by_Allied_air_raids,_9_March_1945._CL2169.jpg]]
+
+#+print_bibliography:
+
 ** The three traditional laws of being
 :PROPERTIES:
 :EXPORT_FILE_NAME:  the-three-traditional-laws-of-being
