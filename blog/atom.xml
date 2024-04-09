@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-04-09T00:31:35Z</updated>
+  <updated>2024-04-09T02:45:42Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -36,6 +36,8 @@ in the tech industry:&lt;/p&gt;
 &lt;dd&gt;&lt;code&gt;My database will have a user table and a product table.&lt;/code&gt;&lt;/dd&gt;
 &lt;dt&gt;A DBMS&lt;/dt&gt;
 &lt;dd&gt;&lt;code&gt;Let&#39;s use MongoDB as a database!&lt;/code&gt;&lt;/dd&gt;
+&lt;dt&gt;A storage strategy&lt;/dt&gt;
+&lt;dd&gt;&lt;code&gt;I&#39;ll store these as protobufs in my database, it will be faster!&lt;/code&gt;&lt;/dd&gt;
 &lt;dt&gt;A group of propositions&lt;/dt&gt;
 &lt;dd&gt;(ok, almost no one uses it like this, but
 it is what &lt;code&gt;database&lt;/code&gt; &lt;strong&gt;should&lt;/strong&gt; mean).&lt;/dd&gt;
