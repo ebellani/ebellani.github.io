@@ -42,6 +42,111 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** A point about FAANG points
+:PROPERTIES:
+:EXPORT_FILE_NAME:  a-point-about-faang
+:EXPORT_DATE: 2024-04-14
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug a-point-about-faang
+:END:
+
+As a technologist I often hear variations of the following phrase in my
+industry:
+
+#+begin_quote
+Do it because some FAANG[cite:@faang] company did it.
+#+end_quote
+
+The structure of this argument is usually like this:
+
+1. Technique or process X is great/bad,
+2. Company C does it like this,
+3. C is financially successful and famous,
+4. Therefore, you should use X if you want to increase your chances of
+   becoming like X.
+
+
+This is a mixture of the fallacies of selection bias, appeal to
+authority and false cause. Here are their definitions and some
+context-sensitive examples[fn:1]:
+
+*** Selection bias
+
+This is a bias introduced by sampling in a way that is not
+representative of the population in question.
+
+#+begin_example
+We should only look at what FAANG companies do (and ignore the ones that
+did the same and went bankrupt).
+#+end_example
+
+*** Appeal to authority
+
+You appeal to authority if you back up your reasoning by saying that it
+is supported by what some authority says on the subject.
+
+However, appealing to authority as a reason to believe something is
+fallacious whenever the authority appealed to is not really an authority
+in this particular subject, when the authority cannot be trusted to tell
+the truth, when authorities disagree on this subject (except for the
+occasional lone wolf), when the reasoner misquotes the authority, and so
+forth.
+
+#+begin_example
+We should start using managed services because AWS tells us to do so.
+#+end_example
+
+*** False cause
+
+Improperly concluding that one thing is a cause of another. Its four
+principal kinds are the Post Hoc Fallacy, the Fallacy of Cum Hoc, Ergo
+Propter Hoc, the Regression Fallacy, and the Fallacy of Reversing
+Causation.
+
+**** Post hoc
+
+Suppose we notice that an event of kind A is followed in time by an
+event of kind B, and then hastily leap to the conclusion that A caused
+B. If so, our reasoning contains the Post Hoc Fallacy
+
+#+begin_example
+After Facebook build their system with PHP, they became hugely successful.
+#+end_example
+
+**** Cum hoc
+
+Latin for “with this, therefore because of this.” This is a False Cause
+Fallacy that doesn’t depend on time order (as does the [[*Post hoc][Post hoc]]
+fallacy), but on any other chance correlation of the supposed cause
+being in the presence of the supposed effect.
+
+
+#+begin_example
+Google uses lots of microservices and Kubernetes.
+#+end_example
+
+**** Reversing causation
+
+Drawing an improper conclusion about causation due to a causal
+assumption that reverses cause and effect.
+
+#+begin_example
+Microsoft and Google both are huge companies and have R&D centers. We
+need to have a R&D center to become a huge company
+#+end_example
+
+*** Conclusion
+
+Do pay attention to successful companies, but only when it is valid to
+do so. Having a great business model and timing can allow a company to
+survive very bad mistakes (such as Google firing all their project
+managers once[cite:@google_firing]).
+
+#+caption: Reims Cathedral hit during a German shell barrage, 19 September 1914.
+[[./Reims Cathedral hit during a German shell barrage.jpg]]
+
+#+print_bibliography:
+
+
 ** What is really the matter with the 'database'?
 :PROPERTIES:
 :EXPORT_FILE_NAME:  what-is-really-the-matter-with-the-database
@@ -503,7 +608,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:1]
+Conceptual schema -> Logical schema -> Physical schema [fn:2]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -580,7 +685,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum[fn:2]:
+14 Themes of the Elite Private School Curriculum[fn:3]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -635,7 +740,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:3]
+the IT sector in particular, is nominalism.[fn:4]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -670,7 +775,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:4]
+terminology. [fn:5]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -839,7 +944,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:5]
+resources. [fn:6]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -1006,15 +1111,18 @@ this is the description of the blog section
 
 * Footnotes
 
-[fn:1] (schemas are synonymous to models in this context)
+[fn:1] The definitions come from [cite:@fallacies_iep], but the examples
+are adapted to this context
 
-[fn:2] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:2] (schemas are synonymous to models in this context)
 
-[fn:3] You will probably see me return to this topic in other posts.
+[fn:3] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:4] I got the idea of such table from a similar table found on
+[fn:4] You will probably see me return to this topic in other posts.
+
+[fn:5] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:5] The manager can be seen as a vicarious owner of company
+[fn:6] The manager can be seen as a vicarious owner of company
 resources.
 ##+
