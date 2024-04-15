@@ -61,8 +61,8 @@ The structure of this argument is usually like this:
 1. Technique or process X is great/bad,
 2. Company C does it like this,
 3. C is financially successful and famous,
-4. Therefore, you should use X if you want to increase your chances of
-   becoming like X.
+4. Therefore, you should do the same as X if you want to increase your
+   chances of becoming like X.
 
 
 This is a mixture of the fallacies of selection bias, appeal to
