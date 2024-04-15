@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-04-15T02:36:52Z</updated>
+  <updated>2024-04-15T02:46:45Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -22,7 +22,7 @@
     <summary>As a technologist I often hear variations of the following phrase in my industry:
  Do it because some FAANG(Fernando 2023) company did it.
  The structure of this argument is usually like this:
- Technique or process X is great/bad, Company C does it like this, C is financially successful and famous, Therefore, you should use X if you want to increase your chances of becoming like X.  This is a mixture of the fallacies of selection bias, appeal to authority and false cause.</summary>
+ Technique or process X is great/bad, Company C does it like this, C is financially successful and famous, Therefore, you should do the same as X if you want to increase your chances of becoming like X.</summary>
     <content type="html">&lt;p&gt;As a technologist I often hear variations of the following phrase in my
 industry:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -33,8 +33,8 @@ industry:&lt;/p&gt;
 &lt;li&gt;Technique or process X is great/bad,&lt;/li&gt;
 &lt;li&gt;Company C does it like this,&lt;/li&gt;
 &lt;li&gt;C is financially successful and famous,&lt;/li&gt;
-&lt;li&gt;Therefore, you should use X if you want to increase your chances of
-becoming like X.&lt;/li&gt;
+&lt;li&gt;Therefore, you should do the same as X if you want to increase your
+chances of becoming like X.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
