@@ -42,6 +42,28 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+
+** A practical principle on politics (office or otherwise)
+:PROPERTIES:
+:EXPORT_FILE_NAME: a-practical-principle-on-politics--office-or-otherwise
+:EXPORT_DATE: 2024-04-28
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug a-practical-principle-on-politics--office-or-otherwise
+:END:
+
+If you are involved in politics, as a voter or just as an office worker
+in an unfortunate situation, you would do well to remember this dictum:
+
+#+begin_quote
+When a public figure tells you something that you want to hear, question
+his sincerity. When a public figure tells you something you don’t want
+to hear, believe him.[cite:@what_is_truth]
+#+end_quote
+
+#+caption: The destruction of the original Church of Christ the Saviour in Moscow, Russia
+[[./Christ_saviour_explosion.jpg]]
+
+#+print_bibliography:
+
 ** A point about FAANG points
 :PROPERTIES:
 :EXPORT_FILE_NAME:  a-point-about-faang
