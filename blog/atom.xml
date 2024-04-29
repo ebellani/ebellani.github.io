@@ -5,13 +5,45 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-04-15T03:01:17Z</updated>
+  <updated>2024-04-29T01:41:38Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>A practical principle on politics (office or otherwise)</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/"/>
+    <id>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</id>
+    <published>2024-04-28T00:00:00Z</published>
+    <updated>2024-04-28T00:00:00Z</updated>
+    <summary>If you are involved in politics, as a voter or just as an office worker in an unfortunate situation, you would do well to remember this dictum:
+ When a public figure tells you something that you want to hear, question his sincerity. When a public figure tells you something you don’t want to hear, believe him.(Lawler 2024)
+  Figure 1: The destruction of the original Church of Christ the Saviour in Moscow, Russia</summary>
+    <content type="html">&lt;p&gt;If you are involved in politics, as a voter or just as an office worker
+in an unfortunate situation, you would do well to remember this dictum:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When a public figure tells you something that you want to hear, question
+his sincerity. When a public figure tells you something you don’t want
+to hear, believe him.(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Lawler 2024&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Christ_saviour_explosion.jpg&#34;
+         alt=&#34;Figure 1: The destruction of the original Church of Christ the Saviour in Moscow, Russia&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The destruction of the original Church of Christ the Saviour in Moscow, Russia&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Lawler, Phil. 2024. “What Is Truth? a Journalist Asks Pilate’s Question.” &lt;a href=&#34;https://www.catholicculture.org/commentary/what-is-truth-journalist-asks-pilates-question/&#34;&gt;https://www.catholicculture.org/commentary/what-is-truth-journalist-asks-pilates-question/&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>A point about FAANG points</title>
@@ -906,30 +938,6 @@ chapter 25 of  (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2003&lt;/a&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>How to stand out in your career, the shortest version I know</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/stand-out-short/"/>
-    <id>https://ebellani.github.io/blog/2023/stand-out-short/</id>
-    <published>2023-09-18T00:00:00Z</published>
-    <updated>2023-09-18T00:00:00Z</updated>
-    <summary>Someone asked me about this, so I feel it might help people out there.
-The short, no nonsense advise I give to people on standing out as a programmer:
- Generate results Make your boss look good Join a relevant open source project  </summary>
-    <content type="html">&lt;p&gt;Someone asked me about this, so I feel it might help people out there.&lt;/p&gt;
-&lt;p&gt;The short, no nonsense advise I give to people on standing out as a
-programmer:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Generate results&lt;/li&gt;
-&lt;li&gt;Make your boss look good&lt;/li&gt;
-&lt;li&gt;Join a relevant open source project&lt;/li&gt;
-&lt;/ol&gt;
 </content>
     
     
