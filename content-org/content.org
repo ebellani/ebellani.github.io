@@ -43,6 +43,133 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus
+:PROPERTIES:
+:EXPORT_FILE_NAME: microservices-as-reification
+:EXPORT_DATE: 2024-05-04
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug microservices-as-reification
+:END:
+
+#+begin_quote
+/Reification/: the treatment of something abstract as a material or
+concrete thing, as in the following lines from Matthew Arnold’s poem
+“Dover Beach”: [cite:@refification_britannica]
+
+#+begin_verse
+/The Sea of Faith
+Was once, too, at the full, and round earth’s shore
+Lay like the folds of a bright girdle furled./
+#+end_verse
+#+end_quote
+
+The microservice architecture(MA) has taken a deep hold in the
+collective imagination of the software engineering community since at
+least 2014[fn:1]. This has happened despite serious and well documented
+[[#drawbacks][drawbacks]].
+
+Such combination calls for an explanation. A sketch of such explanation
+is my intent here, starting with what MA is, at bottom. At a later date
+I intend to provide a history of how it came to be a dominant
+architecture on our industry.
+
+My position is that MA is a reification[cite:@refification_britannica]
+of abstract processes as defined by the Pi-Calculus (PC). Why do I think
+of that? Let's start by defining PC: it is a model of message-based
+concurrent computation.
+
+*** Definitions
+
+Its essential features are[cite:@Pierce1995]:
+
+#+begin_quote
+- focusing on interaction via communication rather than shared
+  variables,
+- describing concurrent systems using a small set of primitive operators
+  and
+- on deriving useful algebraic laws for manipulating expressions written
+  using these operators.
+#+end_quote
+
+More concretely:
+
+#+begin_quote
+...
+\\
+π-calculus lets you represent processes, parallel composition of
+processes, synchronous communication between processes through channels,
+creation of fresh channels, replication of processes, and nondeterminism
+\\
+...
+\\
+A *process* is an abstraction of an independent thread of control. A
+*channel* is an abstraction of the communication link between two
+processes. Processes interact with each other by sending and receiving
+*messages* over channels.
+[cite:@Wing2002FAQO]
+#+end_quote
+
+Here is the best definition of the MA that I know of:
+
+#+begin_quote
+The microservice architecture pattern structures the system as a
+collection of independently deployable services that communicate only
+via messages through service interfaces. [cite:@bass2021software]
+#+end_quote
+
+*** How are they mapped?
+
+So here is PC is mapped to MA:
+
+1. *Processes* are Services(binaries loaded into memory),
+2. *Channels* are either queues or some form of APIs (RPC or REST),
+3. *Messages* are network calls,
+4. The avoidance of *shared variables* as an avoidance of a shared DBMS.
+
+*** Conclusion
+The reader might well ask, so what? Isn't that a good thing? Well, no,
+it's a very bad thing. Why?
+
+Because once you mistake a formal entity such as the PC with a material
+one such as the MA, you lock yourself out of possibilities and in
+specific [[#drawbacks][drawbacks]] that might now exist in other ways to implement the
+PC.
+
+
+*** Appendix: The Drawbacks
+:PROPERTIES:
+:CUSTOM_ID: drawbacks
+:END:
+#+begin_quote
+- It hurts performance. The overhead of serializing data and sending it
+  across the network is increasingly becoming a bottleneck. When
+  developers over-split their applications, these overheads compound.
+- It hurts correctness. It is extremely challenging to reason about the
+  interactions between every deployed version of every microservice. In
+  a case study of over 100 catastrophic failures of eight widely used
+  systems, two-thirds of failures were caused by the interactions
+  between multiple versions of a system.
+- It is hard to manage. Rather than having a single binary to build,
+  test, and deploy, developers have to manage 𝑛 different binaries, each
+  on their own release schedule. Running end-to-end tests with a local
+  instance of the application becomes an engineering feat.
+- It freezes APIs. Once a microservice establishes an API, it becomes
+  hard to change without breaking the other services that consume the
+  API. Legacy APIs linger around, and new APIs are patched on top.
+- It slows down application development. When making changes that affect
+  multiple microservices, developers cannot implement and deploy the
+  changes atomically. They have to carefully plan how to introduce the
+  change across 𝑛 microservices with their own release schedules.
+[cite:@10.1145/3593856.3595909]
+#+end_quote
+
+#+caption: Cathedral of Phnom Penhl, destroyed shortly after by the Khmer Rouge. The Ministry of Posts and Telecommunications now stands on the site of the former cathedral
+#+attr_html: :width 30%
+[[./Cathédrale_St_Joseph_de_Phnom_Penh.jpg]]
+
+
+#+print_bibliography:
+
+
 ** A practical principle on politics (office or otherwise)
 :PROPERTIES:
 :EXPORT_FILE_NAME: a-practical-principle-on-politics--office-or-otherwise
@@ -88,7 +215,7 @@ The structure of this argument is usually like this:
 
 This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
-context-sensitive examples[fn:1]:
+context-sensitive examples[fn:2]:
 
 *** Selection bias
 
@@ -965,7 +1092,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:6]
+resources. [fn:1]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -1132,8 +1259,7 @@ this is the description of the blog section
 
 * Footnotes
 
-[fn:1] The definitions come from [cite:@fallacies_iep], but the examples
-are adapted to this context
+[fn:1] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
 [fn:2] (schemas are synonymous to models in this context)
 
@@ -1144,6 +1270,5 @@ are adapted to this context
 [fn:5] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:6] The manager can be seen as a vicarious owner of company
-resources.
-##+
+[fn:6] The definitions come from [cite:@fallacies_iep], but the examples
+are adapted to this context
