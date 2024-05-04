@@ -6,7 +6,29 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 28 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 04 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>blog section title</title>
+      <link>https://ebellani.github.io/blog/</link>
+      <pubDate>Sat, 04 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
+      <link>https://ebellani.github.io/blog/2024/microservices-as-reification/</link>
+      <pubDate>Sat, 04 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/microservices-as-reification/</guid>
+      <description>Reification: the treatment of something abstract as a material or concrete thing, as in the following lines from Matthew Arnold’s poem “Dover Beach”: (Britannica 2018)
+/The Sea of Faith
+Was once, too, at the full, and round earth’s shore
+Lay like the folds of a bright girdle furled./
+  The microservice architecture(MA) has taken a deep hold in the collective imagination of the software engineering community since at least 20141.</description>
+    </item>
+    
     <item>
       <title>A practical principle on politics (office or otherwise)</title>
       <link>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</link>
@@ -16,15 +38,6 @@
       <description>If you are involved in politics, as a voter or just as an office worker in an unfortunate situation, you would do well to remember this dictum:
  When a public figure tells you something that you want to hear, question his sincerity. When a public figure tells you something you don’t want to hear, believe him.(Lawler 2024)
   Figure 1: The destruction of the original Church of Christ the Saviour in Moscow, Russia</description>
-    </item>
-    
-    <item>
-      <title>blog section title</title>
-      <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/</guid>
-      <description></description>
     </item>
     
     <item>

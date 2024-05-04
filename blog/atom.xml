@@ -5,13 +5,149 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-04-29T01:41:38Z</updated>
+  <updated>2024-05-04T21:33:37Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/microservices-as-reification/"/>
+    <id>https://ebellani.github.io/blog/2024/microservices-as-reification/</id>
+    <published>2024-05-04T00:00:00Z</published>
+    <updated>2024-05-04T00:00:00Z</updated>
+    <summary>Reification: the treatment of something abstract as a material or concrete thing, as in the following lines from Matthew Arnold’s poem “Dover Beach”: (Britannica 2018)
+/The Sea of Faith
+Was once, too, at the full, and round earth’s shore
+Lay like the folds of a bright girdle furled./
+  The microservice architecture(MA) has taken a deep hold in the collective imagination of the software engineering community since at least 20141.</summary>
+    <content type="html">&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Reification&lt;/em&gt;: the treatment of something abstract as a material or
+concrete thing, as in the following lines from Matthew Arnold’s poem
+“Dover Beach”: (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Britannica 2018&lt;/a&gt;)&lt;/p&gt;
+&lt;div class=&#34;verse&#34;&gt;
+&lt;p&gt;/The Sea of Faith&lt;br /&gt;
+Was once, too, at the full, and round earth’s shore&lt;br /&gt;
+Lay like the folds of a bright girdle furled./&lt;br /&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The microservice architecture(MA) has taken a deep hold in the
+collective imagination of the software engineering community since at
+least 2014&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. This has happened despite serious and well documented
+&lt;a href=&#34;#drawbacks&#34;&gt;drawbacks&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Such combination calls for an explanation. A sketch of such explanation
+is my intent here, starting with what MA is, at bottom. At a later date
+I intend to provide a history of how it came to be a dominant
+architecture on our industry.&lt;/p&gt;
+&lt;p&gt;My position is that MA is a reification(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Britannica 2018&lt;/a&gt;)
+of abstract processes as defined by the Pi-Calculus (PC). Why do I think
+of that? Let&amp;rsquo;s start by defining PC: it is a model of message-based
+concurrent computation.&lt;/p&gt;
+&lt;h2 id=&#34;definitions&#34;&gt;Definitions&lt;/h2&gt;
+&lt;p&gt;Its essential features are(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Pierce 1997&lt;/a&gt;):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;focusing on interaction via communication rather than shared
+variables,&lt;/li&gt;
+&lt;li&gt;describing concurrent systems using a small set of primitive operators
+and&lt;/li&gt;
+&lt;li&gt;on deriving useful algebraic laws for manipulating expressions written
+using these operators.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;More concretely:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip;
+&lt;br /&gt;
+π-calculus lets you represent processes, parallel composition of
+processes, synchronous communication between processes through channels,
+creation of fresh channels, replication of processes, and nondeterminism
+&lt;br /&gt;
+&amp;hellip;
+&lt;br /&gt;
+A &lt;strong&gt;process&lt;/strong&gt; is an abstraction of an independent thread of control. A
+&lt;strong&gt;channel&lt;/strong&gt; is an abstraction of the communication link between two
+processes. Processes interact with each other by sending and receiving
+&lt;strong&gt;messages&lt;/strong&gt; over channels.
+(&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Wing 2002&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here is the best definition of the MA that I know of:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The microservice architecture pattern structures the system as a
+collection of independently deployable services that communicate only
+via messages through service interfaces. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Bass et al. 2021&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;how-are-they-mapped&#34;&gt;How are they mapped?&lt;/h2&gt;
+&lt;p&gt;So here is PC is mapped to MA:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Processes&lt;/strong&gt; are Services(binaries loaded into memory),&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Channels&lt;/strong&gt; are either queues or some form of APIs (RPC or REST),&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Messages&lt;/strong&gt; are network calls,&lt;/li&gt;
+&lt;li&gt;The avoidance of &lt;strong&gt;shared variables&lt;/strong&gt; as an avoidance of a shared DBMS.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The reader might well ask, so what? Isn&amp;rsquo;t that a good thing? Well, no,
+it&amp;rsquo;s a very bad thing. Why?&lt;/p&gt;
+&lt;p&gt;Because once you mistake a formal entity such as the PC with a material
+one such as the MA, you lock yourself out of possibilities and in
+specific &lt;a href=&#34;#drawbacks&#34;&gt;drawbacks&lt;/a&gt; that might now exist in other ways to implement the
+PC.&lt;/p&gt;
+&lt;h2 id=&#34;drawbacks&#34;&gt;Appendix: The Drawbacks&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;It hurts performance. The overhead of serializing data and sending it
+across the network is increasingly becoming a bottleneck. When
+developers over-split their applications, these overheads compound.&lt;/li&gt;
+&lt;li&gt;It hurts correctness. It is extremely challenging to reason about the
+interactions between every deployed version of every microservice. In
+a case study of over 100 catastrophic failures of eight widely used
+systems, two-thirds of failures were caused by the interactions
+between multiple versions of a system.&lt;/li&gt;
+&lt;li&gt;It is hard to manage. Rather than having a single binary to build,
+test, and deploy, developers have to manage 𝑛 different binaries, each
+on their own release schedule. Running end-to-end tests with a local
+instance of the application becomes an engineering feat.&lt;/li&gt;
+&lt;li&gt;It freezes APIs. Once a microservice establishes an API, it becomes
+hard to change without breaking the other services that consume the
+API. Legacy APIs linger around, and new APIs are patched on top.&lt;/li&gt;
+&lt;li&gt;It slows down application development. When making changes that affect
+multiple microservices, developers cannot implement and deploy the
+changes atomically. They have to carefully plan how to introduce the
+change across 𝑛 microservices with their own release schedules.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Ghemawat et al. 2023&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Cath%c3%a9drale_St_Joseph_de_Phnom_Penh.jpg&#34;
+         alt=&#34;Figure 1: Cathedral of Phnom Penhl, destroyed shortly after by the Khmer Rouge. The Ministry of Posts and Telecommunications now stands on the site of the former cathedral&#34; width=&#34;30%&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Cathedral of Phnom Penhl, destroyed shortly after by the Khmer Rouge. The Ministry of Posts and Telecommunications now stands on the site of the former cathedral&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Bass, L., P. Clements, R. Kazman, and an O’Reilly Media Company Safari. 2021. &lt;i&gt;Software Architecture in Practice, 4th Edition&lt;/i&gt;. Sei Series in Software Engineering. Addison-Wesley Professional.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Britannica, The Editors of Encyclopaedia. 2018. “Reification.” In &lt;i&gt;Encyclopedia Britannica&lt;/i&gt;. &lt;a href=&#34;https://www.britannica.com/topic/reification&#34;&gt;https://www.britannica.com/topic/reification&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Ghemawat, Sanjay, Robert Grandl, Srdjan Petrovic, Michael Whittaker, Parveen Patel, Ivan Posva, and Amin Vahdat. 2023. “Towards Modern Development of Cloud Applications.” In &lt;i&gt;Proceedings of the 19th Workshop on Hot Topics in Operating Systems&lt;/i&gt;, 110–17. Hotos ’23. Providence, RI, USA: Association for Computing Machinery. &lt;a href=&#34;https://doi.org/10.1145/3593856.3595909&#34;&gt;https://doi.org/10.1145/3593856.3595909&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Pierce, Benjamin C. 1997. “Foundational Calculi for Programming Languages.” In &lt;i&gt;The Computer Science and Engineering Handbook&lt;/i&gt;, edited by Allen B. Tucker, 2190–2207. CRC Press. &lt;a href=&#34;http://dblp.uni-trier.de/db/books/collections/tucker97.html#Pierce97&#34;&gt;http://dblp.uni-trier.de/db/books/collections/tucker97.html#Pierce97&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Wing, Jeannette M. 2002. “Faq on $\Pi$-Calculus.” &lt;a href=&#34;https://www.cs.cmu.edu/~wing/publications/Wing02a.pdf&#34;&gt;https://www.cs.cmu.edu/~wing/publications/Wing02a.pdf&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;geo=US&amp;amp;q=microservices&#34;&gt;https://trends.google.com/trends/explore?date=all&amp;amp;geo=US&amp;amp;q=microservices&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>A practical principle on politics (office or otherwise)</title>
@@ -58,7 +194,7 @@ to hear, believe him.(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Lawler 2024&l
     <content type="html">&lt;p&gt;As a technologist I often hear variations of the following phrase in my
 industry:&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Do it because some FAANG(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Fernando 2023&lt;/a&gt;) company did it.&lt;/p&gt;
+&lt;p&gt;Do it because some FAANG(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Fernando 2023&lt;/a&gt;) company did it.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;The structure of this argument is usually like this:&lt;/p&gt;
 &lt;ol&gt;
@@ -110,7 +246,7 @@ assumption that reverses cause and effect.&lt;/p&gt;
 &lt;p&gt;Do pay attention to successful companies, but only when it is valid to
 do so. Having a great business model and timing can allow a company to
 survive very bad mistakes (such as Google firing all their project
-managers once(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Editors 2017&lt;/a&gt;)).&lt;/p&gt;
+managers once(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Editors 2017&lt;/a&gt;)).&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/ox-hugo/Reims%20Cathedral%20hit%20during%20a%20German%20shell%20barrage.jpg&#34;
          alt=&#34;Figure 1: Reims Cathedral hit during a German shell barrage, 19 September 1914.&#34;/&gt;&lt;figcaption&gt;
             &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Reims Cathedral hit during a German shell barrage, 19 September 1914.&lt;/p&gt;
@@ -119,16 +255,14 @@ managers once(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Editors 2017&lt;/a&gt
 
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Dowden, Bradley. n.d. “Fallacies.” The Internet Encyclopedia of Philosophy. &lt;a href=&#34;https://web.archive.org/web/20240314002853/https://iep.utm.edu/fallacy/&#34;&gt;https://web.archive.org/web/20240314002853/https://iep.utm.edu/fallacy/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Editors, Re:Work. 2017. “Google’s Ongoing Effort to Make Managers Awesome.” &lt;a href=&#34;https://web.archive.org/web/20230922045752/http://rework.withgoogle.com/blog/Googles-effort-to-make-managers-awesome/&#34;&gt;https://web.archive.org/web/20230922045752/http://rework.withgoogle.com/blog/Googles-effort-to-make-managers-awesome/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Fernando, Jason. 2023. “Faang Stocks: Definition and Companies Involved.” &lt;a href=&#34;https://web.archive.org/web/20240407224456/https://www.investopedia.com/terms/f/faang-stocks.asp&#34;&gt;https://web.archive.org/web/20240407224456/https://www.investopedia.com/terms/f/faang-stocks.asp&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Editors, Re:Work. 2017. “Google’s Ongoing Effort to Make Managers Awesome.” &lt;a href=&#34;https://web.archive.org/web/20230922045752/http://rework.withgoogle.com/blog/Googles-effort-to-make-managers-awesome/&#34;&gt;https://web.archive.org/web/20230922045752/http://rework.withgoogle.com/blog/Googles-effort-to-make-managers-awesome/&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Fernando, Jason. 2023. “Faang Stocks: Definition and Companies Involved.” &lt;a href=&#34;https://web.archive.org/web/20240407224456/https://www.investopedia.com/terms/f/faang-stocks.asp&#34;&gt;https://web.archive.org/web/20240407224456/https://www.investopedia.com/terms/f/faang-stocks.asp&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;The definitions come from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Dowden, n.d.&lt;/a&gt;), but the examples
-are adapted to this context&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;(schemas are synonymous to models in this context)&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -815,126 +949,6 @@ predictions were.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
 &lt;p&gt;As listed in &lt;a href=&#34;https://www.youtube.com/watch?v=IZBdv2yznmI&#34;&gt;The Ultimate History Lesson&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CQRS as nominalism</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/cqrs-nominalism/"/>
-    <id>https://ebellani.github.io/blog/2023/cqrs-nominalism/</id>
-    <published>2023-11-04T00:00:00Z</published>
-    <updated>2023-11-04T00:00:00Z</updated>
-    <summary>A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
-What is CQRS? Here is an authoritative word on it(Young 2010):
- Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle</summary>
-    <content type="html">&lt;p&gt;A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a
-concrete case and work my way to the abstract definition. The case in
-point is a somewhat popular architecture tactic, CQRS.&lt;/p&gt;
-&lt;p&gt;What is CQRS? Here is an authoritative word on it(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Young 2010&lt;/a&gt;):&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Command and Query Responsibility Segregation (CQRS) originated with
-Bertrand Meyer’s Command and Query Separation Principle&lt;/p&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;p&gt;It states that every method should either be a command that performs an
-action, or a query that returns data to the caller, but not both. In
-other words, asking a question should not change the answer. More
-formally, methods should return a value only if they are referentially
-transparent and hence possess no side effects.&lt;/p&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;p&gt;Basically it boils down to. If you have a return value you cannot mutate
-state. If you mutate state your return type must be void.&lt;/p&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;p&gt;in CQRS objects are split into two objects, one containing the Commands
-one containing the Queries.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;CQRS is basically then an extension on CQS, but played on objects
-instead of methods. It leverages the notions of immutable and mutable
-objects, a feature it shares with a more encompassing approach,
-DDD(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Evans 2014&lt;/a&gt;). Here is a mapping of the
-terminology. &lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;div class=&#34;table-caption&#34;&gt;
-  &lt;span class=&#34;table-number&#34;&gt;Table 1:&lt;/span&gt;
-  CQRS/DDD/Traditional computer science terms mapping
-&lt;/div&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;CQRS&lt;/th&gt;
-&lt;th&gt;DDD&lt;/th&gt;
-&lt;th&gt;Traditional&lt;/th&gt;
-&lt;th&gt;Interpretation&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Domain model&lt;/td&gt;
-&lt;td&gt;Entity&lt;/td&gt;
-&lt;td&gt;Variable&lt;/td&gt;
-&lt;td&gt;A symbol that represents a value of a given type. Can represent  different values on different calls&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Read model&lt;/td&gt;
-&lt;td&gt;Value Object&lt;/td&gt;
-&lt;td&gt;Value&lt;/td&gt;
-&lt;td&gt;An element of a set&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Command&lt;/td&gt;
-&lt;td&gt;Aggregate command&lt;/td&gt;
-&lt;td&gt;assignment operator&lt;/td&gt;
-&lt;td&gt;Change the value of a variable&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Query&lt;/td&gt;
-&lt;td&gt;Side effect free function&lt;/td&gt;
-&lt;td&gt;function call&lt;/td&gt;
-&lt;td&gt;Derive values from values&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;As this table shows, we have new names for old things, and people think
-that because of that they &lt;strong&gt;are&lt;/strong&gt; different things. My point is that this
-is because of a nominalist position of the people on the CQRS community,
-even if they are unaware of that. Why? Here&amp;rsquo;s what nominalism is:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nominalism &amp;hellip; denies the existence of abstract and universal concepts,
-and refuses to admit that the intellect has the power of engendering
-them. What are called general ideas are only names, mere verbal
-designations, serving as labels for a collection of things or a series
-of particular events. (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;De Wulf 1911&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;When you don&amp;rsquo;t believe that general ideas exist as such, you have a
-strong (inevitable?) tendency to mistake names for things, like the
-CQRS community did here.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;PS&lt;/em&gt;: Any implementation patterns that apply to CQRS would also apply to
-the tradional concepts, since my point here is to show that &lt;strong&gt;they are
-the same thing&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Date, C.J. 2003. &lt;i&gt;An Introduction to Database Systems&lt;/i&gt;. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Evans, Eric. 2014. &lt;i&gt;Domain-driven design reference: Definitions and pattern summaries&lt;/i&gt;. Paperback. Dog Ear Pub Llc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Young, Greg. 2010. “Cqrs Documents by Greg Young.” &lt;a href=&#34;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#34;&gt;https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;You will probably see me return to this topic in other posts.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;I got the idea of such table from a similar table found on
-chapter 25 of  (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2003&lt;/a&gt;)&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
