@@ -61,10 +61,10 @@ I intend to provide a history of how it came to be a dominant
 architecture on our industry.</p>
 <p>My position is that MA is a reification(<a href="#citeproc_bib_item_2">Britannica 2018</a>)
 of abstract processes as defined by the Pi-Calculus (PC). Why do I think
-of that? Let&rsquo;s start by defining PC: it is a model of message-based
-concurrent computation.</p>
+of that? Let&rsquo;s start by defining things.</p>
 <h2 id="definitions">Definitions</h2>
-<p>Its essential features are(<a href="#citeproc_bib_item_4">Pierce 1997</a>):</p>
+<p>PC is a model of message-based concurrent computation and its essential
+features are(<a href="#citeproc_bib_item_4">Pierce 1997</a>):</p>
 <blockquote>
 <ul>
 <li>focusing on interaction via communication rather than shared
@@ -110,8 +110,21 @@ via messages through service interfaces. (<a href="#citeproc_bib_item_1">Bass et
 it&rsquo;s a very bad thing. Why?</p>
 <p>Because once you mistake a formal entity such as the PC with a material
 one such as the MA, you lock yourself out of possibilities and in
-specific <a href="#drawbacks">drawbacks</a> that might now exist in other ways to implement the
+specific <a href="#drawbacks">drawbacks</a> that might not exist in other ways to implement the
 PC.</p>
+<p>Let me illustrate the point here with a metaphor:</p>
+<p>Say you think the formal entity called <code>Boat</code> can only be implemented by
+<code>Yacht</code>. You now are locked into the design choices of that concrete
+instantiation of the <code>Boat</code> form. <code>Transatlantic</code> or <code>Canoe</code> are not
+possible for you.</p>
+<p>Coming back to the case at hand, here are some examples of how you could
+implement the pi-calculus without MA:</p>
+<ul>
+<li>Use a language/runtime that supports it, such as Erlang/ERT, SML/NJ or F#/.net.</li>
+<li>Use a framework such as Akka.</li>
+<li>Use a DBMS where several applications share the same DBMS but you use
+permissions and views to manage access and have logical independence.</li>
+</ul>
 <h2 id="drawbacks">Appendix: The Drawbacks</h2>
 <blockquote>
 <ul>
@@ -129,7 +142,7 @@ on their own release schedule. Running end-to-end tests with a local
 instance of the application becomes an engineering feat.</li>
 <li>It freezes APIs. Once a microservice establishes an API, it becomes
 hard to change without breaking the other services that consume the
-API. Legacy APIs linger around, and new APIs are patched on top.</li>
+API. Legacy APIs linger around, and new APIs are patched on top.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></li>
 <li>It slows down application development. When making changes that affect
 multiple microservices, developers cannot implement and deploy the
 changes atomically. They have to carefully plan how to introduce the
@@ -156,6 +169,9 @@ change across 𝑛 microservices with their own release schedules.</li>
 <ol>
 <li id="fn:1">
 <p><a href="https://trends.google.com/trends/explore?date=all&amp;geo=US&amp;q=microservices">https://trends.google.com/trends/explore?date=all&amp;geo=US&amp;q=microservices</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything <code>external</code> and not part of the same checkable runtime.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
