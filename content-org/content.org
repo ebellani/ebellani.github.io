@@ -74,12 +74,12 @@ architecture on our industry.
 
 My position is that MA is a reification[cite:@refification_britannica]
 of abstract processes as defined by the Pi-Calculus (PC). Why do I think
-of that? Let's start by defining PC: it is a model of message-based
-concurrent computation.
+of that? Let's start by defining things.
 
 *** Definitions
 
-Its essential features are[cite:@Pierce1995]:
+PC is a model of message-based concurrent computation and its essential
+features are[cite:@Pierce1995]:
 
 #+begin_quote
 - focusing on interaction via communication rather than shared
@@ -131,9 +131,23 @@ it's a very bad thing. Why?
 
 Because once you mistake a formal entity such as the PC with a material
 one such as the MA, you lock yourself out of possibilities and in
-specific [[#drawbacks][drawbacks]] that might now exist in other ways to implement the
+specific [[#drawbacks][drawbacks]] that might not exist in other ways to implement the
 PC.
 
+Let me illustrate the point here with a metaphor:
+
+Say you think the formal entity called ~Boat~ can only be implemented by
+~Yacht~. You now are locked into the design choices of that concrete
+instantiation of the ~Boat~ form. ~Transatlantic~ or ~Canoe~ are not
+possible for you.
+
+Coming back to the case at hand, here are some examples of how you could
+implement the pi-calculus without MA:
+
+- Use a language/runtime that supports it, such as Erlang/ERT, SML/NJ or F#/.net.
+- Use a framework such as Akka.
+- Use a DBMS where several applications share the same DBMS but you use
+  permissions and views to manage access and have logical independence.
 
 *** Appendix: The Drawbacks
 :PROPERTIES:
@@ -154,7 +168,7 @@ PC.
   instance of the application becomes an engineering feat.
 - It freezes APIs. Once a microservice establishes an API, it becomes
   hard to change without breaking the other services that consume the
-  API. Legacy APIs linger around, and new APIs are patched on top.
+  API. Legacy APIs linger around, and new APIs are patched on top.[fn:2]
 - It slows down application development. When making changes that affect
   multiple microservices, developers cannot implement and deploy the
   changes atomically. They have to carefully plan how to introduce the
@@ -215,7 +229,7 @@ The structure of this argument is usually like this:
 
 This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
-context-sensitive examples[fn:2]:
+context-sensitive examples[fn:3]:
 
 *** Selection bias
 
@@ -756,7 +770,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:2]
+Conceptual schema -> Logical schema -> Physical schema [fn:3]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -833,7 +847,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum[fn:3]:
+14 Themes of the Elite Private School Curriculum[fn:4]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -888,7 +902,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:4]
+the IT sector in particular, is nominalism.[fn:5]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -923,7 +937,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:5]
+terminology. [fn:6]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -1261,14 +1275,16 @@ this is the description of the blog section
 
 [fn:1] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:2] (schemas are synonymous to models in this context)
+[fn:2] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
 
-[fn:3] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:3] (schemas are synonymous to models in this context)
 
-[fn:4] You will probably see me return to this topic in other posts.
+[fn:4] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:5] I got the idea of such table from a similar table found on
+[fn:5] You will probably see me return to this topic in other posts.
+
+[fn:6] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:6] The definitions come from [cite:@fallacies_iep], but the examples
+[fn:7] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this context
