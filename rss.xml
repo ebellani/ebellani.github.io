@@ -6,7 +6,20 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 26 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to use the relational model to do database design?</title>
+      <link>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</link>
+      <pubDate>Sun, 26 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</guid>
+      <description>On a recent exchange I was asked the following:
+ &amp;hellip; what you mean that you use the relation model to design? &amp;hellip;
+ Let&amp;rsquo;s first start with the motivation: Why should one use the relational model(RM) to do database design? Here is my one line answer:
+It makes it possible to have and to maintain the integrity of your business rules.
+To illustrate this point, here are some examples of problems that one faces when one does not have such integrity:</description>
+    </item>
+    
     <item>
       <title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
       <link>https://ebellani.github.io/blog/2024/microservices-as-reification/</link>

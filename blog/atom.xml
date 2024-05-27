@@ -5,13 +5,94 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-05-05T00:26:49Z</updated>
+  <updated>2024-05-27T02:37:35Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>How to use the relational model to do database design?</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/"/>
+    <id>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</id>
+    <published>2024-05-26T00:00:00Z</published>
+    <updated>2024-05-26T00:00:00Z</updated>
+    <summary>On a recent exchange I was asked the following:
+ &amp;hellip; what you mean that you use the relation model to design? &amp;hellip;
+ Let&amp;rsquo;s first start with the motivation: Why should one use the relational model(RM) to do database design? Here is my one line answer:
+It makes it possible to have and to maintain the integrity of your business rules.
+To illustrate this point, here are some examples of problems that one faces when one does not have such integrity:</summary>
+    <content type="html">&lt;p&gt;On a recent &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7199813569549328386?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7199820740962004992%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7200430915628462080%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287199820740962004992%2Curn%3Ali%3Aactivity%3A7199813569549328386%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287200430915628462080%2Curn%3Ali%3Aactivity%3A7199813569549328386%29%20&#34;&gt;exchange&lt;/a&gt; I was asked the following:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; what you mean that you use the relation model to design? &amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s first start with the motivation: &lt;strong&gt;Why&lt;/strong&gt; should one use the
+relational model(RM) to do database design? Here is my one line answer:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;It makes it possible to have and to maintain the integrity of your
+business rules.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;To illustrate this point, here are some examples of problems that one
+faces when one does not have such integrity:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A status got written to &amp;lsquo;Done&amp;rsquo;, but the data that was expected to be
+there was not (eventual consistency)&lt;/li&gt;
+&lt;li&gt;Some data that your application depends on got deleted (delete anomaly)&lt;/li&gt;
+&lt;li&gt;A join returns more information than expected (update anomaly)&lt;/li&gt;
+&lt;li&gt;Slow queries (optimizer problems due to duplicates)
+&lt;ul&gt;
+&lt;li&gt;Ambiguous duplicates in results (duplicates)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Wrong query results (NULLs)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Now to the point at hand: How would one use the relational model to
+design a database? Let me start by a definition of what is the
+relational model:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;An open-ended collection of scalar types, including type BOOLEAN in
+particular&lt;/li&gt;
+&lt;li&gt;A type generator and an intended interpretation for relations of
+types generated thereby&lt;/li&gt;
+&lt;li&gt;Facilities for defining variables of such generated
+relation types&lt;/li&gt;
+&lt;li&gt;A assignment operator for assigning values to such variables&lt;/li&gt;
+&lt;li&gt;A complete (but otherwise open-ended) collection of generic operators
+for deriving values from other values&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2015&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let&amp;rsquo;s define a database:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;A database is a set predicates and propositions that instantiate them.&lt;/em&gt;
+The RM uses relation types to represent predicates. SQL uses table
+definitions. The RM uses relations to represent the arguments of a
+predicate, SQL uses rows.&lt;/p&gt;
+&lt;p&gt;In short, the RM set global constraints on any database design. Here is
+a (probably incomplete) list with ways that the RM drives database
+design:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Never allow NULL anywhere (avoid &lt;code&gt;NULL&lt;/code&gt; generating operators, such as &lt;code&gt;OUTER JOIN&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Never allow duplicates (avoid duplicates generating queries, such as &lt;code&gt;&amp;lt;SELECT | UNION&amp;gt; All&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Never depend on position of columns or rows&lt;/li&gt;
+&lt;li&gt;Always make sure each table represents one and only one predicate, thus being in 5NF&lt;/li&gt;
+&lt;li&gt;Use updateable views to have logical independence (simulate them with triggers)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/SpanishLeftistsShootStatueOfChrist.jpg&#34;
+         alt=&#34;Figure 1: Communist firing squad aiming at the Monument of the Sacred Heart on the Cerro de los Angeles, Spain. 31 August 1936&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Communist firing squad aiming at the Monument of the Sacred Heart on the Cerro de los Angeles, Spain. 31 August 1936&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Date, Chris. 2015. &lt;i&gt;Sql and relational theory: How to write accurate sql code&lt;/i&gt;. Paperback. O’Reilly Media.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
@@ -884,91 +965,6 @@ even get the desired benefit. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Goet
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Goetz, B. 2006. &lt;i&gt;Java Concurrency in Practice&lt;/i&gt;. Addison-Wesley.&lt;/div&gt;
 &lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Themes of the Elite Private School Curriculum</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/theme-elite-schooling/"/>
-    <id>https://ebellani.github.io/blog/2023/theme-elite-schooling/</id>
-    <published>2023-11-26T00:00:00Z</published>
-    <updated>2023-11-26T00:00:00Z</updated>
-    <summary>I think its fair to say that one can significantly improve one&amp;rsquo;s chances of being materially successful in life by learning John Taylor Gatto’s 14 Themes of the Elite Private School Curriculum1:
-  A theory of human nature (as embodied in history, philosophy, theology, literature and law).
-  Skill in the active literacies (writing, public speaking).
-  Insight into the major institutional forms (courts, corporations, military, education).</summary>
-    <content type="html">&lt;p&gt;I think its fair to say that one can significantly improve one&amp;rsquo;s chances
-of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;A theory of human nature (as embodied in history, philosophy, theology,
-literature and law).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Skill in the active literacies (writing, public speaking).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Insight into the major institutional forms (courts, corporations, military,
-education).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Repeated exercises in the forms of good manners and politeness; based on
-the notion that they are the foundation of all future relationships, all
-future alliances, and access to places that you might want to go.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Independent work.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Energetic physical sports are the only way to confer grace on the human
-presence, and that that grace translates into power and money later on. Also,
-they teach you practice in handling pain, and in dealing with emergencies.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;A complete theory of access to any place and any person.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Responsibility as an utterly essential part of the curriculum; always to
-grab it when it is offered and always to deliver more than is asked for.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Arrival at a personal code of standards (in production, behavior and
-morality).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;To have a familiarity with, and to be at ease with, the fine
-arts. (cultural capital)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;The power of accurate observation and recording. For example, sharpen the
-perception by being able to draw accurately.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;The ability to deal with challenges of all sorts.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;A habit of caution in reasoning to conclusions.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;The constant development and testing of prior judgements: you make
-judgements, you discriminate value, and then you follow up and “keep an eye”
-on your predictions to see how far skewed, or how consistent, your
-predictions were.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;As listed in &lt;a href=&#34;https://www.youtube.com/watch?v=IZBdv2yznmI&#34;&gt;The Ultimate History Lesson&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
     
     
     <category term="blog"/>
