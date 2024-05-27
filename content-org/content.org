@@ -43,6 +43,78 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** How to use the relational model to do database design?
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-to-use-the-relational-model-to-do-database-design
+:EXPORT_DATE: 2024-05-26
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug how-to-use-the-relational-model-to-do-database-design
+:END:
+
+On a recent [[https://www.linkedin.com/feed/update/urn:li:activity:7199813569549328386?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7199820740962004992%29&replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7200430915628462080%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287199820740962004992%2Curn%3Ali%3Aactivity%3A7199813569549328386%29&dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287200430915628462080%2Curn%3Ali%3Aactivity%3A7199813569549328386%29 ][exchange]] I was asked the following:
+
+#+begin_quote
+... what you mean that you use the relation model to design? ...
+#+end_quote
+
+Let's first start with the motivation: *Why* should one use the
+relational model(RM) to do database design? Here is my one line answer:
+
+/It makes it possible to have and to maintain the integrity of your
+business rules./
+
+To illustrate this point, here are some examples of problems that one
+faces when one does not have such integrity:
+
+- A status got written to 'Done', but the data that was expected to be
+  there was not (eventual consistency)
+- Some data that your application depends on got deleted (delete anomaly)
+- A join returns more information than expected (update anomaly)
+- Slow queries (optimizer problems due to duplicates)
+  - Ambiguous duplicates in results (duplicates)
+- Wrong query results (NULLs)
+
+
+Now to the point at hand: How would one use the relational model to
+design a database? Let me start by a definition of what is the
+relational model:
+
+#+begin_quote
+1) An open-ended collection of scalar types, including type BOOLEAN in
+   particular
+2) A type generator and an intended interpretation for relations of
+   types generated thereby
+3) Facilities for defining variables of such generated
+   relation types
+4) A assignment operator for assigning values to such variables
+5) A complete (but otherwise open-ended) collection of generic operators
+   for deriving values from other values
+[cite:@Date_Chris2015-12-15]
+#+end_quote
+
+Let's define a database:
+
+/A database is a set predicates and propositions that instantiate them./
+The RM uses relation types to represent predicates. SQL uses table
+definitions. The RM uses relations to represent the arguments of a
+predicate, SQL uses rows.
+
+
+In short, the RM set global constraints on any database design. Here is
+a (probably incomplete) list with ways that the RM drives database
+design:
+
+- Never allow NULL anywhere (avoid ~NULL~ generating operators, such as ~OUTER JOIN~)
+- Never allow duplicates (avoid duplicates generating queries, such as ~<SELECT | UNION> All~)
+- Never depend on position of columns or rows
+- Always make sure each table represents one and only one predicate, thus being in 5NF
+- Use updateable views to have logical independence (simulate them with triggers)
+
+#+caption: Communist firing squad aiming at the Monument of the Sacred Heart on the Cerro de los Angeles, Spain. 31 August 1936
+[[./SpanishLeftistsShootStatueOfChrist.jpg]]
+
+
+#+print_bibliography:
+
 ** How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus
 :PROPERTIES:
 :EXPORT_FILE_NAME: microservices-as-reification
