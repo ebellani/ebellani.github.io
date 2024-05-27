@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-05-27T02:37:35Z</updated>
+  <updated>2024-05-27T02:44:59Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -64,10 +64,10 @@ for deriving values from other values&lt;/li&gt;
 &lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date 2015&lt;/a&gt;)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Let&amp;rsquo;s define a database:&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;A database is a set predicates and propositions that instantiate them.&lt;/em&gt;
-The RM uses relation types to represent predicates. SQL uses table
-definitions. The RM uses relations to represent the arguments of a
-predicate, SQL uses rows.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;A database is a set of predicates and instatiations of such as
+propositions.&lt;/em&gt; The RM uses relation types to represent predicates. SQL
+uses table definitions. The RM uses relations to represent the arguments
+of a predicate, SQL uses rows.&lt;/p&gt;
 &lt;p&gt;In short, the RM set global constraints on any database design. Here is
 a (probably incomplete) list with ways that the RM drives database
 design:&lt;/p&gt;
