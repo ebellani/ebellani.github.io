@@ -43,11 +43,47 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** A real life example of database design
+:PROPERTIES:
+:EXPORT_FILE_NAME: a-real-life-example-of-database-design
+:EXPORT_DATE: 2024-05-27
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug a-real-life-example-of-database-design
+:END:
+
+In a followup to [[#relational-model-design][How to use the relational model to do database design?]],
+I was asked to provide an example to illustrate the point:
+
+
+#+begin_quote
+Can you walk through a real life example of modelling, let's say, a car
+(it's always a car isn't it?).. Consider that the car may have 2WD, 4WD
+and also let say we allow truck types of cars with 6 wheels. Cars have
+various engine types and depending on the model of car, some colours are
+available and some are not. How would you apply the logical design to
+this idea and where would such a design lead you if you were to
+implement it into the physical world?
+#+end_quote
+
+Here is a list of predicates that provide such an example:
+
+1. There exists car of models ~$MOD~
+2. Cars can have transmission ~$TRA~
+3. Cars can have engines ~$ENG~
+4. Cars can have colors ~$COL~
+5. Model ~$MOD~ can have color ~$COL~
+6. Model ~$MOD~ can have engine ~$ENG~
+7. Model ~$MOD~ can have transmission ~$TRA~
+
+#+caption: Spanish cathedral destroyed by communist arson, circa 1937
+[[./burning-cathedral-spanish-civil-war.jpg]]
+
+
 ** How to use the relational model to do database design?
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-use-the-relational-model-to-do-database-design
 :EXPORT_DATE: 2024-05-26
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug how-to-use-the-relational-model-to-do-database-design
+:CUSTOM_ID: relational-model-design
 :END:
 
 On a recent [[https://www.linkedin.com/feed/update/urn:li:activity:7199813569549328386?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7199820740962004992%29&replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7200430915628462080%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287199820740962004992%2Curn%3Ali%3Aactivity%3A7199813569549328386%29&dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287200430915628462080%2Curn%3Ali%3Aactivity%3A7199813569549328386%29 ][exchange]] I was asked the following:
