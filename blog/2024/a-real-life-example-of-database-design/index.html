@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  A real life example of database design
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="A real life example of database design" />
+<meta property="og:description" content="In a followup to How to use the relational model to do database design?, I was asked to provide an example to illustrate the point:
+ Can you walk through a real life example of modelling, let&rsquo;s say, a car (it&rsquo;s always a car isn&rsquo;t it?).. Consider that the car may have 2WD, 4WD and also let say we allow truck types of cars with 6 wheels. Cars have various engine types and depending on the model of car, some colours are available and some are not." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-05-27T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-27T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>A real life example of database design
+    <small>
+      <time>May 27, 2024</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p>In a followup to <a href="/blog/2024/how-to-use-the-relational-model-to-do-database-design/">How to use the relational model to do database design?</a>,
+I was asked to provide an example to illustrate the point:</p>
+<blockquote>
+<p>Can you walk through a real life example of modelling, let&rsquo;s say, a car
+(it&rsquo;s always a car isn&rsquo;t it?).. Consider that the car may have 2WD, 4WD
+and also let say we allow truck types of cars with 6 wheels. Cars have
+various engine types and depending on the model of car, some colours are
+available and some are not. How would you apply the logical design to
+this idea and where would such a design lead you if you were to
+implement it into the physical world?</p>
+</blockquote>
+<p>Here is a list of predicates that provide such an example:</p>
+<ol>
+<li>There exists car of models <code>$MOD</code></li>
+<li>Cars can have transmission <code>$TRA</code></li>
+<li>Cars can have engines <code>$ENG</code></li>
+<li>Cars can have colors <code>$COL</code></li>
+<li>Model <code>$MOD</code> can have color <code>$COL</code></li>
+<li>Model <code>$MOD</code> can have engine <code>$ENG</code></li>
+<li>Model <code>$MOD</code> can have transmission <code>$TRA</code></li>
+</ol>
+<figure><img src="/ox-hugo/burning-cathedral-spanish-civil-war.jpg"
+         alt="Figure 1: Spanish cathedral destroyed by communist arson, circa 1937"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Spanish cathedral destroyed by communist arson, circa 1937</p>
+        </figcaption>
+</figure>
+
+
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>

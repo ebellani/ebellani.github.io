@@ -6,7 +6,17 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 27 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A real life example of database design</title>
+      <link>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</link>
+      <pubDate>Mon, 27 May 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</guid>
+      <description>In a followup to How to use the relational model to do database design?, I was asked to provide an example to illustrate the point:
+ Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car (it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD and also let say we allow truck types of cars with 6 wheels. Cars have various engine types and depending on the model of car, some colours are available and some are not.</description>
+    </item>
+    
     <item>
       <title>How to use the relational model to do database design?</title>
       <link>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</link>

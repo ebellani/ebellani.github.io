@@ -5,13 +5,55 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-05-27T02:44:59Z</updated>
+  <updated>2024-05-27T17:24:36Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>A real life example of database design</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/"/>
+    <id>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</id>
+    <published>2024-05-27T00:00:00Z</published>
+    <updated>2024-05-27T00:00:00Z</updated>
+    <summary>In a followup to How to use the relational model to do database design?, I was asked to provide an example to illustrate the point:
+ Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car (it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD and also let say we allow truck types of cars with 6 wheels. Cars have various engine types and depending on the model of car, some colours are available and some are not.</summary>
+    <content type="html">&lt;p&gt;In a followup to &lt;a href=&#34;/blog/2024/how-to-use-the-relational-model-to-do-database-design/&#34;&gt;How to use the relational model to do database design?&lt;/a&gt;,
+I was asked to provide an example to illustrate the point:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car
+(it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD
+and also let say we allow truck types of cars with 6 wheels. Cars have
+various engine types and depending on the model of car, some colours are
+available and some are not. How would you apply the logical design to
+this idea and where would such a design lead you if you were to
+implement it into the physical world?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here is a list of predicates that provide such an example:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;There exists car of models &lt;code&gt;$MOD&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Cars can have transmission &lt;code&gt;$TRA&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Cars can have engines &lt;code&gt;$ENG&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Cars can have colors &lt;code&gt;$COL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have color &lt;code&gt;$COL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have engine &lt;code&gt;$ENG&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have transmission &lt;code&gt;$TRA&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/burning-cathedral-spanish-civil-war.jpg&#34;
+         alt=&#34;Figure 1: Spanish cathedral destroyed by communist arson, circa 1937&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Spanish cathedral destroyed by communist arson, circa 1937&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>How to use the relational model to do database design?</title>
@@ -932,39 +974,6 @@ wrong (and very costly) technology and business decisions.&lt;/p&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Measure, don’t guess.</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2023/measure-dont-guess/"/>
-    <id>https://ebellani.github.io/blog/2023/measure-dont-guess/</id>
-    <published>2023-12-09T00:00:00Z</published>
-    <updated>2023-12-09T00:00:00Z</updated>
-    <summary>&amp;hellip; when you trade safety for performance, you may get neither. Especially when it comes to concurrency, the intuition of many developers about where a performance problem lies or which approach will be faster or more scalable is often incorrect.
-It is therefore imperative that any performance tuning exercise be accompanied by concrete performance requirements (so you know both when to tune and when to stop tuning) and with a measurement program in place using a realistic configuration and load profile.</summary>
-    <content type="html">&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; when you trade safety for performance, you may get
-neither. Especially when it comes to concurrency, the intuition of many
-developers about where a performance problem lies or which approach will
-be faster or more scalable is often incorrect.&lt;/p&gt;
-&lt;p&gt;It is therefore imperative that any performance tuning exercise be
-accompanied by concrete performance requirements (so you know both when
-to tune and when to stop tuning) and with a measurement program in place
-using a realistic configuration and load profile.&lt;/p&gt;
-&lt;p&gt;Measure again after tuning to verify that you’ve achieved the desired
-improvements. The safety and maintenance risks associated with many
-optimizations are bad enough—you don’t want to pay these costs if you
-don’t need to—and you definitely don’t want to pay them if you don’t
-even get the desired benefit. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Goetz 2006&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Goetz, B. 2006. &lt;i&gt;Java Concurrency in Practice&lt;/i&gt;. Addison-Wesley.&lt;/div&gt;
-&lt;/div&gt;</content>
     
     
     <category term="blog"/>
