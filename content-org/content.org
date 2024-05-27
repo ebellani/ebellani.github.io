@@ -93,10 +93,10 @@ relational model:
 
 Let's define a database:
 
-/A database is a set predicates and propositions that instantiate them./
-The RM uses relation types to represent predicates. SQL uses table
-definitions. The RM uses relations to represent the arguments of a
-predicate, SQL uses rows.
+/A database is a set of predicates and instatiations of such as
+propositions./ The RM uses relation types to represent predicates. SQL
+uses table definitions. The RM uses relations to represent the arguments
+of a predicate, SQL uses rows.
 
 
 In short, the RM set global constraints on any database design. Here is
