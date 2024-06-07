@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  Why updateable views, or, Why modules matter?
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Why updateable views, or, Why modules matter?" />
+<meta property="og:description" content="Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&rsquo;s the full exchange.
+  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
+ Logical independence the ability to change the form without affecting clients." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-06-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-06-06T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>Why updateable views, or, Why modules matter?
+    <small>
+      <time>June 6, 2024</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p><a href="https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29">Continuing</a> a rich conversation that sparked <a href="/blog/2024/a-real-life-example-of-database-design/">other</a> <a href="/blog/2024/how-to-use-the-relational-model-to-do-database-design/">posts</a>, I was asked to
+justify updateable views which, to me, are analogous to module'
+signatures (a topic for another post). Here&rsquo;s the full exchange.</p>
+<blockquote>
+<ol>
+<li>Why is the logical model more likely to be correct and immutable from
+the perspective of the app than the physical one?</li>
+</ol>
+</blockquote>
+<p>This question seems to mistake logical and physical independence.</p>
+<dl>
+<dt>Logical independence</dt>
+<dd>the ability to change the form without
+affecting clients.</dd>
+<dt>Physical independence</dt>
+<dd>the ability to change the implementation
+without changing the form.</dd>
+</dl>
+<blockquote>
+<ol>
+<li>
+<p>In an updateable view world, how would you explain deadlocks
+occurring to the developers consuming the model (since they can no
+longer &ldquo;see&rdquo; the physical tables that implement it)</p>
+</li>
+<li>
+<p>Similarly, how will you explain the performance characteristics of
+that model when someone updates the updatable view (example: updating
+a column that is a primary key is MUCH cheaper then one that is a
+foreign key - yet they look the same in the logical representation
+shows to the developer)</p>
+</li>
+<li>
+<p>In the same line of reasoning: How do you explain to developers why
+there is a vastly different performance characteristics selecting
+data from the same view even though queries look almost identical?</p>
+</li>
+</ol>
+</blockquote>
+<p>All these seem to boil down to: how do you explain performance and
+concurrency issues to the clients of the view? I&rsquo;ll make an analogy with
+RPC endpoints, which are the most widely used alternative to updateable
+views. Such endpoints use documentation to explain their capabilities
+limitations to their clients.</p>
+<blockquote>
+<ol>
+<li>Which skill is more common and cheapest to acquire: A database
+developer who can create such a logical model or the developer who
+can modify apps in case we got something about the model wrong?</li>
+</ol>
+</blockquote>
+<p>The logical model will be created, and SQL is a better language for
+that, since it at least can be declarative. In that sense, I think SQL
+is cheaper because it provides a better language than the ones mostly
+used. But the real advantages are:</p>
+<ol>
+<li>Avoidable rework. The logical contract is done once. In RPC
+alternatives such contract can be implemented in multiple apps.</li>
+<li>Consistency. Having the DBMS be the source of truth instead of
+multiple DBMS instances avoids consistency problems, which are widely
+considered the most expensive problems in the industry.</li>
+</ol>
+<figure><img src="/ox-hugo/st-maria-civil-war--comparision.jpg"
+         alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
+        </figcaption>
+</figure>
+
+
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>

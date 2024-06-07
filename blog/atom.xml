@@ -5,13 +5,97 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-05-27T17:24:36Z</updated>
+  <updated>2024-06-07T02:51:52Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Why updateable views, or, Why modules matter?</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/"/>
+    <id>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</id>
+    <published>2024-06-06T00:00:00Z</published>
+    <updated>2024-06-06T00:00:00Z</updated>
+    <summary>Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&amp;rsquo;s the full exchange.
+  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
+ Logical independence the ability to change the form without affecting clients.</summary>
+    <content type="html">&lt;p&gt;&lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&#34;&gt;Continuing&lt;/a&gt; a rich conversation that sparked &lt;a href=&#34;/blog/2024/a-real-life-example-of-database-design/&#34;&gt;other&lt;/a&gt; &lt;a href=&#34;/blog/2024/how-to-use-the-relational-model-to-do-database-design/&#34;&gt;posts&lt;/a&gt;, I was asked to
+justify updateable views which, to me, are analogous to module&#39;
+signatures (a topic for another post). Here&amp;rsquo;s the full exchange.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Why is the logical model more likely to be correct and immutable from
+the perspective of the app than the physical one?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This question seems to mistake logical and physical independence.&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;Logical independence&lt;/dt&gt;
+&lt;dd&gt;the ability to change the form without
+affecting clients.&lt;/dd&gt;
+&lt;dt&gt;Physical independence&lt;/dt&gt;
+&lt;dd&gt;the ability to change the implementation
+without changing the form.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;In an updateable view world, how would you explain deadlocks
+occurring to the developers consuming the model (since they can no
+longer &amp;ldquo;see&amp;rdquo; the physical tables that implement it)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Similarly, how will you explain the performance characteristics of
+that model when someone updates the updatable view (example: updating
+a column that is a primary key is MUCH cheaper then one that is a
+foreign key - yet they look the same in the logical representation
+shows to the developer)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In the same line of reasoning: How do you explain to developers why
+there is a vastly different performance characteristics selecting
+data from the same view even though queries look almost identical?&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;All these seem to boil down to: how do you explain performance and
+concurrency issues to the clients of the view? I&amp;rsquo;ll make an analogy with
+RPC endpoints, which are the most widely used alternative to updateable
+views. Such endpoints use documentation to explain their capabilities
+limitations to their clients.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Which skill is more common and cheapest to acquire: A database
+developer who can create such a logical model or the developer who
+can modify apps in case we got something about the model wrong?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The logical model will be created, and SQL is a better language for
+that, since it at least can be declarative. In that sense, I think SQL
+is cheaper because it provides a better language than the ones mostly
+used. But the real advantages are:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Avoidable rework. The logical contract is done once. In RPC
+alternatives such contract can be implemented in multiple apps.&lt;/li&gt;
+&lt;li&gt;Consistency. Having the DBMS be the source of truth instead of
+multiple DBMS instances avoids consistency problems, which are widely
+considered the most expensive problems in the industry.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war--comparision.jpg&#34;
+         alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>A real life example of database design</title>
@@ -837,143 +921,6 @@ calls a function an object, or a relation a table.&lt;/p&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Duffy, F. 1907. “Abstraction.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;http://www.newadvent.org/cathen/01074a.htm&#34;&gt;http://www.newadvent.org/cathen/01074a.htm&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;iamprovidence. 2023. “Backend Side Architecture Evolution (N-Layered, Ddd, Hexagon, Onion, Clean Architecture).” &lt;a href=&#34;https://web.archive.org/web/20230721054753/https://medium.com/@iamprovidence/backend-side-architecture-evolution-n-layered-ddd-hexagon-onion-clean-architecture-643d72444ce4&#34;&gt;https://web.archive.org/web/20230721054753/https://medium.com/@iamprovidence/backend-side-architecture-evolution-n-layered-ddd-hexagon-onion-clean-architecture-643d72444ce4&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>A dangerous book</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/dangerous-book/"/>
-    <id>https://ebellani.github.io/blog/2024/dangerous-book/</id>
-    <published>2024-01-04T00:00:00Z</published>
-    <updated>2024-01-04T00:00:00Z</updated>
-    <summary>I recently commented on how the book (Kleppmann 2017) is a dangerous book, due to a subtle error on how it defines data models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:
- We must first explain how an economy can possibly work right before we can meaningfully ask what might go wrong
- What is a data model? Here are 3 definitions, in increasing level of detail:</summary>
-    <content type="html">&lt;p&gt;I recently &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29&#34;&gt;commented&lt;/a&gt; on how the book (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kleppmann 2017&lt;/a&gt;)
-is a dangerous book, due to a subtle error on how it defines data
-models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for
-that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;We must first explain how an economy can possibly work right before we
-can meaningfully ask what might go wrong&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;what-is-a-data-model&#34;&gt;What is a data model?&lt;/h2&gt;
-&lt;p&gt;Here are 3 definitions, in increasing level of detail:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A data model is an abstract, self-contained, logical definition of the
-objects, operators, and so forth, that together constitute the abstract
-machine with which users interact. The objects allow us to model the
-structure of data. The operators allow us to model its behavior.
-(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Date 2003&lt;/a&gt;):&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!--quoteend--&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;a collection of data structure types (the building blocks of any
-database that conforms to the model);&lt;/li&gt;
-&lt;li&gt;a collection of operators or inferencing rules, which can be applied
-to any valid instances of the data types listed in (i), to retrieve
-or derive data from any parts of those structures in any combinations
-desired;&lt;/li&gt;
-&lt;li&gt;a collection of general integrity rules, which implicitly or
-explicitly define the set of consistent database states or changes of
-state or both &amp;ndash; these rules may sometimes be expressed as
-insert-update-delete rules.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Codd 1980&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;In particular, the Relational Data Model&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;An open-ended collection of scalar types, including type BOOLEAN in
-particular&lt;/li&gt;
-&lt;li&gt;A type generator and an intended interpretation for relations of
-types generated thereby&lt;/li&gt;
-&lt;li&gt;Facilities for defining variables of such generated
-relation types&lt;/li&gt;
-&lt;li&gt;A assignment operator for assigning values to such variables&lt;/li&gt;
-&lt;li&gt;A complete (but otherwise open-ended) collection of generic operators
-for deriving values from other values&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Date 2015&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Unfortunately, in our industry, it almost exclusively means a model of
-which information is relevant to particular business cases. Those used
-to be called Conceptual Schemas. It is part of the classic data model
-progression(&lt;a href=&#34;#citeproc_bib_item_6&#34;&gt;Steel 1975&lt;/a&gt;):&lt;/p&gt;
-&lt;p&gt;Conceptual schema -&amp;gt; Logical schema -&amp;gt; Physical schema &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;What are those? I can&amp;rsquo;t do better than (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Think of a conceptual model as the territory, the logical model as its
-symbolic representation on the map and the map print and medium (paper,
-plastic, screen) as the physical model.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;How about the Data Model, how does it fit in this metaphor?&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The data model is the map legend that provides the mapping symbols and
-their correspondence to the elements of the territory (e.g., cities,
-highways, forests and so on) they symbolize on the map.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;what-is-wrong-with-the-book-s-definition&#34;&gt;What is wrong with the book&amp;rsquo;s definition?&lt;/h2&gt;
-&lt;p&gt;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kleppmann 2017&lt;/a&gt;) does not provide an explicit
-definition. The closest he has is this paragraph:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Most applications are built by layering one data model on top of
-another. For each layer, the key question is: how is it represented in
-terms of the next-lower layer?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;My translation of this, given the rest of the book&amp;rsquo;s chapter on Data
-Models, is that a Data Model for the author is any particular
-implementation of a higher abstraction in a lower abstraction would
-count as a Data Model. So, the author refers to all 4 models (and any
-concrete instance of them) using the same term.&lt;/p&gt;
-&lt;h2 id=&#34;why-does-this-matter&#34;&gt;Why does this matter?&lt;/h2&gt;
-&lt;p&gt;I hope that the consequences of such confusion would be clear to the
-reader. If not, consider the advice of (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Referring to all four as data models, or using the terms interchangeably
-blurs the important differences, reflecting common confusion of levels
-of representation, namely&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Conceptual-logical conflation (CLC);&lt;/li&gt;
-&lt;li&gt;Logical-physical confusion (LPC).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;with costly consequences.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;A single example from the book should suffice, I think:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;There are several driving forces behind the adoption of NoSQL databases,
-including:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A need for greater scalability than relational databases can easily
-achieve, including very large datasets or very high write throughput
-&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Here, the author is confusing a Data Model (the relational data model)
-with physical concerns (scalability and throughput), which might lead to
-wrong (and very costly) technology and business decisions.&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Codd, E. F. 1980. “Data Models in Database Management.” &lt;i&gt;Sigplan Not.&lt;/i&gt; 16 (1): 112–14. &lt;a href=&#34;https://doi.org/10.1145/960124.806891&#34;&gt;https://doi.org/10.1145/960124.806891&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Date, C.J. 2003. &lt;i&gt;An Introduction to Database Systems&lt;/i&gt;. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Date, Chris. 2015. &lt;i&gt;Sql and relational theory: How to write accurate sql code&lt;/i&gt;. Paperback. O’Reilly Media.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Kleppmann, Martin. 2017. &lt;i&gt;Designing data-intensive applications: The big ideas behind reliable, scalable, and maintainable systems&lt;/i&gt;. Paperback. O’Reilly Media.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_6&#34;&gt;&lt;/a&gt;Steel, Thomas B. Jr., ed. 1975. “Interim Report: Ansi/X3/Sparc Study Group on Data Base Management Systems 75-02-08.” &lt;i&gt;Bulletin of Acm Sigmod&lt;/i&gt; 7 (2): 1–140. &lt;a href=&#34;http://portal.acm.org/toc.cfm?id=984332&#34;&gt;http://portal.acm.org/toc.cfm?id=984332&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;(schemas are synonymous to models in this context)&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
     
     
     <category term="blog"/>

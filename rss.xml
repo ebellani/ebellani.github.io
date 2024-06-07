@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 27 May 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 06 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why updateable views, or, Why modules matter?</title>
+      <link>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</link>
+      <pubDate>Thu, 06 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</guid>
+      <description>Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&amp;rsquo;s the full exchange.
+  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
+ Logical independence the ability to change the form without affecting clients.</description>
+    </item>
+    
     <item>
       <title>A real life example of database design</title>
       <link>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</link>
