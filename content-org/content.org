@@ -43,6 +43,22 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Substantial and accidental forms of a SQL expression
+:PROPERTIES:
+:EXPORT_FILE_NAME: substantial-and-accidental-forms-of-a-sql-expression
+:EXPORT_DATE: 2024-06-16
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug substantial-and-accidental-forms-of-a-sql-expression
+:CUSTOM_ID: substantial-and-accidental-forms-of-a-sql-expression
+:END:
+
+
+#+begin_quote
+- substantial form always ... brings a new substance into existence;
+
+- accidental form simply informs an already existing substance, and in
+  doing so it simply modifies some substance. [cite:@acquinas_metaphysics_iep]
+#+end_quote
+
 ** Why updateable views, or, Why modules matter?
 :PROPERTIES:
 :EXPORT_FILE_NAME: why-updateable-views-or-why-modules-matter
