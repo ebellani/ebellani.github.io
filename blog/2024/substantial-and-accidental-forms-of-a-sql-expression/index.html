@@ -74,11 +74,12 @@ doing so it simply modifies some substance. (<a href="#citeproc_bib_item_3">Kerr
 </li>
 </ul>
 </blockquote>
-<p>The problem with SQL, in particular a SELECT expression, is that the way
-it is read and written (and the usual expectations of the terms such as
-SELECT/FROM&hellip;) is very different from what is actually taking
-place. Let&rsquo;s discuss this from an example (the example and much of the
-discussion are taken from (<a href="#citeproc_bib_item_1">Date and Darwen 1997</a>))</p>
+<p>One of the core problems with SQL and in particular its <code>SELECT</code>
+expression is that the way it is written/read (and the usual
+expectations of the terms such as <code>SELECT/FROM</code> &hellip;) is very different
+from what is actually taking place.</p>
+<p>Let&rsquo;s discuss this fact starting from an example (the example and much
+of the discussion are taken from (<a href="#citeproc_bib_item_1">Date and Darwen 1997</a>))</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">  </span><span class="k">SELECT</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">P</span><span class="p">.</span><span class="n">PNO</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="s1">&#39;Weight in grams =&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">TEXT1</span><span class="p">,</span><span class="w">
@@ -96,27 +97,26 @@ discussion are taken from (<a href="#citeproc_bib_item_1">Date and Darwen 1997</
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">P</span><span class="p">.</span><span class="n">WEIGHT</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">P</span><span class="p">.</span><span class="n">COLOR</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">HAVING</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">SP</span><span class="p">.</span><span class="n">QTY</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">350</span><span class="w">
-</span></span></span></code></pre></div><p>To give a glimpse of the difficulty here, the <code>SELECT</code> clause if the
-first to be read and written, but it is the <strong>last</strong> to be evaluated. So,
-here is how to read this expression:</p>
+</span></span></span></code></pre></div><p>The difficulty here starts right at the begging, since the <code>SELECT</code>
+clause is the first to be read and written, but it is the <strong>last</strong> to be
+evaluated. Here is how to interpret this <code>SELECT</code> expression:</p>
 <ol>
 <li>
-<p><strong>FROM</strong> <span class="org-target" id="org-target--join"></span>: The source of the data. An usually overseen point is that
-the <code>FROM</code> clause is actually a <code>JOIN</code> (a <code>CROSS JOIN</code> more
+<p><strong>FROM</strong> <span class="org-target" id="org-target--join"></span>: The source of the data. An usually overseen point is
+that the <code>FROM</code> clause is actually a <code>JOIN</code> (a <code>CROSS JOIN</code>
 specifically).</p>
 </li>
 <li>
-<p><strong>WHERE</strong> <span class="org-target" id="org-target--restriction"></span>: The result of the <code>JOIN</code> of the <a href="#org-target--join">previous step</a>&rsquo;s is reduced
-by elimination of rows (a process called <code>RESTRICTION</code> in the
-Relational Algebra).</p>
+<p><strong>WHERE</strong> <span class="org-target" id="org-target--restriction"></span>: The result of the <code>JOIN</code> of the
+<a href="#org-target--join">previous step</a> is reduced by elimination of rows (a process
+called <code>RESTRICTION</code> in the Relational Algebra).</p>
 </li>
 <li>
 <p><strong>GROUP BY</strong> <span class="org-target" id="org-target--dictionary"></span>: This is one of the most complex parts of
-the expression, exactly because it goes outside the Relational
-Algebra. You can think of it as creating from the <a href="#org-target--restriction">restricted table</a> a
-Dictionary, where the keys are a combination of the values of the
-defined columns and such keys reference all the rows where they
-exist.</p>
+the expression because it goes outside the Relational Algebra. You
+can think of it as creating, from the <a href="#org-target--restriction">restricted table</a>, a Dictionary
+where the keys are a combination of the values of the defined columns
+and the referenced values are all the rows where the keys exist.</p>
 <p><strong>NOTE HOWEVER</strong> that such Dictionary is <strong>NOT</strong> a proper table. And that is why a
 <code>GROUP BY</code> clause will always demand a corresponding <code>SELECT</code> clause
 that turns such Dictionary into a proper table.</p>

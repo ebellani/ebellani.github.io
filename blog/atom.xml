@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-06-20T18:06:22Z</updated>
+  <updated>2024-06-20T18:15:15Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -57,11 +57,12 @@ doing so it simply modifies some substance. (&lt;a href=&#34;#citeproc_bib_item_
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;The problem with SQL, in particular a SELECT expression, is that the way
-it is read and written (and the usual expectations of the terms such as
-SELECT/FROM&amp;hellip;) is very different from what is actually taking
-place. Let&amp;rsquo;s discuss this from an example (the example and much of the
-discussion are taken from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date and Darwen 1997&lt;/a&gt;))&lt;/p&gt;
+&lt;p&gt;One of the core problems with SQL and in particular its &lt;code&gt;SELECT&lt;/code&gt;
+expression is that the way it is written/read (and the usual
+expectations of the terms such as &lt;code&gt;SELECT/FROM&lt;/code&gt; &amp;hellip;) is very different
+from what is actually taking place.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s discuss this fact starting from an example (the example and much
+of the discussion are taken from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date and Darwen 1997&lt;/a&gt;))&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PNO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Weight in grams =&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TEXT1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
@@ -79,27 +80,26 @@ discussion are taken from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date and
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WEIGHT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COLOR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;HAVING&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SUM&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;QTY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;350&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To give a glimpse of the difficulty here, the &lt;code&gt;SELECT&lt;/code&gt; clause if the
-first to be read and written, but it is the &lt;strong&gt;last&lt;/strong&gt; to be evaluated. So,
-here is how to read this expression:&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The difficulty here starts right at the begging, since the &lt;code&gt;SELECT&lt;/code&gt;
+clause is the first to be read and written, but it is the &lt;strong&gt;last&lt;/strong&gt; to be
+evaluated. Here is how to interpret this &lt;code&gt;SELECT&lt;/code&gt; expression:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;FROM&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--join&#34;&gt;&lt;/span&gt;: The source of the data. An usually overseen point is that
-the &lt;code&gt;FROM&lt;/code&gt; clause is actually a &lt;code&gt;JOIN&lt;/code&gt; (a &lt;code&gt;CROSS JOIN&lt;/code&gt; more
+&lt;p&gt;&lt;strong&gt;FROM&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--join&#34;&gt;&lt;/span&gt;: The source of the data. An usually overseen point is
+that the &lt;code&gt;FROM&lt;/code&gt; clause is actually a &lt;code&gt;JOIN&lt;/code&gt; (a &lt;code&gt;CROSS JOIN&lt;/code&gt;
 specifically).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;WHERE&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--restriction&#34;&gt;&lt;/span&gt;: The result of the &lt;code&gt;JOIN&lt;/code&gt; of the &lt;a href=&#34;#org-target--join&#34;&gt;previous step&lt;/a&gt;&amp;rsquo;s is reduced
-by elimination of rows (a process called &lt;code&gt;RESTRICTION&lt;/code&gt; in the
-Relational Algebra).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;WHERE&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--restriction&#34;&gt;&lt;/span&gt;: The result of the &lt;code&gt;JOIN&lt;/code&gt; of the
+&lt;a href=&#34;#org-target--join&#34;&gt;previous step&lt;/a&gt; is reduced by elimination of rows (a process
+called &lt;code&gt;RESTRICTION&lt;/code&gt; in the Relational Algebra).&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;GROUP BY&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--dictionary&#34;&gt;&lt;/span&gt;: This is one of the most complex parts of
-the expression, exactly because it goes outside the Relational
-Algebra. You can think of it as creating from the &lt;a href=&#34;#org-target--restriction&#34;&gt;restricted table&lt;/a&gt; a
-Dictionary, where the keys are a combination of the values of the
-defined columns and such keys reference all the rows where they
-exist.&lt;/p&gt;
+the expression because it goes outside the Relational Algebra. You
+can think of it as creating, from the &lt;a href=&#34;#org-target--restriction&#34;&gt;restricted table&lt;/a&gt;, a Dictionary
+where the keys are a combination of the values of the defined columns
+and the referenced values are all the rows where the keys exist.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;NOTE HOWEVER&lt;/strong&gt; that such Dictionary is &lt;strong&gt;NOT&lt;/strong&gt; a proper table. And that is why a
 &lt;code&gt;GROUP BY&lt;/code&gt; clause will always demand a corresponding &lt;code&gt;SELECT&lt;/code&gt; clause
 that turns such Dictionary into a proper table.&lt;/p&gt;
