@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-06-20T18:15:15Z</updated>
+  <updated>2024-06-20T18:32:22Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -111,8 +111,10 @@ condition. This is another operator that sits outside the Relational
 Algebra.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;strong&gt;SELECT&lt;/strong&gt; : Each group resulting from the &lt;a href=&#34;#org-target--filter&#34;&gt;HAVING filter&lt;/a&gt; should now
-generate a single result row, by this process:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SELECT&lt;/strong&gt; : This is called a &lt;code&gt;PROJECTION&lt;/code&gt; in Relational Algebra. It is
+where you pick the colums of the table. It is also where each group
+resulting from the &lt;a href=&#34;#org-target--filter&#34;&gt;HAVING filter&lt;/a&gt; should now generate a single result
+row, by this process:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;The part number, weight, color and maximum quantity are extracted from the Dictionary&lt;/li&gt;
 &lt;li&gt;The weight is converted to grams&lt;/li&gt;
@@ -159,7 +161,8 @@ can help the reader a lot in understanding things like such expression
 in the future.&lt;/p&gt;
 &lt;p&gt;I also think a point that deserves attention is how worse the &lt;code&gt;SELECT&lt;/code&gt;
 expression becomes by SQL&amp;rsquo;s introduction of operators that don&amp;rsquo;t fit the
-relational algebra (&lt;code&gt;GROUP BY&lt;/code&gt; and &lt;code&gt;HAVING&lt;/code&gt; clauses).&lt;/p&gt;
+relational algebra (&lt;code&gt;GROUP BY&lt;/code&gt; and &lt;code&gt;HAVING&lt;/code&gt; clauses). Besides such, the
+&lt;code&gt;SELECT&lt;/code&gt; expression is merely a &lt;code&gt;JOIN-&amp;gt;RESTRICT-&amp;gt;PROJECT&lt;/code&gt; sequence.&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war--comparision-2.jpg&#34;
          alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
             &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;

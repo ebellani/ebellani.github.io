@@ -128,8 +128,10 @@ condition. This is another operator that sits outside the Relational
 Algebra.</p>
 </li>
 <li>
-<p><strong>SELECT</strong> : Each group resulting from the <a href="#org-target--filter">HAVING filter</a> should now
-generate a single result row, by this process:</p>
+<p><strong>SELECT</strong> : This is called a <code>PROJECTION</code> in Relational Algebra. It is
+where you pick the colums of the table. It is also where each group
+resulting from the <a href="#org-target--filter">HAVING filter</a> should now generate a single result
+row, by this process:</p>
 <ol>
 <li>The part number, weight, color and maximum quantity are extracted from the Dictionary</li>
 <li>The weight is converted to grams</li>
@@ -176,7 +178,8 @@ can help the reader a lot in understanding things like such expression
 in the future.</p>
 <p>I also think a point that deserves attention is how worse the <code>SELECT</code>
 expression becomes by SQL&rsquo;s introduction of operators that don&rsquo;t fit the
-relational algebra (<code>GROUP BY</code> and <code>HAVING</code> clauses).</p>
+relational algebra (<code>GROUP BY</code> and <code>HAVING</code> clauses). Besides such, the
+<code>SELECT</code> expression is merely a <code>JOIN-&gt;RESTRICT-&gt;PROJECT</code> sequence.</p>
 <figure><img src="/ox-hugo/st-maria-civil-war--comparision-2.jpg"
          alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"/><figcaption>
             <p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
