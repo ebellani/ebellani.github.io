@@ -58,14 +58,15 @@ such are the elements of order found in all beauty.
 [cite:@de2023system]
 #+end_verse
 
-I have been working with data intensive applications for a while, and of
+I have been working with data intensive applications for a while and of
 course that means exposure to a lot of SQL, both personally and training
-developers.
+other developers.
 
-In this experiences I have notices that it is sometimes harder than it
+In these experiences I have noticed that it is sometimes harder than it
 should be to grasp what SQL is doing, specially since its accidental
 form makes understanding its substantial form so hard. In this post I'm
-going to try to help the reader separate the two.
+going to try to help the reader separate the two and understand SQL
+better.
 
 But first, some definitions of terms:
 
