@@ -86,11 +86,13 @@ already constituted substance.
   doing so it simply modifies some substance. [cite:@acquinas_metaphysics_iep]
 #+end_quote
 
-The problem with SQL, in particular a SELECT expression, is that the way
-it is read and written (and the usual expectations of the terms such as
-SELECT/FROM...) is very different from what is actually taking
-place. Let's discuss this from an example (the example and much of the
-discussion are taken from [cite:@10.5555/249527])
+One of the core problems with SQL and in particular its ~SELECT~
+expression is that the way it is written/read (and the usual
+expectations of the terms such as ~SELECT/FROM~ ...) is very different
+from what is actually taking place.
+
+Let's discuss this fact starting from an example (the example and much
+of the discussion are taken from [cite:@10.5555/249527])
 
 #+begin_src sql
   SELECT
@@ -112,22 +114,21 @@ discussion are taken from [cite:@10.5555/249527])
   HAVING SUM(SP.QTY) > 350
 #+end_src
 
-To give a glimpse of the difficulty here, the ~SELECT~ clause if the
-first to be read and written, but it is the *last* to be evaluated. So,
-here is how to read this expression:
+The difficulty here starts right at the begging, since the ~SELECT~
+clause is the first to be read and written, but it is the *last* to be
+evaluated. Here is how to interpret this ~SELECT~ expression:
 
-1. *FROM* <<join>>: The source of the data. An usually overseen point is that
-   the ~FROM~ clause is actually a ~JOIN~ (a ~CROSS JOIN~ more
+1. *FROM* <<join>>: The source of the data. An usually overseen point is
+   that the ~FROM~ clause is actually a ~JOIN~ (a ~CROSS JOIN~
    specifically).
-2. *WHERE* <<restriction>>: The result of the ~JOIN~ of the [[join][previous step]]'s is reduced
-   by elimination of rows (a process called ~RESTRICTION~ in the
-   Relational Algebra).
+2. *WHERE* <<restriction>>: The result of the ~JOIN~ of the
+   [[join][previous step]] is reduced by elimination of rows (a process
+   called ~RESTRICTION~ in the Relational Algebra).
 3. *GROUP BY* <<dictionary>>: This is one of the most complex parts of
-   the expression, exactly because it goes outside the Relational
-   Algebra. You can think of it as creating from the [[restriction][restricted table]] a
-   Dictionary, where the keys are a combination of the values of the
-   defined columns and such keys reference all the rows where they
-   exist.
+   the expression because it goes outside the Relational Algebra. You
+   can think of it as creating, from the [[restriction][restricted table]], a Dictionary
+   where the keys are a combination of the values of the defined columns
+   and the referenced values are all the rows where the keys exist.
 
    *NOTE HOWEVER* that such Dictionary is *NOT* a proper table. And that is why a
    ~GROUP BY~ clause will always demand a corresponding ~SELECT~ clause
