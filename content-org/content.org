@@ -43,6 +43,79 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Integrity Constraints and business value
+:PROPERTIES:
+:EXPORT_FILE_NAME: constraints-and-business-value
+:EXPORT_DATE: 2024-06-26
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug constraints-and-business-value
+:CUSTOM_ID: constraints-and-business-value
+:END:
+
+Again with this database business? Let me try to motivate you dear
+reader before I start again with a illustrative case: SQL Injections!
+
+- SQL injection is one of the oldest vulnerabilities still present in
+  the OWASP TOP 10 [cite:@sql_injection]
+- A well documented case puts the cost of one SQL Injection in USD 196k
+  [cite:@group14:_global_threat_intel_repor]
+
+
+Ok, and how these are related to databases, and more specifically
+constraints? And what are these constraints?
+
+#+begin_quote
+*Constraints* are informal business rules (BR) expressed in natural
+language that constrain the values of the shared properties of entity
+members of a class.
+
+*Integrity constraints* are the formalized versions of the constraints
+as first order predicates that represent them in the database, expressed
+in a specific data language and enforced by the DBMS in the database for
+all applications, with potential reduction in application development
+and maintenance estimated at as high as 80%.
+
+Integrity independence (II)—DBMS-enforced integrity in the database—was
+a major objective and is an advantage of database management in general
+and relational database management in particular (and is enshrined as
+one of the famous 12 Codd rules). It is much superior to
+application-enforced integrity— *a redundant, unreliable and prone to
+error development and maintenance burden— which was readily subvertible*. [cite:@pascal_guide]
+#+end_quote
+
+Ok, say I got your attention about SQL Injections and you have some
+clarity on what I mean by constraints. How do I connect these 2 topics?
+
+Here is how: if developers were aware that you could encode your
+authentication/authorization rules at the DBMS level as integrity
+constraints, SQL injections would be impossible!
+
+#+begin_quote
+... why do it?
+
+*Security:*
+- All access control performed by database – even if application code is compromised
+- Essentially, users can be given freeform sql access – database is a
+  Fort Knox and will not allow unauthorized operations
+
+*Developer productivity:*
+- No more time spent on access control and worrying about security
+- Even the new guy can now safely work on applications, api’s etc.
+- Worst case, api breaks, but the data is perfectly safe [cite:@swart19:_row_level_secur]
+#+end_quote
+
+Consider the double effect of properly encoding this integrity
+constraint (data access) where it belongs (with the system managing the data):
+
+1. You avoid an entire class of common and expensive problems
+2. Because of that, your developers can work on your actual product
+   instead of solving this non issue over and over again.
+
+#+caption: Santa Maria del Mar destroyed by communist arson, circa 1936
+[[./st-maria-civil-war.jpg]]
+
+
+#+print_bibliography:
+
 ** Substantial and accidental forms of a SQL expression
 :PROPERTIES:
 :EXPORT_FILE_NAME: substantial-and-accidental-forms-of-a-sql-expression
