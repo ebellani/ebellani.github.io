@@ -6,7 +6,17 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 26 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Integrity Constraints and business value</title>
+      <link>https://ebellani.github.io/blog/2024/constraints-and-business-value/</link>
+      <pubDate>Wed, 26 Jun 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/constraints-and-business-value/</guid>
+      <description>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
+ SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</description>
+    </item>
+    
     <item>
       <title>Substantial and accidental forms of a SQL expression</title>
       <link>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</link>
