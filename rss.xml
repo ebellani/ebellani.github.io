@@ -6,13 +6,24 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 26 Jun 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to avoid a common career pitfall</title>
+      <link>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</link>
+      <pubDate>Tue, 02 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</guid>
+      <description>If the way you think others see you is in stark contrast to how others actually see you, you are in danger of derailing in your career.
+To avoid that, here are 3 steps, and a reference:
+ Ask and embrace feedback from bosses, peers and followers1, Expose your most cherished ideas to the most intense forms of public scrutiny you can find, See ways to measure yourself, such as 360 feedback mechanisms and validated personality assessments.</description>
+    </item>
+    
     <item>
       <title>Integrity Constraints and business value</title>
-      <link>https://ebellani.github.io/blog/2024/constraints-and-business-value/</link>
+      <link>https://ebellani.github.io/constraints-and-business-value/</link>
       <pubDate>Wed, 26 Jun 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://ebellani.github.io/blog/2024/constraints-and-business-value/</guid>
+      <guid>https://ebellani.github.io/constraints-and-business-value/</guid>
       <description>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
  SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</description>
     </item>

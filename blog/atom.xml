@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-06-26T20:05:07Z</updated>
+  <updated>2024-07-02T15:18:22Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -14,79 +14,49 @@
   <id>https://ebellani.github.io/blog/</id>
   
   <entry>
-    <title>Integrity Constraints and business value</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/constraints-and-business-value/"/>
-    <id>https://ebellani.github.io/blog/2024/constraints-and-business-value/</id>
-    <published>2024-06-26T00:00:00Z</published>
-    <updated>2024-06-26T00:00:00Z</updated>
-    <summary>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
- SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</summary>
-    <content type="html">&lt;p&gt;Again with this database business? Let me try to motivate you dear
-reader before I start again with a illustrative case: SQL Injections!&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;SQL injection is one of the oldest vulnerabilities still present in
-the OWASP TOP 10 (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;CyberSecura 2021&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;A well documented case puts the cost of one SQL Injection in USD 196k
-(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Group 2014&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Ok, and how these are related to databases, and more specifically
-constraints? And what are these constraints?&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Constraints&lt;/strong&gt; are informal business rules (BR) expressed in natural
-language that constrain the values of the shared properties of entity
-members of a class.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Integrity constraints&lt;/strong&gt; are the formalized versions of the constraints
-as first order predicates that represent them in the database, expressed
-in a specific data language and enforced by the DBMS in the database for
-all applications, with potential reduction in application development
-and maintenance estimated at as high as 80%.&lt;/p&gt;
-&lt;p&gt;Integrity independence (II)—DBMS-enforced integrity in the database—was
-a major objective and is an advantage of database management in general
-and relational database management in particular (and is enshrined as
-one of the famous 12 Codd rules). It is much superior to
-application-enforced integrity— &lt;strong&gt;a redundant, unreliable and prone to
-error development and maintenance burden— which was readily subvertible&lt;/strong&gt;. (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Ok, say I got your attention about SQL Injections and you have some
-clarity on what I mean by constraints. How do I connect these 2 topics?&lt;/p&gt;
-&lt;p&gt;Here is how: if developers were aware that you could encode your
-authentication/authorization rules at the DBMS level as integrity
-constraints, SQL injections would be impossible!&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; why do it?&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Security:&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;All access control performed by database – even if application code is compromised&lt;/li&gt;
-&lt;li&gt;Essentially, users can be given freeform sql access – database is a
-Fort Knox and will not allow unauthorized operations&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Developer productivity:&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;No more time spent on access control and worrying about security&lt;/li&gt;
-&lt;li&gt;Even the new guy can now safely work on applications, api’s etc.&lt;/li&gt;
-&lt;li&gt;Worst case, api breaks, but the data is perfectly safe (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Swart 2019&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Consider the double effect of properly encoding this integrity
-constraint (data access) where it belongs (with the system managing the data):&lt;/p&gt;
+    <title>How to avoid a common career pitfall</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/"/>
+    <id>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</id>
+    <published>2024-07-02T00:00:00Z</published>
+    <updated>2024-07-02T00:00:00Z</updated>
+    <summary>If the way you think others see you is in stark contrast to how others actually see you, you are in danger of derailing in your career.
+To avoid that, here are 3 steps, and a reference:
+ Ask and embrace feedback from bosses, peers and followers1, Expose your most cherished ideas to the most intense forms of public scrutiny you can find, See ways to measure yourself, such as 360 feedback mechanisms and validated personality assessments.</summary>
+    <content type="html">&lt;p&gt;If the way you think others see you is in stark contrast to how others
+actually see you, you are in danger of derailing in your career.&lt;/p&gt;
+&lt;p&gt;To avoid that, here are 3 steps, and a reference:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;You avoid an entire class of common and expensive problems&lt;/li&gt;
-&lt;li&gt;Because of that, your developers can work on your actual product
-instead of solving this non issue over and over again.&lt;/li&gt;
+&lt;li&gt;Ask and &lt;strong&gt;embrace&lt;/strong&gt; feedback from bosses, peers and followers&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;,&lt;/li&gt;
+&lt;li&gt;Expose your most cherished ideas to the most intense forms of public scrutiny you can find,&lt;/li&gt;
+&lt;li&gt;See ways to measure yourself, such as 360 feedback mechanisms and
+validated personality assessments.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war.jpg&#34;
-         alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
+&lt;p&gt;It all boils down to reducing your own cognitive
+dissonance(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Festinger 1957&lt;/a&gt;), which is:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; The maximum dissonance which could exist &amp;hellip;  determined by the
+resistance to admitting that he had been wrong or foolish.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/French_School_-_View_of_the_abbey_of_Saint-Victor_%28Saint_Victor%29_former_abbey_of_regular_canons_-_%28MeisterDrucke-917697%29.jpg&#34;
+         alt=&#34;Figure 1: Abbey of St Victor, before being destroyed by republican revolutionaries during the French Revolution&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Abbey of St Victor, before being destroyed by republican revolutionaries during the French Revolution&lt;/p&gt;
         &lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;CyberSecura, Consultant. 2021. “Sql Injection : Why Is This Attack Still Possible in 2021?” &lt;a href=&#34;https://www.cybersecura.com/en/post/sql-injection-why-is-this-attack-still-possible-in-2021&#34;&gt;https://www.cybersecura.com/en/post/sql-injection-why-is-this-attack-still-possible-in-2021&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Group, NTT. 2014. “Global Threat Intelligence Report.” NTT Innovation Institute.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Swart, Bennie. 2019. “Row Level Security.” Postgres Conference. Postgres Conference US. &lt;a href=&#34;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&#34;&gt;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;</content>
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Festinger, L. 1957. &lt;i&gt;A Theory of Cognitive Dissonance&lt;/i&gt;. Mass Communication Series. Stanford University Press.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;I like the terms superordinate, coordinates and subordinates, but
+they are not in common usage&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
     
     
     <category term="blog"/>
