@@ -5,13 +5,92 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-07-02T15:18:22Z</updated>
+  <updated>2024-07-18T14:48:24Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>How to avoid frustration with software architecture</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/"/>
+    <id>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</id>
+    <published>2024-07-18T00:00:00Z</published>
+    <updated>2024-07-18T00:00:00Z</updated>
+    <summary>It is becoming more common for companies to come out with stories on the downsides of distributed microservice architectures1(Kolny 2023; Ghemawat et al. 2023).
+Instead of hopping in this bandwagon, as tempting as this might be, I want to suggest how could one avoid being caught in such situation in the first place.
+Fundamentally, I think the problem that originated the current dissatisfaction with microservices is a double confusion:
+ between the form (modules) and the matter (interacting running processes) of software and(Ainsworth 2024); between the the form (modules) of software and the form of software building organizations (teams, executing environments, deployment pipelines &amp;hellip;).</summary>
+    <content type="html">&lt;p&gt;It is becoming more common for companies to come out with stories on the
+downsides of distributed microservice
+architectures&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kolny 2023&lt;/a&gt;; &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Ghemawat et al. 2023&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Instead of hopping in this bandwagon, as tempting as this might be, I
+want to suggest how could one avoid being caught in such situation in
+the first place.&lt;/p&gt;
+&lt;p&gt;Fundamentally, I think the problem that originated the current
+dissatisfaction with microservices is a double confusion:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;between the form (modules) and the matter (interacting running
+processes) of software and(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Ainsworth 2024&lt;/a&gt;);&lt;/li&gt;
+&lt;li&gt;between the the form (modules) of software and the form of software
+building organizations (teams, executing environments,
+deployment pipelines &amp;hellip;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Interestingly enough, such structures are the 3 categories of software
+architecture proposed in a standard Software Architecture
+book:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;dl&gt;
+&lt;dt&gt;Module structures&lt;/dt&gt;
+&lt;dd&gt;partition systems into implementation units&lt;/dd&gt;
+&lt;dt&gt;Component-and-connector (C&amp;amp;C) structures&lt;/dt&gt;
+&lt;dd&gt;focus on the way the
+elements interact with each other at runtime to carry out the system’s
+functions.&lt;/dd&gt;
+&lt;dt&gt;Allocation structures&lt;/dt&gt;
+&lt;dd&gt;establish the mapping from software
+structures to the system’s non-software structures, such as its
+organization, or its development, test, and execution
+environments. (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Bass et al. 2021&lt;/a&gt;)&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;so-what&#34;&gt;So what?&lt;/h2&gt;
+&lt;p&gt;In order to avoid confusion and unecessary costs, the next time you are
+discussing software architecture:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Make sure you know which category you are talking about;&lt;/li&gt;
+&lt;li&gt;Insist on exaustive definitions of key terms (such as &lt;code&gt;module&lt;/code&gt;);&lt;/li&gt;
+&lt;li&gt;Be sure to refer to reputable sources.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Beeldenstorm_%28Iconoclastic_Fury%29_in_Antwerpen_1566_Frans_Hogenberg.jpg&#34;
+         alt=&#34;Figure 1: Print of the destruction in the Church of Our Lady in Antwerp, the &amp;amp;ldquo;signature event&amp;amp;rdquo; of the Beeldenstorm, 20 August 1566, by Frans Hogenberg&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Print of the destruction in the Church of Our Lady in Antwerp, the &amp;ldquo;signature event&amp;rdquo; of the Beeldenstorm, 20 August 1566, by Frans Hogenberg&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Ainsworth, Thomas. 2024. “Form vs. Matter.” In &lt;i&gt;The Stanford Encyclopedia of Philosophy&lt;/i&gt;, edited by Edward N. Zalta and Uri Nodelman, Fall 2024. https://plato.stanford.edu/entries/form-matter/; Metaphysics Research Lab, Stanford University.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Bass, L., P. Clements, R. Kazman, and an O’Reilly Media Company Safari. 2021. &lt;i&gt;Software Architecture in Practice, 4th Edition&lt;/i&gt;. Sei Series in Software Engineering. Addison-Wesley Professional.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Ghemawat, Sanjay, Robert Grandl, Srdjan Petrovic, Michael Whittaker, Parveen Patel, Ivan Posva, and Amin Vahdat. 2023. “Towards Modern Development of Cloud Applications.” In &lt;i&gt;Proceedings of the 19th Workshop on Hot Topics in Operating Systems&lt;/i&gt;, 110–17. Hotos ’23. Providence, RI, USA: Association for Computing Machinery. &lt;a href=&#34;https://doi.org/10.1145/3593856.3595909&#34;&gt;https://doi.org/10.1145/3593856.3595909&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Kolny, Marcin. 2023. “Scaling up the Prime Video Audio/Video Monitoring Service and Reducing Costs by 90\%.” &lt;a href=&#34;https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90&#34;&gt;https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;Including a claim of cost reductions of over 90%!&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>How to avoid a common career pitfall</title>
@@ -57,6 +136,86 @@ they are not in common usage&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;f
 &lt;/ol&gt;
 &lt;/div&gt;
 </content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Integrity Constraints and business value</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/constraints-and-business-value/"/>
+    <id>https://ebellani.github.io/blog/2024/constraints-and-business-value/</id>
+    <published>2024-06-26T00:00:00Z</published>
+    <updated>2024-06-26T00:00:00Z</updated>
+    <summary>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
+ SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</summary>
+    <content type="html">&lt;p&gt;Again with this database business? Let me try to motivate you dear
+reader before I start again with a illustrative case: SQL Injections!&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SQL injection is one of the oldest vulnerabilities still present in
+the OWASP TOP 10 (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;CyberSecura 2021&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;A well documented case puts the cost of one SQL Injection in USD 196k
+(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Group 2014&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ok, and how these are related to databases, and more specifically
+constraints? And what are these constraints?&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Constraints&lt;/strong&gt; are informal business rules (BR) expressed in natural
+language that constrain the values of the shared properties of entity
+members of a class.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Integrity constraints&lt;/strong&gt; are the formalized versions of the constraints
+as first order predicates that represent them in the database, expressed
+in a specific data language and enforced by the DBMS in the database for
+all applications, with potential reduction in application development
+and maintenance estimated at as high as 80%.&lt;/p&gt;
+&lt;p&gt;Integrity independence (II)—DBMS-enforced integrity in the database—was
+a major objective and is an advantage of database management in general
+and relational database management in particular (and is enshrined as
+one of the famous 12 Codd rules). It is much superior to
+application-enforced integrity— &lt;strong&gt;a redundant, unreliable and prone to
+error development and maintenance burden— which was readily subvertible&lt;/strong&gt;. (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Ok, say I got your attention about SQL Injections and you have some
+clarity on what I mean by constraints. How do I connect these 2 topics?&lt;/p&gt;
+&lt;p&gt;Here is how: if developers were aware that you could encode your
+authentication/authorization rules at the DBMS level as integrity
+constraints, SQL injections would be impossible!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; why do it?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Security:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;All access control performed by database – even if application code is compromised&lt;/li&gt;
+&lt;li&gt;Essentially, users can be given freeform sql access – database is a
+Fort Knox and will not allow unauthorized operations&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Developer productivity:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;No more time spent on access control and worrying about security&lt;/li&gt;
+&lt;li&gt;Even the new guy can now safely work on applications, api’s etc.&lt;/li&gt;
+&lt;li&gt;Worst case, api breaks, but the data is perfectly safe (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Swart 2019&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Consider the double effect of properly encoding this integrity
+constraint (data access) where it belongs (with the system managing the data):&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You avoid an entire class of common and expensive problems&lt;/li&gt;
+&lt;li&gt;Because of that, your developers can work on your actual product
+instead of solving this non issue over and over again.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war.jpg&#34;
+         alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;CyberSecura, Consultant. 2021. “Sql Injection : Why Is This Attack Still Possible in 2021?” &lt;a href=&#34;https://www.cybersecura.com/en/post/sql-injection-why-is-this-attack-still-possible-in-2021&#34;&gt;https://www.cybersecura.com/en/post/sql-injection-why-is-this-attack-still-possible-in-2021&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Group, NTT. 2014. “Global Threat Intelligence Report.” NTT Innovation Institute.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Swart, Bennie. 2019. “Row Level Security.” Postgres Conference. Postgres Conference US. &lt;a href=&#34;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&#34;&gt;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
     
     
     <category term="blog"/>
@@ -946,131 +1105,6 @@ So that you can &lt;strong&gt;swap DBMSes?&lt;/strong&gt;&lt;/p&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;King, Gavin. 2024. &lt;i&gt;An Introduction to Hibernate 6&lt;/i&gt;. 6.4. &lt;a href=&#34;https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html&#34;&gt;https://docs.jboss.org/hibernate/orm/6.4/introduction/html_single/Hibernate_Introduction.html&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>What is database normalization and why should you do it?</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/"/>
-    <id>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</id>
-    <published>2024-02-25T00:00:00Z</published>
-    <updated>2024-02-25T00:00:00Z</updated>
-    <summary>A fully normalized database means one thing, and only one thing: your relations corresponds only one predicate under a given interpretation (i.e. your business rules).
-You should properly normalize your database because it:
-  Simplifies integrity enforcement and data manipulation; Avoids data redundancy and the risk of database inconsistency; Guarantees semantic correctness: no update anomalies. (Pascal 2016)   PS: As an example of the impact to the bottom line, think of it means to have to trust, but verify every piece of data you have.</summary>
-    <content type="html">&lt;p&gt;A fully normalized database means one thing, and &lt;strong&gt;only&lt;/strong&gt; one thing: your
-relations corresponds only one predicate &lt;strong&gt;under a given interpretation
-(i.e. your business rules)&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;You should properly normalize your database because it:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Simplifies integrity enforcement and data manipulation;&lt;/li&gt;
-&lt;li&gt;Avoids data redundancy and the risk of database inconsistency;&lt;/li&gt;
-&lt;li&gt;Guarantees semantic correctness: no update
-anomalies. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;PS: As an example of the impact to the bottom line, think of it means to
-have to &lt;code&gt;trust, but verify&lt;/code&gt; every piece of data you have. How many
-checks, and in how many places? What if you forget one of those?&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/287615-rose-window-strasbourg-cathedral-strasbourg-france.jpg&#34;/&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
-&lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>How I do development on PostgreSQL over Emacs</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/"/>
-    <id>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</id>
-    <published>2024-02-24T00:00:00Z</published>
-    <updated>2024-02-24T00:00:00Z</updated>
-    <summary>These days I&amp;rsquo;m doing quite a lot of work in PostgreSql. Given that my tool of choice is Emacs, I had to learn how to make do. This post&amp;rsquo;s goal is to document that.
-First, I set up a connection
-(add-to-list &amp;#39;sql-connection-alist `(production-read-only (sql-product &amp;#39;postgres) (sql-user &amp;#34;prod_user&amp;#34;) (sql-server &amp;#34;data-aurora.cluster-ro.us-east-1.rds.amazonaws.com&amp;#34;) (sql-database &amp;#34;ProdDB&amp;#34;))) Since this uses psql under the covers and I want to not to have to type passwords all the time, I store the passwords in ~/.</summary>
-    <content type="html">&lt;p&gt;These days I&amp;rsquo;m doing quite a lot of work in PostgreSql. Given that my
-tool of choice is Emacs, I had to learn how to make do. This post&amp;rsquo;s goal
-is to document that.&lt;/p&gt;
-&lt;p&gt;First, I set up a connection&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;add-to-list&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;sql-connection-alist&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;production-read-only&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-product&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;postgres&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-user&lt;/span&gt;    &lt;span class=&#34;s&#34;&gt;&amp;#34;prod_user&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-server&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;data-aurora.cluster-ro.us-east-1.rds.amazonaws.com&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-database&lt;/span&gt;   &lt;span class=&#34;s&#34;&gt;&amp;#34;ProdDB&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Since this uses psql under the covers and I want to not to have to type
-passwords all the time, I store the passwords in &lt;code&gt;~/.pgpass&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;# hostname:port:database:username:password&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  data-aurora.cluster-ro.us-east-1.rds.amazonaws.com:5432:ProdDB:prod_user:the_password
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order to make life a bit better over at psql&amp;rsquo;s prompt, I have a
-&lt;code&gt;.psqlrc&lt;/code&gt; file with the following:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et QUIET &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et PROMPT1 &lt;span class=&#34;s1&#34;&gt;&amp;#39;(%n@%m) [%/] &amp;gt; &amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et PROMPT2 &lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\p&lt;/span&gt;set null &lt;span class=&#34;s1&#34;&gt;&amp;#39;[null]&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et COMP_KEYWORD_CASE upper
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et HISTSIZE &lt;span class=&#34;m&#34;&gt;2000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et VERBOSITY verbose
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\p&lt;/span&gt;set linestyle unicode
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\p&lt;/span&gt;set border &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\p&lt;/span&gt;set format wrapped
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;et QUIET &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Finally, I&amp;rsquo;d like to keep the history of commands. Here is how I enable that on comint-mode:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;use-package&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;comint&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; This is based on&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; https://oleksandrmanzyuk.wordpress.com/2011/10/23/a-persistent-command-history-in-emacs/&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; The idea is to store sessions of comint based modes. For example, to enable&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; reading/writing of command history in, say, inferior-haskell-mode buffers,&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; simply add turn-on-comint-history to inferior-haskell-mode-hook by adding&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;;; it to the :hook directive&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;:config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;defun&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;comint-write-history-on-exit&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;comint-write-input-ring&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;buf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;process-buffer&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;when&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;buffer-live-p&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;with-current-buffer&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;buf&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;insert&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;format&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;\nProcess %s %s&amp;#34;&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))))))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;defun&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;turn-on-comint-history&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;let&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;get-buffer-process&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;current-buffer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;when&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;setq&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;comint-input-ring-file-name&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;format&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;~/.emacs.d/inferior-%s-history&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                        &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;process-name&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;comint-read-input-ring&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;          &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;set-process-sentinel&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;process&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                &lt;span class=&#34;nf&#34;&gt;#&amp;#39;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;comint-write-history-on-exit&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;defun&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;mapc-buffers&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;mapc&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;lambda&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;buffer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;              &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;with-current-buffer&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;buffer&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;funcall&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;fn&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;buffer-list&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;defun&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;comint-write-input-ring-all-buffers&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;mapc-buffers&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;comint-write-input-ring&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;add-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;kill-emacs-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;comint-write-input-ring-all-buffers&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;add-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;kill-buffer-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;comint-write-input-ring&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;use-package&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;sql&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;:after&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;comint&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nb&#34;&gt;:config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;add-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;sql-interactive-mode-hook&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;turn-on-comint-history&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;setq&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;sql-password-wallet&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;list&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;~/.authinfo.gpg&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content>
     
     
     <category term="blog"/>

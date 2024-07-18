@@ -6,7 +6,19 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 02 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 18 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to avoid frustration with software architecture</title>
+      <link>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</link>
+      <pubDate>Thu, 18 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</guid>
+      <description>It is becoming more common for companies to come out with stories on the downsides of distributed microservice architectures1(Kolny 2023; Ghemawat et al. 2023).
+Instead of hopping in this bandwagon, as tempting as this might be, I want to suggest how could one avoid being caught in such situation in the first place.
+Fundamentally, I think the problem that originated the current dissatisfaction with microservices is a double confusion:
+ between the form (modules) and the matter (interacting running processes) of software and(Ainsworth 2024); between the the form (modules) of software and the form of software building organizations (teams, executing environments, deployment pipelines &amp;hellip;).</description>
+    </item>
+    
     <item>
       <title>How to avoid a common career pitfall</title>
       <link>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</link>
@@ -20,10 +32,10 @@ To avoid that, here are 3 steps, and a reference:
     
     <item>
       <title>Integrity Constraints and business value</title>
-      <link>https://ebellani.github.io/constraints-and-business-value/</link>
+      <link>https://ebellani.github.io/blog/2024/constraints-and-business-value/</link>
       <pubDate>Wed, 26 Jun 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://ebellani.github.io/constraints-and-business-value/</guid>
+      <guid>https://ebellani.github.io/blog/2024/constraints-and-business-value/</guid>
       <description>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
  SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</description>
     </item>
