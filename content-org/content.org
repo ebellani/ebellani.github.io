@@ -43,12 +43,12 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** Avoiding architectural problems by aristotelian categories
+** How to avoid frustration with software architecture
 :PROPERTIES:
-:EXPORT_FILE_NAME: how-to-avoid-a-common-career-pitfall
-:EXPORT_DATE: 2024-07-02
-:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug how-to-avoid-a-common-career-pitfall
-:CUSTOM_ID: how-to-avoid-a-common-career-pitfall
+:EXPORT_FILE_NAME: how-to-avoid-frustration-with-software-architecture
+:EXPORT_DATE: 2024-07-18
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug how-to-avoid-frustration-with-software-architecture
+:CUSTOM_ID: how-to-avoid-frustration-with-software-architecture
 :END:
 
 It is becoming more common for companies to come out with stories on the
@@ -56,29 +56,50 @@ downsides of distributed microservice
 architectures[fn:9][cite:@kolny23:_scalin_prime_video;
 @10.1145/3593856.3595909].
 
-Instead of offering an alternative to microservices, I'd like to suggest
-how could one have avoided such situation in the first place and come up
-with alternatives oneself.
+Instead of hopping in this bandwagon, as tempting as this might be, I
+want to suggest how could one avoid being caught in such situation in
+the first place.
 
-Fundamentally, I think the problem with microservices is a double confusion: that beween the form and the matter of
+Fundamentally, I think the problem that originated the current
+dissatisfaction with microservices is a double confusion:
 
-# https://plato.stanford.edu/entries/form-matter/
-# Britannica, T. Editors of Encyclopaedia. "hylomorphism." Encyclopedia Britannica, March 15, 2016. https://www.britannica.com/topic/hylomorphism.
+- between the form (modules) and the matter (interacting running
+  processes) of software and[cite:@sep-form-matter];
+- between the the form (modules) of software and the form of software
+  building organizations (teams, executing environments,
+  deployment pipelines ...).
 
-I think these results usually flow from confusing 3 things (this insight
-comes from Software Architecture in Practice, Fourth Edition)
+Interestingly enough, such structures are the 3 categories of software
+architecture proposed in a standard Software Architecture
+book:
+
+#+begin_quote
+- Module structures :: partition systems into implementation units
 
 - Component-and-connector (C&C) structures :: focus on the way the
   elements interact with each other at runtime to carry out the system’s
   functions.
 
-- Module structures :: partition systems into implementation units
-
 - Allocation structures :: establish the mapping from software
   structures to the system’s non-software structures, such as its
-  organization, or its development, test, and execution environments.
+  organization, or its development, test, and execution
+  environments. [cite:@bass2021software]
+#+end_quote
 
-  https://www.linkedin.com/feed/update/urn:li:activity:7060131010885107712?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7060131010885107712%2C7060304410584711168%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287060304410584711168%2Curn%3Ali%3Aactivity%3A7060131010885107712%29
+*** So what?
+
+In order to avoid confusion and unecessary costs, the next time you are
+discussing software architecture:
+
+1. Make sure you know which category you are talking about;
+2. Insist on exaustive definitions of key terms (such as ~module~);
+3. Be sure to refer to reputable sources.
+
+#+caption: Print of the destruction in the Church of Our Lady in Antwerp, the "signature event" of the Beeldenstorm, 20 August 1566, by Frans Hogenberg
+[[./Beeldenstorm_(Iconoclastic_Fury)_in_Antwerpen_1566_Frans_Hogenberg.jpg]]
+
+#+print_bibliography:
+
 
 ** How to avoid a common career pitfall
 :PROPERTIES:
