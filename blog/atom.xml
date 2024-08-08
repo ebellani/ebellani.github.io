@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-08-08T00:23:47Z</updated>
+  <updated>2024-08-08T00:40:43Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -37,7 +37,7 @@ bounds, which is a special case of a buffer overflow and considered an
 develop crowdstrike&amp;rsquo; system(&lt;a href=&#34;#citeproc_bib_item_6&#34;&gt;Stack 2024&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Here then we get to the core of my argument: For a software of this
 criticality, such problem should &lt;strong&gt;not be possible&lt;/strong&gt;. The technology to
-ensure such has existed for decades already, as can be see by this
+ensure such has existed for decades already, as can be seen in this
 quote:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&amp;hellip; we can continue to add contracts to the code until every subprogram
@@ -91,9 +91,9 @@ was small, the broad economic and societal impacts reflect the use of
 CrowdStrike by enterprises that run many critical services. (&lt;a href=&#34;#citeproc_bib_item_7&#34;&gt;Weston 2024&lt;/a&gt;)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;crowdstrike-appendix-2&#34;&gt;Appendix 2:  What happened&lt;/h2&gt;
-&lt;p&gt;Here are the list of problems found and their mitigations proposed by
-the RCA(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;) (slightly
-reworded for space eficiency):&lt;/p&gt;
+&lt;p&gt;Here is the list of problems found and their mitigations proposed by
+Crowdstrike&amp;rsquo;s RCA(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;)
+(slightly reworded for space eficiency):&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -141,7 +141,7 @@ reworded for space eficiency):&lt;/p&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Crowdstrike. 2024a. “Crowdstrike Preliminary Post Incident Review (Pir): Content Configuration Update Impacting the Falcon Sensor and the Windows Operating System (Bsod).” Crowdstrike blog. &lt;a href=&#34;https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf&#34;&gt;https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;———. 2024b. “External Technical Root Cause Analysis — Channel File 291.” Crowdstrike blog. &lt;a href=&#34;https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf&#34;&gt;https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Cunningham, Andrew. 2024. “Microsoft Says 8.5m Systems Hit by Crowdstrike Bsod, Releases Usb Recovery Tool.” Ars Technica. &lt;a href=&#34;https://arstechnica.com/information-technology/2024/07/microsoft-says-8-5m-systems-hit-by-crowdstrike-bsod-releases-usb-recovery-tool/&#34;&gt;https://arstechnica.com/information-technology/2024/07/microsoft-says-8-5m-systems-hit-by-crowdstrike-bsod-releases-usb-recovery-tool/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_6&#34;&gt;&lt;/a&gt;Stack, The. 2024. “Crowdstrike Promises Rca as c++ Null Pointer Claim Contested.” The stack.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_6&#34;&gt;&lt;/a&gt;Stack, The. 2024. “Crowdstrike Promises Rca as c++ Null Pointer Claim Contested.” The stack. &lt;a href=&#34;https://www.thestack.technology/crowstrike-null-pointer-blamed-rca/&#34;&gt;https://www.thestack.technology/crowstrike-null-pointer-blamed-rca/&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_7&#34;&gt;&lt;/a&gt;Weston, David. 2024. “Helping Our Customers through the Crowdstrike Outage.” Microsoft Official Blog. &lt;a href=&#34;https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/&#34;&gt;https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
     
