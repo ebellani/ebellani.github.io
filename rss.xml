@@ -6,7 +6,17 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Crowdstrike&#39;s outage should not have happened, and the company is missing the point on how to avoid it in the future</title>
+      <link>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</link>
+      <pubDate>Wed, 07 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</guid>
+      <description>A global IT outage occurred on [2024-07-18 Thu], with several industries having significant economic problems (see Appendix 1: The impact for some quotes on what happened). The outage what caused by a bug in the remote update system of the software of Crowdstrike, a popular Threat Intelligence/Response company.
+The company has published the Post Incident Review(Crowdstrike 2024a) right after the incident and has just released its root cause analysis (Crowdstrike 2024b).</description>
+    </item>
+    
     <item>
       <title>How to avoid frustration with software architecture</title>
       <link>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</link>
