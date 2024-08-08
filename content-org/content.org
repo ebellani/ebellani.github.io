@@ -70,7 +70,7 @@ develop crowdstrike' system[cite:@stack24:_crowd_rca_c].
 
 Here then we get to the core of my argument: For a software of this
 criticality, such problem should *not be possible*. The technology to
-ensure such has existed for decades already, as can be see by this
+ensure such has existed for decades already, as can be seen in this
 quote:
 
 #+begin_quote
@@ -138,9 +138,9 @@ CrowdStrike by enterprises that run many critical services. [cite:@weston24:_hel
 :CUSTOM_ID: crowdstrike-appendix-2
 :END:
 
-Here are the list of problems found and their mitigations proposed by
-the RCA[cite:@crowdstrike24:_exter_techn_root_cause_analy] (slightly
-reworded for space eficiency):
+Here is the list of problems found and their mitigations proposed by
+Crowdstrike's RCA[cite:@crowdstrike24:_exter_techn_root_cause_analy]
+(slightly reworded for space eficiency):
 
 | Finding                                                            | Mitigation                                          |
 |--------------------------------------------------------------------+-----------------------------------------------------|
