@@ -43,6 +43,47 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Are you considering Event Sourcing? Think again.
+:PROPERTIES:
+:EXPORT_FILE_NAME:  are-you-considering-event-sourcing-think-again
+:EXPORT_DATE: 2024-08-16
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug are-you-considering-event-sourcing-think-again
+:CUSTOM_ID: are-you-considering-event-sourcing-think-again
+:END:
+
+Are you considering doing event sourcing? Maybe you have read that it is
+necessary for your project or that you will have great benefits in doing
+so.
+
+If so, I ask you to think about an alternative. Maybe you already have
+something of equal capacity in the tooling that you use and could
+extract all the benefits for a fraction of the cost. What is that
+something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle,
+etc).
+
+Here is the kicker: Temporal tables! Most SQL DBMSes already implement
+such feature[cite:@jungwirth19:_survey_sql], and they basically allow
+you to reap all the benefits of ES while still keeping to your CRUD
+style of programming[cite:@esposito17:_soft_updat_tempor_tables]. Think
+continuation passing style, but with an ~async/await~ syntax that allows
+you think linearly.
+
+To demonstrate the point, here is a table with the claimed benefits from
+each approach, from the vendors themselves(slightly reworded for space
+eficiency)[cite:@team24:_benef_of_event_sourc; @microsoft24:_tempor]:
+
+| Temporal Tables                    | Event Sourcing         | Meaning                                            |
+|------------------------------------+------------------------+----------------------------------------------------|
+| Auditing                           | Auditing               | An immutable audit trail                           |
+| Recovering from application errors | Testing & RCA          | Improving debugging by having 'what if' scenarios |
+| Calculating trends                 | Analytics Capabilities | Temporal queries to see your past beliefs          |
+| Reconstructing data                | Zero data loss         | All state is preserved                             |
+
+#+caption: Mock execution of Jesus Christ by the ~Death Brigade~, communist revolutionaries led by Pascual Fresquet. Spain 1936.
+[[./spanish-holocaust.jpg]]
+
+#+print_bibliography:
+
 ** Crowdstrike's outage should not have happened, and the company is missing the point on how to avoid it in the future
 :PROPERTIES:
 :EXPORT_FILE_NAME: analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality
