@@ -5,13 +5,88 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-08-08T00:40:43Z</updated>
+  <updated>2024-08-16T20:40:06Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Are you considering Event Sourcing? Think again.</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/"/>
+    <id>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</id>
+    <published>2024-08-16T00:00:00Z</published>
+    <updated>2024-08-16T00:00:00Z</updated>
+    <summary>Are you considering doing event sourcing? Maybe you have read that it is necessary for your project or that you will have great benefits in doing so.
+If so, I ask you to think about an alternative. Maybe you already have something of equal capacity in the tooling that you use and could extract all the benefits for a fraction of the cost. What is that something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle, etc).</summary>
+    <content type="html">&lt;p&gt;Are you considering doing event sourcing? Maybe you have read that it is
+necessary for your project or that you will have great benefits in doing
+so.&lt;/p&gt;
+&lt;p&gt;If so, I ask you to think about an alternative. Maybe you already have
+something of equal capacity in the tooling that you use and could
+extract all the benefits for a fraction of the cost. What is that
+something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle,
+etc).&lt;/p&gt;
+&lt;p&gt;Here is the kicker: Temporal tables! Most SQL DBMSes already implement
+such feature(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Jungwirth 2019&lt;/a&gt;), and they basically allow
+you to reap all the benefits of ES while still keeping to your CRUD
+style of programming(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Esposito 2017&lt;/a&gt;). Think
+continuation passing style, but with an &lt;code&gt;async/await&lt;/code&gt; syntax that allows
+you think linearly.&lt;/p&gt;
+&lt;p&gt;To demonstrate the point, here is a table with the claimed benefits from
+each approach, from the vendors themselves(slightly reworded for space
+eficiency)(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Team 2024&lt;/a&gt;; &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Microsoft 2024&lt;/a&gt;):&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Temporal Tables&lt;/th&gt;
+&lt;th&gt;Event Sourcing&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Auditing&lt;/td&gt;
+&lt;td&gt;Auditing&lt;/td&gt;
+&lt;td&gt;An immutable audit trail&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Recovering from application errors&lt;/td&gt;
+&lt;td&gt;Testing &amp;amp; RCA&lt;/td&gt;
+&lt;td&gt;Improving debugging by having &amp;lsquo;what if&amp;rsquo; scenarios&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Calculating trends&lt;/td&gt;
+&lt;td&gt;Analytics Capabilities&lt;/td&gt;
+&lt;td&gt;Temporal queries to see your past beliefs&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Reconstructing data&lt;/td&gt;
+&lt;td&gt;Zero data loss&lt;/td&gt;
+&lt;td&gt;All state is preserved&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/spanish-holocaust.jpg&#34;
+         alt=&#34;Figure 1: Mock execution of Jesus Christ by the Death Brigade, communist revolutionaries led by Pascual Fresquet. Spain 1936.&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Mock execution of Jesus Christ by the &lt;code&gt;Death Brigade&lt;/code&gt;, communist revolutionaries led by Pascual Fresquet. Spain 1936.&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Esposito, Dino. 2017. “Soft Updates with Temporal Tables.” MSDN Magazine. &lt;a href=&#34;https://learn.microsoft.com/en-us/archive/msdn-magazine/2017/march/cutting-edge-soft-updates-with-temporal-tables&#34;&gt;https://learn.microsoft.com/en-us/archive/msdn-magazine/2017/march/cutting-edge-soft-updates-with-temporal-tables&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Jungwirth, Paul A. 2019. “Survey of Sql:2011 Temporal Features.” Illuminated Computing. &lt;a href=&#34;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&#34;&gt;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Microsoft. 2024. “Temporal Tables.” Microsoft documentation. &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&#34;&gt;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Team, Event Store. 2024. “Benefits of Event Sourcing.” Event Store Blog. &lt;a href=&#34;https://www.eventstore.com/blog/benefits-of-event-sourcing&#34;&gt;https://www.eventstore.com/blog/benefits-of-event-sourcing&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Crowdstrike&#39;s outage should not have happened, and the company is missing the point on how to avoid it in the future</title>
@@ -1126,59 +1201,6 @@ and company success against its competition.&lt;/li&gt;
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Hogan, Robert, and Robert B. Kaiser. 2005. “What We Know About Leadership.” &lt;i&gt;Review of General Psychology&lt;/i&gt; 9 (2): 169–80. &lt;a href=&#34;https://doi.org/10.1037/1089-2680.9.2.169&#34;&gt;https://doi.org/10.1037/1089-2680.9.2.169&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Principles of reliable applications</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/principles-of-reliable-applications/"/>
-    <id>https://ebellani.github.io/blog/2024/principles-of-reliable-applications/</id>
-    <published>2024-03-19T00:00:00Z</published>
-    <updated>2024-03-19T00:00:00Z</updated>
-    <summary>The following are adapted from(Perry 2020), using a more database centric approach:
-   Principle Implementation     Idempotence Client side ids; Session ids   Immutability Insert only DBMSes (system time in SQL 2016)   Location independence Natural keys   Versioning Additive structures; Temporal dimension on schemas     Figure 1: Gargoyles of Notre-Dame de Paris
-  References .csl-entry{text-indent: -1.5em; margin-left: 1.</summary>
-    <content type="html">&lt;p&gt;The following are adapted from(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Perry 2020&lt;/a&gt;), using
-a more database centric approach:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Principle&lt;/th&gt;
-&lt;th&gt;Implementation&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Idempotence&lt;/td&gt;
-&lt;td&gt;Client side ids; Session ids&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Immutability&lt;/td&gt;
-&lt;td&gt;Insert only DBMSes (system time in SQL 2016)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Location independence&lt;/td&gt;
-&lt;td&gt;Natural keys&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Versioning&lt;/td&gt;
-&lt;td&gt;Additive structures; Temporal dimension on schemas&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/notre-dame-gargoyle.jpg&#34;
-         alt=&#34;Figure 1: Gargoyles of Notre-Dame de Paris&#34; width=&#34;50%&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Gargoyles of Notre-Dame de Paris&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Perry, Michael L. 2020. &lt;i&gt;The art of immutable architecture: Theory and practice of data management in distributed systems&lt;/i&gt;. Paperback. Apress.&lt;/div&gt;
 &lt;/div&gt;</content>
     
     
