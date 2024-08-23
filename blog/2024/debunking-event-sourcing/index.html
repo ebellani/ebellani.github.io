@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  Debunking Event Sourcing
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Debunking Event Sourcing" />
+<meta property="og:description" content="Are you looking into event sourcing? I hope this article gives you enough information for you to properly contrast it with what I consider an overall better alternative: temporal tables.
+The context: my last article (Are you considering Event Sourcing? Think again) has produced some heated responses. One of the responders published an article (Dear Temporal Table Developers ❤) explaining
+ .. why temporal tables are &hellip; an inferior choice, especially for systems that require scalability, flexibility, and resilience in an ever-changing world." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2024/debunking-event-sourcing/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-08-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-08-23T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>Debunking Event Sourcing
+    <small>
+      <time>August 23, 2024</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p>Are you looking into event sourcing? I hope this article gives you
+enough information for you to properly contrast it with what I consider
+an overall better alternative: temporal tables.</p>
+<p>The context: my last article (<a href="/blog/2024/are-you-considering-event-sourcing-think-again/">Are you considering Event Sourcing? Think
+again</a>) has produced some heated responses. One of the responders
+published an article (<a href="https://medium.com/@ZaradarTR/dear-temporal-table-developers-a3f126c010c4#e4c4">Dear Temporal Table Developers ❤</a>) explaining</p>
+<blockquote>
+<p>.. why temporal tables are &hellip; an inferior choice, especially for
+systems that require scalability, flexibility, and resilience in an
+ever-changing world.</p>
+</blockquote>
+<p>Since the published reply contains an amalgamation of common positions
+on this matter, I want to use it as an opportunity to create a reference
+for myself and others in the future when debating this topic. Therefore,
+I&rsquo;ll go topic by topic, linking to the appropriate place</p>
+<h3 id="temporal-tables-aren-t-true-history">Temporal Tables Aren’t True History</h3>
+<blockquote>
+<p>Events (allow) you to understand both the “what” and the “why” in a
+meaningful way.</p>
+</blockquote>
+<p>Here the author is referring to the name of the event that <code>should</code> map
+to an use-case, and claiming that this is impossible with the relational
+model.</p>
+<p>This is a bogus claim. If such data is demanded by your business rules,
+there is no reason why it can&rsquo;t be expressed as part of a table. Here is
+an example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl">   <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;name&#34;</span><span class="o">:</span> <span class="s2">&#34;reservation-bought&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;reservation-id&#34;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;user-id&#34;</span><span class="o">:</span> <span class="mi">33</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="s2">&#34;seat-id&#34;</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="err">&#34;</span><span class="nx">venue</span><span class="o">-</span><span class="nx">id</span><span class="o">:</span> <span class="mi">12</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span></code></pre></div><p>In a SQL version, all you need is to add the intent as a desired
+attribute.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">   </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">reservation</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="n">user_name</span><span class="w"> </span><span class="k">references</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="n">seat</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="n">venue</span><span class="w"> </span><span class="n">string</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="n">intent</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">intent</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;buy&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;rent&#39;</span><span class="p">))</span><span class="w">
+</span></span></span></code></pre></div><h3 id="temporal-tables-impose-rigid-structure">Temporal Tables Impose Rigid Structure</h3>
+<p>This seems to be the main point of the article. So I&rsquo;ll break it down in
+parts and index my replies below:</p>
+<blockquote>
+<ol>
+<li>
+<p>One of the biggest pitfalls of temporal tables is the inherent
+rigidity of the relational model.</p>
+</li>
+<li>
+<p>As your application grows and evolves, so do your requirements, and
+changing a temporal table schema can become a significant burden.</p>
+</li>
+<li>
+<p>Event Sourcing lets you evolve your system naturally. Each new
+feature or behavior can be introduced as a new event type, without
+the need to retroactively change the structure of your past data.</p>
+</li>
+</ol>
+</blockquote>
+<ol>
+<li>
+<p>This point seems to imply ignorance of what the relational model (RM)
+is. The RM is a logical model based on set theory and predicate
+logic. One of the major points of the RM is to allow developers the
+flexibility to choose access paths after database design.</p>
+</li>
+<li>
+<p>Changing the schema of a temporal database can potentially be serious
+and delicate work, since it might involve changing what you claimed
+were your past beliefs. This is an universal point.</p>
+</li>
+<li>
+<p>Given the previous point, versioning in an event sourced system can
+be at least as hard as versioning any other. As one of the leaders of
+the ES/CQRS community puts it:</p>
+<blockquote>
+<p><strong>Over the years, I have met many developers who run into issues
+dealing with versioning, particularly in Event Sourced systems.</strong> This
+seems odd to me. As we will discuss, Event Sourced systems are in
+fact easier to version than structural data in most instances, as
+long as you know the patterns for how to version, where they apply,
+and the trade-offs between the options.  dealing with versioning,
+particularly in Event Sourced
+systems. (<a href="#citeproc_bib_item_5">Young 2017</a>)</p>
+</blockquote>
+</li>
+</ol>
+<p>In fact, I&rsquo;ll claim that managing the evolution of a temporal structure
+in event sourced systems is <strong>harder</strong>. I&rsquo;m not alone in this
+assessment:</p>
+<blockquote>
+<p>Data conversion in event sourced systems introduces new challenges,
+because of the relative novelty of the event sourcing architectural
+pattern, because of the lack of standardized tools for data conversion,
+and because of the large amount of data that is stored in typical event
+stores.(<a href="#citeproc_bib_item_4">Overeem, Spoor, and Jansen 2017</a>)</p>
+</blockquote>
+<h3 id="temporal-tables-aren-t-built-for-distributed-systems">Temporal Tables Aren’t Built for Distributed Systems</h3>
+<blockquote>
+<p>.. temporal tables simply don’t cut it. They are designed with a
+single-node, relational mindset, which makes them ill-suited for
+large-scale, distributed architectures.</p>
+</blockquote>
+<p>I think the author here is confusing a logical approach, temporal
+tables, with an implementation in a DBMS, such as PostgreSQL or SQL
+Server. One can certainly scale a modern DBMS to impressive
+results(<a href="#citeproc_bib_item_2">Justin Kwan 2022</a>).</p>
+<h3 id="complex-queries-and-performance-overhead">Complex Queries and Performance Overhead</h3>
+<blockquote>
+<p>With CQRS, you avoid this mess entirely. Instead of bloating your read
+models with historical data, you can create dedicated read projections
+that are optimized for the specific queries you need. Event-driven
+architectures naturally lend themselves to this approach, allowing you
+to create purpose-built views without overloading your database.</p>
+</blockquote>
+<p>The author seems to be impliying that creating projections are in any
+way better than creating queries. This is the opposite of reality,
+because:</p>
+<ol>
+<li>You will pay the cost of maintaining each read
+projection(<a href="#citeproc_bib_item_3">Kiehl 2019</a>) as you would with
+a view or a snapshot</li>
+<li>SQL is a DSL specifically designed for querying</li>
+<li>CQRS itself adds <code>risky</code> complexity(<a href="#citeproc_bib_item_1">Fowler 2011</a>). A
+very risky kind of complexity indeed: consistency problems.</li>
+</ol>
+<h3 id="a-false-sense-of-auditability">A False Sense of Auditability</h3>
+<p>This is just restating <a href="#temporal-tables-aren-t-true-history">Temporal Tables Aren’t True History</a>.</p>
+<h3 id="temporal-tables-lack-flexibility">Temporal Tables Lack Flexibility</h3>
+<p>This is just restating <a href="#temporal-tables-impose-rigid-structure">Temporal Tables Impose Rigid Structure</a>.</p>
+<h3 id="event-streams-are-the-real-temporal-model">Event Streams Are the Real Temporal Model</h3>
+<p>This is just restating <a href="#temporal-tables-aren-t-true-history">Temporal Tables Aren’t True History</a>.</p>
+<h3 id="temporal-tables-create-monoliths-not-microservices">Temporal Tables Create Monoliths, Not Microservices</h3>
+<p>This is confusing logical and physical concerns, or, as I put it in
+another article (see <a href="/blog/2024/how-to-avoid-frustration-with-software-architecture/">How to avoid frustration with software architecture</a>):</p>
+<blockquote>
+<p>Fundamentally, I think the problem that originated the current
+dissatisfaction with microservices is a double confusion:</p>
+<ul>
+<li>between the form (modules) and the matter (interacting running
+processes) of software and;</li>
+<li>between the the form (modules) of software and the form of software
+building organizations (teams, executing environments, deployment
+pipelines &hellip;)</li>
+</ul>
+</blockquote>
+<h2 id="my-conclusion">My conclusion</h2>
+<p>The preference for Event Sourced systems seems to stem from a confusion
+of physical and logical concerns and a vague desire for
+<code>scaleability</code>.</p>
+<figure><img src="/ox-hugo/Liege-ruine-stlambert.jpg"
+         alt="Figure 1: Ruins of Saint Lambert&amp;rsquo;s Cathedral, Liège. Destruction started in 1795 and was caused by republican revolutionaries,"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Ruins of Saint Lambert&rsquo;s Cathedral, Liège. Destruction started in 1795 and was caused by republican revolutionaries,</p>
+        </figcaption>
+</figure>
+
+<h2 id="references">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Fowler, Martin. 2011. “Cqrs (Accessed on 2024-08-23).” <a href="https://martinfowler.com/bliki/CQRS.html">https://martinfowler.com/bliki/CQRS.html</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Justin Kwan, Vignesh Ravichandran. 2022. “Performance Isolation in a Multi-Tenant Database Environment (Accessed on 2024-08-23).” <a href="https://blog.cloudflare.com/performance-isolation-in-a-multi-tenant-database-environment/">https://blog.cloudflare.com/performance-isolation-in-a-multi-tenant-database-environment/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Kiehl, Chris. 2019. “Don’t Let the Internet Dupe You, Event Sourcing Is Hard (Accessed on 2024-08-23).” https://chriskiehl.com/. <a href="https://chriskiehl.com/article/event-sourcing-is-hard">https://chriskiehl.com/article/event-sourcing-is-hard</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Overeem, Michiel, Marten Spoor, and Slinger Jansen. 2017. “The Dark Side of Event Sourcing: Managing Data Conversion,” 193–204. <a href="https://doi.org/10.1109/SANER.2017.7884621">https://doi.org/10.1109/SANER.2017.7884621</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_5"></a>Young, Gregory. 2017. “Versioning in an Event Sourced System (Accessed on 2024-08-23).” leanpub. <a href="https://leanpub.com/esversioning">https://leanpub.com/esversioning</a>.</div>
+</div>
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>

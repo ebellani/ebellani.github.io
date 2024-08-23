@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 23 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debunking Event Sourcing</title>
+      <link>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</link>
+      <pubDate>Fri, 23 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</guid>
+      <description>Are you looking into event sourcing? I hope this article gives you enough information for you to properly contrast it with what I consider an overall better alternative: temporal tables.
+The context: my last article (Are you considering Event Sourcing? Think again) has produced some heated responses. One of the responders published an article (Dear Temporal Table Developers ❤) explaining
+ .. why temporal tables are &amp;hellip; an inferior choice, especially for systems that require scalability, flexibility, and resilience in an ever-changing world.</description>
+    </item>
+    
     <item>
       <title>Are you considering Event Sourcing? Think again.</title>
       <link>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</link>

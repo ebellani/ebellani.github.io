@@ -5,13 +5,194 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2024-08-16T20:44:26Z</updated>
+  <updated>2024-08-23T17:00:29Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Debunking Event Sourcing</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2024/debunking-event-sourcing/"/>
+    <id>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</id>
+    <published>2024-08-23T00:00:00Z</published>
+    <updated>2024-08-23T00:00:00Z</updated>
+    <summary>Are you looking into event sourcing? I hope this article gives you enough information for you to properly contrast it with what I consider an overall better alternative: temporal tables.
+The context: my last article (Are you considering Event Sourcing? Think again) has produced some heated responses. One of the responders published an article (Dear Temporal Table Developers ❤) explaining
+ .. why temporal tables are &amp;hellip; an inferior choice, especially for systems that require scalability, flexibility, and resilience in an ever-changing world.</summary>
+    <content type="html">&lt;p&gt;Are you looking into event sourcing? I hope this article gives you
+enough information for you to properly contrast it with what I consider
+an overall better alternative: temporal tables.&lt;/p&gt;
+&lt;p&gt;The context: my last article (&lt;a href=&#34;/blog/2024/are-you-considering-event-sourcing-think-again/&#34;&gt;Are you considering Event Sourcing? Think
+again&lt;/a&gt;) has produced some heated responses. One of the responders
+published an article (&lt;a href=&#34;https://medium.com/@ZaradarTR/dear-temporal-table-developers-a3f126c010c4#e4c4&#34;&gt;Dear Temporal Table Developers ❤&lt;/a&gt;) explaining&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;.. why temporal tables are &amp;hellip; an inferior choice, especially for
+systems that require scalability, flexibility, and resilience in an
+ever-changing world.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Since the published reply contains an amalgamation of common positions
+on this matter, I want to use it as an opportunity to create a reference
+for myself and others in the future when debating this topic. Therefore,
+I&amp;rsquo;ll go topic by topic, linking to the appropriate place&lt;/p&gt;
+&lt;h3 id=&#34;temporal-tables-aren-t-true-history&#34;&gt;Temporal Tables Aren’t True History&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Events (allow) you to understand both the “what” and the “why” in a
+meaningful way.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here the author is referring to the name of the event that &lt;code&gt;should&lt;/code&gt; map
+to an use-case, and claiming that this is impossible with the relational
+model.&lt;/p&gt;
+&lt;p&gt;This is a bogus claim. If such data is demanded by your business rules,
+there is no reason why it can&amp;rsquo;t be expressed as part of a table. Here is
+an example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;s2&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;reservation-bought&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;s2&#34;&gt;&amp;#34;reservation-id&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;s2&#34;&gt;&amp;#34;user-id&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;33&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;s2&#34;&gt;&amp;#34;seat-id&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;err&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;venue&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In a SQL version, all you need is to add the intent as a desired
+attribute.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;reservation&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;user_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;references&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;user&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;seat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;venue&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;intent&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;     &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;CHECK&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;intent&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;buy&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;rent&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;temporal-tables-impose-rigid-structure&#34;&gt;Temporal Tables Impose Rigid Structure&lt;/h3&gt;
+&lt;p&gt;This seems to be the main point of the article. So I&amp;rsquo;ll break it down in
+parts and index my replies below:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;One of the biggest pitfalls of temporal tables is the inherent
+rigidity of the relational model.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;As your application grows and evolves, so do your requirements, and
+changing a temporal table schema can become a significant burden.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Event Sourcing lets you evolve your system naturally. Each new
+feature or behavior can be introduced as a new event type, without
+the need to retroactively change the structure of your past data.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;This point seems to imply ignorance of what the relational model (RM)
+is. The RM is a logical model based on set theory and predicate
+logic. One of the major points of the RM is to allow developers the
+flexibility to choose access paths after database design.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Changing the schema of a temporal database can potentially be serious
+and delicate work, since it might involve changing what you claimed
+were your past beliefs. This is an universal point.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Given the previous point, versioning in an event sourced system can
+be at least as hard as versioning any other. As one of the leaders of
+the ES/CQRS community puts it:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Over the years, I have met many developers who run into issues
+dealing with versioning, particularly in Event Sourced systems.&lt;/strong&gt; This
+seems odd to me. As we will discuss, Event Sourced systems are in
+fact easier to version than structural data in most instances, as
+long as you know the patterns for how to version, where they apply,
+and the trade-offs between the options.  dealing with versioning,
+particularly in Event Sourced
+systems. (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Young 2017&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In fact, I&amp;rsquo;ll claim that managing the evolution of a temporal structure
+in event sourced systems is &lt;strong&gt;harder&lt;/strong&gt;. I&amp;rsquo;m not alone in this
+assessment:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Data conversion in event sourced systems introduces new challenges,
+because of the relative novelty of the event sourcing architectural
+pattern, because of the lack of standardized tools for data conversion,
+and because of the large amount of data that is stored in typical event
+stores.(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Overeem, Spoor, and Jansen 2017&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;temporal-tables-aren-t-built-for-distributed-systems&#34;&gt;Temporal Tables Aren’t Built for Distributed Systems&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;.. temporal tables simply don’t cut it. They are designed with a
+single-node, relational mindset, which makes them ill-suited for
+large-scale, distributed architectures.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I think the author here is confusing a logical approach, temporal
+tables, with an implementation in a DBMS, such as PostgreSQL or SQL
+Server. One can certainly scale a modern DBMS to impressive
+results(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Justin Kwan 2022&lt;/a&gt;).&lt;/p&gt;
+&lt;h3 id=&#34;complex-queries-and-performance-overhead&#34;&gt;Complex Queries and Performance Overhead&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;With CQRS, you avoid this mess entirely. Instead of bloating your read
+models with historical data, you can create dedicated read projections
+that are optimized for the specific queries you need. Event-driven
+architectures naturally lend themselves to this approach, allowing you
+to create purpose-built views without overloading your database.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The author seems to be impliying that creating projections are in any
+way better than creating queries. This is the opposite of reality,
+because:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You will pay the cost of maintaining each read
+projection(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Kiehl 2019&lt;/a&gt;) as you would with
+a view or a snapshot&lt;/li&gt;
+&lt;li&gt;SQL is a DSL specifically designed for querying&lt;/li&gt;
+&lt;li&gt;CQRS itself adds &lt;code&gt;risky&lt;/code&gt; complexity(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Fowler 2011&lt;/a&gt;). A
+very risky kind of complexity indeed: consistency problems.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;a-false-sense-of-auditability&#34;&gt;A False Sense of Auditability&lt;/h3&gt;
+&lt;p&gt;This is just restating &lt;a href=&#34;#temporal-tables-aren-t-true-history&#34;&gt;Temporal Tables Aren’t True History&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;temporal-tables-lack-flexibility&#34;&gt;Temporal Tables Lack Flexibility&lt;/h3&gt;
+&lt;p&gt;This is just restating &lt;a href=&#34;#temporal-tables-impose-rigid-structure&#34;&gt;Temporal Tables Impose Rigid Structure&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;event-streams-are-the-real-temporal-model&#34;&gt;Event Streams Are the Real Temporal Model&lt;/h3&gt;
+&lt;p&gt;This is just restating &lt;a href=&#34;#temporal-tables-aren-t-true-history&#34;&gt;Temporal Tables Aren’t True History&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;temporal-tables-create-monoliths-not-microservices&#34;&gt;Temporal Tables Create Monoliths, Not Microservices&lt;/h3&gt;
+&lt;p&gt;This is confusing logical and physical concerns, or, as I put it in
+another article (see &lt;a href=&#34;/blog/2024/how-to-avoid-frustration-with-software-architecture/&#34;&gt;How to avoid frustration with software architecture&lt;/a&gt;):&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fundamentally, I think the problem that originated the current
+dissatisfaction with microservices is a double confusion:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;between the form (modules) and the matter (interacting running
+processes) of software and;&lt;/li&gt;
+&lt;li&gt;between the the form (modules) of software and the form of software
+building organizations (teams, executing environments, deployment
+pipelines &amp;hellip;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;my-conclusion&#34;&gt;My conclusion&lt;/h2&gt;
+&lt;p&gt;The preference for Event Sourced systems seems to stem from a confusion
+of physical and logical concerns and a vague desire for
+&lt;code&gt;scaleability&lt;/code&gt;.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Liege-ruine-stlambert.jpg&#34;
+         alt=&#34;Figure 1: Ruins of Saint Lambert&amp;amp;rsquo;s Cathedral, Liège. Destruction started in 1795 and was caused by republican revolutionaries,&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Ruins of Saint Lambert&amp;rsquo;s Cathedral, Liège. Destruction started in 1795 and was caused by republican revolutionaries,&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Fowler, Martin. 2011. “Cqrs (Accessed on 2024-08-23).” &lt;a href=&#34;https://martinfowler.com/bliki/CQRS.html&#34;&gt;https://martinfowler.com/bliki/CQRS.html&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Justin Kwan, Vignesh Ravichandran. 2022. “Performance Isolation in a Multi-Tenant Database Environment (Accessed on 2024-08-23).” &lt;a href=&#34;https://blog.cloudflare.com/performance-isolation-in-a-multi-tenant-database-environment/&#34;&gt;https://blog.cloudflare.com/performance-isolation-in-a-multi-tenant-database-environment/&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Kiehl, Chris. 2019. “Don’t Let the Internet Dupe You, Event Sourcing Is Hard (Accessed on 2024-08-23).” https://chriskiehl.com/. &lt;a href=&#34;https://chriskiehl.com/article/event-sourcing-is-hard&#34;&gt;https://chriskiehl.com/article/event-sourcing-is-hard&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Overeem, Michiel, Marten Spoor, and Slinger Jansen. 2017. “The Dark Side of Event Sourcing: Managing Data Conversion,” 193–204. &lt;a href=&#34;https://doi.org/10.1109/SANER.2017.7884621&#34;&gt;https://doi.org/10.1109/SANER.2017.7884621&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Young, Gregory. 2017. “Versioning in an Event Sourced System (Accessed on 2024-08-23).” leanpub. &lt;a href=&#34;https://leanpub.com/esversioning&#34;&gt;https://leanpub.com/esversioning&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Are you considering Event Sourcing? Think again.</title>
@@ -1166,41 +1347,6 @@ we call the database? Caveat lector!)
 &lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
 &lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Russell, Bertrand. 1912. &lt;i&gt;The Problems of Philosophy&lt;/i&gt;. Oxford University Press UK.&lt;/div&gt;
-&lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Who should rule</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/who-should-rule/"/>
-    <id>https://ebellani.github.io/blog/2024/who-should-rule/</id>
-    <published>2024-03-21T00:00:00Z</published>
-    <updated>2024-03-21T00:00:00Z</updated>
-    <summary>If you want to become a (better) leader, you should master the four essential characteristics for leaders: integrity, judgment, competence, and vision(Hogan and Kaiser 2005):
- Integrity. A leader must be trusted to be followed. Decisiveness. Making reasonable decisions in a timely manner. Competence. Both your followers and your stakeholders must know that you not only mean well but that you can deliver. Vision. Setting goals under the right strategy is vital for team and company success against its competition.</summary>
-    <content type="html">&lt;p&gt;If you want to become a (better) leader, you should master the four
-essential characteristics for leaders: integrity, judgment, competence,
-and vision(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Hogan and Kaiser 2005&lt;/a&gt;):&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Integrity&lt;/strong&gt;. A leader must be trusted to be followed.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Decisiveness&lt;/strong&gt;. Making reasonable decisions in a timely manner.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Competence&lt;/strong&gt;. Both your followers and your stakeholders must know
-that you not only mean well but that you can deliver.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Vision&lt;/strong&gt;. Setting goals under the right strategy is vital for team
-and company success against its competition.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Saint-Sulpice-Nave-Paris.jpg&#34;
-         alt=&#34;Figure 1: The nave of the Saint-Sulpice Church in Paris&#34; width=&#34;80%&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The nave of the Saint-Sulpice Church in Paris&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Hogan, Robert, and Robert B. Kaiser. 2005. “What We Know About Leadership.” &lt;i&gt;Review of General Psychology&lt;/i&gt; 9 (2): 169–80. &lt;a href=&#34;https://doi.org/10.1037/1089-2680.9.2.169&#34;&gt;https://doi.org/10.1037/1089-2680.9.2.169&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
     
     
