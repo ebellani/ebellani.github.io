@@ -6,11 +6,22 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A simple way to deal with the principal threat to scalability</title>
+      <link>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</link>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</guid>
+      <description>If you have a distributed system one of the main worries you probably have is scalability. Well, what is the principal threat to scalability in such systems is the conflict between transactions that are used to guarantee correct results in concurrent operations.
+Such conflicts are dealt with by concurrency control, either pessimistically via something like exclusive resource lock or optimistically via something like serializable snapshot isolation.
+Let me illustrate the threat with from the pessimistic point of view:</description>
+    </item>
+    
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Fri, 23 Aug 2024 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>

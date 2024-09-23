@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  A simple way to deal with the principal threat to scalability
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="A simple way to deal with the principal threat to scalability" />
+<meta property="og:description" content="If you have a distributed system one of the main worries you probably have is scalability. Well, what is the principal threat to scalability in such systems is the conflict between transactions that are used to guarantee correct results in concurrent operations.
+Such conflicts are dealt with by concurrency control, either pessimistically via something like exclusive resource lock or optimistically via something like serializable snapshot isolation.
+Let me illustrate the threat with from the pessimistic point of view:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2024-09-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-09-20T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>A simple way to deal with the principal threat to scalability
+    <small>
+      <time>September 20, 2024</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p>If you have a distributed system one of the main worries you probably
+have is scalability. Well, what is the principal threat to scalability
+in such systems is the conflict between transactions that are used to
+guarantee correct results in concurrent operations.</p>
+<p>Such conflicts are dealt with by concurrency control, either
+pessimistically via something like exclusive resource lock or
+optimistically via something like serializable snapshot isolation.</p>
+<p>Let me illustrate the threat with from the pessimistic point of view:</p>
+<blockquote>
+<p>Access to resources guarded by an exclusive lock is serialized—only one
+thread at a time may access it. Of course, we use locks for good
+reasons, such as preventing data corruption, but this safety comes at a
+price. Persistent contention for a lock limits scalability.</p>
+<p><strong>The principal threat to scalability in concurrent applications is the
+exclusive resource lock.</strong></p>
+<p>Two factors influence the likelihood of contention for a lock:</p>
+<ol>
+<li>how often that lock is requested and</li>
+<li>how long it is held once acquired.</li>
+</ol>
+<p>(<a href="#citeproc_bib_item_3">Goetz 2006</a>)</p>
+</blockquote>
+<p>The trick that I&rsquo;m going to present addresses point 1, <code>how often the lock is requested</code>.  Just to be clear, the same trick applies to
+optimistic concurrency control (OCC):</p>
+<blockquote>
+<p>While OCC is guaranteed to make progress, it can still perform quite
+poorly under high contention. The simplest of these contention cases is
+when a whole lot of clients start at the same time, and try to update
+the same database row. With one client guaranteed to succeed every
+round, the time to complete all the updates grows linearly with
+contention. (<a href="#citeproc_bib_item_2">Brooker 2015</a>)</p>
+</blockquote>
+<p>So, what is the trick? A combination of a capped exponential backoff
+with jittering in order to avoid synchronization of the retries of
+several clients. &ldquo;Oh, it can&rsquo;t be that simple&rdquo; you say. Hear the expert
+out:</p>
+<blockquote>
+<p>After 8 years, this solution continues to serve as a pillar for how
+Amazon builds remote client libraries for resilient
+systems.(<a href="#citeproc_bib_item_2">Brooker 2015</a>)</p>
+</blockquote>
+<p>You can check the article above for an in-depth overview. If you are
+curious as to what a <code>real</code> version looks like, below I added the code
+that I contributed to Omnigres to implement this for automatic
+transaction retries(<a href="#citeproc_bib_item_1">Bellani 2024</a>).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="n">List</span> <span class="o">*</span><span class="n">backoff_values</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">int32</span> <span class="n">retry_attempts</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">int64</span> <span class="n">cap_sleep_microsecs</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">int64</span> <span class="n">base_sleep_microsecs</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The backoff should increase with each attempt.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">int64</span> <span class="nf">get_backoff</span><span class="p">(</span><span class="n">int64</span> <span class="n">cap</span><span class="p">,</span> <span class="n">int64</span> <span class="n">base</span><span class="p">,</span> <span class="n">int32</span> <span class="n">attempt</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">exp</span> <span class="o">=</span> <span class="n">Min</span><span class="p">(</span><span class="n">attempt</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span> <span class="c1">// caps the exponent to avoid overflowing,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                              <span class="c1">// as the user can control the # of
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                              <span class="c1">// attempts.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">return</span> <span class="n">Min</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">base</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">exp</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Get the random jitter to avoid contention in the backoff. Uses the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * process seed initialized in `InitProcessGlobals`.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">float8</span> <span class="nf">get_jitter</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#if PG_MAJORVERSION_NUM &gt; 14
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">return</span> <span class="n">pg_prng_double</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pg_global_prng_state</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="k">return</span> <span class="n">rand</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">RAND_MAX</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Implements the backoff + fitter approach
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">int64</span> <span class="nf">backoff_jitter</span><span class="p">(</span><span class="n">int64</span> <span class="n">cap</span><span class="p">,</span> <span class="n">int64</span> <span class="n">base</span><span class="p">,</span> <span class="n">int32</span> <span class="n">attempt</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">int64</span> <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">int64</span><span class="p">)(</span><span class="n">get_jitter</span><span class="p">()</span> <span class="o">*</span> <span class="n">get_backoff</span><span class="p">(</span><span class="n">cap</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">attempt</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="n">ret</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nl">ret</span> <span class="p">:</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Turns the value into something that can be consumed by
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * `pg_sleep`. The literal comes copied from there, to ensure the same
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * ratio.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">float8</span> <span class="nf">to_secs</span><span class="p">(</span><span class="n">int64</span> <span class="n">secs</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">float8</span><span class="p">)</span><span class="n">secs</span> <span class="o">/</span> <span class="mf">1000000.0</span><span class="p">;</span> <span class="p">}</span>
+</span></span></code></pre></div><figure><img src="/ox-hugo/Monte-Cassino-before-and-after-bombing-in-1944.jpg"
+         alt="Figure 1: The Benedictine Abbey on Monte Cassino, before and after being bombed by Allied forces, February 15 1944"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>The Benedictine Abbey on Monte Cassino, before and after being bombed by Allied forces, February 15 1944</p>
+        </figcaption>
+</figure>
+
+<h2 id="references">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Bellani, Eduardo. 2024. “Problem: Retries Can Perform Poorly under High Contention.” Github. <a href="https://github.com/omnigres/omnigres/commit/b9798409f007a6941dc6ad7ef2bccc6ac5cc7ba8">https://github.com/omnigres/omnigres/commit/b9798409f007a6941dc6ad7ef2bccc6ac5cc7ba8</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Brooker, Marc. 2015. “Exponential Backoff and Jitter (Accessed on 2024-09-22).” AWS Architecture Blog. <a href="https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/">https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Goetz, B. 2006. <i>Java Concurrency in Practice</i>. Addison-Wesley.</div>
+</div>
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>
