@@ -37,6 +37,119 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** A simple way to deal with the principal threat to scalability
+:PROPERTIES:
+:EXPORT_FILE_NAME: a-simple-way-to-deal-with-the-principal-threat-to-scalability
+:EXPORT_DATE: 2024-09-20
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug a-simple-way-to-deal-with-the-principal-threat-to-scalability
+:CUSTOM_ID: a-simple-way-to-deal-with-the-principal-threat-to-scalability
+:END:
+
+If you have a distributed system one of the main worries you probably
+have is scalability. Well, what is the principal threat to scalability
+in such systems is the conflict between transactions that are used to
+guarantee correct results in concurrent operations.
+
+Such conflicts are dealt with by concurrency control, either
+pessimistically via something like exclusive resource lock or
+optimistically via something like serializable snapshot isolation.
+
+Let me illustrate the threat with from the pessimistic point of view:
+
+#+begin_quote
+Access to resources guarded by an exclusive lock is serialized—only one
+thread at a time may access it. Of course, we use locks for good
+reasons, such as preventing data corruption, but this safety comes at a
+price. Persistent contention for a lock limits scalability.
+
+*The principal threat to scalability in concurrent applications is the
+exclusive resource lock.*
+
+Two factors influence the likelihood of contention for a lock:
+1. how often that lock is requested and
+2. how long it is held once acquired.
+[cite:@goetz2006java]
+#+end_quote
+
+The trick that I'm going to present addresses point 1, ~how often the
+lock is requested~.  Just to be clear, the same trick applies to
+optimistic concurrency control (OCC):
+
+#+begin_quote
+While OCC is guaranteed to make progress, it can still perform quite
+poorly under high contention. The simplest of these contention cases is
+when a whole lot of clients start at the same time, and try to update
+the same database row. With one client guaranteed to succeed every
+round, the time to complete all the updates grows linearly with
+contention. [cite:@brooker15:_expon_backof_and_jitter]
+#+end_quote
+
+So, what is the trick? A combination of a capped exponential backoff
+with jittering in order to avoid synchronization of the retries of
+several clients. "Oh, it can't be that simple" you say. Hear the expert
+out:
+
+#+begin_quote
+After 8 years, this solution continues to serve as a pillar for how
+Amazon builds remote client libraries for resilient
+systems.[cite:@brooker15:_expon_backof_and_jitter]
+#+end_quote
+
+You can check the article above for an in-depth overview. If you are
+curious as to what a ~real~ version looks like, below I added the code
+that I contributed to Omnigres to implement this for automatic
+transaction retries[cite:@bellani24:_probl].
+
+#+begin_src c
+static List *backoff_values;
+static int32 retry_attempts = 0;
+static int64 cap_sleep_microsecs = 10000;
+static int64 base_sleep_microsecs = 1;
+
+/**
+ * The backoff should increase with each attempt.
+ */
+static int64 get_backoff(int64 cap, int64 base, int32 attempt) {
+  int exp = Min(attempt, 30); // caps the exponent to avoid overflowing,
+                              // as the user can control the # of
+                              // attempts.
+  return Min(cap, base * (1 << exp));
+}
+
+/**
+ * Get the random jitter to avoid contention in the backoff. Uses the
+ * process seed initialized in `InitProcessGlobals`.
+ */
+static float8 get_jitter() {
+#if PG_MAJORVERSION_NUM > 14
+  return pg_prng_double(&pg_global_prng_state);
+#else
+  return rand() / (RAND_MAX + 1.0);
+#endif
+}
+
+/**
+ * Implements the backoff + fitter approach
+ * https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+ */
+static int64 backoff_jitter(int64 cap, int64 base, int32 attempt) {
+  int64 ret = (int64)(get_jitter() * get_backoff(cap, base, attempt));
+  return (ret > 0 ? ret : 1);
+}
+
+/**
+ * Turns the value into something that can be consumed by
+ * `pg_sleep`. The literal comes copied from there, to ensure the same
+ * ratio.
+ */
+static float8 to_secs(int64 secs) { return (float8)secs / 1000000.0; }
+#+end_src
+
+
+#+caption: The Benedictine Abbey on Monte Cassino, before and after being bombed by Allied forces, February 15 1944
+[[./Monte-Cassino-before-and-after-bombing-in-1944.jpg]]
+#+print_bibliography:
+
 ** Debunking Event Sourcing
 :PROPERTIES:
 :EXPORT_FILE_NAME: debunking-event-sourcing
@@ -49,8 +162,7 @@ Are you looking into event sourcing? I hope this article gives you
 enough information for you to properly contrast it with what I consider
 an overall better alternative: temporal tables.
 
-The context: my last article ([[#are-you-considering-event-sourcing-think-again][Are you considering Event Sourcing? Think
-again]]) has produced some heated responses. One of the responders
+The context: my last article ([[#are-you-considering-event-sourcing-think-again][Are you considering Event Sourcing? Think again]]) has produced some heated responses. One of the responders
 published an article ([[https://medium.com/@ZaradarTR/dear-temporal-table-developers-a3f126c010c4#e4c4][Dear Temporal Table Developers ❤]]) explaining
 
 #+begin_quote
