@@ -37,6 +37,75 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+** How to unlock motivation for high performance in your team
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-to-unlock-motivation-for-high-performance-in-your-team
+:EXPORT_DATE: 2024-10-23
+:CUSTOM_ID: how-to-unlock-motivation-for-high-performance-in-your-team
+:END:
+
+As an engineering manager(EM), one of your core tasks is to build and
+maintain a team of high performance. To accomplish this, it should be
+obvious that motivation is a key factor:
+
+#+begin_quote
+Why do followers join some teams but not others? How do you get
+followers to exhibit enough of the critical behaviors needed for the
+team to succeed? And why are some leaders capable of getting followers
+to go above and beyond the call of duty? The ability to motivate others
+is a fundamental leadership skill and has strong connections to building
+cohesive, goal-oriented teams and getting results through others. The
+importance of follower motivation is suggested in findings that most
+people believe they could give as much as 15 percent or 20 percent more
+effort at work than they now do with no one, including their own bosses,
+recognizing any difference. Perhaps even more startling, these workers
+also believed they could give 15 percent or 20 percent less effort with
+no one noticing any difference. Moreover, variation in work output
+varies significantly across leaders and followers. The top 15 percent of
+workers in any particular job may produce 20 to 50 percent more output
+than the average worker, depending on the complexity of the job. Put
+another way, the best computer programmers or salesclerks might write up
+to 50 percent more programs or process 50 percent more customer orders.
+[cite:@curphy2018ise]
+#+end_quote
+
+Let's assume that you are convinced that having a motivated team is key
+for your success as an EM. Now comes the question, how? Everyone and
+their dog has advice on this, mostly about your interactions with your
+followers. This article will focus on a different angle: the advice is
+to you about you, or more specifically, about your vision.
+
+Why vision? 
+
+#+begin_quote
+Followers expect leaders to provide a sense of mission and a hopeful
+view of the future and to explain why they are doing what they are doing
+and why it matters. [cite:@warrenfeltz2016coaching]
+#+end_quote
+
+Now, how do you develop a vision? Since action follows from essence, we
+should understand what is the essence of a man. For this context, what
+matters is that man is a creature in tension between his contingent
+situation and the contemplation of God, the Eternal transcendence.
+
+The way man deals with this tension sucessfully is with a story. This
+story is what connects his present to the vanishing point we call the
+future. [cite:@noica2009six]
+
+Since it is likely that the vast majority of people you will encounter
+as followers have no such story, they will be inclined to follow yours
+as long as you present it clearly and be able to connect it to the
+company's goals.
+
+Summing it up: clarify to yourself and to others what is your story and
+how it connects to the current situation. There are specific tools
+available if you want help crafting your story, such as
+[cite:@booker2004seven].
+
+
+#+caption: Pontifical High Mass in the ruins of St Mary's Cathedral, Nagasaki, Japan. December 7th, 1949 - (5 years after the atom bomb).
+[[./mass-at-nagasaki.jpg]]
+#+print_bibliography:
 ** A simple way to deal with the principal threat to scalability
 :PROPERTIES:
 :EXPORT_FILE_NAME: a-simple-way-to-deal-with-the-principal-threat-to-scalability
