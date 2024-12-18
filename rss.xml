@@ -6,7 +6,18 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 17 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to have decoupled systems without setting your company on fire</title>
+      <link>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</link>
+      <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</guid>
+      <description>Have you heard that having decoupled systems is paramount to dealing with complexity at the heart of software?
+Have you also seen companies waste piles of cash and lots of developer time trying to build decoupled systems?
+This article might be of your interest, since my goal is to teach you how to build decoupled systems cheaply and using technology that is battle tested and that will keep you in control.</description>
+    </item>
+    
     <item>
       <title>How to unlock motivation for high performance in your team</title>
       <link>https://ebellani.github.io/blog/2024/how-to-unlock-motivation-for-high-performance-in-your-team/</link>
