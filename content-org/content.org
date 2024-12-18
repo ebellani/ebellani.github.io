@@ -32,11 +32,104 @@ functional programming and research oriented projects/companies.
 - Disclaimer :: The opinions expressed herein are those of the author,
   and should not be construed as representing the views of any
   employers, past or present, of mine.
-
 * Blog                                                                :@blog:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+
+** How to have decoupled systems without setting your company on fire
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-to-have-decoupled-systems-without-setting-your-company-on-fire
+:EXPORT_DATE: 2024-12-17
+:CUSTOM_ID: how-to-have-decoupled-systems-without-setting-your-company-on-fire
+:END:
+
+Have you heard that having decoupled systems is paramount to ~dealing
+with complexity at the heart of software~?
+
+Have you also seen companies waste piles of cash and lots of developer
+time trying to build decoupled systems?
+
+This article might be of your interest, since my goal is to teach you
+how to build decoupled systems cheaply and using technology that is
+battle tested and that will keep you in control. How? By
+
+1. See the problems of the current widespread solution to coupling:
+   microservices;
+2. See how to implement decoupled systems using a SQL DBMS;
+3. Visit a bit of the underlying theory about coupling/modularity/views
+   in light of what was presented.
+
+*** A summary of the comparison: Microservices vs SQL DBMS
+
+*Microservices*
+
+1. Poor performance with serialization and networking
+2. Correctness problems over versioning in a distributed system
+3. Hard to manage multiple binaries and e2e testing
+4. Dangerous to change APIs
+5. Slow development because of lack of atomicity of changes
+
+[cite:@10.1145/3593856.3595909]
+
+*SQL DBMS*
+
+1. Great performance with data colocation
+2. Correctness by default
+3. Single system, easy to test e2e
+4. Change is made safe by constraints
+5. ACID baby
+
+*** The core point
+
+[[./modules.png]]
+
+#+begin_quote
+this rule means: We have a module N which uses some module M, but only
+through its type (interface) A. M can be replaced by any other module
+with the same type, and N will continue to work. That's modularity. [cite:@koppel23:_modul_matter_most_masses_acces]
+#+end_quote
+
+Or, in non-alien language: It means that the relation between interfaces
+and implementations is many-to-many. That means that modularity is a
+logical property that can be implemented in many ways.
+
+The canonical way of doing it in the relational model is through views.
+
+*** So what about views?
+
+You can have many views (interfaces) over the same base tables
+(implementations). (many to one)
+
+The same view can have multiple ways of being deduced from the base
+tables. (one to many)
+
+*This implements modularity, as defined in the previous section*
+
+*** The original view (pun intended) about views
+
+#+begin_quote
+In contrast, the problems treated here are those of data
+independence-the independence of application programs and terminal
+activities from growth in data types and changes in data representation
+
+...
+
+Activities of users at terminals and ... application programs should
+remain unaffected when the internal representation of data is changed
+and even when some aspects of the external representation are changed.
+
+[cite:@10.1145/362384.362685]
+#+end_quote
+
+It used to be called logical data independence. It can also be called de-coupling.
+
+#+caption: The Church of Ulrich, over 1000 years old, was bombed in 1945 by the americans, but survived. In 1956, it was destroyed by the communists to create the new city center based on communist architecture.
+[[./church of Saint Ulrich and Levin.jpeg]]
+#+print_bibliography:
+
+
+
 ** How to unlock motivation for high performance in your team
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-unlock-motivation-for-high-performance-in-your-team
@@ -75,7 +168,7 @@ their dog has advice on this, mostly about your interactions with your
 followers. This article will focus on a different angle: the advice is
 to you about you, or more specifically, about your vision.
 
-Why vision? 
+Why vision?
 
 #+begin_quote
 Followers expect leaders to provide a sense of mission and a hopeful
@@ -2284,3 +2377,4 @@ chapter 25 of  [cite:@10.5555/861613]
 
 [fn:8] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this context
+
