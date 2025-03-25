@@ -6,14 +6,24 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Dec 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 24 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Queries when you have a postgresql based system</title>
+      <link>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</link>
+      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</guid>
+      <description>Are you managing/developing a PostgreSQL based application? Here are some scripts that might make your life easier dealing with your installation:
+selectschema_name,relname,pg_size_pretty(table_size)from(selectpg_catalog.pg_namespace.nspnameasschema_name,relname,pg_total_relation_size(pg_catalog.pg_class.oid)astable_sizefrompg_catalog.pg_classjoinpg_catalog.pg_namespaceonrelnamespace=pg_catalog.pg_namespace.oid)twhereschema_namenotlike&amp;#39;pg_%&amp;#39;orderbytable_sizedesclimit5;Code Snippet 1: Check the 5 largests tables (courtesy of Supabase&#39;s dashboard)  select*fromcron.job_run_detailsorderbystart_timedesclimit5;Code Snippet 2: Check the current running cron jobs  selectact.query,act.datname,act.query_start,nspnameasschema_name,relnameasobject_name,l.pidfrompg_locksljoinpg_classcon(relation=c.oid)joinpg_namespacenspon(c.relnamespace=nsp.oid)joinpg_stat_activityacton(l.pid=act.pid)wherel.pidin(selectpidfrompg_stat_activitywheredatname=current_database()andquery!=current_query())orderbypid;Code Snippet 3: See what is being locked by what (pg_terminate can unlock things) </description>
     </item>
     
     <item>
