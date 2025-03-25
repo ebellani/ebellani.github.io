@@ -37,6 +37,61 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Queries when you have a postgresql based system
+:PROPERTIES:
+:EXPORT_FILE_NAME: queries-when-you-have-a-postgresql-based-system
+:EXPORT_DATE: 2025-03-24
+:CUSTOM_ID: queries-when-you-have-a-postgresql-based-system
+:END:
+
+Are you managing/developing a PostgreSQL based application? Here are some scripts
+that might make your life easier dealing with your installation:
+
+#+caption: Check the 5 largests tables (courtesy of Supabase's dashboard)
+#+begin_src sql
+  select
+    schema_name,
+    relname,
+    pg_size_pretty(table_size)
+    from
+      (select
+         pg_catalog.pg_namespace.nspname as schema_name,
+         relname,
+         pg_total_relation_size(pg_catalog.pg_class.oid) as table_size
+         from pg_catalog.pg_class
+              join pg_catalog.pg_namespace on relnamespace = pg_catalog.pg_namespace.oid
+      ) t
+   where schema_name not like 'pg_%'
+   order by table_size desc
+   limit 5;
+#+end_src
+
+#+caption: Check the current running cron jobs
+#+begin_src sql
+  select * from cron.job_run_details order by start_time desc limit 5;
+#+end_src
+
+
+#+caption: See what is being locked by what (pg_terminate can unlock things)
+#+begin_src sql
+  select act.query,
+         act.datname,
+         act.query_start,
+         nspname as schema_name,
+         relname as object_name,
+         l.pid
+    from pg_locks l
+         join pg_class c on (relation = c.oid)
+         join pg_namespace nsp on (c.relnamespace = nsp.oid)
+         join pg_stat_activity act on (l.pid = act.pid)
+   where l.pid in
+         (select pid
+            from pg_stat_activity
+           where datname = current_database()
+             and query != current_query())
+   order by pid;
+#+end_src
+
 ** How to have decoupled systems without setting your company on fire
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-have-decoupled-systems-without-setting-your-company-on-fire
