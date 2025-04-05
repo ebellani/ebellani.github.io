@@ -45,8 +45,7 @@ functional programming and research oriented projects/companies.
 :END:
 
 Recently there has been an interest in cheating(?) leetcode style
-interviews[cite:@yang25:_kicked_colum_ai_acces]. Such articles expose a
-glaring problem with tech recruiting practices: These articles highlight
+interviews[cite:@yang25:_kicked_colum_ai_acces]. These articles highlight
 a longstanding issue in tech recruiting: puzzle-style assessments have
 little to no correlation with actual job
 performance[cite:@konnikova13:_why_brain_don_belon_job;
