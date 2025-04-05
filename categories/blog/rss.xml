@@ -6,14 +6,23 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>How to Replace LeetCode with Something That Actually Works</title>
+      <link>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</link>
+      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</guid>
+      <description>Recently there has been an interest in cheating(?) leetcode style interviews(Yang 2025). Such articles expose a glaring problem with tech recruiting practices: These articles highlight a longstanding issue in tech recruiting: puzzle-style assessments have little to no correlation with actual job performance(Konnikova 2013; McAllister 2013), and leetcode is nothing but algorithmic puzzles. This makes them a poor predictor of job performance. What leetcode does predict seems to be success at leetcode style interviews(Mroczka 2024).</description>
     </item>
     
     <item>
