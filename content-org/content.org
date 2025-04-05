@@ -37,6 +37,162 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** How to Replace LeetCode with Something That Actually Works
+:PROPERTIES:
+:EXPORT_FILE_NAME: how-to-replace-leetcode-with-something-that-actually-works
+:EXPORT_DATE: 2025-04-04
+:CUSTOM_ID:  how-to-replace-leetcode-with-something-that-actually-workso
+:END:
+
+Recently there has been an interest in cheating(?) leetcode style
+interviews[cite:@yang25:_kicked_colum_ai_acces]. Such articles expose a
+glaring problem with tech recruiting practices: These articles highlight
+a longstanding issue in tech recruiting: puzzle-style assessments have
+little to no correlation with actual job
+performance[cite:@konnikova13:_why_brain_don_belon_job;
+@mcallister13:_googl], and leetcode is nothing but algorithmic
+puzzles. This makes them a poor predictor of job performance. What
+leetcode does predict seems to be success at leetcode style
+interviews[cite:@mroczka24:_how_leetc]. Go figure.
+
+If you are in power to stop doing these silly things and reach for
+something with actual evidence of working, here is a blueprint for
+performing a structured interview with a focus on programmers, but that
+can be adapted for other positions quite easily.
+
+A core part of a structured interview is to determine the competencies
+to be assessed by the
+interview[cite:@Opm_Structured_Interviews]. According to
+[cite:@hogan_ed_manager], the skills and behaviors found in virtually
+every organizational competency model fall into one of four major
+domains, and that they form a natural, overlapping developmental
+sequence, with the latter skills (e.g., Leadership Skills) depending on
+the appropriate development of the earlier skills (e.g., Intrapersonal
+Skills).
+
+*** Intrapersonal
+
+These skills develop early in childhood and have important consequences for
+career development in adulthood. Core components include core-self esteem,
+resiliency, and self-control. Intrapersonal skills form the foundation on which
+careers develop.
+
+**** Questions
+
+- Can you describe a situation in your life where your capacity of planning made a
+  difference?
+- Can you describe a situation in your life where your capacity for discipline made
+  a difference?
+- Can you describe a situation in your life where your capacity for flexibility
+  in thinking made a difference?
+
+***** Answers
+
+- 1 :: Candidate demonstrated very little conscientiousness and emotional
+  stability in the answers. Apathetic, unstable, resented.
+
+- 5 :: Candidate demonstrated a lot of conscientiousness. Resiliency,
+  intelligent risk taking, disciplined effort.
+
+*** Interpersonal
+
+These skills concern building and sustaining relationships. Interpersonal skills
+can be described in terms of three components:
+
+1) an ability to put oneself in the position of another person,
+2) an ability to accurately perceive and anticipate other’s expectations, and
+3) an ability to incorporate information about the other person's expectations
+   into subsequent behavior.
+
+**** Questions
+
+- Can you describe a situation in your life where your capacity of for building
+  relationships with others made a difference?
+- Can you describe a situation in your life where your capacity for teamwork
+  made a difference?
+- Can you describe a situation in your life where your capacity for
+  communicating made a difference?
+
+***** Answers
+
+- 1 :: Candidate demonstrated very little capacity for working with
+  others. Imprecise language, bad intonation, weird social cues.
+
+- 5 :: Candidate demonstrated a lot of capacity to integrate and to work with
+  others. Lots of agreeable, extroverted behaviors.
+
+*** Technical
+
+These skills differ from Intrapersonal and Interpersonal skills in that they are
+1) the last to develop,
+2) the easiest to teach,
+3) the most cognitive, and
+4) the least dependent upon dealing with other people.
+
+Technical skills involve comparing, compiling, innovating, computing, analyzing,
+coordinating, synthesizing, and so on.
+
+**** Questions
+
+- Can you describe your technical progress in your career?
+- What's your favorite programming language and why do you like it the most?
+- Can you describe how you make technical judgements when facing scarce
+  resources (time, etc)?
+- Can you describe what is a good software development environment?
+
+***** Answers
+
+- 1 :: Candidate demonstrated very little awareness of the Computer Science
+  field. Only the obvious knowledge, and very shallow at that.
+
+- 5 :: Candidate demonstrated amazing grasp of the field, quoting different
+  areas and integrating them into a coherent whole.
+
+*** Business
+These skills can be understood in terms of components that depend upon
+intrapersonal, interpersonal, and technical skills. The point here is to
+understand if the person is capable of using his whole tool set to generate
+value for others.
+
+For a leader these entail an ability to recruit talented people to join the
+team. Second, one must be able to retain talent once it has been
+recruited. Third, one must be able to motivate a team. Fourth, effective leaders
+are able to develop and promote a vision for the team. Finally, leadership skill
+involves being persistent and hard to discourage.
+
+For a follower, the persistance component is shared, alongside initiative.
+
+**** Questions
+
+- Can you describe a situation where you generated value for others?
+- Can you describe a situation where your initiative made a difference?
+- Can you describe how your technical knowledge might help a business like BP?
+- Can you describe what is a good software development team?
+- Can you describe what is your ideal technical vision?
+
+***** Answers
+
+- 1 :: Candidate demonstrated very little capacity for integrating his
+  knowledge. Confused technical vision, murky connections.
+
+- 5 :: Candidate demonstrated a great grasp on how to use his whole knowledge to
+  help the business and his team.
+
+*** Conclusion:
+
+Tech hiring is long overdue for an evidence-based overhaul. Structured
+interviews rooted in validated competencies not only predict performance
+better — they respect candidates' time and intelligence. If you’re
+hiring engineers, skip the puzzles and build a process that actually
+works.
+
+
+
+#+caption: Andronikov Monastery of the Savior is a well-preserved monastery from the late Middle Ages. The communists turned it into one of the first concentration camps for political prisoners
+[[./Andronikov Monastery.jpg]]
+#+print_bibliography:
+
+
 ** Queries when you have a postgresql based system
 :PROPERTIES:
 :EXPORT_FILE_NAME: queries-when-you-have-a-postgresql-based-system
