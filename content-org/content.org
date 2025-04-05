@@ -41,7 +41,7 @@ functional programming and research oriented projects/companies.
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-replace-leetcode-with-something-that-actually-works
 :EXPORT_DATE: 2025-04-04
-:CUSTOM_ID:  how-to-replace-leetcode-with-something-that-actually-workso
+:CUSTOM_ID:  how-to-replace-leetcode-with-something-that-actually-works
 :END:
 
 Recently there has been an interest in cheating(?) leetcode style
@@ -166,7 +166,7 @@ For a follower, the persistance component is shared, alongside initiative.
 
 - Can you describe a situation where you generated value for others?
 - Can you describe a situation where your initiative made a difference?
-- Can you describe how your technical knowledge might help a business like BP?
+- Can you describe how your technical knowledge might help a business like ours?
 - Can you describe what is a good software development team?
 - Can you describe what is your ideal technical vision?
 
