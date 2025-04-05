@@ -13,7 +13,8 @@
       <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</guid>
-      <description>Recently there has been an interest in cheating(?) leetcode style interviews(Yang 2025). Such articles expose a glaring problem with tech recruiting practices: These articles highlight a longstanding issue in tech recruiting: puzzle-style assessments have little to no correlation with actual job performance(Konnikova 2013; McAllister 2013), and leetcode is nothing but algorithmic puzzles. This makes them a poor predictor of job performance. What leetcode does predict seems to be success at leetcode style interviews(Mroczka 2024).</description>
+      <description>Recently there has been an interest in cheating(?) leetcode style interviews(Yang 2025). These articles highlight a longstanding issue in tech recruiting: puzzle-style assessments have little to no correlation with actual job performance(Konnikova 2013; McAllister 2013), and leetcode is nothing but algorithmic puzzles. This makes them a poor predictor of job performance. What leetcode does predict seems to be success at leetcode style interviews(Mroczka 2024). Go figure.
+If you are in power to stop doing these silly things and reach for something with actual evidence of working, here is a blueprint for performing a structured interview with a focus on programmers, but that can be adapted for other positions quite easily.</description>
     </item>
     
     <item>
