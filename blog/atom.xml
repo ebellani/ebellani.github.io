@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-04-14T16:35:05Z</updated>
+  <updated>2025-04-14T16:46:37Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -19,10 +19,11 @@
     <id>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</id>
     <published>2025-04-14T00:00:00Z</published>
     <updated>2025-04-14T00:00:00Z</updated>
-    <summary>Underpinning relational databases you find a very powerful principle: all your information as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
-A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on? In many environments, answering that might involve using external tools or writing scripts in another language.</summary>
+    <summary>Underpinning relational databases you find a very powerful principle: all your information should be represented as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
+A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on?</summary>
     <content type="html">&lt;p&gt;Underpinning relational databases you find a very powerful principle:
-all your information as attributes drawn from domains in
+all your information should be represented as attributes drawn from
+domains in
 relations(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2020&lt;/a&gt;). This is Codd’s
 Information Principle #1. This principle isn’t just fluffy theory: it
 can lead to very concrete wins in how we design, query, and maintain
@@ -74,7 +75,7 @@ shows that following sound principles can yield practical advantages.&lt;/p&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;Recently I had a conversation on linkedin about this on linkedin: &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29&#34;&gt;https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Recently I had a conversation on linkedin: &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29&#34;&gt;https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;

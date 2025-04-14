@@ -22,8 +22,8 @@
       <pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</guid>
-      <description>Underpinning relational databases you find a very powerful principle: all your information as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
-A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on? In many environments, answering that might involve using external tools or writing scripts in another language.</description>
+      <description>Underpinning relational databases you find a very powerful principle: all your information should be represented as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
+A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on?</description>
     </item>
     
     <item>
