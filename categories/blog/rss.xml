@@ -6,14 +6,24 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 04 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Theory in practice: Why Treating Metadata as Relations Pays Off</title>
+      <link>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</link>
+      <pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</guid>
+      <description>Underpinning relational databases you find a very powerful principle: all your information as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
+A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on? In many environments, answering that might involve using external tools or writing scripts in another language.</description>
     </item>
     
     <item>
