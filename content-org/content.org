@@ -37,6 +37,63 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Theory in practice: Why Treating Metadata as Relations Pays Off
+:PROPERTIES:
+:EXPORT_FILE_NAME: theory-in-practice-why-treating-metadata-as-relations-pays-off
+:EXPORT_DATE: 2025-04-14
+:CUSTOM_ID: theory-in-practice-why-treating-metadata-as-relations-pays-off
+:END:
+
+Underpinning relational databases you find a very powerful principle:
+all your information as attributes drawn from domains in
+relations[cite:@pascal20:_under_codds_rules_rdbms_acces]. This is Codd’s
+Information Principle #1. This principle isn’t just fluffy theory: it
+can lead to very concrete wins in how we design, query, and maintain
+systems.[fn:1]
+
+*** A practical case: Dependencies for Security Policies 
+
+This is clearly a metadata question: Which other database objects does
+this view depend on? In many environments, answering that might involve
+using external tools or writing scripts in another language. But in
+PostgreSQL, you can answer it with a simple query *because* PostgreSQL
+respects Codd’s principle and exposes metadata as part of its relational
+structure.
+
+#+caption: Retrieves all objects (tables, views, etc.) that MY_SCHEMA.MY_VIEW depends on — across schemas and object types
+#+begin_src sql
+  select distinct
+    source_schema.nspname as source_object_schema_name,
+    source_object.relname as source_object_name,
+    dependent_schema.nspname as dependent_object_schema_name,
+    dependent.relname as dependent_object_name,
+    dependent.relkind as dependent_object_type
+    from
+      pg_rewrite rw
+      join pg_class     source_object      on rw.ev_class    = source_object.oid
+      join pg_depend    dep              on dep.objid      = rw.oid
+      join pg_class     dependent        on dep.refobjid   = dependent.oid
+      join pg_namespace source_schema    on source_schema.oid = source_object.relnamespace
+      join pg_namespace dependent_schema on dependent_schema.oid = dependent.relnamespace
+   where
+       (dependent_schema.nspname <> source_schema.nspname or dependent.relname <> source_object.relname)
+       and source_object.relname = 'MY_VIEW' and source_schema.nspname = 'MY_SCHEMA';
+#+end_src
+
+*** Conclusion
+
+When your system represents metadata relationally, you can reason about
+it with the same tools you use for business data. No context-switching,
+no ETL jobs, no external tools. Just your relationally inspired SQL.
+
+This aligns with the foundational ideas behind relational databases and
+shows that following sound principles can yield practical advantages.
+
+#+print_bibliography:
+
+#+caption:The Cathedral of the Archangel Michael in Bronnitsy underwent a relatively mild transformation: It was used as a state book archive - but the "book of books," the Bible, surely couldn't be found there.
+[[./The Cathedral of the Archangel Michael in Bronnitsy.jpg]]
+
 ** How to Replace LeetCode with Something That Actually Works
 :PROPERTIES:
 :EXPORT_FILE_NAME: how-to-replace-leetcode-with-something-that-actually-works
@@ -879,7 +936,7 @@ Crowdstrike's RCA[cite:@crowdstrike24:_exter_techn_root_cause_analy]
 
 It is becoming more common for companies to come out with stories on the
 downsides of distributed microservice
-architectures[fn:9][cite:@kolny23:_scalin_prime_video;
+architectures[fn:2][cite:@kolny23:_scalin_prime_video;
 @10.1145/3593856.3595909].
 
 Instead of hopping in this bandwagon, as tempting as this might be, I
@@ -940,7 +997,7 @@ actually see you, you are in danger of derailing in your career.
 
 To avoid that, here are 3 steps, and a reference:
 
-   1) Ask and *embrace* feedback from bosses, peers and followers[fn:1],
+   1) Ask and *embrace* feedback from bosses, peers and followers[fn:3],
    2) Expose your most cherished ideas to the most intense forms of public scrutiny you can find,
    3) See ways to measure yourself, such as 360 feedback mechanisms and
       validated personality assessments.
@@ -1359,7 +1416,7 @@ Lay like the folds of a bright girdle furled./
 
 The microservice architecture(MA) has taken a deep hold in the
 collective imagination of the software engineering community since at
-least 2014[fn:2]. This has happened despite serious and well documented
+least 2014[fn:4]. This has happened despite serious and well documented
 [[#drawbacks][drawbacks]].
 
 Such combination calls for an explanation. A sketch of such explanation
@@ -1463,7 +1520,7 @@ implement the pi-calculus without MA:
   instance of the application becomes an engineering feat.
 - It freezes APIs. Once a microservice establishes an API, it becomes
   hard to change without breaking the other services that consume the
-  API. Legacy APIs linger around, and new APIs are patched on top.[fn:3]
+  API. Legacy APIs linger around, and new APIs are patched on top.[fn:5]
 - It slows down application development. When making changes that affect
   multiple microservices, developers cannot implement and deploy the
   changes atomically. They have to carefully plan how to introduce the
@@ -1524,7 +1581,7 @@ The structure of this argument is usually like this:
 
 This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
-context-sensitive examples[fn:4]:
+context-sensitive examples[fn:6]:
 
 *** Selection bias
 
@@ -2065,7 +2122,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:4]
+Conceptual schema -> Logical schema -> Physical schema [fn:6]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -2142,7 +2199,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto’s
-14 Themes of the Elite Private School Curriculum[fn:5]:
+14 Themes of the Elite Private School Curriculum[fn:7]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -2197,7 +2254,7 @@ of being materially successful in life by learning John Taylor Gatto’s
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:6]
+the IT sector in particular, is nominalism.[fn:8]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -2232,7 +2289,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:7]
+terminology. [fn:9]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -2401,7 +2458,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:2]
+resources. [fn:4]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -2567,24 +2624,26 @@ this is the description of the blog section
 #+end_description
 
 * Footnotes
-[fn:9] Including a claim of cost reductions of over 90%!
 
-[fn:1] I like the terms superordinate, coordinates and subordinates, but
+[fn:1] Recently I had a conversation on linkedin about this on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
+
+[fn:2] Including a claim of cost reductions of over 90%!
+
+[fn:3] I like the terms superordinate, coordinates and subordinates, but
 they are not in common usage
 
-[fn:2] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
+[fn:4] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:3] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
+[fn:5] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
 
-[fn:4] (schemas are synonymous to models in this context)
+[fn:6] (schemas are synonymous to models in this context)
 
-[fn:5] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:7] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:6] You will probably see me return to this topic in other posts.
+[fn:8] You will probably see me return to this topic in other posts.
 
-[fn:7] I got the idea of such table from a similar table found on
+[fn:9] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:8] The definitions come from [cite:@fallacies_iep], but the examples
+[fn:10] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this context
-
