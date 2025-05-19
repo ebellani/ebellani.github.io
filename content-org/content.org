@@ -37,6 +37,106 @@ functional programming and research oriented projects/companies.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** The principles of database design, or,  the Truth is out there
+:PROPERTIES:
+:EXPORT_FILE_NAME: the-principles-of-database-design-or-the-truth-is-out-there
+:CUSTOM_ID: the-principles-of-database-design-or-the-truth-is-out-there
+:EXPORT_DATE: 2025-05-17
+:END:
+
+Every software project needs to represent the reality of the business he
+is embedded in. The way we can represent reality as limited rational
+beings is through propositions, i.e, declarative statements that affirm
+or deny something about reality. When a collection of such propositions
+is stored in a computer system, we call it a database.
+
+Such database needs to be designed to properly reflect reality. This
+can't be automated, since the semantics of the situation need to be
+encoded in a way that can be processed by a computer. Such then is the
+goal of database design: to encode propositions in such a way that can
+properly be processed by a database management system (DBMS).
+
+At this point, a regular software developer comes to a stall. Since
+there is scarcely any formal training in database design (or formal
+logic) in his education, he tends to fall back haphazardly on ad-hoc
+methods, with severe consequences (update anomalies and data
+inconsitencies with huge potential downsides).
+
+If you are such developer, you *need* to understand the underlying
+principles of database design. Think about it, if you don't have
+principles of design, you are not doing engineering, are you?
+
+Here is a list of design principles to follow for formal database
+design[cite:@mcgoveran12:_updat_datab; @mcgoveran15:_can_all_relat_be_updat][cite:@pascal16:_princ_orthog_datab_desig_part_i]:
+
+- Principle of Orthogonal Design (POOD): Base relations are independent;
+- Principle of Representational Parsimony (PORP): There are no
+  superfluous base relations;
+- Principle of Expressive Completeness (POEC): All meaningful relations
+  are derivable from the base relations.
+- Principle of Full Normalization (POFN) : Every base relation should be
+  in its highest normal form (3, 5 or 6th normal form).​ Thus eliminating
+  redundancy and preventing anomalies by ensuring that each relation is
+  free from undesirable characteristics like partial, transitive, or
+  join dependencies.
+- The Information Principle (TIP) : All information in the database is
+  represented explicitly and in exactly one way --- by attribute values
+  drawn from domains in relations.
+- Principle of Logical Independence (PLI) : Application programs and
+  terminal activities remain logically unimpaired when information
+  preserving changes of any kind that theoretically permit unimpairment
+  are made to the base relations.
+
+
+To these I'd like to introduce a new principle, an innovation I hope to
+develop in future work:
+
+- Principle of Essential Denotation (PED): A relation should be
+  identified by a natural key that reflects the entity’s essential,
+  domain-defined identity --- not by arbitrary or surrogate values.
+
+The following pseudo-SQL shows the contrast between improper and proper denotation:
+
+#+caption: Illustration of not using PED with SQL
+#+begin_src sql
+  -- usage of surrogate keys
+  create table citizen (
+    id uuid,
+    national_id text,
+    full_name text);
+#+end_src
+
+This usage has some problems, the worst of it is the disconnection
+between database structure and domain semantics. Here is a rework that
+preserves such connection:
+
+#+caption: Illustration of using PED with SQL
+#+begin_src sql
+  create domain national_id as text check (...);
+
+  create table citizen (
+    national_id national_id,
+    full_name text);
+#+end_src
+
+
+*** Conclusion
+
+Databases are representations of reality, and as such, they are
+foundational to any serious information system. Poor design leads to
+semantic confusion and technical instability—with consequences that can
+be costly and far-reaching. Good design demands rigor, discipline, and a
+firm grasp of foundational principles.
+
+To put it simply: if you're in the business of information, you need to
+know how to build structures that tell the truth that is out there.
+
+#+print_bibliography:
+
+#+caption: But revolutionary Parisians had had enough of its royal resonance. The cathedral’s west facade featured 28 statues that portrayed the biblical Kings of Judah. In fall 1793, the new government ordered workers to remove them. They didn’t portray French kings, but no matter: The 500-year-old statues combined monarchy and religion, and they were brought to the cathedral’s square and decapitated. Twenty-one of the heads were only recovered in 1977, when workers found them behind a wall in an old Parisian mansion.[cite:@blakemore19:_notre_dame_cathed_was_nearl]
+[[./king-of-judah-heads.jpg]]
+
+
 ** Theory in practice: Why Treating Metadata as Relations Pays Off
 :PROPERTIES:
 :EXPORT_FILE_NAME: theory-in-practice-why-treating-metadata-as-relations-pays-off
