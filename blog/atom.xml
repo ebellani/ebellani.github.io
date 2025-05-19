@@ -5,13 +5,117 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-04-14T16:46:37Z</updated>
+  <updated>2025-05-19T01:52:39Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>The principles of database design, or,  the Truth is out there</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/"/>
+    <id>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</id>
+    <published>2025-05-17T00:00:00Z</published>
+    <updated>2025-05-17T00:00:00Z</updated>
+    <summary>Every software project needs to represent the reality of the business he is embedded in. The way we can represent reality as limited rational beings is through propositions, i.e, declarative statements that affirm or deny something about reality. When a collection of such propositions is stored in a computer system, we call it a database.
+Such database needs to be designed to properly reflect reality. This can&amp;rsquo;t be automated, since the semantics of the situation need to be encoded in a way that can be processed by a computer.</summary>
+    <content type="html">&lt;p&gt;Every software project needs to represent the reality of the business he
+is embedded in. The way we can represent reality as limited rational
+beings is through propositions, i.e, declarative statements that affirm
+or deny something about reality. When a collection of such propositions
+is stored in a computer system, we call it a database.&lt;/p&gt;
+&lt;p&gt;Such database needs to be designed to properly reflect reality. This
+can&amp;rsquo;t be automated, since the semantics of the situation need to be
+encoded in a way that can be processed by a computer. Such then is the
+goal of database design: to encode propositions in such a way that can
+properly be processed by a database management system (DBMS).&lt;/p&gt;
+&lt;p&gt;At this point, a regular software developer comes to a stall. Since
+there is scarcely any formal training in database design (or formal
+logic) in his education, he tends to fall back haphazardly on ad-hoc
+methods, with severe consequences (update anomalies and data
+inconsitencies with huge potential downsides).&lt;/p&gt;
+&lt;p&gt;If you are such developer, you &lt;strong&gt;need&lt;/strong&gt; to understand the underlying
+principles of database design. Think about it, if you don&amp;rsquo;t have
+principles of design, you are not doing engineering, are you?&lt;/p&gt;
+&lt;p&gt;Here is a list of design principles to follow for formal database
+design(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;McGoveran 2012&lt;/a&gt;, &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;2015&lt;/a&gt;)(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Pascal 2016&lt;/a&gt;):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Principle of Orthogonal Design (POOD): Base relations are independent;&lt;/li&gt;
+&lt;li&gt;Principle of Representational Parsimony (PORP): There are no
+superfluous base relations;&lt;/li&gt;
+&lt;li&gt;Principle of Expressive Completeness (POEC): All meaningful relations
+are derivable from the base relations.&lt;/li&gt;
+&lt;li&gt;Principle of Full Normalization (POFN) : Every base relation should be
+in its highest normal form (3, 5 or 6th normal form).​ Thus eliminating
+redundancy and preventing anomalies by ensuring that each relation is
+free from undesirable characteristics like partial, transitive, or
+join dependencies.&lt;/li&gt;
+&lt;li&gt;The Information Principle (TIP) : All information in the database is
+represented explicitly and in exactly one way &amp;mdash; by attribute values
+drawn from domains in relations.&lt;/li&gt;
+&lt;li&gt;Principle of Logical Independence (PLI) : Application programs and
+terminal activities remain logically unimpaired when information
+preserving changes of any kind that theoretically permit unimpairment
+are made to the base relations.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To these I&amp;rsquo;d like to introduce a new principle, an innovation I hope to
+develop in future work:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Principle of Essential Denotation (PED): A relation should be
+identified by a natural key that reflects the entity’s essential,
+domain-defined identity &amp;mdash; not by arbitrary or surrogate values.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The following pseudo-SQL shows the contrast between improper and proper denotation:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- usage of surrogate keys
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;citizen&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uuid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;national_id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;full_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;src-block-caption&#34;&gt;
+  &lt;span class=&#34;src-block-number&#34;&gt;Code Snippet 1:&lt;/span&gt;
+  Illustration of not using PED with SQL
+&lt;/div&gt;
+&lt;p&gt;This usage has some problems, the worst of it is the disconnection
+between database structure and domain semantics. Here is a rework that
+preserves such connection:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;domain&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;national_id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;as&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;check&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(...);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;create&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;table&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;citizen&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;national_id&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;national_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;full_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;src-block-caption&#34;&gt;
+  &lt;span class=&#34;src-block-number&#34;&gt;Code Snippet 2:&lt;/span&gt;
+  Illustration of using PED with SQL
+&lt;/div&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Databases are representations of reality, and as such, they are
+foundational to any serious information system. Poor design leads to
+semantic confusion and technical instability—with consequences that can
+be costly and far-reaching. Good design demands rigor, discipline, and a
+firm grasp of foundational principles.&lt;/p&gt;
+&lt;p&gt;To put it simply: if you&amp;rsquo;re in the business of information, you need to
+know how to build structures that tell the truth that is out there.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Blakemore, Erin. 2019. “The Notre-Dame Cathedral Was Nearly Destroyed by French Revolutionary Mobs (Accessed on 2025-05-18).” &lt;a href=&#34;https://web.archive.org/web/20190607211856/https://www.history.com/news/notre-dame-fire-french-revolution&#34;&gt;https://web.archive.org/web/20190607211856/https://www.history.com/news/notre-dame-fire-french-revolution&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;McGoveran, David. 2012. “Updating a Database.” Alternative Technologies Blog. &lt;a href=&#34;http://w.alternativetech.com/publications/View%20Updating%206-12-12.pdf&#34;&gt;http://w.alternativetech.com/publications/View%20Updating%206-12-12.pdf&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;———. 2015. “Can All Relations Be Updated? (or Can Any Relation Be Updated?) Logic for Serious Database Folks Series.” Alternative Technologies Blog. &lt;a href=&#34;https://www.alternativetech.com/publications/Logic%20for%20DB%20Folks%20Series%20XX%20-%20Updating%20Relations.pdf&#34;&gt;https://www.alternativetech.com/publications/Logic%20for%20DB%20Folks%20Series%20XX%20-%20Updating%20Relations.pdf&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. “The Principle of Orthogonal Database Design Part I.” &lt;a href=&#34;https://www.dbdebunk.com/2016/09/the-principle-of-orthogonal-database.html&#34;&gt;https://www.dbdebunk.com/2016/09/the-principle-of-orthogonal-database.html&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/king-of-judah-heads.jpg&#34;
+         alt=&#34;Figure 1: But revolutionary Parisians had had enough of its royal resonance. The cathedral’s west facade featured 28 statues that portrayed the biblical Kings of Judah. In fall 1793, the new government ordered workers to remove them. They didn’t portray French kings, but no matter: The 500-year-old statues combined monarchy and religion, and they were brought to the cathedral’s square and decapitated. Twenty-one of the heads were only recovered in 1977, when workers found them behind a wall in an old Parisian mansion.(Blakemore 2019)&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;But revolutionary Parisians had had enough of its royal resonance. The cathedral’s west facade featured 28 statues that portrayed the biblical Kings of Judah. In fall 1793, the new government ordered workers to remove them. They didn’t portray French kings, but no matter: The 500-year-old statues combined monarchy and religion, and they were brought to the cathedral’s square and decapitated. Twenty-one of the heads were only recovered in 1977, when workers found them behind a wall in an old Parisian mansion.(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Blakemore 2019&lt;/a&gt;)&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Theory in practice: Why Treating Metadata as Relations Pays Off</title>
@@ -1429,48 +1533,6 @@ considered the most expensive problems in the industry.&lt;/li&gt;
 &lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war--comparision.jpg&#34;
          alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
             &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>A real life example of database design</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/"/>
-    <id>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</id>
-    <published>2024-05-27T00:00:00Z</published>
-    <updated>2024-05-27T00:00:00Z</updated>
-    <summary>In a followup to How to use the relational model to do database design?, I was asked to provide an example to illustrate the point:
- Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car (it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD and also let say we allow truck types of cars with 6 wheels. Cars have various engine types and depending on the model of car, some colours are available and some are not.</summary>
-    <content type="html">&lt;p&gt;In a followup to &lt;a href=&#34;/blog/2024/how-to-use-the-relational-model-to-do-database-design/&#34;&gt;How to use the relational model to do database design?&lt;/a&gt;,
-I was asked to provide an example to illustrate the point:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car
-(it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD
-and also let say we allow truck types of cars with 6 wheels. Cars have
-various engine types and depending on the model of car, some colours are
-available and some are not. How would you apply the logical design to
-this idea and where would such a design lead you if you were to
-implement it into the physical world?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Here is a list of predicates that provide such an example:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;There exists car of models &lt;code&gt;$MOD&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Cars can have transmission &lt;code&gt;$TRA&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Cars can have engines &lt;code&gt;$ENG&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Cars can have colors &lt;code&gt;$COL&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have color &lt;code&gt;$COL&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have engine &lt;code&gt;$ENG&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Model &lt;code&gt;$MOD&lt;/code&gt; can have transmission &lt;code&gt;$TRA&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/burning-cathedral-spanish-civil-war.jpg&#34;
-         alt=&#34;Figure 1: Spanish cathedral destroyed by communist arson, circa 1937&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Spanish cathedral destroyed by communist arson, circa 1937&lt;/p&gt;
         &lt;/figcaption&gt;
 &lt;/figure&gt;
 

@@ -6,7 +6,17 @@
     <description>Recent content in homepage title on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 May 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The principles of database design, or,  the Truth is out there</title>
+      <link>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</link>
+      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</guid>
+      <description>Every software project needs to represent the reality of the business he is embedded in. The way we can represent reality as limited rational beings is through propositions, i.e, declarative statements that affirm or deny something about reality. When a collection of such propositions is stored in a computer system, we call it a database.
+Such database needs to be designed to properly reflect reality. This can&amp;rsquo;t be automated, since the semantics of the situation need to be encoded in a way that can be processed by a computer.</description>
+    </item>
+    
     <item>
       <title>Theory in practice: Why Treating Metadata as Relations Pays Off</title>
       <link>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</link>
