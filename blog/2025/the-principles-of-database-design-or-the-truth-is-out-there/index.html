@@ -87,7 +87,7 @@ domain-defined identity &mdash; not by arbitrary or surrogate values.</li>
 <p>The following pseudo-SQL shows the contrast between improper and proper denotation:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">  </span><span class="c1">-- usage of surrogate keys
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">  </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">citizen</span><span class="w"> </span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="n">uuid</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="n">uuid</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">national_id</span><span class="w"> </span><span class="nb">text</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">full_name</span><span class="w"> </span><span class="nb">text</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></div><div class="src-block-caption">
@@ -100,7 +100,7 @@ preserves such connection:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">  </span><span class="k">create</span><span class="w"> </span><span class="k">domain</span><span class="w"> </span><span class="n">national_id</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">text</span><span class="w"> </span><span class="k">check</span><span class="w"> </span><span class="p">(...);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">citizen</span><span class="w"> </span><span class="p">(</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">national_id</span><span class="w"> </span><span class="n">national_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">national_id</span><span class="w"> </span><span class="n">national_id</span><span class="w"> </span><span class="k">primary</span><span class="w"> </span><span class="k">key</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">full_name</span><span class="w"> </span><span class="nb">text</span><span class="p">);</span><span class="w">
 </span></span></span></code></pre></div><div class="src-block-caption">
   <span class="src-block-number">Code Snippet 2:</span>
