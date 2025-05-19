@@ -101,7 +101,7 @@ The following pseudo-SQL shows the contrast between improper and proper denotati
 #+begin_src sql
   -- usage of surrogate keys
   create table citizen (
-    id uuid,
+    id uuid primary key,
     national_id text,
     full_name text);
 #+end_src
@@ -115,7 +115,7 @@ preserves such connection:
   create domain national_id as text check (...);
 
   create table citizen (
-    national_id national_id,
+    national_id national_id primary key,
     full_name text);
 #+end_src
 
