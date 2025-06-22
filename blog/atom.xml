@@ -5,13 +5,135 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-05-19T02:31:15Z</updated>
+  <updated>2025-06-22T03:27:55Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
+    <id>https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
+    <published>2025-06-14T00:00:00Z</published>
+    <updated>2025-06-14T00:00:00Z</updated>
+    <summary>Another global IT outage happened, this time at Google Cloud Platform (team 2025), taking down with it large swaths of the internet (Zeff 2025). Like my previous analysis of the CrowdStrike outage, this post critiques GCP’s root cause analysis (RCA), which—despite detailed engineering steps—misses the real lesson.
+Here’s the key section of their RCA:
+ Google and Google Cloud APIs are served through our Google API management and control planes. Distributed regionally, these management and control planes are responsible for ensuring each API request that comes in is authorized, has the policy and appropriate checks (like quota) to meet their endpoints.</summary>
+    <content type="html">&lt;p&gt;&lt;a href=&#34;/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/&#34;&gt;Another global IT outage happened&lt;/a&gt;, this time at Google Cloud Platform
+(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;team 2025&lt;/a&gt;), taking down with it large
+swaths of the internet (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Zeff 2025&lt;/a&gt;). Like my previous
+analysis of the CrowdStrike outage, this post critiques GCP’s root cause
+analysis (RCA), which—despite detailed engineering steps—misses the real
+lesson.&lt;/p&gt;
+&lt;p&gt;Here’s the key section of their RCA:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Google and Google Cloud APIs are served through our Google API
+management and control planes. Distributed regionally, these management
+and control planes are responsible for ensuring each API request that
+comes in is authorized, has the policy and appropriate checks (like
+quota) to meet their endpoints. The core binary that is part of this
+policy check system is known as Service Control. Service Control is a
+regional service that has a regional datastore that it reads quota and
+policy information from. This datastore metadata gets replicated almost
+instantly globally to manage quota policies for Google Cloud and our
+customers.&lt;/p&gt;
+&lt;p&gt;On May 29, 2025, a new feature was added to Service Control for
+additional quota policy checks. This code change and binary release went
+through our region by region rollout, but the code path that failed was
+never exercised during this rollout due to needing a policy change that
+would trigger the code. As a safety precaution, this code change came
+with a red-button to turn off that particular policy serving path. The
+issue with this change was that it did not have appropriate error
+handling nor was it feature flag protected. Without the appropriate
+error handling, the null pointer caused the binary to crash. Feature
+flags are used to gradually enable the feature region by region per
+project, starting with internal projects, to enable us to catch
+issues. If this had been flag protected, the issue would have been
+caught in staging.&lt;/p&gt;
+&lt;p&gt;On June 12, 2025 at ~10:45am PDT, a policy change was inserted into the
+regional Spanner tables that Service Control uses for policies. Given
+the global nature of quota management, this metadata was replicated
+globally within seconds. This policy data contained unintended blank
+fields. Service Control, then regionally exercised quota checks on
+policies in each regional datastore. This pulled in blank fields for
+this respective policy change and exercised the code path that hit the
+null pointer causing the binaries to go into a crash loop. This occurred
+globally given each regional
+deployment. (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;team 2025&lt;/a&gt;)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A central database had a nullable field. A new policy change injected a
+blank value into this field. The application code didn’t expect that
+value to be null, which caused a crash loop across all regions. The bug
+wasn’t caught during rollout because the faulty code path required a
+policy trigger that never occurred in staging&lt;/p&gt;
+&lt;p&gt;Sound familiar? It should. Any senior engineer has seen this pattern
+before. This is classic database/application mismatch and the age-old
+curse of &lt;code&gt;NULL&lt;/code&gt;(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;McGoveran 1993&lt;/a&gt;). With this in mind,
+let&amp;rsquo;s review how GCP is planning to prevent this from happening again:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-org&#34; data-lang=&#34;org&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;1.&lt;/span&gt; We will modularize Service Control’s architecture, so the
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     functionality is isolated and fails open. Thus, if a corresponding
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     check fails, Service Control can still serve API requests.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;2.&lt;/span&gt; We will audit all systems that consume globally replicated
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     data. Regardless of the business need for near instantaneous
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     consistency of the data globally (i.e. quota management settings are
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     global), data replication needs to be propagated incrementally with
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     sufficient time to validate and detect issues.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;3.&lt;/span&gt; We will enforce all changes to critical binaries to be feature flag
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     protected and disabled by default.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;4.&lt;/span&gt; We will improve our static analysis and testing practices to
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     correctly handle errors and if need be fail open.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;5.&lt;/span&gt; We will audit and ensure our systems employ randomized exponential
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     backoff.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;6.&lt;/span&gt; We will improve our external communications, both automated and
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     human, so our customers get the information they need asap to react
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     to issues, manage their systems and help their customers.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;k&#34;&gt;7.&lt;/span&gt; We&amp;#39;ll ensure our monitoring and communication infrastructure remains
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     operational to serve customers even when Google Cloud and our primary
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     monitoring products are down, ensuring business continuity.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;These are all solid, reasonable steps. But here&amp;rsquo;s the problem: they already do most of this—and the outage happened anyway.&lt;/p&gt;
+&lt;p&gt;Why? Because of this admission, buried in their own RCA:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip;this policy data contained unintended blank fields&amp;hellip;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;They are treating a design flaw as if it were a testing failure.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-real-cause&#34;&gt;The real cause&lt;/h2&gt;
+&lt;p&gt;These kinds of outages stem from the uncontrolled interaction between
+application logic and database schema. You can’t reliably catch that
+with more tests or rollouts or flags. You prevent it by
+construction—through analytical design.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;No nullable fiels.&lt;/li&gt;
+&lt;li&gt;(as a cororally of 1) full normalization of the database (&lt;a href=&#34;/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/&#34;&gt;The principles of database design, or, the Truth is out there&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;formally verified application code(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Chapman et al. 2024&lt;/a&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;FAANG-style companies are unlikely to adopt formal methods or relational
+rigor wholesale. But for their most critical systems, they should. It’s
+the only way to make failures like this impossible by design, rather
+than just less likely.&lt;/p&gt;
+&lt;p&gt;The internet would thank them. (Cloud users too—caveat emptor.)&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Chapman, Roderick, Claire Dross, Stuart Matthews, and Yannick Moy. 2024. “Co-Developing Programs and Their Proof of Correctness.” &lt;i&gt;Commun. Acm&lt;/i&gt; 67 (3): 84–94. &lt;a href=&#34;https://doi.org/10.1145/3624728&#34;&gt;https://doi.org/10.1145/3624728&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;McGoveran, David. 1993. “Nothing from Nothing Series.” &lt;i&gt;Database Program. Des.&lt;/i&gt;, 33–41.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Zeff, Maxwell. 2025. “Google Cloud Outage Brings down a Lot of the Internet.” &lt;a href=&#34;https://techcrunch.com/2025/06/12/google-cloud-outage-brings-down-a-lot-of-the-internet/&#34;&gt;https://techcrunch.com/2025/06/12/google-cloud-outage-brings-down-a-lot-of-the-internet/&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;team, GCP. 2025. “Multiple Gcp Products Are Experiencing Service Issues Incident Began at 2025-06-12 10:51 and Ended at 2025-06-12 18:18 (Accessed on 2025-06-14).” &lt;a href=&#34;https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW&#34;&gt;https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/boulogne.jpg&#34;
+         alt=&#34;Figure 1: Boulogne-sur-Mer cathedral: destroyed by the Revolution. The cathedral in 1570, drawn by Camille Enlart (1862-1927)&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Boulogne-sur-Mer cathedral: destroyed by the Revolution. The cathedral in 1570, drawn by Camille Enlart (1862-1927)&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>The principles of database design, or,  the Truth is out there</title>
@@ -1453,90 +1575,6 @@ relational algebra (&lt;code&gt;GROUP BY&lt;/code&gt; and &lt;code&gt;HAVING&lt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;De Wulf, M. 2012. &lt;i&gt;The System of Thomas Aquinas&lt;/i&gt;. Verlag Editiones Scholasticae.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Kerrl, Gaven. n.d. “Aquinas: Metaphysics.” The Internet Encyclopedia of Philosophy. &lt;a href=&#34;https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/&#34;&gt;https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Why updateable views, or, Why modules matter?</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/"/>
-    <id>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</id>
-    <published>2024-06-06T00:00:00Z</published>
-    <updated>2024-06-06T00:00:00Z</updated>
-    <summary>Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&amp;rsquo;s the full exchange.
-  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
- Logical independence the ability to change the form without affecting clients.</summary>
-    <content type="html">&lt;p&gt;&lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&#34;&gt;Continuing&lt;/a&gt; a rich conversation that sparked &lt;a href=&#34;/blog/2024/a-real-life-example-of-database-design/&#34;&gt;other&lt;/a&gt; &lt;a href=&#34;/blog/2024/how-to-use-the-relational-model-to-do-database-design/&#34;&gt;posts&lt;/a&gt;, I was asked to
-justify updateable views which, to me, are analogous to module&#39;
-signatures (a topic for another post). Here&amp;rsquo;s the full exchange.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;Why is the logical model more likely to be correct and immutable from
-the perspective of the app than the physical one?&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;This question seems to mistake logical and physical independence.&lt;/p&gt;
-&lt;dl&gt;
-&lt;dt&gt;Logical independence&lt;/dt&gt;
-&lt;dd&gt;the ability to change the form without
-affecting clients.&lt;/dd&gt;
-&lt;dt&gt;Physical independence&lt;/dt&gt;
-&lt;dd&gt;the ability to change the implementation
-without changing the form.&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;In an updateable view world, how would you explain deadlocks
-occurring to the developers consuming the model (since they can no
-longer &amp;ldquo;see&amp;rdquo; the physical tables that implement it)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Similarly, how will you explain the performance characteristics of
-that model when someone updates the updatable view (example: updating
-a column that is a primary key is MUCH cheaper then one that is a
-foreign key - yet they look the same in the logical representation
-shows to the developer)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;In the same line of reasoning: How do you explain to developers why
-there is a vastly different performance characteristics selecting
-data from the same view even though queries look almost identical?&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;All these seem to boil down to: how do you explain performance and
-concurrency issues to the clients of the view? I&amp;rsquo;ll make an analogy with
-RPC endpoints, which are the most widely used alternative to updateable
-views. Such endpoints use documentation to explain their capabilities
-limitations to their clients.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;Which skill is more common and cheapest to acquire: A database
-developer who can create such a logical model or the developer who
-can modify apps in case we got something about the model wrong?&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;The logical model will be created, and SQL is a better language for
-that, since it at least can be declarative. In that sense, I think SQL
-is cheaper because it provides a better language than the ones mostly
-used. But the real advantages are:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Avoidable rework. The logical contract is done once. In RPC
-alternatives such contract can be implemented in multiple apps.&lt;/li&gt;
-&lt;li&gt;Consistency. Having the DBMS be the source of truth instead of
-multiple DBMS instances avoids consistency problems, which are widely
-considered the most expensive problems in the industry.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war--comparision.jpg&#34;
-         alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-</content>
     
     
     <category term="blog"/>

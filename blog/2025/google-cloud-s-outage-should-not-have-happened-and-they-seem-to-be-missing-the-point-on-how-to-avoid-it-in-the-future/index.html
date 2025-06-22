@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future" />
+<meta property="og:description" content="Another global IT outage happened, this time at Google Cloud Platform (team 2025), taking down with it large swaths of the internet (Zeff 2025). Like my previous analysis of the CrowdStrike outage, this post critiques GCP’s root cause analysis (RCA), which—despite detailed engineering steps—misses the real lesson.
+Here’s the key section of their RCA:
+ Google and Google Cloud APIs are served through our Google API management and control planes. Distributed regionally, these management and control planes are responsible for ensuring each API request that comes in is authorized, has the policy and appropriate checks (like quota) to meet their endpoints." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2025-06-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-06-14T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future
+    <small>
+      <time>June 14, 2025</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><p><a href="/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/">Another global IT outage happened</a>, this time at Google Cloud Platform
+(<a href="#citeproc_bib_item_4">team 2025</a>), taking down with it large
+swaths of the internet (<a href="#citeproc_bib_item_3">Zeff 2025</a>). Like my previous
+analysis of the CrowdStrike outage, this post critiques GCP’s root cause
+analysis (RCA), which—despite detailed engineering steps—misses the real
+lesson.</p>
+<p>Here’s the key section of their RCA:</p>
+<blockquote>
+<p>Google and Google Cloud APIs are served through our Google API
+management and control planes. Distributed regionally, these management
+and control planes are responsible for ensuring each API request that
+comes in is authorized, has the policy and appropriate checks (like
+quota) to meet their endpoints. The core binary that is part of this
+policy check system is known as Service Control. Service Control is a
+regional service that has a regional datastore that it reads quota and
+policy information from. This datastore metadata gets replicated almost
+instantly globally to manage quota policies for Google Cloud and our
+customers.</p>
+<p>On May 29, 2025, a new feature was added to Service Control for
+additional quota policy checks. This code change and binary release went
+through our region by region rollout, but the code path that failed was
+never exercised during this rollout due to needing a policy change that
+would trigger the code. As a safety precaution, this code change came
+with a red-button to turn off that particular policy serving path. The
+issue with this change was that it did not have appropriate error
+handling nor was it feature flag protected. Without the appropriate
+error handling, the null pointer caused the binary to crash. Feature
+flags are used to gradually enable the feature region by region per
+project, starting with internal projects, to enable us to catch
+issues. If this had been flag protected, the issue would have been
+caught in staging.</p>
+<p>On June 12, 2025 at ~10:45am PDT, a policy change was inserted into the
+regional Spanner tables that Service Control uses for policies. Given
+the global nature of quota management, this metadata was replicated
+globally within seconds. This policy data contained unintended blank
+fields. Service Control, then regionally exercised quota checks on
+policies in each regional datastore. This pulled in blank fields for
+this respective policy change and exercised the code path that hit the
+null pointer causing the binaries to go into a crash loop. This occurred
+globally given each regional
+deployment. (<a href="#citeproc_bib_item_4">team 2025</a>)</p>
+</blockquote>
+<p>A central database had a nullable field. A new policy change injected a
+blank value into this field. The application code didn’t expect that
+value to be null, which caused a crash loop across all regions. The bug
+wasn’t caught during rollout because the faulty code path required a
+policy trigger that never occurred in staging</p>
+<p>Sound familiar? It should. Any senior engineer has seen this pattern
+before. This is classic database/application mismatch and the age-old
+curse of <code>NULL</code>(<a href="#citeproc_bib_item_2">McGoveran 1993</a>). With this in mind,
+let&rsquo;s review how GCP is planning to prevent this from happening again:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-org" data-lang="org"><span class="line"><span class="cl">  <span class="k">1.</span> We will modularize Service Control’s architecture, so the
+</span></span><span class="line"><span class="cl">     functionality is isolated and fails open. Thus, if a corresponding
+</span></span><span class="line"><span class="cl">     check fails, Service Control can still serve API requests.
+</span></span><span class="line"><span class="cl">  <span class="k">2.</span> We will audit all systems that consume globally replicated
+</span></span><span class="line"><span class="cl">     data. Regardless of the business need for near instantaneous
+</span></span><span class="line"><span class="cl">     consistency of the data globally (i.e. quota management settings are
+</span></span><span class="line"><span class="cl">     global), data replication needs to be propagated incrementally with
+</span></span><span class="line"><span class="cl">     sufficient time to validate and detect issues.
+</span></span><span class="line"><span class="cl">  <span class="k">3.</span> We will enforce all changes to critical binaries to be feature flag
+</span></span><span class="line"><span class="cl">     protected and disabled by default.
+</span></span><span class="line"><span class="cl">  <span class="k">4.</span> We will improve our static analysis and testing practices to
+</span></span><span class="line"><span class="cl">     correctly handle errors and if need be fail open.
+</span></span><span class="line"><span class="cl">  <span class="k">5.</span> We will audit and ensure our systems employ randomized exponential
+</span></span><span class="line"><span class="cl">     backoff.
+</span></span><span class="line"><span class="cl">  <span class="k">6.</span> We will improve our external communications, both automated and
+</span></span><span class="line"><span class="cl">     human, so our customers get the information they need asap to react
+</span></span><span class="line"><span class="cl">     to issues, manage their systems and help their customers.
+</span></span><span class="line"><span class="cl">  <span class="k">7.</span> We&#39;ll ensure our monitoring and communication infrastructure remains
+</span></span><span class="line"><span class="cl">     operational to serve customers even when Google Cloud and our primary
+</span></span><span class="line"><span class="cl">     monitoring products are down, ensuring business continuity.
+</span></span></code></pre></div><p>These are all solid, reasonable steps. But here&rsquo;s the problem: they already do most of this—and the outage happened anyway.</p>
+<p>Why? Because of this admission, buried in their own RCA:</p>
+<blockquote>
+<p>&hellip;this policy data contained unintended blank fields&hellip;</p>
+</blockquote>
+<p><strong>They are treating a design flaw as if it were a testing failure.</strong></p>
+<h2 id="the-real-cause">The real cause</h2>
+<p>These kinds of outages stem from the uncontrolled interaction between
+application logic and database schema. You can’t reliably catch that
+with more tests or rollouts or flags. You prevent it by
+construction—through analytical design.</p>
+<ol>
+<li>No nullable fiels.</li>
+<li>(as a cororally of 1) full normalization of the database (<a href="/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/">The principles of database design, or, the Truth is out there</a>)</li>
+<li>formally verified application code(<a href="#citeproc_bib_item_1">Chapman et al. 2024</a>)</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>FAANG-style companies are unlikely to adopt formal methods or relational
+rigor wholesale. But for their most critical systems, they should. It’s
+the only way to make failures like this impossible by design, rather
+than just less likely.</p>
+<p>The internet would thank them. (Cloud users too—caveat emptor.)</p>
+<h2 id="references">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Chapman, Roderick, Claire Dross, Stuart Matthews, and Yannick Moy. 2024. “Co-Developing Programs and Their Proof of Correctness.” <i>Commun. Acm</i> 67 (3): 84–94. <a href="https://doi.org/10.1145/3624728">https://doi.org/10.1145/3624728</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>McGoveran, David. 1993. “Nothing from Nothing Series.” <i>Database Program. Des.</i>, 33–41.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Zeff, Maxwell. 2025. “Google Cloud Outage Brings down a Lot of the Internet.” <a href="https://techcrunch.com/2025/06/12/google-cloud-outage-brings-down-a-lot-of-the-internet/">https://techcrunch.com/2025/06/12/google-cloud-outage-brings-down-a-lot-of-the-internet/</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>team, GCP. 2025. “Multiple Gcp Products Are Experiencing Service Issues Incident Began at 2025-06-12 10:51 and Ended at 2025-06-12 18:18 (Accessed on 2025-06-14).” <a href="https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW">https://status.cloud.google.com/incidents/ow5i3PPK96RduMcb1SsW</a>.</div>
+</div>
+<figure><img src="/ox-hugo/boulogne.jpg"
+         alt="Figure 1: Boulogne-sur-Mer cathedral: destroyed by the Revolution. The cathedral in 1570, drawn by Camille Enlart (1862-1927)"/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Boulogne-sur-Mer cathedral: destroyed by the Revolution. The cathedral in 1570, drawn by Camille Enlart (1862-1927)</p>
+        </figcaption>
+</figure>
+
+
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>
