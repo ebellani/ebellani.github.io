@@ -5,13 +5,65 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-07-27T11:27:46Z</updated>
+  <updated>2025-08-18T02:52:20Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>What is mathematics? A classification based on universals</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/"/>
+    <id>https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/</id>
+    <published>2025-08-17T00:00:00Z</published>
+    <updated>2025-08-17T00:00:00Z</updated>
+    <summary>I find that it is hard for me to motivate myself to learn a subject that one cannot define. So I made an effort to define mathematics, and the best source I have ever found was (Franklin 2014).
+To sum up my views on the topic: at the core of philosophical inquiry, one finds a deep division into 2 opposites as their regard to the universals, realism and nominalism(and its kantian variant, conceptualism)(De Wulf 1911).</summary>
+    <content type="html">&lt;p&gt;I find that it is hard for me to motivate myself to learn a subject that
+one cannot define. So I made an effort to define mathematics, and the
+best source I have ever found was (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Franklin 2014&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;To sum up my views on the topic: at the core of philosophical inquiry,
+one finds a deep division into 2 opposites as their regard to the
+universals, realism and nominalism(and its kantian variant,
+conceptualism)(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;). Taking that into consideration
+and (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Franklin 2014&lt;/a&gt;), Here is a taxonomy
+of definitions for what is mathematics:&lt;/p&gt;
+&lt;h2 id=&#34;realism&#34;&gt;Realism&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;Platonism&lt;/dt&gt;
+&lt;dd&gt;Knowledge of another dimension&lt;/dd&gt;
+&lt;dt&gt;Aristotelianism&lt;/dt&gt;
+&lt;dd&gt;Knowledge of instantiation of universals and
+structure (parts to whole)&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;nominalism&#34;&gt;Nominalism&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;Language&lt;/dt&gt;
+&lt;dd&gt;A Language of science&lt;/dd&gt;
+&lt;dt&gt;Logicism&lt;/dt&gt;
+&lt;dd&gt;A process to guide inferences&lt;/dd&gt;
+&lt;dt&gt;Formalism&lt;/dt&gt;
+&lt;dd&gt;The manipulation of uninterpreted symbols&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. &lt;a href=&#34;https://www.newadvent.org/cathen/11090c.htm&#34;&gt;https://www.newadvent.org/cathen/11090c.htm&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Franklin, James. 2014. &lt;i&gt;An Aristotelian Realist Philosophy of Mathematics: Mathematics as the Science of Quantity and Structure&lt;/i&gt;. Palgrave Macmillan.&lt;/div&gt;
+&lt;/div&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/william-of-ockham-seventeenth-century-engraving-of-the-english-franciscan-friar-and-scholastic-philosopher-and-theologian-william-of-ockham-also-occam-from-latin-gulielmus-occamus-c-1287-1347-2D8W10M.jpg&#34;
+         alt=&#34;Figure 1: Venerabilis nominalium incaeptor (the venerable fouder of nominalism)&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Venerabilis nominalium incaeptor (the venerable fouder of nominalism)&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
@@ -1406,174 +1458,6 @@ instead of solving this non issue over and over again.&lt;/li&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Group, NTT. 2014. “Global Threat Intelligence Report.” NTT Innovation Institute.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Pascal, Fabian. 2016. &lt;i&gt;The Dbdebunk Guide to Misconceptions About Data Fundamentals&lt;/i&gt;. DATABASE DEBUNKINGS.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Swart, Bennie. 2019. “Row Level Security.” Postgres Conference. Postgres Conference US. &lt;a href=&#34;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&#34;&gt;https://postgresconf.org/system/events/document/000/000/996/pgconf_us_2019.pdf&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Substantial and accidental forms of a SQL expression</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/"/>
-    <id>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</id>
-    <published>2024-06-20T00:00:00Z</published>
-    <updated>2024-06-20T00:00:00Z</updated>
-    <summary>Multiplicity of parts, variety, and unity of plan which
-combines the parts into a coherent whole, &amp;ndash;
-such are the elements of order found in all beauty.
-(De Wulf 2012)
- I have been working with data intensive applications for a while and of course that means exposure to a lot of SQL, both personally and training other developers.
-In these experiences I have noticed that it is sometimes harder than it should be to grasp what SQL is doing, specially since its accidental form makes understanding its substantial form so hard.</summary>
-    <content type="html">&lt;div class=&#34;verse&#34;&gt;
-&lt;p&gt;Multiplicity of parts, variety, and unity of plan which&lt;br /&gt;
-combines the parts into a coherent whole, &amp;ndash;&lt;br /&gt;
-such are the elements of order found in all beauty.&lt;br /&gt;
-(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;De Wulf 2012&lt;/a&gt;)&lt;br /&gt;&lt;/p&gt;
-&lt;/div&gt;
-&lt;p&gt;I have been working with data intensive applications for a while and of
-course that means exposure to a lot of SQL, both personally and training
-other developers.&lt;/p&gt;
-&lt;p&gt;In these experiences I have noticed that it is sometimes harder than it
-should be to grasp what SQL is doing, specially since its accidental
-form makes understanding its substantial form so hard. In this post I&amp;rsquo;m
-going to try to help the reader separate the two and understand SQL
-better.&lt;/p&gt;
-&lt;p&gt;But first, some definitions of terms:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; &lt;strong&gt;form&lt;/strong&gt; is the principle of organization of a thing’s matter, or the
-thing’s intelligible nature, form can be of two kinds.&lt;/p&gt;
-&lt;p&gt;&amp;hellip; (it) can be &lt;strong&gt;substantial&lt;/strong&gt;, organizing the matter into the
-kind of thing that the substance is.&lt;/p&gt;
-&lt;p&gt;On the other hand, form can be &lt;strong&gt;accidental&lt;/strong&gt;, organising some part of an
-already constituted substance.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;substantial form&lt;/strong&gt; always &amp;hellip; brings a new substance into existence;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;accidental form simply informs an already existing substance, and in
-doing so it simply modifies some substance. (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Kerrl, n.d.&lt;/a&gt;)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;One of the core problems with SQL and in particular its &lt;code&gt;SELECT&lt;/code&gt;
-expression is that the way it is written/read (and the usual
-expectations of the terms such as &lt;code&gt;SELECT/FROM&lt;/code&gt; &amp;hellip;) is very different
-from what is actually taking place.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s discuss this fact starting from an example (the example and much
-of the discussion are taken from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Date and Darwen 1997&lt;/a&gt;))&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PNO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Weight in grams =&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TEXT1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WEIGHT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;454&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;GMWT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COLOR&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Max Quantity =&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TEXT2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;MAX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SQ&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;QTY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MQTY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;WHERE&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PNO&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PNO&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AND&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COLOR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Red&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;OR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COLOR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;Blue&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AND&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;QTY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GROUP&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;BY&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PNO&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WEIGHT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;COLOR&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;HAVING&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;SUM&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SP&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;QTY&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;350&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The difficulty here starts right at the begging, since the &lt;code&gt;SELECT&lt;/code&gt;
-clause is the first to be read and written, but it is the &lt;strong&gt;last&lt;/strong&gt; to be
-evaluated. Here is how to interpret this &lt;code&gt;SELECT&lt;/code&gt; expression:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;FROM&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--join&#34;&gt;&lt;/span&gt;: The source of the data. An usually overseen point is
-that the &lt;code&gt;FROM&lt;/code&gt; clause is actually a &lt;code&gt;JOIN&lt;/code&gt; (a &lt;code&gt;CROSS JOIN&lt;/code&gt;
-specifically).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;WHERE&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--restriction&#34;&gt;&lt;/span&gt;: The result of the &lt;code&gt;JOIN&lt;/code&gt; of the
-&lt;a href=&#34;#org-target--join&#34;&gt;previous step&lt;/a&gt; is reduced by elimination of rows (a process
-called &lt;code&gt;RESTRICTION&lt;/code&gt; in the Relational Algebra).&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;GROUP BY&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--dictionary&#34;&gt;&lt;/span&gt;: This is one of the most complex parts of
-the expression because it goes outside the Relational Algebra. You
-can think of it as creating, from the &lt;a href=&#34;#org-target--restriction&#34;&gt;restricted table&lt;/a&gt;, a Dictionary
-where the keys are a combination of the values of the defined columns
-and the referenced values are all the rows where the keys exist.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;NOTE HOWEVER&lt;/strong&gt; that such Dictionary is &lt;strong&gt;NOT&lt;/strong&gt; a proper table. And that is why a
-&lt;code&gt;GROUP BY&lt;/code&gt; clause will always demand a corresponding &lt;code&gt;SELECT&lt;/code&gt; clause
-that turns such Dictionary into a proper table.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;HAVING&lt;/strong&gt; &lt;span class=&#34;org-target&#34; id=&#34;org-target--filter&#34;&gt;&lt;/span&gt;: This clause applies to the &lt;a href=&#34;#org-target--dictionary&#34;&gt;Dictionary values
-generated by GROUP BY&lt;/a&gt;, filtering all rows that do not match the
-condition. This is another operator that sits outside the Relational
-Algebra.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;SELECT&lt;/strong&gt; : This is called a &lt;code&gt;PROJECTION&lt;/code&gt; in Relational Algebra. It is
-where you pick the colums of the table. It is also where each group
-resulting from the &lt;a href=&#34;#org-target--filter&#34;&gt;HAVING filter&lt;/a&gt; should now generate a single result
-row, by this process:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;The part number, weight, color and maximum quantity are extracted from the Dictionary&lt;/li&gt;
-&lt;li&gt;The weight is converted to grams&lt;/li&gt;
-&lt;li&gt;Two literals are added (&amp;lsquo;Weight in grams =&amp;rsquo;, &amp;lsquo;Max Quantity =&amp;rsquo;).&lt;/li&gt;
-&lt;li&gt;All these insertions are ordered. The result looks like this:&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;PNO&lt;/th&gt;
-&lt;th&gt;TEXT1&lt;/th&gt;
-&lt;th&gt;GMWT&lt;/th&gt;
-&lt;th&gt;COLOR&lt;/th&gt;
-&lt;th&gt;TEXT2&lt;/th&gt;
-&lt;th&gt;MQTY&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;P1&lt;/td&gt;
-&lt;td&gt;Weight in grams =&lt;/td&gt;
-&lt;td&gt;5448&lt;/td&gt;
-&lt;td&gt;Red&lt;/td&gt;
-&lt;td&gt;Max Quantity =&lt;/td&gt;
-&lt;td&gt;300&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;P5&lt;/td&gt;
-&lt;td&gt;Weight in grams =&lt;/td&gt;
-&lt;td&gt;5448&lt;/td&gt;
-&lt;td&gt;Blue&lt;/td&gt;
-&lt;td&gt;Max Quantity =&lt;/td&gt;
-&lt;td&gt;400&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;so-what&#34;&gt;So what&lt;/h2&gt;
-&lt;p&gt;I hope the reader will leave with a better appreciation of what a SQL
-&lt;code&gt;SELECT&lt;/code&gt; expression actually is, instead of what it looks like. I also
-think that understanding the concept of substantial vs accidental form
-can help the reader a lot in understanding things like such expression
-in the future.&lt;/p&gt;
-&lt;p&gt;I also think a point that deserves attention is how worse the &lt;code&gt;SELECT&lt;/code&gt;
-expression becomes by SQL&amp;rsquo;s introduction of operators that don&amp;rsquo;t fit the
-relational algebra (&lt;code&gt;GROUP BY&lt;/code&gt; and &lt;code&gt;HAVING&lt;/code&gt; clauses). Besides such, the
-&lt;code&gt;SELECT&lt;/code&gt; expression is merely a &lt;code&gt;JOIN-&amp;gt;RESTRICT-&amp;gt;PROJECT&lt;/code&gt; sequence.&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/st-maria-civil-war--comparision-2.jpg&#34;
-         alt=&#34;Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Santa Maria del Mar destroyed by communist arson, circa 1936&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Date, C. J., and Hugh Darwen. 1997. &lt;i&gt;A Guide to the Sql Standard (4th Ed.): A User’s Guide to the Standard Database Language Sql&lt;/i&gt;. USA: Addison-Wesley Longman Publishing Co., Inc.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;De Wulf, M. 2012. &lt;i&gt;The System of Thomas Aquinas&lt;/i&gt;. Verlag Editiones Scholasticae.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Kerrl, Gaven. n.d. “Aquinas: Metaphysics.” The Internet Encyclopedia of Philosophy. &lt;a href=&#34;https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/&#34;&gt;https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;</content>
     
     
