@@ -41,18 +41,39 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** What is mathematics? A classification based on universals
+** What is mathematics? A classification based on universals 
+:PROPERTIES:
+:EXPORT_FILE_NAME: what-is-mathematics-a-classification-based-on-universals
+:CUSTOM_ID: what-is-mathematics-a-classification-based-on-universals
+:EXPORT_DATE: 2025-08-17
+:END:
 
+I find that it is hard for me to motivate myself to learn a subject that
+one cannot define. So I made an effort to define mathematics, and the
+best source I have ever found was [cite:@franklin14:_arist_realis_philos_mathem].
 
-Philosophy of mathematics
-- Realism
-  - Platonism :: about another dimension
-  - Aristotelianism :: about instantiation and structure (parts to whole)
-- Nominalism
-  - [Language ]:: Language of science
-  - [Logicism ]:: How to make inferences
-  - [Formalism] :: Manipulation of uninterpreted symbols
+To sum up my views on the topic: at the core of philosophical inquiry,
+one finds a deep division into 2 opposites as their regard to the
+universals, realism and nominalism(and its kantian variant,
+conceptualism)[cite:@wulf_universals]. Taking that into consideration
+and [cite:@franklin14:_arist_realis_philos_mathem], Here is a taxonomy
+of definitions for what is mathematics:
 
+*** Realism
+  - Platonism :: Knowledge of another dimension
+  - Aristotelianism :: Knowledge of instantiation of universals and
+    structure (parts to whole)
+
+*** Nominalism
+  - Language :: A Language of science
+  - Logicism :: A process to guide inferences
+  - Formalism :: The manipulation of uninterpreted symbols
+
+#+print_bibliography:
+
+#+caption: Venerabilis nominalium incaeptor (the venerable fouder of nominalism)
+[[./william-of-ockham-seventeenth-century-engraving-of-the-english-franciscan-friar-and-scholastic-philosopher-and-theologian-william-of-ockham-also-occam-from-latin-gulielmus-occamus-c-1287-1347-2D8W10M.jpg]]
+  
 ** Google Cloud's outage should not have happened, and they seem to be missing the point on how to avoid it in the future
 :PROPERTIES:
 :EXPORT_FILE_NAME: google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
