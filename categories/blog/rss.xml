@@ -6,14 +6,23 @@
     <description>Recent content in blog on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/categories/blog/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>blog section title</title>
       <link>https://ebellani.github.io/blog/</link>
-      <pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 18 Oct 2025 00:00:00 +0000</pubDate>
       
       <guid>https://ebellani.github.io/blog/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>On dealing with GPT results, or, Pots, Kettles And Hallucinations</title>
+      <link>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</link>
+      <pubDate>Sat, 18 Oct 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</guid>
+      <description>.org-center { margin-left: auto; margin-right: auto; text-align: center; } Hallucinations in GPTs can lead to the dissemination of false information, creating harmful outcomes in applications of critical decision making or leading to mistrust in AI. In a viral instance, The New York Times published an article about a lawyer who used ChatGPT to produce case citations without realizing they were fictional, or hallucinated. This incident highlights the danger of hallucinations in LLM-based queries; often the hallucinations are subtle and go easily unnoticed.</description>
     </item>
     
     <item>

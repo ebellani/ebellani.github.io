@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>
+  On dealing with GPT results, or, Pots, Kettles And Hallucinations
+
+    </title>
+    
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="On dealing with GPT results, or, Pots, Kettles And Hallucinations" />
+<meta property="og:description" content=".org-center { margin-left: auto; margin-right: auto; text-align: center; } Hallucinations in GPTs can lead to the dissemination of false information, creating harmful outcomes in applications of critical decision making or leading to mistrust in AI. In a viral instance, The New York Times published an article about a lawyer who used ChatGPT to produce case citations without realizing they were fictional, or hallucinated. This incident highlights the danger of hallucinations in LLM-based queries; often the hallucinations are subtle and go easily unnoticed." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/" /><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2025-10-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-10-18T00:00:00+00:00" />
+
+</head>
+  <body><nav>
+  <img
+    src="/img/triquetra.png"
+    alt="put your logo here"
+    width="128"
+    height="128"
+  />
+  <h1>Eduardo&#39;s blog</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+  </ul>
+</nav>
+<main>
+  <h2>On dealing with GPT results, or, Pots, Kettles And Hallucinations
+    <small>
+      <time>October 18, 2025</time>
+    by Eduardo Bellani
+
+
+    </small>
+  </h2><style>.org-center { margin-left: auto; margin-right: auto; text-align: center; }</style>
+<div class="org-center">
+<p>Hallucinations in GPTs can lead to the dissemination of false
+information, creating harmful outcomes in applications of critical
+decision making or leading to mistrust in AI. In a viral instance, The
+New York Times published an article about a lawyer who used ChatGPT to
+produce case citations without realizing they were fictional, or
+hallucinated. This incident highlights the danger of hallucinations in
+LLM-based queries; often the hallucinations are subtle and go easily
+unnoticed. Given these risks, an important question arises: <strong>Why do GPTs
+hallucinate?</strong> (<a href="#citeproc_bib_item_2">Waldo and Boussard 2024</a>)</p>
+</div>
+<p>Given the above, how to safely use the results of GPTs? As
+(<a href="#citeproc_bib_item_2">Waldo and Boussard 2024</a>) put it, a GPT <code>generates the most common response</code> from its training corpus, reflecting the current linguistic
+consensus. Where there is such consensus, GPTs appear accurate; where
+there is controversy or little data, hallucination follows.</p>
+<p>Therein lies the crux of the matter: most people would see the current
+ideas represented in the LLM <code>training corpus</code> as representing truth,
+since they are the most popular (presumably) ideas around. So, someone
+would need to already have an apprehension of actual truth to be able to
+trust the output of the LLM.</p>
+<p>An interesting turn is that one can take the
+(<a href="#citeproc_bib_item_2">Waldo and Boussard 2024</a>) itself as an example. Here is what it says
+about Epistemic Trust:</p>
+<blockquote>
+<p>We tend to forget how recent the current mechanisms are for establishing
+trust in a claim. The notion that science is an activity based on
+experience and experiment can be traced back to Francis Bacon in the
+17th century; the idea that we can use logic and mathematics to derive
+new knowledge from base principles can be traced to about the same
+period to René Descartes. This approach of using logic and experiment
+is a hallmark of the Renaissance. Prior to that time, trust was
+established by reference to ancient authorities (such as Aristotle or
+Plato) or from religion.</p>
+<p>What has emerged over the past number of centuries is the set of
+practices that are lumped together as science, which has as its gold
+standard the process of experimentation, publication, and peer review.
+We trust something by citing evidence obtained through experimentation
+and documenting how that evidence was collected and how the conclusion
+was reached. Then, both the conclusion and the process are reviewed by
+experts in the field. Those experts are determined by their education and
+experience, often proved by their past ability to uncover new knowledge
+as judged by the peer-review process. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+</blockquote>
+<p>The first paragraph is an example of something that is clearly part of
+the current intellectual landscape, and very likely what would be
+generated by a LLM. As a matter of fact, here is what ChatGPT-5 replied
+when fed this text:</p>
+<blockquote>
+<p>Your paragraph is mostly correct in its broad strokes&hellip;</p>
+</blockquote>
+<p>Given that I have some knowledge in this matter, I can tell the paragraph is
+wrong:</p>
+<ol>
+<li>Bacon did <strong>not</strong> establish science as an activity of experience and
+experiment. What he did was to deny the validity of form, finality
+and ultimately metaphysics in the universe. Given that his work is a
+work arguing <strong>for</strong> a form(sense perception), finality(man) and
+metaphysics (sense perception as the only ground for truth), he is a
+self refuting ideologue.</li>
+<li>Descartes did something similar, denying the validity of anything that
+was not quantity (including sense perception, ironically). His is a
+self refuting position for the same reason.</li>
+</ol>
+<p>Here is what the educated man thought science was before Bacon and
+Descartes:</p>
+<blockquote>
+<p>The method is the path that intelligence must follow for the acquisition
+of science. It has 3 elements: a starting point, a process and an end.</p>
+<ul>
+<li>The starting point cannot be universal doubt, but must rest in
+immediately evident truths(necessary regarding its rational part,
+contingent regarding its experimental part).</li>
+<li>The process is the method properly speaking, being analytical or
+synthetic, in accordance to its direction &mdash; from/to the objects that
+have more/less comprehension.</li>
+<li>The end is science, which is a system of correct knowledge, relative
+to the cause of beings and ultimately deduced through demonstration. Such
+science can be rational or experimental, and is structured in a
+dependency hierarchy. <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
+(<a href="#citeproc_bib_item_1">Sinibaldi 2021</a>)</li>
+</ul>
+</blockquote>
+<h2 id="conclusion-and-advice">Conclusion and advice</h2>
+<p>GPT queries are useful only when you can verify them. When that is
+possible, GPTs become a viable exploration and templating system.</p>
+<p>So, the practical advice boils down to: don&rsquo;t rely on it in areas you
+are not well versed in already.</p>
+<p>Given how this advice applies to (<a href="#citeproc_bib_item_2">Waldo and Boussard 2024</a>) itself &mdash;
+where the authors ventured in a branch of knowledge that they didn&rsquo;t
+seem to hold expertise besides the current popular science milieu &mdash;
+the follow image seems appropos here.</p>
+<figure><img src="/ox-hugo/Charles_Henry_Bennett_-_The_Pot_Calling_The_Kettle_Black_%28coloured_engraving%29_-_%28MeisterDrucke-969630%29.jpg"
+         alt="Figure 1: Charles H. Bennett&amp;rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &amp;ldquo;The pot calling the kettle black&amp;rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them."/><figcaption>
+            <p><span class="figure-number">Figure 1: </span>Charles H. Bennett&rsquo;s coloured engraving from Shadow and Substance (1860), a series based on popular sayings. In this case, a coal-man and chimney sweep stop to argue in the street in illustration of &ldquo;The pot calling the kettle black&rdquo;. A street light throws the shadow of the kitchen implements on the wall behind them.</p>
+        </figcaption>
+</figure>
+
+<h2 id="references">References</h2>
+<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Sinibaldi, Dom Thiago. 2021. <i>Compêndio Elementos de Filosofia (4 Vols.)</i>. 5ª ed. Florianópolis, SC, Brazil: Instituto Santo Agostinho. <a href="https://loja.institutosantoagostinho.org/compendio-elementos-de-filosofia-dom-thiago-sinibaldi">https://loja.institutosantoagostinho.org/compendio-elementos-de-filosofia-dom-thiago-sinibaldi</a>.</div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Waldo, Jim, and Soline Boussard. 2024. “Gpts and Hallucination.” <i>Commun. Acm</i> 68 (1): 40–45. <a href="https://doi.org/10.1145/3703757">https://doi.org/10.1145/3703757</a>.</div>
+</div>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>From the portuguese, translated by this author.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+
+
+
+
+<footer>
+  <p>Feel free to send me an email: ebellani -at- gmail -dot- com</p>
+  <p>
+    PGP Key Fingerprint: 48C50C6F1139C5160AA0DC2BC54D00BC4DF7CA7C
+  </p>
+</footer>
+
+      </main>
+    </main>
+  </body>
+</html>
