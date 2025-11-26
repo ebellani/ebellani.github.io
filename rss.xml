@@ -6,7 +6,18 @@
     <description>Recent content in Agere sequitur esse on Eduardo&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 26 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+      <link>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</guid>
+      <description>Yet again, another global IT outage happen (deja vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swats of the internet with it(Booth 2025).
+And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages, this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash; despite providing a great overview of what happened &amp;mdash; misses the real lesson.
+Here’s the key section of their RCA:</description>
+    </item>
+    
     <item>
       <title>On dealing with GPT results, or, Pots, Kettles And Hallucinations</title>
       <link>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</link>

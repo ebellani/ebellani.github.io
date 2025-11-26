@@ -5,13 +5,135 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-10-18T20:50:11Z</updated>
+  <updated>2025-11-26T16:31:42Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
+    <id>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
+    <published>2025-11-26T00:00:00Z</published>
+    <updated>2025-11-26T00:00:00Z</updated>
+    <summary>Yet again, another global IT outage happen (deja vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swats of the internet with it(Booth 2025).
+And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages, this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash; despite providing a great overview of what happened &amp;mdash; misses the real lesson.
+Here’s the key section of their RCA:</summary>
+    <content type="html">&lt;p&gt;&lt;a href=&#34;/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/&#34;&gt;Yet again&lt;/a&gt;, another global IT outage happen (deja vu strikes again in our
+industry). This time at
+cloudflare(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Prince 2025&lt;/a&gt;). Again, taking down
+large swats of the internet with
+it(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Booth 2025&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages,
+this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash;
+despite providing a great overview of what happened &amp;mdash; misses the real
+lesson.&lt;/p&gt;
+&lt;p&gt;Here’s the key section of their RCA:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Unfortunately, there were assumptions made in the past, that the list of
+columns returned by a query like this would only include the “default”
+database:&lt;/p&gt;
+&lt;p&gt;SELECT
+name,
+type
+FROM system.columns
+WHERE
+table = &amp;lsquo;http_requests_features&amp;rsquo;
+order by name;&lt;/p&gt;
+&lt;p&gt;Note how the query does not filter for the database name. With us
+gradually rolling out the explicit grants to users of a given ClickHouse
+cluster, after the change at 11:05 the query above started returning
+“duplicates” of columns because those were for underlying tables stored
+in the r0 database.&lt;/p&gt;
+&lt;p&gt;This, unfortunately, was the type of query that was performed by the Bot
+Management feature file generation logic to construct each input
+“feature” for the file mentioned at the beginning of this section.&lt;/p&gt;
+&lt;p&gt;The query above would return a table of columns like the one displayed
+(simplified example):&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/cf_table_sql_return.png&#34;/&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;However, as part of the additional permissions that were granted to the
+user, the response now contained all the metadata of the r0 schema
+effectively more than doubling the rows in the response ultimately
+affecting the number of rows (i.e. features) in the final file output.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;A central database query didn&amp;rsquo;t have the right constraints to express
+business rules. Not only it missed the database name, but it clearly
+needs a distinct and a limit, since these seem to be crucial business
+rules.&lt;/p&gt;
+&lt;p&gt;So, a new underlying security work manifested the (unintended) potential
+already there in the query. Since this was by definition unintended, the
+application code didn’t expect that value to be what it was, and reacted
+poorly. This caused a crash loop across seemingly all of cloudflare&amp;rsquo;s
+core systems. This bug wasn’t caught during rollout because the faulty
+code path required data that was assumed to be impossible to be
+generated.&lt;/p&gt;
+&lt;p&gt;Sounds familiar? It should. Any senior engineer has seen this pattern
+before. This is classic database/application mismatch. With this in
+mind, let&amp;rsquo;s review how Cloudflare is planning to prevent this from happening
+again:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Hardening ingestion of Cloudflare-generated configuration files in the same way we would for user-generated input&lt;/li&gt;
+&lt;li&gt;Enabling more global kill switches for features&lt;/li&gt;
+&lt;li&gt;Eliminating the ability for core dumps or other error reports to overwhelm system resources&lt;/li&gt;
+&lt;li&gt;Reviewing failure modes for error conditions across all core proxy modules&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;These are all solid, reasonable steps. But here&amp;rsquo;s the problem: they
+already do most of this—and the outage happened anyway.&lt;/p&gt;
+&lt;p&gt;Why? Because of they seem to mistake physical replication with not
+having a single point of failure. This mistakes the physical layer with
+the logical layer. One can have a logical single point of failure
+without having any physical one, which was the case in this
+situation.&lt;/p&gt;
+&lt;p&gt;I base my paragraph on their choice of abandoning PostgreSQL and
+adopting
+ClickHouse(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Bocharov 2018&lt;/a&gt;). The
+whole post is a great overview on trying to process data fast, without a
+single line on how to garantee its logical correctness/consistency in
+the face of changes.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;They are treating a logical problem as if it was a physical problem&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ll repeat the &lt;a href=&#34;/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/&#34;&gt;same advice&lt;/a&gt; I offered in my previous article on GCP&amp;rsquo;s outage:&lt;/p&gt;
+&lt;h2 id=&#34;the-real-cause&#34;&gt;The real cause&lt;/h2&gt;
+&lt;p&gt;These kinds of outages stem from the uncontrolled interaction between
+application logic and database schema. You can’t reliably catch that
+with more tests or rollouts or flags. You prevent it by
+construction—through analytical design.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;No nullable fiels.&lt;/li&gt;
+&lt;li&gt;(as a cororally of 1) full normalization of the database (&lt;a href=&#34;/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/&#34;&gt;The principles of database design, or, the Truth is out there&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;formally verified application code(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Chapman et al. 2024&lt;/a&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;FAANG-style companies are unlikely to adopt formal methods or relational
+rigor wholesale. But for their most critical systems, they should. It’s
+the only way to make failures like this impossible by design, rather
+than just less likely.&lt;/p&gt;
+&lt;p&gt;The internet would thank them. (Cloud users too—caveat emptor.)&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Bocharov, Alex. 2018. “Http Analytics for 6m Requests per Second Using Clickhouse.” &lt;a href=&#34;https://blog.cloudflare.com/http-analytics-for-6m-requests-per-second-using-clickhouse/&#34;&gt;https://blog.cloudflare.com/http-analytics-for-6m-requests-per-second-using-clickhouse/&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Booth, Robert. 2025. “What Is Cloudflare — and Why Did Its Outage Take down so Many Websites?” &lt;a href=&#34;https://www.theguardian.com/technology/2025/nov/18/what-is-cloudflare-and-why-did-its-outage-take-down-so-many-websites&#34;&gt;https://www.theguardian.com/technology/2025/nov/18/what-is-cloudflare-and-why-did-its-outage-take-down-so-many-websites&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Chapman, Roderick, Claire Dross, Stuart Matthews, and Yannick Moy. 2024. “Co-Developing Programs and Their Proof of Correctness.” &lt;i&gt;Commun. Acm&lt;/i&gt; 67 (3): 84–94. &lt;a href=&#34;https://doi.org/10.1145/3624728&#34;&gt;https://doi.org/10.1145/3624728&lt;/a&gt;.&lt;/div&gt;
+  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Prince, Matthew. 2025. “Cloudflare Outage on November 18, 2025.” &lt;a href=&#34;https://blog.cloudflare.com/18-november-2025-outage/&#34;&gt;https://blog.cloudflare.com/18-november-2025-outage/&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/2560px-Dehio_212_Cluny.jpg&#34;
+         alt=&#34;Figure 1: The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving&#34;/&gt;&lt;figcaption&gt;
+            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving&lt;/p&gt;
+        &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>On dealing with GPT results, or, Pots, Kettles And Hallucinations</title>
@@ -1453,56 +1575,6 @@ discussing software architecture:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
 &lt;p&gt;Including a claim of cost reductions of over 90%!&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>How to avoid a common career pitfall</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/"/>
-    <id>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</id>
-    <published>2024-07-02T00:00:00Z</published>
-    <updated>2024-07-02T00:00:00Z</updated>
-    <summary>If the way you think others see you is in stark contrast to how others actually see you, you are in danger of derailing in your career.
-To avoid that, here are 3 steps, and a reference:
- Ask and embrace feedback from bosses, peers and followers1, Expose your most cherished ideas to the most intense forms of public scrutiny you can find, See ways to measure yourself, such as 360 feedback mechanisms and validated personality assessments.</summary>
-    <content type="html">&lt;p&gt;If the way you think others see you is in stark contrast to how others
-actually see you, you are in danger of derailing in your career.&lt;/p&gt;
-&lt;p&gt;To avoid that, here are 3 steps, and a reference:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Ask and &lt;strong&gt;embrace&lt;/strong&gt; feedback from bosses, peers and followers&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;,&lt;/li&gt;
-&lt;li&gt;Expose your most cherished ideas to the most intense forms of public scrutiny you can find,&lt;/li&gt;
-&lt;li&gt;See ways to measure yourself, such as 360 feedback mechanisms and
-validated personality assessments.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;It all boils down to reducing your own cognitive
-dissonance(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Festinger 1957&lt;/a&gt;), which is:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; The maximum dissonance which could exist &amp;hellip;  determined by the
-resistance to admitting that he had been wrong or foolish.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/French_School_-_View_of_the_abbey_of_Saint-Victor_%28Saint_Victor%29_former_abbey_of_regular_canons_-_%28MeisterDrucke-917697%29.jpg&#34;
-         alt=&#34;Figure 1: Abbey of St Victor, before being destroyed by republican revolutionaries during the French Revolution&#34;/&gt;&lt;figcaption&gt;
-            &lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Abbey of St Victor, before being destroyed by republican revolutionaries during the French Revolution&lt;/p&gt;
-        &lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;style&gt;.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}&lt;/style&gt;&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Festinger, L. 1957. &lt;i&gt;A Theory of Cognitive Dissonance&lt;/i&gt;. Mass Communication Series. Stanford University Press.&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;I like the terms superordinate, coordinates and subordinates, but
-they are not in common usage&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
