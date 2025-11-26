@@ -1,3 +1,4 @@
+
 #+TITLE: eduardo's website title
 #+bibliography: ./refs.bib
 #+options: broken-links:mark
@@ -40,6 +41,131 @@ reflect those of any past or present employer.
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: blog
 :END:
+
+** Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
+:PROPERTIES:
+:EXPORT_DATE: 2025-11-26
+:EXPORT_FILE_NAME: cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
+:CUSTOM_ID: cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
+:END:
+
+[[#google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future][Yet again]], another global IT outage happen (deja vu strikes again in our
+industry). This time at
+cloudflare[cite:@prince25:cloudflare_2025_outage]. Again, taking down
+large swats of the internet with
+it[cite:@booth25:what_is_cloudflare_and_why_did_its_outage_take_down_so_many_websites].
+
+And yes, like my previous analysis of the GCP and CrowdStrike's outages,
+this post critiques Cloudflare's root cause analysis (RCA), which ---
+despite providing a great overview of what happened --- misses the real
+lesson.
+
+Here’s the key section of their RCA:
+
+#+begin_quote
+Unfortunately, there were assumptions made in the past, that the list of
+columns returned by a query like this would only include the “default”
+database:
+
+SELECT
+  name,
+  type
+FROM system.columns
+WHERE
+  table = 'http_requests_features'
+order by name;
+
+Note how the query does not filter for the database name. With us
+gradually rolling out the explicit grants to users of a given ClickHouse
+cluster, after the change at 11:05 the query above started returning
+“duplicates” of columns because those were for underlying tables stored
+in the r0 database.
+
+This, unfortunately, was the type of query that was performed by the Bot
+Management feature file generation logic to construct each input
+“feature” for the file mentioned at the beginning of this section.
+
+The query above would return a table of columns like the one displayed
+(simplified example):
+
+[[./cf_table_sql_return.png]]
+
+However, as part of the additional permissions that were granted to the
+user, the response now contained all the metadata of the r0 schema
+effectively more than doubling the rows in the response ultimately
+affecting the number of rows (i.e. features) in the final file output.
+#+end_quote
+
+A central database query didn't have the right constraints to express
+business rules. Not only it missed the database name, but it clearly
+needs a distinct and a limit, since these seem to be crucial business
+rules.
+
+So, a new underlying security work manifested the (unintended) potential
+already there in the query. Since this was by definition unintended, the
+application code didn’t expect that value to be what it was, and reacted
+poorly. This caused a crash loop across seemingly all of cloudflare's
+core systems. This bug wasn’t caught during rollout because the faulty
+code path required data that was assumed to be impossible to be
+generated.
+
+Sounds familiar? It should. Any senior engineer has seen this pattern
+before. This is classic database/application mismatch. With this in
+mind, let's review how Cloudflare is planning to prevent this from happening
+again:
+
+
+  #+begin_quote
+  - Hardening ingestion of Cloudflare-generated configuration files in the same way we would for user-generated input
+  - Enabling more global kill switches for features
+  - Eliminating the ability for core dumps or other error reports to overwhelm system resources
+  - Reviewing failure modes for error conditions across all core proxy modules
+  #+end_quote
+
+
+These are all solid, reasonable steps. But here's the problem: they
+already do most of this—and the outage happened anyway.
+
+Why? Because of they seem to mistake physical replication with not
+having a single point of failure. This mistakes the physical layer with
+the logical layer. One can have a logical single point of failure
+without having any physical one, which was the case in this
+situation.
+
+I base my paragraph on their choice of abandoning PostgreSQL and
+adopting
+ClickHouse[cite:@bocharov18:cloudflare_http_analytics_clickhouse]. The
+whole post is a great overview on trying to process data fast, without a
+single line on how to garantee its logical correctness/consistency in
+the face of changes.
+
+*They are treating a logical problem as if it was a physical problem*
+
+I'll repeat the [[#google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future][same advice]] I offered in my previous article on GCP's outage:
+
+*** The real cause
+
+These kinds of outages stem from the uncontrolled interaction between
+application logic and database schema. You can’t reliably catch that
+with more tests or rollouts or flags. You prevent it by
+construction—through analytical design.
+
+1. No nullable fiels.
+2. (as a cororally of 1) full normalization of the database ([[#the-principles-of-database-design-or-the-truth-is-out-there][The principles of database design, or, the Truth is out there]])
+3. formally verified application code[cite:@10.1145/3624728]
+
+*** Conclusion
+
+FAANG-style companies are unlikely to adopt formal methods or relational
+rigor wholesale. But for their most critical systems, they should. It’s
+the only way to make failures like this impossible by design, rather
+than just less likely.
+
+The internet would thank them. (Cloud users too—caveat emptor.)
+#+print_bibliography:
+
+#+caption: The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving
+[[./2560px-Dehio_212_Cluny.jpg]]
 
 ** On dealing with GPT results, or, Pots, Kettles And Hallucinations
 :PROPERTIES:
