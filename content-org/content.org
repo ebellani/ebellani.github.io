@@ -42,7 +42,7 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
+** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
 :EXPORT_DATE: 2025-11-26
 :EXPORT_FILE_NAME: cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
@@ -126,7 +126,7 @@ again:
 These are all solid, reasonable steps. But here's the problem: they
 already do most of this—and the outage happened anyway.
 
-Why? Because of they seem to mistake physical replication with not
+Why? Because they seem to mistake physical replication with not
 having a single point of failure. This mistakes the physical layer with
 the logical layer. One can have a logical single point of failure
 without having any physical one, which was the case in this
@@ -136,7 +136,7 @@ I base my paragraph on their choice of abandoning PostgreSQL and
 adopting
 ClickHouse[cite:@bocharov18:cloudflare_http_analytics_clickhouse]. The
 whole post is a great overview on trying to process data fast, without a
-single line on how to garantee its logical correctness/consistency in
+single line on how to guarantee its logical correctness/consistency in
 the face of changes.
 
 *They are treating a logical problem as if it was a physical problem*
@@ -150,8 +150,8 @@ application logic and database schema. You can’t reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.
 
-1. No nullable fiels.
-2. (as a cororally of 1) full normalization of the database ([[#the-principles-of-database-design-or-the-truth-is-out-there][The principles of database design, or, the Truth is out there]])
+1. No nullable fields.
+2. (as a corollary of 1) full normalization of the database ([[#the-principles-of-database-design-or-the-truth-is-out-there][The principles of database design, or, the Truth is out there]])
 3. formally verified application code[cite:@10.1145/3624728]
 
 *** Conclusion
