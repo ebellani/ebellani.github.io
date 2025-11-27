@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
-  Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future
+  Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future" />
+    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future" />
 <meta property="og:description" content="Yet again, another global IT outage happen (deja vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swats of the internet with it(Booth 2025).
 And yes, like my previous analysis of the GCP and CrowdStrike&rsquo;s outages, this post critiques Cloudflare&rsquo;s root cause analysis (RCA), which &mdash; despite providing a great overview of what happened &mdash; misses the real lesson.
 Here’s the key section of their RCA:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/" /><meta property="article:section" content="blog" />
+<meta property="og:url" content="https://ebellani.github.io/blog/2025/cloudflares-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/" /><meta property="article:section" content="blog" />
 <meta property="article:published_time" content="2025-11-26T00:00:00+00:00" />
 <meta property="article:modified_time" content="2025-11-26T00:00:00+00:00" />
 
@@ -32,7 +32,7 @@ Here’s the key section of their RCA:" />
   </ul>
 </nav>
 <main>
-  <h2>Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future
+  <h2>Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future
     <small>
       <time>November 26, 2025</time>
     by Eduardo Bellani
@@ -103,7 +103,7 @@ again:</p>
 </blockquote>
 <p>These are all solid, reasonable steps. But here&rsquo;s the problem: they
 already do most of this—and the outage happened anyway.</p>
-<p>Why? Because of they seem to mistake physical replication with not
+<p>Why? Because they seem to mistake physical replication with not
 having a single point of failure. This mistakes the physical layer with
 the logical layer. One can have a logical single point of failure
 without having any physical one, which was the case in this
@@ -112,7 +112,7 @@ situation.</p>
 adopting
 ClickHouse(<a href="#citeproc_bib_item_1">Bocharov 2018</a>). The
 whole post is a great overview on trying to process data fast, without a
-single line on how to garantee its logical correctness/consistency in
+single line on how to guarantee its logical correctness/consistency in
 the face of changes.</p>
 <p><strong>They are treating a logical problem as if it was a physical problem</strong></p>
 <p>I&rsquo;ll repeat the <a href="/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/">same advice</a> I offered in my previous article on GCP&rsquo;s outage:</p>
@@ -122,8 +122,8 @@ application logic and database schema. You can’t reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.</p>
 <ol>
-<li>No nullable fiels.</li>
-<li>(as a cororally of 1) full normalization of the database (<a href="/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/">The principles of database design, or, the Truth is out there</a>)</li>
+<li>No nullable fields.</li>
+<li>(as a corollary of 1) full normalization of the database (<a href="/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/">The principles of database design, or, the Truth is out there</a>)</li>
 <li>formally verified application code(<a href="#citeproc_bib_item_3">Chapman et al. 2024</a>)</li>
 </ol>
 <h2 id="conclusion">Conclusion</h2>

@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-11-26T16:31:42Z</updated>
+  <updated>2025-11-27T16:41:22Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -14,9 +14,9 @@
   <id>https://ebellani.github.io/blog/</id>
   
   <entry>
-    <title>Cloudflare outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
-    <id>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
+    <title>Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/cloudflares-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
+    <id>https://ebellani.github.io/blog/2025/cloudflares-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
     <published>2025-11-26T00:00:00Z</published>
     <updated>2025-11-26T00:00:00Z</updated>
     <summary>Yet again, another global IT outage happen (deja vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swats of the internet with it(Booth 2025).
@@ -86,7 +86,7 @@ again:&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;These are all solid, reasonable steps. But here&amp;rsquo;s the problem: they
 already do most of this—and the outage happened anyway.&lt;/p&gt;
-&lt;p&gt;Why? Because of they seem to mistake physical replication with not
+&lt;p&gt;Why? Because they seem to mistake physical replication with not
 having a single point of failure. This mistakes the physical layer with
 the logical layer. One can have a logical single point of failure
 without having any physical one, which was the case in this
@@ -95,7 +95,7 @@ situation.&lt;/p&gt;
 adopting
 ClickHouse(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Bocharov 2018&lt;/a&gt;). The
 whole post is a great overview on trying to process data fast, without a
-single line on how to garantee its logical correctness/consistency in
+single line on how to guarantee its logical correctness/consistency in
 the face of changes.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;They are treating a logical problem as if it was a physical problem&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ll repeat the &lt;a href=&#34;/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/&#34;&gt;same advice&lt;/a&gt; I offered in my previous article on GCP&amp;rsquo;s outage:&lt;/p&gt;
@@ -105,8 +105,8 @@ application logic and database schema. You can’t reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;No nullable fiels.&lt;/li&gt;
-&lt;li&gt;(as a cororally of 1) full normalization of the database (&lt;a href=&#34;/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/&#34;&gt;The principles of database design, or, the Truth is out there&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;No nullable fields.&lt;/li&gt;
+&lt;li&gt;(as a corollary of 1) full normalization of the database (&lt;a href=&#34;/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/&#34;&gt;The principles of database design, or, the Truth is out there&lt;/a&gt;)&lt;/li&gt;
 &lt;li&gt;formally verified application code(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Chapman et al. 2024&lt;/a&gt;)&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
