@@ -45,20 +45,22 @@ reflect those of any past or present employer.
 ** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
 :EXPORT_DATE: 2025-11-26
+:EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
 :EXPORT_FILE_NAME: cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
 :CUSTOM_ID: cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future
 :END:
 
-[[#google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future][Yet again]], another global IT outage happen (deja vu strikes again in our
+[[#google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future][Yet again]], another global IT outage happened (dèjá vu strikes again in our
 industry). This time at
 cloudflare[cite:@prince25:cloudflare_2025_outage]. Again, taking down
-large swats of the internet with
+large swaths of the internet with
 it[cite:@booth25:what_is_cloudflare_and_why_did_its_outage_take_down_so_many_websites].
 
 And yes, like my previous analysis of the GCP and CrowdStrike's outages,
 this post critiques Cloudflare's root cause analysis (RCA), which ---
 despite providing a great overview of what happened --- misses the real
 lesson.
+
 
 Here’s the key section of their RCA:
 
