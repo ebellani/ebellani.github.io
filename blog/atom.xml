@@ -5,7 +5,7 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2025-11-27T16:41:22Z</updated>
+  <updated>2025-11-27T17:50:33Z</updated>
   <author>
     <name>Eduardo Bellani</name>
     
@@ -15,17 +15,17 @@
   
   <entry>
     <title>Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2025/cloudflares-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
-    <id>https://ebellani.github.io/blog/2025/cloudflares-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/"/>
+    <id>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</id>
     <published>2025-11-26T00:00:00Z</published>
     <updated>2025-11-26T00:00:00Z</updated>
-    <summary>Yet again, another global IT outage happen (deja vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swats of the internet with it(Booth 2025).
+    <summary>Yet again, another global IT outage happened (dèjá vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swaths of the internet with it(Booth 2025).
 And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages, this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash; despite providing a great overview of what happened &amp;mdash; misses the real lesson.
 Here’s the key section of their RCA:</summary>
-    <content type="html">&lt;p&gt;&lt;a href=&#34;/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/&#34;&gt;Yet again&lt;/a&gt;, another global IT outage happen (deja vu strikes again in our
+    <content type="html">&lt;p&gt;&lt;a href=&#34;/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/&#34;&gt;Yet again&lt;/a&gt;, another global IT outage happened (dèjá vu strikes again in our
 industry). This time at
 cloudflare(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Prince 2025&lt;/a&gt;). Again, taking down
-large swats of the internet with
+large swaths of the internet with
 it(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Booth 2025&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages,
 this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash;
