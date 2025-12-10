@@ -1,7 +1,7 @@
 
 #+TITLE: eduardo's website title
 #+bibliography: ./refs.bib
-#+options: broken-links:mark
+#+options: broken-links:mark toc:nil
 #+HUGO_BASE_DIR: ../
 #+HUGO_PAIRED_SHORTCODES: alert image
 #+AUTHOR: Eduardo Bellani
@@ -27,7 +27,7 @@ I'm Eduardo Bellani. This space is where I explore the intersections of
 computer science, programming, classical philosophy (especially from a
 moderate realist perspective), and leadership.
 
-Over the past 15+ years, I’ve worked across the tech landscape --- as a
+Over the past 15+ years, I've worked across the tech landscape --- as a
 developer, engineering manager, director, and founder --- primarily in
 research-driven environments and with a strong emphasis on functional
 programming and relational theory. Much of my writing reflects a
@@ -50,6 +50,10 @@ reflect those of any past or present employer.
 :EXPORT_DATE: 2025-12-04
 :END:
 
+#+TOC: headlines 2 local
+
+*** Introduction
+
 There is a deep cultural reflex in modern engineering: whenever a
 problem appears, reach for a packaged solution instead of thinking from
 first principles. The result is architectural cargo culting and lots of
@@ -57,11 +61,9 @@ missed opportunities. Some intentionally absurd-but-familiar examples:
 
 #+begin_quote
 We need an audit trail, let's use {temporal/event sourcing DBMS}
-#+end_quote
 
-#+begin_src
-Our application is slow, let's cache that using {in-memory key–value database}  
-#+end_src
+Our application is slow, let's cache that using {in-memory key-value database}  
+#+end_quote
 
 And since a relational database like PostgreSQL is still considered
 mandatory,thanks mostly to its unmatched reputation, companies end up
@@ -70,28 +72,34 @@ number of moving parts, operational risk, headcount demand, and overall
 system entropy. Complexity[fn:1] grows, not because the problems demand it,
 but because someone reached for a tool they saw in a conference talk.
 
-In this post, I’ll walk through a set of common misconceptions that
-drive teams to introduce new infrastructure when they don’t need to. All
+In this post, I'll walk through a set of common misconceptions that
+drive teams to introduce new infrastructure when they don't need to. All
 of these can be solved with vanilla PostgreSQL 18 using standard
 extensions available on RDS, with no special infrastructure and no
 distributed-systems cosplay.
 
-- Auditing and reconstructing state
-- Write throughput
-- Observability
-- Slow transactional queries
-- Slow analytical queries
-- Database Coupling
-- Database rigidity 
+The goal in this article is not to argue that specialized systems are
+never appropriate, but to show that the default assumption for your data
+problems should be: *You probably don't need anything beyond PostgreSQL,
+and you're paying a real cost--- financial, operational, and
+cognitive--- time you add one more moving part.*
 
-The goal here is not to argue that specialized systems are never
-appropriate, but to show that the default assumption for your data
-problems should be:
 
-*You probably don’t need anything beyond PostgreSQL, and you’re paying a real cost—financial, operational, and cognitive—every time you add one more moving part.*
+*** The setup
 
-For that, I'm going to use a variation of the /Drosophila melanogaster/
-of the database field: [[https://en.wikipedia.org/wiki/Suppliers_and_Parts_database][the classic Supplier and Parts]]
+Here is a list of arguments that people put forth to reach for other
+tools besides Postgres, based on my experience:
+
+- I'll need auditing and reconstructing state
+- Write throughput is too high
+- It does not have observability
+- The transactional queries are too slow
+- The analytical queries are too slow
+- My app will be coupled to the Database
+- The Database schema is too rigid for my growing business
+
+To address these, I'm going to use a variation of the /Drosophila
+melanogaster/ of the database field: [[https://en.wikipedia.org/wiki/Suppliers_and_Parts_database][the classic Supplier and Parts]]
 database[cite:@10.5555/861613]. I'll update it to be more in line with
 the usual problematic tables: Financial Transaction and their
 originating transfers. Here is a requirements snippet from a very
@@ -100,9 +108,9 @@ popular banking API company:
 #+begin_quote
 Transactions: are immutable records of financial interactions with
 Increase. You can think of them as the line items on your bank
-statement. A Transaction with a positive amount means there’s more money
-in your account. A Transaction with a negative amount means there’s less
-money in your account. You can’t directly create a Transaction, and they
+statement. A Transaction with a positive amount means there's more money
+in your account. A Transaction with a negative amount means there's less
+money in your account. You can't directly create a Transaction, and they
 never change after they are made. Anything that causes money to move
 around your Increase account results in a Transaction - initiated or
 received transfers, card payments, earned interest, and more.
@@ -117,12 +125,12 @@ the network.
 Pending Transactions: represent potential future credits or debits of
 money into your account and are a separate resource from Transactions
 (despite their similar name). Notably, while Transactions are immutable,
-Pending Transactions are not, as they don’t guarantee the movement of
+Pending Transactions are not, as they don't guarantee the movement of
 money. For example, Pending Transactions are created for card
 authorizations (which can mutate or timeout) and also when placing a
 hold on an account (which can be removed). Pending Transactions do not
 affect your current balance (which is the balance you earn interest on),
-but do affect your available balance (which is the amount you’re able to
+but do affect your available balance (which is the amount you're able to
 move out of Increase).  [cite:@increase_transactions_and_transfers]
 #+end_quote
 
@@ -193,7 +201,83 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
   comment on table transfer is 'Represents the flow of money, and is therefore a mutable entity.';
 #+end_src
 
+*** Auditing and reconstructing state
+
+Given the financial nature of the presumed business rules here, it
+stands to reason that you'd need:
+
+#+begin_quote
+- Auditing all data changes and performing data forensics when necessary
+- Reconstructing state of the data as of any time in the past
+- Calculating trends over time
+- Maintaining a slowly changing dimension for decision support applications
+- Recovering from accidental data changes and application errors
+  Auditing all data changes and performing data forensics when necessary
+  [cite:@microsoft24:_tempor]
+#+end_quote
+
+This is usually handled with the combination of several tools outside of
+Postgres, increasing the operating cost and sometimes not achieving the
+desired features. Achieving this in PostgreSQL is straightforward with
+several extension, one that is ready to use with RDS is
+[cite:@nearform_temporal_tables]. Simply run that SQL on your
+instance. If you want a way to drive the extension with a simple
+function call, use this snippet:
+
+#+begin_src sql
+  create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
+    language plpgsql
+  as $_$
+    declare
+    history_sql text;
+  begin
+    history_sql := format(
+      $his$
+      alter table %1$s.%2$s add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
+      alter table %1$s.%2$s alter column sys_period set not null;
+      create table if not exists %1$s.%2$s_history
+      (
+        like %1$s.%2$s
+      );
+      drop trigger if exists %2$s_temporal on %1$s.%2$s;
+      create trigger %2$s_temporal
+      before insert or update or delete
+      on %1$s.%2$s
+      for each row
+      execute procedure versioning('sys_period', '%1$s.%2$s_history', true);
+      $his$, _schema_name, _table_name);
+    execute history_sql;
+  end;
+  create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
+    language plpgsql
+  as $_$
+    declare
+    history_sql text;
+  begin
+    history_sql := format(
+      $his$
+      alter table %1$s.%2$s add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
+      alter table %1$s.%2$s alter column sys_period set not null;
+      create table if not exists %1$s.%2$s_history
+      (
+        like %1$s.%2$s
+      );
+      drop trigger if exists %2$s_temporal on %1$s.%2$s;
+      create trigger %2$s_temporal
+      before insert or update or delete
+      on %1$s.%2$s
+      for each row
+      execute procedure versioning('sys_period', '%1$s.%2$s_history', true);
+      $his$, _schema_name, _table_name);
+    execute history_sql;
+  end;
+
+  -- this will generate a public.my_table_history that will hold the history of the my_table
+  -- call make_temporal_table('pblic', 'my_table_history');
+#+end_src
+
 #+print_bibliography:
+
 
 ** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
@@ -215,7 +299,7 @@ despite providing a great overview of what happened --- misses the real
 lesson.
 
 
-Here’s the key section of their RCA:
+Here's the key section of their RCA:
 
 #+begin_quote
 Unfortunately, there were assumptions made in the past, that the list of
@@ -258,9 +342,9 @@ rules.
 
 So, a new underlying security work manifested the (unintended) potential
 already there in the query. Since this was by definition unintended, the
-application code didn’t expect that value to be what it was, and reacted
+application code didn't expect that value to be what it was, and reacted
 poorly. This caused a crash loop across seemingly all of cloudflare's
-core systems. This bug wasn’t caught during rollout because the faulty
+core systems. This bug wasn't caught during rollout because the faulty
 code path required data that was assumed to be impossible to be
 generated.
 
@@ -301,7 +385,7 @@ I'll repeat the [[#google-cloud-s-outage-should-not-have-happened-and-they-seem-
 *** The real cause
 
 These kinds of outages stem from the uncontrolled interaction between
-application logic and database schema. You can’t reliably catch that
+application logic and database schema. You can't reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.
 
@@ -312,7 +396,7 @@ construction—through analytical design.
 *** Conclusion
 
 FAANG-style companies are unlikely to adopt formal methods or relational
-rigor wholesale. But for their most critical systems, they should. It’s
+rigor wholesale. But for their most critical systems, they should. It's
 the only way to make failures like this impossible by design, rather
 than just less likely.
 
@@ -485,11 +569,11 @@ of definitions for what is mathematics:
 [[*Crowdstrike's outage should not have happened, and the company is missing the point on how to avoid it in the future][Another global IT outage happened]], this time at Google Cloud Platform
 [cite:@team25:_multip_gcp_servic_incid], taking down with it large
 swaths of the internet [cite:@zeff25:_googl_cloud]. Like my previous
-analysis of the CrowdStrike outage, this post critiques GCP’s root cause
+analysis of the CrowdStrike outage, this post critiques GCP's root cause
 analysis (RCA), which—despite detailed engineering steps—misses the real
 lesson.
 
-Here’s the key section of their RCA:
+Here's the key section of their RCA:
 
 #+begin_quote
 Google and Google Cloud APIs are served through our Google API
@@ -530,9 +614,9 @@ deployment. [cite:@team25:_multip_gcp_servic_incid]
 #+end_quote
 
 A central database had a nullable field. A new policy change injected a
-blank value into this field. The application code didn’t expect that
+blank value into this field. The application code didn't expect that
 value to be null, which caused a crash loop across all regions. The bug
-wasn’t caught during rollout because the faulty code path required a
+wasn't caught during rollout because the faulty code path required a
 policy trigger that never occurred in staging
 
 Sound familiar? It should. Any senior engineer has seen this pattern
@@ -541,7 +625,7 @@ curse of ~NULL~[cite:@mcgoveran93:_nothin_nothin]. With this in mind,
 let's review how GCP is planning to prevent this from happening again:
 
 #+begin_src org
-  1. We will modularize Service Control’s architecture, so the
+  1. We will modularize Service Control's architecture, so the
      functionality is isolated and fails open. Thus, if a corresponding
      check fails, Service Control can still serve API requests.
   2. We will audit all systems that consume globally replicated
@@ -576,7 +660,7 @@ Why? Because of this admission, buried in their own RCA:
 
 *** The real cause
 These kinds of outages stem from the uncontrolled interaction between
-application logic and database schema. You can’t reliably catch that
+application logic and database schema. You can't reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.
 
@@ -587,7 +671,7 @@ construction—through analytical design.
 *** Conclusion
 
 FAANG-style companies are unlikely to adopt formal methods or relational
-rigor wholesale. But for their most critical systems, they should. It’s
+rigor wholesale. But for their most critical systems, they should. It's
 the only way to make failures like this impossible by design, rather
 than just less likely.
 
@@ -653,7 +737,7 @@ To these I'd like to introduce a new principle, an innovation I hope to
 develop in future work:
 
 - Principle of Essential Denotation (PED): A relation should be
-  identified by a natural key that reflects the entity’s essential,
+  identified by a natural key that reflects the entity's essential,
   domain-defined identity --- not by arbitrary or surrogate values.
 
 The following pseudo-SQL shows the contrast between improper and proper denotation:
@@ -694,7 +778,7 @@ know how to build structures that tell the truth that is out there.
 
 #+print_bibliography:
 
-#+caption: But revolutionary Parisians had had enough of its royal resonance. The cathedral’s west facade featured 28 statues that portrayed the biblical Kings of Judah. In fall 1793, the new government ordered workers to remove them. They didn’t portray French kings, but no matter: The 500-year-old statues combined monarchy and religion, and they were brought to the cathedral’s square and decapitated. Twenty-one of the heads were only recovered in 1977, when workers found them behind a wall in an old Parisian mansion.[cite:@blakemore19:_notre_dame_cathed_was_nearl]
+#+caption: But revolutionary Parisians had had enough of its royal resonance. The cathedral's west facade featured 28 statues that portrayed the biblical Kings of Judah. In fall 1793, the new government ordered workers to remove them. They didn't portray French kings, but no matter: The 500-year-old statues combined monarchy and religion, and they were brought to the cathedral's square and decapitated. Twenty-one of the heads were only recovered in 1977, when workers found them behind a wall in an old Parisian mansion.[cite:@blakemore19:_notre_dame_cathed_was_nearl]
 [[./king-of-judah-heads.jpg]]
 
 
@@ -708,8 +792,8 @@ know how to build structures that tell the truth that is out there.
 Underpinning relational databases you find a very powerful principle:
 all your information should be represented as attributes drawn from
 domains in
-relations[cite:@pascal20:_under_codds_rules_rdbms_acces]. This is Codd’s
-Information Principle #1. This principle isn’t just fluffy theory: it
+relations[cite:@pascal20:_under_codds_rules_rdbms_acces]. This is Codd's
+Information Principle #1. This principle isn't just fluffy theory: it
 can lead to very concrete wins in how we design, query, and maintain
 systems.[fn:4]
 
@@ -719,7 +803,7 @@ This is clearly a metadata question: Which other database objects does
 this view depend on? In many environments, answering that might involve
 using external tools or writing scripts in another language. But in
 PostgreSQL, you can answer it with a simple query *because* PostgreSQL
-respects Codd’s principle and exposes metadata as part of its relational
+respects Codd's principle and exposes metadata as part of its relational
 structure.
 
 #+caption: Retrieves all objects (tables, views, etc.) that MY_SCHEMA.MY_VIEW depends on — across schemas and object types
@@ -818,7 +902,7 @@ These skills concern building and sustaining relationships. Interpersonal skills
 can be described in terms of three components:
 
 1) an ability to put oneself in the position of another person,
-2) an ability to accurately perceive and anticipate other’s expectations, and
+2) an ability to accurately perceive and anticipate other's expectations, and
 3) an ability to incorporate information about the other person's expectations
    into subsequent behavior.
 
@@ -900,7 +984,7 @@ For a follower, the persistance component is shared, alongside initiative.
 
 Tech hiring is long overdue for an evidence-based overhaul. Structured
 interviews rooted in validated competencies not only predict performance
-better — they respect candidates' time and intelligence. If you’re
+better — they respect candidates' time and intelligence. If you're
 hiring engineers, skip the puzzles and build a process that actually
 works.
 
@@ -1267,7 +1351,7 @@ on this matter, I want to use it as an opportunity to create a reference
 for myself and others in the future when debating this topic. Therefore,
 I'll go topic by topic, linking to the appropriate place
 
-**** Temporal Tables Aren’t True History
+**** Temporal Tables Aren't True History
 
 #+begin_quote
 Events (allow) you to understand both the “what” and the “why” in a
@@ -1358,10 +1442,10 @@ and because of the large amount of data that is stored in typical event
 stores.[cite:@inproceedings]
 #+end_quote
 
-**** Temporal Tables Aren’t Built for Distributed Systems
+**** Temporal Tables Aren't Built for Distributed Systems
 
 #+begin_quote
-.. temporal tables simply don’t cut it. They are designed with a
+.. temporal tables simply don't cut it. They are designed with a
 single-node, relational mindset, which makes them ill-suited for
 large-scale, distributed architectures.
 #+end_quote
@@ -1394,7 +1478,7 @@ because:
 
 **** A False Sense of Auditability
 
-This is just restating [[*Temporal Tables Aren’t True History][Temporal Tables Aren’t True History]].
+This is just restating [[*Temporal Tables Aren't True History][Temporal Tables Aren't True History]].
 
 **** Temporal Tables Lack Flexibility
 
@@ -1402,7 +1486,7 @@ This is just restating [[*Temporal Tables Impose Rigid Structure][Temporal Table
 
 **** Event Streams Are the Real Temporal Model
 
-This is just restating [[*Temporal Tables Aren’t True History][Temporal Tables Aren’t True History]].
+This is just restating [[*Temporal Tables Aren't True History][Temporal Tables Aren't True History]].
 
 **** Temporal Tables Create Monoliths, Not Microservices
 
@@ -1560,7 +1644,7 @@ its competitors' clouds. [cite:@cunningham24:_micros]
 #+begin_quote
 While software updates may occasionally cause disturbances, significant
 incidents like the CrowdStrike event are infrequent. We currently
-estimate that CrowdStrike’s update affected 8.5 million Windows devices,
+estimate that CrowdStrike's update affected 8.5 million Windows devices,
 or less than one percent of all Windows machines. While the percentage
 was small, the broad economic and societal impacts reflect the use of
 CrowdStrike by enterprises that run many critical services. [cite:@weston24:_helpin_crowd]
@@ -1622,11 +1706,11 @@ book:
 - Module structures :: partition systems into implementation units
 
 - Component-and-connector (C&C) structures :: focus on the way the
-  elements interact with each other at runtime to carry out the system’s
+  elements interact with each other at runtime to carry out the system's
   functions.
 
 - Allocation structures :: establish the mapping from software
-  structures to the system’s non-software structures, such as its
+  structures to the system's non-software structures, such as its
   organization, or its development, test, and execution
   environments. [cite:@bass2021software]
 #+end_quote
@@ -1734,7 +1818,7 @@ constraints, SQL injections would be impossible!
 
 *Developer productivity:*
 - No more time spent on access control and worrying about security
-- Even the new guy can now safely work on applications, api’s etc.
+- Even the new guy can now safely work on applications, api's etc.
 - Worst case, api breaks, but the data is perfectly safe [cite:@swart19:_row_level_secur]
 #+end_quote
 
@@ -1779,8 +1863,8 @@ better.
 But first, some definitions of terms:
 
 #+begin_quote
-... *form* is the principle of organization of a thing’s matter, or the
-thing’s intelligible nature, form can be of two kinds.
+... *form* is the principle of organization of a thing's matter, or the
+thing's intelligible nature, form can be of two kinds.
 
 ... (it) can be *substantial*, organizing the matter into the
 kind of thing that the substance is.
@@ -2066,12 +2150,12 @@ design:
 
 #+begin_quote
 /Reification/: the treatment of something abstract as a material or
-concrete thing, as in the following lines from Matthew Arnold’s poem
+concrete thing, as in the following lines from Matthew Arnold's poem
 “Dover Beach”: [cite:@refification_britannica]
 
 #+begin_verse
 /The Sea of Faith
-Was once, too, at the full, and round earth’s shore
+Was once, too, at the full, and round earth's shore
 Lay like the folds of a bright girdle furled./
 #+end_verse
 #+end_quote
@@ -2210,7 +2294,7 @@ in an unfortunate situation, you would do well to remember this dictum:
 
 #+begin_quote
 When a public figure tells you something that you want to hear, question
-his sincerity. When a public figure tells you something you don’t want
+his sincerity. When a public figure tells you something you don't want
 to hear, believe him.[cite:@what_is_truth]
 #+end_quote
 
@@ -2291,7 +2375,7 @@ After Facebook build their system with PHP, they became hugely successful.
 **** Cum hoc
 
 Latin for “with this, therefore because of this.” This is a False Cause
-Fallacy that doesn’t depend on time order (as does the [[*Post hoc][Post hoc]]
+Fallacy that doesn't depend on time order (as does the [[*Post hoc][Post hoc]]
 fallacy), but on any other chance correlation of the supposed cause
 being in the presence of the supposed effect.
 
@@ -2450,7 +2534,7 @@ all places. The author of the manual itself makes it clear that it is a
 special section of the manual:
 
 #+begin_quote
-In this section, we’re going to give you our opinion. If you’re only
+In this section, we're going to give you our opinion. If you're only
 interested in facts, or if you prefer not to read things that might
 undermine the opinion you currently hold, please feel free to skip
 straight to the next chapter.
@@ -2460,7 +2544,7 @@ The section can be summarized in the following recommendation and
 image[cite:@king24:_introd_hiber]:
 
 #+begin_quote
-we’re not sure you need a separate persistence layer at all
+we're not sure you need a separate persistence layer at all
 #+end_quote
 
 #+caption: Hibernate's manual suggested architecture
@@ -2474,7 +2558,7 @@ that it was misguided to believe the following:
 Eventually, some folks came to believe that their DAOs shielded their
 program from depending in a hard way on ORM, allowing them to "swap out"
 Hibernate, and replace it with JDBC, or with something else. In fact,
-this was never really true—there’s quite a deep difference between the
+this was never really true—there's quite a deep difference between the
 programming model of JDBC, where every interaction with the database is
 explicit and synchronous, and the programming model of stateful sessions
 in Hibernate, where updates are implicit, and SQL statements are
@@ -2687,7 +2771,7 @@ calls a function an object, or a relation a table.
 
 #+print_bibliography:
 
-** Measure, don’t guess.
+** Measure, don't guess.
 :PROPERTIES:
 :EXPORT_FILE_NAME: measure-dont-guess
 :EXPORT_DATE: 2023-12-09
@@ -2707,10 +2791,10 @@ to tune and when to stop tuning) and with a measurement program in place
 using a realistic configuration and load profile.
 
 
-Measure again after tuning to verify that you’ve achieved the desired
+Measure again after tuning to verify that you've achieved the desired
 improvements. The safety and maintenance risks associated with many
-optimizations are bad enough—you don’t want to pay these costs if you
-don’t need to—and you definitely don’t want to pay them if you don’t
+optimizations are bad enough—you don't want to pay these costs if you
+don't need to—and you definitely don't want to pay them if you don't
 even get the desired benefit. [cite:@goetz2006java]
 #+end_quote
 
@@ -2860,7 +2944,7 @@ wrong (and very costly) technology and business decisions.
 :END:
 
 I think its fair to say that one can significantly improve one's chances
-of being materially successful in life by learning John Taylor Gatto’s
+of being materially successful in life by learning John Taylor Gatto's
 14 Themes of the Elite Private School Curriculum[fn:10]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
@@ -2926,7 +3010,7 @@ What is CQRS? Here is an authoritative word on it[cite:@cqrs_young]:
 
 #+begin_quote
 Command and Query Responsibility Segregation (CQRS) originated with
-Bertrand Meyer’s Command and Query Separation Principle
+Bertrand Meyer's Command and Query Separation Principle
 
 ...
 
@@ -3164,14 +3248,14 @@ being). Here's what an authoritative source has to say about it:
 #+begin_quote
 The basic concept of ChatGPT is at some level rather simple. Start from
 a huge sample of human-created text from the web, books, etc. Then train
-a neural net to generate text that’s “like this”. And in particular,
-make it able to start from a “prompt” and then continue with text that’s
-“like what it’s been trained with”.
+a neural net to generate text that's “like this”. And in particular,
+make it able to start from a “prompt” and then continue with text that's
+“like what it's been trained with”.
 
-As we’ve seen, the actual neural net in ChatGPT is made up of very
+As we've seen, the actual neural net in ChatGPT is made up of very
 simple elements—though billions of them. And the basic operation of the
 neural net is also very simple, consisting essentially of passing input
-derived from the text it’s generated so far “once through its elements”
+derived from the text it's generated so far “once through its elements”
 (without any loops, etc.) for every new word (or part of a word) that it
 generates. [cite:@chat_gpt_wolfram_2023]
 #+end_quote
@@ -3315,3 +3399,4 @@ chapter 25 of  [cite:@10.5555/861613]
 
 [fn:13] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this context
+
