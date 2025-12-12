@@ -139,48 +139,13 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     account_name text primary key  
   );
 
-  comment on table transaction is
+  comment on table account is
     'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance.';
 
   create domain transfer_status as text
-    check(value in ('pending_approval',
-                    'pending_submission',
-  	          'canceled',
-  		  'pending_reviewing',
-  		  'rejected',
-  		  'requires_attention',
-  		  'pending_creating',
-  	          'reversed',
-  		  'submitted',
-  		  'complete'));
-
-  create domain transaction_type as text
-    check(value in ('pending', 'completed', 'settled'));
-
-  create table transaction (
-    transaction_created_at   timestamptz not null,
-    transfer_created_at      timestamptz not null,
-    transaction_account      text not null references account(account_name),
-    counterparty_account     text not null references account(account_name),
-    transaction_type         transaction_type not null,
-    amount                   bigint not null, 
-    foreign key (
-      transfer_created_at,
-      transaction_account,
-      counterparty_account
-    ) references transfer (
-      transfer_created_at,
-      transaction_account,
-      counterparty_account
-    ),  
-    primary key (
-      transaction_created_at,
-      transfer_created_at, 
-      transaction_account,
-      counterparty_account,
-      transaction_type 
-    )
-  );
+    check(value in ('pending',                                                                        
+  	          'returned',                  
+  		  'completed'));
 
   create table transfer (
     transfer_created_at    timestamptz not null,
@@ -195,16 +160,113 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     )
   );
 
-  comment on table transaction is
-    'Implements both regular and pending transactions. These are immutable events, so no one should have update permissions.';
+  comment on table transfer is 'Represents the flow of money over its lifecyle (approvals, etc), and is therefore a mutable entity.';
 
-  comment on table transfer is 'Represents the flow of money, and is therefore a mutable entity.';
+  create table settled_transaction (
+    transaction_created_at   timestamptz not null,
+    transfer_created_at      timestamptz not null,
+    transaction_account      text not null references account(account_name),
+    counterparty_account     text not null references account(account_name),  
+    amount                   bigint not null, 
+    foreign key (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account
+    ) references transfer (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account
+    ),  
+    primary key (
+      transaction_created_at,
+      transfer_created_at, 
+      transaction_account,
+      counterparty_account    
+    )
+  );
+
+  comment on table settled_transaction is
+    'Implements settled transactions, such transactions affect your available balance (which is the amount you’re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
+
+  create table pending_transaction (
+    like settled_transaction including all,
+    foreign key (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account
+    ) references transfer (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account
+    )
+  );
+
+  comment on table pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+
+  create or replace function ensure_non_pending_transfer()
+    returns trigger language plpgsql as $$
+    begin
+      if exists (
+        select 1
+          from transfer t
+         where t.transfer_created_at = NEW.transfer_created_at
+           and t.transaction_account = NEW.transaction_account
+           and t.counterparty_account = NEW.counterparty_account
+           and t.transfer_status = 'pending'
+      ) then
+        raise exception
+        'Settled transaction cannot reference pending transfer (% %, %)',
+        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+      end if;
+      return NEW;
+    end;
+  $$;
+
+  create constraint trigger settled_transaction_requires_non_pending_transfer
+    after insert on setttled_transaction
+    deferrable initially deferred
+    for each row  
+    execute function ensure_non_pending_transfer();
+
+  create or replace function ensure_pending_transfer()
+    returns trigger language plpgsql as $$
+    begin
+      if not exists (
+        select 1
+          from transfer t
+         where t.transfer_created_at = NEW.transfer_created_at
+           and t.transaction_account = NEW.transaction_account
+           and t.counterparty_account = NEW.counterparty_account
+           and t.transfer_status in ('pending', 'returned')
+      ) then
+        raise exception
+        'Pending transaction must reference pending transfer (% %, %)',
+        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+      end if;
+      return NEW;
+    end;
+  $$;
+
+  create constraint trigger pending_transaction_requires_pending_transfer
+    after insert on pending_transaction
+    deferrable initially deferred
+    for each row  
+    execute function ensure_pending_transfer();
+
 #+end_src
+
+Notice the constraint triggers: These enforce crucial business rules
+(pending transactions are associated with a transfer in the
+pending/returned state and settled transactions are never associated
+with pending transfers).
+
+Such constraints are almost never created at the data level, exposing
+applications to the risk of failing audits and worse.
 
 *** Auditing and reconstructing state
 
 Given the financial nature of the presumed business rules here, it
-stands to reason that you'd need:
+stands to reason that you'd need the classical temporal requirements:
 
 #+begin_quote
 - Auditing all data changes and performing data forensics when necessary
@@ -216,12 +278,20 @@ stands to reason that you'd need:
   [cite:@microsoft24:_tempor]
 #+end_quote
 
-This is usually handled with the combination of several tools outside of
-Postgres, increasing the operating cost and sometimes not achieving the
-desired features. Achieving this in PostgreSQL is straightforward with
-several extension, one that is ready to use with RDS is
-[cite:@nearform_temporal_tables]. Simply run that SQL on your
-instance. If you want a way to drive the extension with a simple
+For the design in [[*The setup][the setup]], only /transfer/ is mutable. Everything else
+is append-only. This means the entire list of temporal requirements are
+achieved by maintaining a temporal history of one table.
+
+This is usually handled with the combination of several logging tools
+outside of Postgres, increasing the operating cost and sometimes not
+achieving the desired features. PostgreSQL on the other hand supports
+several approaches for temporal auditing. For simplicity and portability
+(including RDS), I use the temporal_tables extension [cite:@nearform_temporal_tables].
+
+The extension automatically writes old versions of each row to a sibling
+_history table on every ~UPDATE~ or ~DELETE~. Together with a tstzrange
+period, this gives you a full history suitable for ~AS OF~ queries and
+state reconstruction. If you install the extension in a table with a simple
 function call, use this snippet:
 
 #+begin_src sql
@@ -229,7 +299,7 @@ function call, use this snippet:
     language plpgsql
   as $_$
     declare
-    history_sql text;
+      history_sql text;
   begin
     history_sql := format(
       $his$
@@ -239,6 +309,7 @@ function call, use this snippet:
       (
         like %1$s.%2$s
       );
+      create index on %1$s.%2$s_history (sys_period);
       drop trigger if exists %2$s_temporal on %1$s.%2$s;
       create trigger %2$s_temporal
       before insert or update or delete
@@ -248,37 +319,177 @@ function call, use this snippet:
       $his$, _schema_name, _table_name);
     execute history_sql;
   end;
-  create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
-    language plpgsql
-  as $_$
-    declare
-    history_sql text;
-  begin
-    history_sql := format(
-      $his$
-      alter table %1$s.%2$s add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
-      alter table %1$s.%2$s alter column sys_period set not null;
-      create table if not exists %1$s.%2$s_history
-      (
-        like %1$s.%2$s
-      );
-      drop trigger if exists %2$s_temporal on %1$s.%2$s;
-      create trigger %2$s_temporal
-      before insert or update or delete
-      on %1$s.%2$s
-      for each row
-      execute procedure versioning('sys_period', '%1$s.%2$s_history', true);
-      $his$, _schema_name, _table_name);
-    execute history_sql;
-  end;
+  $_$;
 
-  -- this will generate a public.my_table_history that will hold the history of the my_table
-  -- call make_temporal_table('pblic', 'my_table_history');
+  -- this will generate a public.transfer_history that will hold the history of the transfers
+  -- presumes temporal_tables is installed
+  call make_temporal_table('public', 'transfer');
+#+end_src
+
+Once applied, ~public.transfer_history~ will contain every past version
+of every transfer, from which you can reconstruct the state of transfers
+over time. You can query the state of a transfer by doing something like:
+
+#+begin_src sql
+  select * from transfer where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13')
+  UNION ALL
+  select * from transfer_history where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13');
+
+  -- ─[ RECORD 1 ]────────┬──────────────────────────────────────────────────────────────────
+  -- transfer_created_at  │ 2025-10-10 00:50:03.768892+00
+  -- transaction_account  │ acc_12
+  -- counterparty_account │ acc_13
+  -- amount               │ 4258
+  -- transfer_status      │ completed
+  -- sys_period           │ ["2025-12-12 20:56:14.176726+00",)
+  -- ═[ RECORD 2 ]════════╪══════════════════════════════════════════════════════════════════
+  -- transfer_created_at  │ 2025-10-10 00:50:03.768892+00
+  -- transaction_account  │ acc_12
+  -- counterparty_account │ acc_13
+  -- amount               │ 4258
+  -- transfer_status      │ pending
+  -- sys_period           │ ["2025-12-12 20:56:10.909782+00","2025-12-12 20:56:14.176726+00")
+#+end_src
+
+You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].
+
+*** Generating test data
+
+If you want to play around with the design here, run
+
+#+begin_src sql
+  -- tests
+
+  create or replace function generate_pending_activity(
+    accounts_count int,
+    days int,
+    avg_transfers_per_day int
+  )
+  returns void
+  language plpgsql
+  as $$
+  declare
+    start_ts timestamptz := now() - (days || ' days')::interval;
+    end_ts   timestamptz := now();
+    accs     text[];
+  begin
+    with s as (
+      select ('acc_' || gs::text) as name
+      from generate_series(1, accounts_count) gs
+    )
+    insert into account(account_name)
+    select name from s
+    on conflict do nothing;
+    select array_agg(account_name) into accs
+    from account;
+    insert into transfer (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,
+      amount,
+      transfer_status
+    )
+    select
+      start_ts
+        + (random() * extract(epoch from (end_ts - start_ts))) * interval '1 second',
+      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
+      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
+      (10 + floor(random() * 10000))::bigint,
+      'pending'::transfer_status
+    from generate_series(1, days * avg_transfers_per_day);  
+    insert into pending_transaction(
+      transaction_created_at,
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,    
+      amount
+    )
+    select
+      lower(t.sys_period),        -- system-time when row was created
+      t.transfer_created_at,
+      t.transaction_account,
+      t.counterparty_account,    
+      t.amount
+    from transfer t
+    where upper(t.sys_period) is null
+      and t.transfer_status = 'pending';
+    return;
+  end;
+  $$;
+
+
+  create or replace function complete_pending_activity(
+    completion_percent int
+  )
+  returns void
+  language plpgsql
+  as $$
+  declare
+    total_pending int;
+    target_count  int;
+  begin
+    -- Compute how many pending transfers exist
+    select count(*) into total_pending
+    from transfer
+    where upper(sys_period) is null
+      and transfer_status = 'pending';
+    if total_pending = 0 then
+      return;
+    end if;
+    -- Determine how many to complete
+    target_count := ceil(total_pending * completion_percent / 100.0);
+    ---------------------------------------------------------------------
+    -- 1. Random sample of pending transfers
+    ---------------------------------------------------------------------
+    with to_complete as (
+      select t.transfer_created_at,
+             t.transaction_account,
+             t.counterparty_account
+      from transfer t
+      where upper(t.sys_period) is null
+        and t.transfer_status = 'pending'
+      order by random()
+      limit target_count
+    )
+    ---------------------------------------------------------------------
+    -- 2. Mark selected transfers as completed (status != pending).
+    --    Your bitemporal trigger should automatically close old sys_period
+    --    and insert a new system-time row.
+    ---------------------------------------------------------------------
+    update transfer t
+       set transfer_status = 'completed'
+    from to_complete c
+    where t.transfer_created_at    = c.transfer_created_at
+      and t.transaction_account    = c.transaction_account
+      and t.counterparty_account   = c.counterparty_account
+      and upper(t.sys_period) is null
+      and t.transfer_status = 'pending';
+    ---------------------------------------------------------------------
+    -- 3. Insert settled transactions corresponding to these now-completed
+    --    transfers. Use the new version of the transfer (status != pending).
+    ---------------------------------------------------------------------
+    insert into settled_transaction (
+      transaction_created_at,
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,    
+      amount
+    )
+    select
+      now(),                     -- transaction occurs now
+      t.transfer_created_at,
+      t.transaction_account,
+      t.counterparty_account,    
+      t.amount
+    from transfer t  
+    where upper(t.sys_period) is null
+      and t.transfer_status = 'completed';  -- ensure we use the new version
+    return;
+  end;
+  $$;
 #+end_src
 
 #+print_bibliography:
-
-
 ** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
 :EXPORT_DATE: 2025-11-26
