@@ -134,25 +134,28 @@ but do affect your available balance (which is the amount you're able to
 move out of Increase).  [cite:@increase_transactions_and_transfers]
 #+end_quote
 
+#+name: core_design
 #+begin_src sql
-  create table account(
+  create schema finance;
+
+  create table finance.account(
     account_name text primary key  
   );
 
-  comment on table account is
+  comment on table finance.account is
     'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance.';
 
-  create domain transfer_status as text
+  create domain finance.transfer_status as text
     check(value in ('pending',                                                                        
   	          'returned',                  
   		  'completed'));
 
-  create table transfer (
+  create table finance.transfer (
     transfer_created_at    timestamptz not null,
     transaction_account    text not null references account(account_name),
     counterparty_account   text not null references account(account_name),
     amount                 bigint not null,
-    transfer_status        transfer_status not null,
+    transfer_status        finance.transfer_status not null,
     primary key (
       transfer_created_at,
       transaction_account,
@@ -160,11 +163,11 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     )
   );
 
-  comment on table transfer is 'Represents the flow of money over its lifecyle (approvals, etc), and is therefore a mutable entity.';
+  comment on table finance.transfer is 'Represents the flow of money over its lifecyle (approvals, etc), and is therefore a mutable entity.';
 
-  create table settled_transaction (
-    transaction_created_at   timestamptz not null,
-    transfer_created_at      timestamptz not null,
+  create table finance.settled_transaction (
+    transaction_created_at   timestamptz not null default now(),
+    transfer_created_at      timestamptz not null default now(),
     transaction_account      text not null references account(account_name),
     counterparty_account     text not null references account(account_name),  
     amount                   bigint not null, 
@@ -176,7 +179,7 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
       transfer_created_at,
       transaction_account,
       counterparty_account
-    ),  
+    ) deferrable initially deferred,  
     primary key (
       transaction_created_at,
       transfer_created_at, 
@@ -185,10 +188,10 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     )
   );
 
-  comment on table settled_transaction is
+  comment on table finance.settled_transaction is
     'Implements settled transactions, such transactions affect your available balance (which is the amount you’re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
 
-  create table pending_transaction (
+  create table finance.pending_transaction (
     like settled_transaction including all,
     foreign key (
       transfer_created_at,
@@ -198,17 +201,17 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
       transfer_created_at,
       transaction_account,
       counterparty_account
-    )
+    ) deferrable initially deferred
   );
 
-  comment on table pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+  comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
 
-  create or replace function ensure_non_pending_transfer()
+  create or replace function finance.ensure_non_pending_transfer()
     returns trigger language plpgsql as $$
     begin
       if exists (
         select 1
-          from transfer t
+          from finance.transfer t
          where t.transfer_created_at = NEW.transfer_created_at
            and t.transaction_account = NEW.transaction_account
            and t.counterparty_account = NEW.counterparty_account
@@ -222,18 +225,18 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     end;
   $$;
 
-  create constraint trigger settled_transaction_requires_non_pending_transfer
-    after insert on setttled_transaction
+  create or replace constraint trigger settled_transaction_requires_non_pending_transfer
+    after insert on finance.setttled_transaction
     deferrable initially deferred
     for each row  
-    execute function ensure_non_pending_transfer();
+    execute function finance.ensure_non_pending_transfer();
 
-  create or replace function ensure_pending_transfer()
+  create or replace function finance.ensure_pending_transfer()
     returns trigger language plpgsql as $$
     begin
       if not exists (
         select 1
-          from transfer t
+          from finance.transfer t
          where t.transfer_created_at = NEW.transfer_created_at
            and t.transaction_account = NEW.transaction_account
            and t.counterparty_account = NEW.counterparty_account
@@ -248,10 +251,10 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
   $$;
 
   create constraint trigger pending_transaction_requires_pending_transfer
-    after insert on pending_transaction
+    after insert on finance.pending_transaction
     deferrable initially deferred
     for each row  
-    execute function ensure_pending_transfer();
+    execute function finance.ensure_pending_transfer();
 
 #+end_src
 
@@ -289,10 +292,10 @@ several approaches for temporal auditing. For simplicity and portability
 (including RDS), I use the temporal_tables extension [cite:@nearform_temporal_tables].
 
 The extension automatically writes old versions of each row to a sibling
-_history table on every ~UPDATE~ or ~DELETE~. Together with a tstzrange
-period, this gives you a full history suitable for ~AS OF~ queries and
-state reconstruction. If you install the extension in a table with a simple
-function call, use this snippet:
+~_history~ table on every ~UPDATE~ or ~DELETE~. Together with a
+tstzrange period, this gives you a full history suitable for ~AS OF~
+queries and state reconstruction. If you install the extension in a
+table with a simple function call, use this snippet:
 
 #+begin_src sql
   create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
@@ -323,7 +326,7 @@ function call, use this snippet:
 
   -- this will generate a public.transfer_history that will hold the history of the transfers
   -- presumes temporal_tables is installed
-  call make_temporal_table('public', 'transfer');
+  call make_temporal_table('finance', 'transfer');
 #+end_src
 
 Once applied, ~public.transfer_history~ will contain every past version
@@ -353,14 +356,125 @@ over time. You can query the state of a transfer by doing something like:
 
 You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].
 
+*** Write/update throughput is too low
+
+If you want to maintain semantic enforcement of your data (which in our
+model is done via fkeys and constraint triggers) about the only thing
+you can do to optimize writes is to use indexes in a smart way. After
+all, ~indexes, if not carefully chosen, can kill performance in a
+write-heavy
+application~[cite:@gerogiannakis_postgres_index_queries_2019]
+
+**** Unused indexes
+
+A common problem is to have a bunch of unused indexes for critical
+tables, since they are not visible directly and experiments can be
+forgotten. So, make sure all indexes are being used (see
+[cite:@gerogiannakis_postgres_index_queries_2019][cite:@postgresql_pg_stat_all_indexes] for a solution based on
+PostgreSQL internal statistics):
+
+#+begin_src sql
+  SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes where schemaname='finance' ORDER BY idx_scan;
+    
+   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch 
+  ════════════╪═════════════════════╪═════════════════════════════════╪══════════╪══════════════╪═══════════════
+   finance    │ settled_transaction │ settled_transaction_pkey        │        0 │            0 │             0
+   finance    │ transfer_history    │ transfer_history_sys_period_idx │        0 │            0 │             0
+   finance    │ account             │ account_pkey                    │      100 │           80 │            60
+   finance    │ pending_transaction │ pending_transaction_pkey        │  1220000 │       120000 │        120000
+   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000    
+#+end_src
+
+- idx_scan :: How many times the index has been scanned (used). This can
+  be either directly by a application query e.g.
+  
+  #+begin_src sql
+    select * from finance.transfer where
+    (transfer_created_at, transaction_account, counterparty_account) =
+    ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
+  #+end_src
+
+  or indirectly due to a JOIN. For example, the primary key index
+  transfer_pkey has been scanned over 2210002 times.
+
+- idx_tup_read :: This is the number of index entries returned as a result
+  of an index scan. An easy-to-understand example is the primary key
+  (e.g. ~select * from finance.transfer where (transfer_created_at,
+  transaction_account, counterparty_account) = ('2025-11-25
+  18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
+  such transfer, then idx_tup_read will increase by 1. Modifying slightly
+  the query
+
+    #+begin_src sql
+      select * from finance.transfer
+       where (transfer_created_at, transaction_account, counterparty_account) in
+             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
+    #+end_src
+   idx_tup_read will increase by 2 (if both transfers exist). In both of
+   these queries, idx_scan will increase by 1.
+
+- idx_tup_fetch :: These are the number of rows fetched from the table
+  as a result of an index scan.  This is increased as a result of both
+  positive and false positive results.  For example, if both ids exist,
+  the query
+    #+begin_src sql
+      select * from finance.transfer
+       where (transfer_created_at, transaction_account, counterparty_account) in
+             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
+       and transfer_status='completed';
+    #+end_src
+   will increase idx_tup_fetch by 2 even if only one tuple is returned
+  to the client. The reason is that the tuples will need to be loaded
+  from disk to examine the value of ‘transfer_status’.
+
+**** HOT transfers
+
+In the design above, there should be no updates to transactions, be them
+pending or settled. Transfers on the other hand, will have their status
+changed a lot. So we should benefit from making that table consist of
+Heap-Only Tuples (HOT).
+
+#+begin_quote
+To allow for high concurrency, PostgreSQL uses multiversion concurrency
+control (MVCC) to store rows. However, MVCC has some downsides for
+update queries. Specifically, updates require new versions of rows to be
+added to tables. This can also require new index entries for each
+updated row, and removal of old versions of rows and their index entries
+can be expensive.[cite:@postgresql_hot_2025]
+#+end_quote
+
+Transfers are the ideal scenario for HOT, since the the indexed columns
+via the PK does not reach the column that will get updated:
+~transfer_status~. 
+
+#+begin_src sql
+  alter table finance.transfer set (fillfactor = 90);
+#+end_src
+
+This will give us the major benefit of not having to touch indexes,
+which is the bane of write heavy
+applications[cite:@gerogiannakis_postgres_index_queries_2019].
+
+
+**** How about partitioning? 
+
+Say that all your indexes are necessary, but you are still facing write
+problems. Here's a concrete example, say each of your tables
+(transaction, pending and transfer) are of ~1TB, indexes included. Such
+indexes would typically not fit memory and because of that every ~INSERT~
+operation undergoes a dramatic performance shift from memory-speed
+updates to disk-bound operations (a shared read).
+
 *** Generating test data
 
 If you want to play around with the design here, run
 
 #+begin_src sql
-  -- tests
+   -- tests
 
-  create or replace function generate_pending_activity(
+  create or replace function finance.generate_pending_activity(
     accounts_count int,
     days int,
     avg_transfers_per_day int
@@ -372,17 +486,18 @@ If you want to play around with the design here, run
     start_ts timestamptz := now() - (days || ' days')::interval;
     end_ts   timestamptz := now();
     accs     text[];
+    t_count bigint;
   begin
     with s as (
       select ('acc_' || gs::text) as name
       from generate_series(1, accounts_count) gs
     )
-    insert into account(account_name)
+    insert into finance.account(account_name)
     select name from s
     on conflict do nothing;
     select array_agg(account_name) into accs
-    from account;
-    insert into transfer (
+    from finance.account;
+    insert into finance.transfer (
       transfer_created_at,
       transaction_account,
       counterparty_account,
@@ -395,9 +510,11 @@ If you want to play around with the design here, run
       accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
       accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
       (10 + floor(random() * 10000))::bigint,
-      'pending'::transfer_status
-    from generate_series(1, days * avg_transfers_per_day);  
-    insert into pending_transaction(
+      'pending'::finance.transfer_status
+      from generate_series(1, days * avg_transfers_per_day) on conflict do nothing;
+    select count(*) into t_count from finance.transfer;
+    raise notice '%', t_count;
+    insert into finance.pending_transaction(
       transaction_created_at,
       transfer_created_at,
       transaction_account,
@@ -410,15 +527,15 @@ If you want to play around with the design here, run
       t.transaction_account,
       t.counterparty_account,    
       t.amount
-    from transfer t
+    from finance.transfer t
     where upper(t.sys_period) is null
-      and t.transfer_status = 'pending';
+      and t.transfer_status = 'pending' on conflict do nothing;
     return;
   end;
   $$;
 
 
-  create or replace function complete_pending_activity(
+  create or replace function finance.complete_pending_activity(
     completion_percent int
   )
   returns void
@@ -430,7 +547,7 @@ If you want to play around with the design here, run
   begin
     -- Compute how many pending transfers exist
     select count(*) into total_pending
-    from transfer
+    from finance.transfer
     where upper(sys_period) is null
       and transfer_status = 'pending';
     if total_pending = 0 then
@@ -445,7 +562,7 @@ If you want to play around with the design here, run
       select t.transfer_created_at,
              t.transaction_account,
              t.counterparty_account
-      from transfer t
+      from finance.transfer t
       where upper(t.sys_period) is null
         and t.transfer_status = 'pending'
       order by random()
@@ -456,7 +573,7 @@ If you want to play around with the design here, run
     --    Your bitemporal trigger should automatically close old sys_period
     --    and insert a new system-time row.
     ---------------------------------------------------------------------
-    update transfer t
+    update finance.transfer t
        set transfer_status = 'completed'
     from to_complete c
     where t.transfer_created_at    = c.transfer_created_at
@@ -468,7 +585,7 @@ If you want to play around with the design here, run
     -- 3. Insert settled transactions corresponding to these now-completed
     --    transfers. Use the new version of the transfer (status != pending).
     ---------------------------------------------------------------------
-    insert into settled_transaction (
+    insert into finance.settled_transaction (
       transaction_created_at,
       transfer_created_at,
       transaction_account,
@@ -481,7 +598,7 @@ If you want to play around with the design here, run
       t.transaction_account,
       t.counterparty_account,    
       t.amount
-    from transfer t  
+    from finance.transfer t  
     where upper(t.sys_period) is null
       and t.transfer_status = 'completed';  -- ensure we use the new version
     return;
