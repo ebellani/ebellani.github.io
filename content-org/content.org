@@ -205,7 +205,7 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
       transfer_created_at,    
       counterparty_account
     ) deferrable initially deferred
-  );
+  ) partition by range (transaction_created_at);
 
   comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
 
@@ -460,7 +460,6 @@ This will give us the major benefit of not having to touch indexes,
 which is the bane of write heavy
 applications[cite:@gerogiannakis_postgres_index_queries_2019].
 
-
 **** Partitioning for speed 
 
 As we have seen, indexes are the bane of inserting information. Fitting
@@ -499,66 +498,52 @@ transaction tables/types. We now need to plug in all the necessary
 tooling around to make sure it has the partitions underneath it.[fn:2]
 
 #+begin_src sql
-  CREATE EXTENSION IF NOT EXISTS pg_cron;
-  CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
+    create schema partman;
+    CREATE EXTENSION IF NOT EXISTS pg_cron;
+    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
 
-  -- set partman for a table, creating the initial partitions
-  SELECT partman.create_parent(
-      p_parent_table := 'finance.settled_transaction',
-      p_control      := 'transaction_created_at',
-      p_type         := 'range',
-      p_interval     := '1 day',
-      p_premake      := 7,
-      p_start_partition := '2025-01-01 00:00:00' 
-  );
+    -- set partman for a table, creating the initial partitions
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.settled_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,
+        p_start_partition := '2025-01-01 00:00:00' 
+    );
 
-  --ensure the system keeps creating partitions based on time
-  UPDATE partman.part_config
-  SET infinite_time_partitions = true, -- Create future partitions regardless of data
-      retention = '6 months',          -- Keep only 6 months of active data
-      retention_keep_table = true,     -- Detach instead of drop for safe archiving
-      premake = 7                      -- Keep 7 days of future partitions ready
-  WHERE parent_table = 'finance.settled_transaction';
+    -- repeat for pending transactions and transfers
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.pending_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,      
+        p_start_partition := '2025-01-01 00:00:00'    
+    );
 
-  -- repeat for pending transactions and transfers
-  SELECT partman.create_parent(
-      p_parent_table := 'finance.pending_transaction',
-      p_control      := 'transaction_created_at',
-      p_type         := 'range',
-      p_interval     := '1 day',
-      p_premake      := 7,
-      p_start_partition := '2025-01-01 00:00:00'    
-  );
+    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
 
-  UPDATE partman.part_config
-  SET infinite_time_partitions = true,
-      retention = '6 months',         
-      retention_keep_table = true,    
-      premake = 7                     
-  WHERE parent_table = 'finance.pending_transaction';
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.transfer',
+        p_control      := 'transfer_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,      
+        p_start_partition := '2025-01-01 00:00:00',
+        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template 
+    );
 
-  -- repeat for pending transactions
-  SELECT partman.create_parent(
-      p_parent_table := 'finance.transfer',
-      p_control      := 'transfer_created_at',
-      p_type         := 'range',
-      p_interval     := '1 day',
-      p_premake      := 7,
-      p_start_partition := '2025-01-01 00:00:00'
-  );
-
-  UPDATE partman.part_config
-  SET infinite_time_partitions = true,
-      retention = '6 months',         
-      retention_keep_table = true,    
-      premake = 7                     
-  WHERE parent_table = 'finance.transfer';
+    UPDATE partman.part_config
+    SET infinite_time_partitions = true,
+        premake = 7                     
+      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
 
   -- run maintenance every hour
-   rtman SCHEMA partman;
-
--- set partman for a table, creating the initial partitions
-SELECT partman.
+  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
 #+end_src
 
 
@@ -695,7 +680,7 @@ If you want to play around with the design here, run
       t.amount
     from finance.transfer t  
     where upper(t.sys_period) is null
-      and t.transfer_status = 'completed';  -- ensure we use the new version
+      and t.transfer_status = 'completed' on conflict do nothing;  -- ensure we use the new version
     return;
   end;
   $$;
