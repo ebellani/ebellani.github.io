@@ -91,7 +91,7 @@ Here is a list of arguments that people put forth to reach for other
 tools besides Postgres, based on my experience:
 
 - I'll need auditing and reconstructing state
-- Write throughput is too high
+- Write throughput is too low
 - The transactional queries are too slow
 - The analytical queries are too slow
 - My app will be coupled to the Database
@@ -495,7 +495,11 @@ index, obviously. The solution for that is twofold:
 
 On our design, we have already created native partitioning for both
 transaction tables/types. We now need to plug in all the necessary
-tooling around to make sure it has the partitions underneath it.[fn:2]
+tooling around to make sure it has the partitions underneath it and that
+they are maintained over time.[fn:2]
+[cite:@pg_partman_github;@aws_rds_postgresql_partitions]. Here's a
+snippet that creates partitions for an year in the past and in the
+future:
 
 #+begin_src sql
     create schema partman;
@@ -545,6 +549,24 @@ tooling around to make sure it has the partitions underneath it.[fn:2]
   -- run maintenance every hour
   SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
 #+end_src
+
+
+*** TODO Transactional Queries
+Here are the transactional queries that I assume will compose the vast
+majority of such application cycle:
+
+1. Insert transfers/transactions
+2. Paginate over transfers/transactions 
+3. Update a transfer's state
+4. Get all transactions for a transfer
+
+*** TODO Analytical Queries
+Here are the analytical queries that I assume will compose the vast majority of
+such application cycle:
+
+~ALTER DATABASE X SET default_transaction_isolation = 'serializable';~
+
+1. Get balance at time X for account Y 
 
 
 *** Generating test data
@@ -3781,7 +3803,7 @@ this is the description of the blog section
 
 [fn:1] Complexity here is defined as the quantity of interacting parts of a whole
 
-[fn:2] DO NOT manage your partitions by hand: Use pg_partman [cite:@pg_partman_github;@aws_rds_postgresql_partitions]. Here's a snippet that creates partitions for an year in the past and in the future:
+[fn:2] DO NOT manage your partitions by hand: Use pg_partman.
 
 [fn:3] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
 
