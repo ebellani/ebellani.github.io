@@ -135,7 +135,7 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
 #+end_quote
 
 #+name: core_design
-#+begin_src sql
+#+begin_src sql :tangle "only_postgres.sql :comments link
   create schema finance;
 
   create table finance.account(
@@ -151,20 +151,46 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
   		  'completed'));
 
   create table finance.transfer (
-    transfer_created_at    timestamptz not null,
-    transaction_account    text not null references account(account_name),
-    counterparty_account   text not null references account(account_name),
-    amount                 bigint not null,
-    transfer_status        finance.transfer_status not null,
+    transfer_created_at        timestamptz not null,
+    transaction_account        text not null references account(account_name),
+    counterparty_account       text not null references account(account_name),
+    amount                     bigint not null,
+    description                text not null,
     primary key (
       -- match the query pattern (give me all transfers for this account for today)
       transaction_account,    
       transfer_created_at,    
-      counterparty_account
+      counterparty_account    
     )
   ) partition by range (transfer_created_at);
 
-  comment on table finance.transfer is 'Represents the flow of money over its lifecyle (approvals, etc), and is therefore a mutable entity.';
+  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions.';
+
+  create table finance.transfer_state_change (
+    transfer_created_at        timestamptz not null,
+    transaction_account        text not null references account(account_name),
+    counterparty_account       text not null references account(account_name),  
+    transfer_status_changed_at timestamptz not null,
+    status                     finance.transfer_status not null,
+    status_message             text not null,
+    primary key (    
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ),
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account    
+    ) references finance.transfer (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account    
+    ) deferrable initially deferred  
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. In particular, financial transaction are connected to such state changes.';
 
   create table finance.settled_transaction (
     transaction_created_at   timestamptz not null default now(),
@@ -175,18 +201,20 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     foreign key (
       transaction_account,    
       transfer_created_at,    
-      counterparty_account
-    ) references finance.transfer (    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
       transaction_account,
       transfer_created_at,    
-      counterparty_account
+      counterparty_account,
+      transfer_status_changed_at
     ) deferrable initially deferred
   ) partition by range (transaction_created_at);
 
   -- include amount on the primary key, performance hack to calculate balances
   create unique index idx_settled_transaction_pkey_covering_amount
-  on finance.settled_transaction (transaction_account, transaction_created_at) 
-  include (amount);
+    on finance.settled_transaction (transaction_account, transaction_created_at) 
+    include (amount);
 
   alter table finance.settled_transaction
     add constraint settled_transaction_pkey primary key using index idx_settled_transaction_pkey_covering_amount;
@@ -199,11 +227,13 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     foreign key (
       transaction_account,    
       transfer_created_at,    
-      counterparty_account
-    ) references finance.transfer (    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
       transaction_account,
       transfer_created_at,    
-      counterparty_account
+      counterparty_account,
+      transfer_status_changed_at
     ) deferrable initially deferred
   ) partition by range (transaction_created_at);
 
@@ -214,11 +244,12 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     begin
       if exists (
         select 1
-          from finance.transfer t
-         where t.transfer_created_at = NEW.transfer_created_at
-           and t.transaction_account = NEW.transaction_account
-           and t.counterparty_account = NEW.counterparty_account
-           and t.transfer_status = 'pending'
+          from finance.transfer_state_change t
+         where t.transfer_created_at     = NEW.transfer_created_at
+           and t.transaction_account     = NEW.transaction_account
+           and t.counterparty_account    = NEW.counterparty_account
+           and t.transaction_created_at  = NEW.transfer_status_changed_at
+           and t.transfer_status         = 'pending'
       ) then
         raise exception
         'Settled transaction cannot reference pending transfer (% %, %)',
@@ -240,9 +271,10 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
       if not exists (
         select 1
           from finance.transfer t
-         where t.transfer_created_at = NEW.transfer_created_at
-           and t.transaction_account = NEW.transaction_account
-           and t.counterparty_account = NEW.counterparty_account
+         where t.transfer_created_at     = NEW.transfer_created_at
+           and t.transaction_account     = NEW.transaction_account
+           and t.counterparty_account    = NEW.counterparty_account
+           and t.transaction_created_at  = NEW.transfer_status_changed_at             
            and t.transfer_status in ('pending', 'returned')
       ) then
         raise exception
@@ -253,12 +285,11 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     end;
   $$;
 
-  create constraint trigger pending_transaction_requires_pending_transfer
+  create or replace constraint trigger pending_transaction_requires_pending_transfer
     after insert on finance.pending_transaction
     deferrable initially deferred
     for each row  
     execute function finance.ensure_pending_transfer();
-
 #+end_src
 
 Notice the constraint triggers: These enforce crucial business rules
@@ -300,7 +331,7 @@ tstzrange period, this gives you a full history suitable for ~AS OF~
 queries and state reconstruction. If you install the extension in a
 table with a simple function call, use this snippet:
 
-#+begin_src sql
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
   create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
     language plpgsql
   as $_$
@@ -336,7 +367,7 @@ Once applied, ~public.transfer_history~ will contain every past version
 of every transfer, from which you can reconstruct the state of transfers
 over time. You can query the state of a transfer by doing something like:
 
-#+begin_src sql
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
   select * from transfer where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13')
   UNION ALL
   select * from transfer_history where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13');
@@ -501,7 +532,7 @@ they are maintained over time.[fn:2]
 snippet that creates partitions for an year in the past and in the
 future:
 
-#+begin_src sql
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
     create schema partman;
     CREATE EXTENSION IF NOT EXISTS pg_cron;
     CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
@@ -573,7 +604,7 @@ such application cycle:
 
 If you want to play around with the design here, run
 
-#+begin_src sql
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
    -- tests
 
   create or replace function finance.generate_pending_activity(
