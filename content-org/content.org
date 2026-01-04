@@ -135,7 +135,7 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
 #+end_quote
 
 #+name: core_design
-#+begin_src sql :tangle "only_postgres.sql :comments link
+#+begin_src sql :tangle only_postgres.sql :comments link
   create schema finance;
 
   create table finance.account(
@@ -156,8 +156,10 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     counterparty_account       text not null references account(account_name),
     amount                     bigint not null,
     description                text not null,
+    transfer_status_changed_at timestamptz not null default now(),
+    status                     finance.transfer_status not null,
+    status_message             text not null,  
     primary key (
-      -- match the query pattern (give me all transfers for this account for today)
       transaction_account,    
       transfer_created_at,    
       counterparty_account    
@@ -191,6 +193,33 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
   ) partition by range (transfer_created_at);
 
   comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. In particular, financial transaction are connected to such state changes.';
+
+  create or replace function finance.log_transfer_state_change()
+    returns trigger language plpgsql as $$
+    begin    
+      insert into finance.transfer_state_change (
+        transfer_created_at,
+        transaction_account,
+        counterparty_account,
+        transfer_status_changed_at,
+        status,
+        status_message
+      ) values (
+        NEW.transfer_created_at,
+        NEW.transaction_account,
+        NEW.counterparty_account,
+        NEW.transfer_status_changed_at,
+        NEW.status,
+        NEW.status_message        
+      );
+    end;
+  $$;
+
+  create trigger transfer_state_change_logger
+    after update
+    on finance.transfer
+    for each row
+    execute function finance.log_transfer_state_change();
 
   create table finance.settled_transaction (
     transaction_created_at   timestamptz not null default now(),
@@ -259,8 +288,8 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     end;
   $$;
 
-  create or replace constraint trigger settled_transaction_requires_non_pending_transfer
-    after insert on finance.setttled_transaction
+  create constraint trigger settled_transaction_requires_non_pending_transfer
+    after insert on finance.settled_transaction
     deferrable initially deferred
     for each row  
     execute function finance.ensure_non_pending_transfer();
@@ -285,11 +314,12 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     end;
   $$;
 
-  create or replace constraint trigger pending_transaction_requires_pending_transfer
+  create constraint trigger pending_transaction_requires_pending_transfer
     after insert on finance.pending_transaction
     deferrable initially deferred
     for each row  
-    execute function finance.ensure_pending_transfer();
+   t.transfer_created_at     = NEW.transfer_created_at
+ 
 #+end_src
 
 Notice the constraint triggers: These enforce crucial business rules
