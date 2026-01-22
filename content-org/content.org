@@ -102,8 +102,12 @@ To address these, I'm going to use a variation of the /Drosophila
 melanogaster/ of the database field: [[https://en.wikipedia.org/wiki/Suppliers_and_Parts_database][the classic Supplier and Parts]]
 database[cite:@10.5555/861613]. I'll update it to be more in line with
 the usual problematic tables: Financial Transaction and their
-originating transfers. Here is a requirements snippet from a very
-popular banking API company:
+originating transfers.
+
+For the rest of this article we will be constructing a database design
+based on modern Postgres that will achieve the general goals listed
+above and specific business requirements. Here is a requirements snippet
+from a very popular banking API company:
 
 #+begin_quote
 Transactions: are immutable records of financial interactions with
@@ -134,12 +138,42 @@ but do affect your available balance (which is the amount you're able to
 move out of Increase).  [cite:@increase_transactions_and_transfers]
 #+end_quote
 
+Below are 2 screenshots from increase's sandbox dashboard that list
+requirements and a conceptual model. Here are some interesting details:
+
+1. Current and available balance are shown, both their present and historical values
+2. Pending and settled transactions are shown, with information about their transfers
+3. Accounts are defined by routing numbers and account numbers and have variable status
+4. Transfers have a state machine like state where the progression
+   between states needs to be exposed to the user. Some of these states
+   are linked to pending/settled transactions.
+
+#+caption: Increase account dashboard
+#+attr_html: :width 150%
+[[./increase.account_dashboard.png]]   
+
+#+caption: Increase details
+#+attr_html: :width 150%
+[[./increase.transfer_details.png]]
+
+*** Initial work, accounts and database level domain constraints
+
+
 #+name: core_design
 #+begin_src sql :tangle only_postgres.sql :comments link
   create schema finance;
 
+  -- set  a role
+  create role application;
+  grant usage on schema finance to application;
+  alter default privileges in schema finance
+    grant select, insert, update, delete on tables to application;
+  alter default privileges in schema finance
+    grant usage, select on sequences to application;
+
   create table finance.account(
-    account_name text primary key  
+    account_name text primary key,
+    account_type text not null
   );
 
   comment on table finance.account is
@@ -166,7 +200,11 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     )
   ) partition by range (transfer_created_at);
 
-  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions.';
+  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
+
+  revoke update on finance.transfer from application;
+  grant update (transfer_status_changed_at, status, status_message) 
+    on finance.transfer to application;
 
   create table finance.transfer_state_change (
     transfer_created_at        timestamptz not null,
@@ -192,7 +230,14 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     ) deferrable initially deferred  
   ) partition by range (transfer_created_at);
 
-  comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. In particular, financial transaction are connected to such state changes.';
+  
+comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. Some of these changes might be tied to financial transactions, but not all. Essential to answer questions related to the state of the transfer.';
+
+
+  -- the app should not be able to change the transfer_state_change except
+  -- via interacting with the transfer table.
+  revoke all on finance.transfer_state_change from application;
+  grant select on finance.transfer_state_change to application;
 
   create or replace function finance.log_transfer_state_change()
     returns trigger language plpgsql as $$
@@ -205,12 +250,12 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
         status,
         status_message
       ) values (
-        NEW.transfer_created_at,
-        NEW.transaction_account,
-        NEW.counterparty_account,
-        NEW.transfer_status_changed_at,
-        NEW.status,
-        NEW.status_message        
+        new.transfer_created_at,
+        new.transaction_account,
+        new.counterparty_account,
+        new.transfer_status_changed_at,
+        new.status,
+        new.status_message        
       );
     end;
   $$;
@@ -249,7 +294,7 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     add constraint settled_transaction_pkey primary key using index idx_settled_transaction_pkey_covering_amount;
 
   comment on table finance.settled_transaction is
-    'Implements settled transactions, such transactions affect your available balance (which is the amount you’re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
+    'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
@@ -267,6 +312,51 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
   ) partition by range (transaction_created_at);
 
   comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+
+  create table finance.transfer_pending_transaction(
+    like finance.pending_transaction including excluding indexes,
+    foreign key (
+      transaction_account, transaction_created_at        
+    ) references finance.pending_transaction (    
+      transaction_account, transaction_created_at
+    ) deferrable initially deferred,
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred,
+    primary key(transaction_account, transfer_created_at, counterparty_account, transfer_status_changed_at, transaction_created_at)
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer_pending_transaction is 'A way to retrieve all pending transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
+
+  create table finance.transfer_settled_transaction(
+    like finance.transfer_pending_transaction including all,
+    foreign key (
+      transaction_account, transaction_created_at        
+    ) references finance.settled_transaction (    
+      transaction_account, transaction_created_at
+    ) deferrable initially deferred,
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred,  
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer_settled_transaction is 'A way to retrieve all settled transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
 
   create or replace function finance.ensure_non_pending_transfer()
     returns trigger language plpgsql as $$
@@ -318,8 +408,263 @@ move out of Increase).  [cite:@increase_transactions_and_transfers]
     after insert on finance.pending_transaction
     deferrable initially deferred
     for each row  
-   t.transfer_created_at     = NEW.transfer_created_at
- 
+    execute function finance.ensure_pending_transfer();
+
+#+end_src
+
+
+
+#+name: core_design
+#+begin_src sql :tangle only_postgres.sql :comments link
+  create schema finance;
+
+  -- set  a role
+  create role application;
+  grant usage on schema finance to application;
+  alter default privileges in schema finance
+    grant select, insert, update, delete on tables to application;
+  alter default privileges in schema finance
+    grant usage, select on sequences to application;
+
+  create table finance.account(
+    account_name text primary key,
+    account_type text not null
+  );
+
+  comment on table finance.account is
+    'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance.';
+
+  create domain finance.transfer_status as text
+    check(value in ('pending',                                                                        
+  	          'returned',                  
+  		  'completed'));
+
+  create table finance.transfer (
+    transfer_created_at        timestamptz not null,
+    transaction_account        text not null references account(account_name),
+    counterparty_account       text not null references account(account_name),
+    amount                     bigint not null,
+    description                text not null,
+    transfer_status_changed_at timestamptz not null default now(),
+    status                     finance.transfer_status not null,
+    status_message             text not null,  
+    primary key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account    
+    )
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
+
+  revoke update on finance.transfer from application;
+  grant update (transfer_status_changed_at, status, status_message) 
+    on finance.transfer to application;
+
+  create table finance.transfer_state_change (
+    transfer_created_at        timestamptz not null,
+    transaction_account        text not null references account(account_name),
+    counterparty_account       text not null references account(account_name),  
+    transfer_status_changed_at timestamptz not null,
+    status                     finance.transfer_status not null,
+    status_message             text not null,
+    primary key (    
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ),
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account    
+    ) references finance.transfer (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account    
+    ) deferrable initially deferred  
+  ) partition by range (transfer_created_at);
+
+  
+comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. Some of these changes might be tied to financial transactions, but not all. Essential to answer questions related to the state of the transfer.';
+
+
+  -- the app should not be able to change the transfer_state_change except
+  -- via interacting with the transfer table.
+  revoke all on finance.transfer_state_change from application;
+  grant select on finance.transfer_state_change to application;
+
+  create or replace function finance.log_transfer_state_change()
+    returns trigger language plpgsql as $$
+    begin    
+      insert into finance.transfer_state_change (
+        transfer_created_at,
+        transaction_account,
+        counterparty_account,
+        transfer_status_changed_at,
+        status,
+        status_message
+      ) values (
+        new.transfer_created_at,
+        new.transaction_account,
+        new.counterparty_account,
+        new.transfer_status_changed_at,
+        new.status,
+        new.status_message        
+      );
+    end;
+  $$;
+
+  create trigger transfer_state_change_logger
+    after update
+    on finance.transfer
+    for each row
+    execute function finance.log_transfer_state_change();
+
+  create table finance.settled_transaction (
+    transaction_created_at   timestamptz not null default now(),
+    transfer_created_at      timestamptz not null default now(),
+    transaction_account      text not null references account(account_name),
+    counterparty_account     text not null references account(account_name),  
+    amount                   bigint not null, 
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred
+  ) partition by range (transaction_created_at);
+
+  -- include amount on the primary key, performance hack to calculate balances
+  create unique index idx_settled_transaction_pkey_covering_amount
+    on finance.settled_transaction (transaction_account, transaction_created_at) 
+    include (amount);
+
+  alter table finance.settled_transaction
+    add constraint settled_transaction_pkey primary key using index idx_settled_transaction_pkey_covering_amount;
+
+  comment on table finance.settled_transaction is
+    'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
+
+  create table finance.pending_transaction (
+    like finance.settled_transaction including all,
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred
+  ) partition by range (transaction_created_at);
+
+  comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you’re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+
+  create table finance.transfer_pending_transaction(
+    like finance.pending_transaction including excluding indexes,
+    foreign key (
+      transaction_account, transaction_created_at        
+    ) references finance.pending_transaction (    
+      transaction_account, transaction_created_at
+    ) deferrable initially deferred,
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred,
+    primary key(transaction_account, transfer_created_at, counterparty_account, transfer_status_changed_at, transaction_created_at)
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer_pending_transaction is 'A way to retrieve all pending transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
+
+  create table finance.transfer_settled_transaction(
+    like finance.transfer_pending_transaction including all,
+    foreign key (
+      transaction_account, transaction_created_at        
+    ) references finance.settled_transaction (    
+      transaction_account, transaction_created_at
+    ) deferrable initially deferred,
+    foreign key (
+      transaction_account,    
+      transfer_created_at,    
+      counterparty_account,
+      transaction_created_at
+    ) references finance.transfer_state_change (    
+      transaction_account,
+      transfer_created_at,    
+      counterparty_account,
+      transfer_status_changed_at
+    ) deferrable initially deferred,  
+  ) partition by range (transfer_created_at);
+
+  comment on table finance.transfer_settled_transaction is 'A way to retrieve all settled transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
+
+  create or replace function finance.ensure_non_pending_transfer()
+    returns trigger language plpgsql as $$
+    begin
+      if exists (
+        select 1
+          from finance.transfer_state_change t
+         where t.transfer_created_at     = NEW.transfer_created_at
+           and t.transaction_account     = NEW.transaction_account
+           and t.counterparty_account    = NEW.counterparty_account
+           and t.transaction_created_at  = NEW.transfer_status_changed_at
+           and t.transfer_status         = 'pending'
+      ) then
+        raise exception
+        'Settled transaction cannot reference pending transfer (% %, %)',
+        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+      end if;
+      return NEW;
+    end;
+  $$;
+
+  create constraint trigger settled_transaction_requires_non_pending_transfer
+    after insert on finance.settled_transaction
+    deferrable initially deferred
+    for each row  
+    execute function finance.ensure_non_pending_transfer();
+
+  create or replace function finance.ensure_pending_transfer()
+    returns trigger language plpgsql as $$
+    begin
+      if not exists (
+        select 1
+          from finance.transfer t
+         where t.transfer_created_at     = NEW.transfer_created_at
+           and t.transaction_account     = NEW.transaction_account
+           and t.counterparty_account    = NEW.counterparty_account
+           and t.transaction_created_at  = NEW.transfer_status_changed_at             
+           and t.transfer_status in ('pending', 'returned')
+      ) then
+        raise exception
+        'Pending transaction must reference pending transfer (% %, %)',
+        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+      end if;
+      return NEW;
+    end;
+  $$;
+
+  create constraint trigger pending_transaction_requires_pending_transfer
+    after insert on finance.pending_transaction
+    deferrable initially deferred
+    for each row  
+    execute function finance.ensure_pending_transfer();
+
 #+end_src
 
 Notice the constraint triggers: These enforce crucial business rules
@@ -345,9 +690,10 @@ stands to reason that you'd need the classical temporal requirements:
   [cite:@microsoft24:_tempor]
 #+end_quote
 
-For the design in [[*The setup][the setup]], only /transfer/ is mutable. Everything else
-is append-only. This means the entire list of temporal requirements are
-achieved by maintaining a temporal history of one table.
+For the design in [[*The setup][the setup]], the changes in /transfer/ are already
+capture, since they are part of the business rules. But accounts don't
+have such business requirement, yet we still want to capture such
+changes in the event of needing to debug or completely audit our system.
 
 This is usually handled with the combination of several logging tools
 outside of Postgres, increasing the operating cost and sometimes not
@@ -388,34 +734,18 @@ table with a simple function call, use this snippet:
   end;
   $_$;
 
-  -- this will generate a public.transfer_history that will hold the history of the transfers
-  -- presumes temporal_tables is installed
-  call make_temporal_table('finance', 'transfer');
+  -- this will generate a public.account_history that will hold the history of an account. 
+  call make_temporal_table('finance', 'account');
 #+end_src
 
-Once applied, ~public.transfer_history~ will contain every past version
-of every transfer, from which you can reconstruct the state of transfers
-over time. You can query the state of a transfer by doing something like:
+Once applied, ~public.account_history~ will contain every past version
+of every account, from which you can reconstruct the state of accounts
+over time. You can query the state of all account by doing something like:
 
 #+begin_src sql :tangle "only_postgres.sql" :comments yes
-  select * from transfer where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13')
+  select * from account 
   UNION ALL
-  select * from transfer_history where (transfer_created_at, transaction_account, counterparty_account) = ('2025-10-10 00:50:03.768892+00', 'acc_12', 'acc_13');
-
-  -- ─[ RECORD 1 ]────────┬──────────────────────────────────────────────────────────────────
-  -- transfer_created_at  │ 2025-10-10 00:50:03.768892+00
-  -- transaction_account  │ acc_12
-  -- counterparty_account │ acc_13
-  -- amount               │ 4258
-  -- transfer_status      │ completed
-  -- sys_period           │ ["2025-12-12 20:56:14.176726+00",)
-  -- ═[ RECORD 2 ]════════╪══════════════════════════════════════════════════════════════════
-  -- transfer_created_at  │ 2025-10-10 00:50:03.768892+00
-  -- transaction_account  │ acc_12
-  -- counterparty_account │ acc_13
-  -- amount               │ 4258
-  -- transfer_status      │ pending
-  -- sys_period           │ ["2025-12-12 20:56:10.909782+00","2025-12-12 20:56:14.176726+00")
+  select * from account_history;
 #+end_src
 
 You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].

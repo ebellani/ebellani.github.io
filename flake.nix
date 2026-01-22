@@ -11,6 +11,7 @@
       let
         pkgs = import nixpkgs { inherit system; };
         inherit (pkgs)
+          aider-chat-full
           emacs-nox
           emacsPackagesFor
           gnumake
@@ -34,7 +35,8 @@
         packages.default = stdenv.mkDerivation {
           name = "website";
           src = ./.;
-          buildInputs = [ customEmacs hugo ];
+          buildInputs = [
+            aider-chat-full  customEmacs hugo ];
 
           buildPhase = ''
             make public
@@ -48,6 +50,7 @@
 
         devShells.default = mkShell {
           buildInputs = [
+            aider-chat-full
             customEmacs
             gnumake
             hugo
