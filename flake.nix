@@ -16,8 +16,7 @@
           emacsPackagesFor
           gnumake
           hugo
-          stdenv
-
+          stdenv                                
           mkShell
           ;
 
