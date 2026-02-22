@@ -210,12 +210,12 @@ database server, which is the core rule of thumb of such decisions
   create domain routing_number as text
       check (value ~ '^[0-9]{9}$');
 
-  create domain account_number as text
-    check (value ~ '^[0-9]+$');
+  create domain finance.account_number as text
+    check (value ~ '^[0-9]{12}+$');
 
   create table finance.account(
-    routing_number  routing_number not null,
-    account_number  account_number not null,
+    routing_number  finance.routing_number not null,
+    account_number  finance.account_number not null,
     account_name    text not null,
     primary key (routing_number, account_number)
   );
@@ -230,17 +230,32 @@ database server, which is the core rule of thumb of such decisions
 
   create table finance.transfer (
     transfer_created_at        timestamptz not null,
-    transaction_account        text not null references finance.account(account_name),
-    counterparty_account       text not null references finance.account(account_name),
+    transaction_account_number finance.account_number not null,
+    transaction_routing_number finance.routing_number not null,
+    counterparty_account_number finance.account_number not null,
+    counterparty_routing_number finance.routing_number not null,    
     amount                     bigint not null,
-    description                text not null,
-    transfer_status_changed_at timestamptz not null default now(),
     status                     finance.transfer_status not null,
-    status_message             text not null,  
     primary key (
-      transaction_account,    
+      transaction_account_number,
+      transaction_routing_number,
       transfer_created_at,    
       counterparty_account    
+    ),
+    -- connect to accounts, both the account and its counterparty
+    foreign key (
+      counterparty_account_number,
+      counterparty_routing_number
+    ) references finance.account (    
+      routing_number
+      account_number
+    ),
+    foreign key (
+      transaction_account_number,
+      transaction_routing_number
+    ) references finance.account (    
+      routing_number
+      account_number
     )
   ) partition by range (transfer_created_at);
 
@@ -305,6 +320,463 @@ database server, which is the core rule of thumb of such decisions
 #+end_src
 
 
+
+Notice the constraint triggers: These enforce crucial business rules
+(pending transactions are associated with a transfer in the
+pending/returned state and settled transactions are never associated
+with pending transfers).
+
+Such constraints are almost never created at the data level, exposing
+applications to the risk of failing audits and worse.
+
+*** Size of the table
+
+Taking ~finance.transfer~ as a reference, we have this total:
+
+| Name                        | Type        | Size(bytes) |
+|-----------------------------+-------------+-------------|
+| transfer_created_at         | timestamptz |           8 |
+| transaction_account_number  | text(12)    |          13 |
+| transaction_routing_number  | text(9)     |          10 |
+| counterparty_account_number | text(12)    |          13 |
+| counterparty_routing_number | text(9)     |          10 |
+| amount                      | bigint      |           8 |
+| status                      | text(10)    |          11 |
+|-----------------------------+-------------+-------------|
+| Total (plus row header)     |             |          97 |
+#+TBLFM: @>$>=vsum(@I..@II)+24
+
+
+*** Auditing and reconstructing state
+
+Given the financial nature of the presumed business rules here, it
+stands to reason that you'd need the classical temporal requirements:
+
+#+begin_quote
+- Auditing all data changes and performing data forensics when necessary
+- Reconstructing state of the data as of any time in the past
+- Calculating trends over time
+- Maintaining a slowly changing dimension for decision support applications
+- Recovering from accidental data changes and application errors
+  Auditing all data changes and performing data forensics when necessary
+  [cite:@microsoft24:_tempor]
+#+end_quote
+
+For the design in [[*The setup][the setup]], the changes in /transfer/ are already
+capture, since they are part of the business rules. But accounts don't
+have such business requirement, yet we still want to capture such
+changes in the event of needing to debug or completely audit our system.
+
+This is usually handled with the combination of several logging tools
+outside of Postgres, increasing the operating cost and sometimes not
+achieving the desired features. PostgreSQL on the other hand supports
+several approaches for temporal auditing. For simplicity and portability
+(including RDS), I use the temporal_tables extension [cite:@nearform_temporal_tables].
+
+The extension automatically writes old versions of each row to a sibling
+~_history~ table on every ~UPDATE~ or ~DELETE~. Together with a
+tstzrange period, this gives you a full history suitable for ~AS OF~
+queries and state reconstruction. If you install the extension in a
+table with a simple function call, use this snippet:
+
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
+  create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
+    language plpgsql
+  as $_$
+    declare
+      history_sql text;
+  begin
+    history_sql := format(
+      $his$
+      alter table %1$s.%2$s add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
+      alter table %1$s.%2$s alter column sys_period set not null;
+      create table if not exists %1$s.%2$s_history
+      (
+        like %1$s.%2$s
+      );
+      create index on %1$s.%2$s_history (sys_period);
+      drop trigger if exists %2$s_temporal on %1$s.%2$s;
+      create trigger %2$s_temporal
+      before insert or update or delete
+      on %1$s.%2$s
+      for each row
+      execute procedure versioning('sys_period', '%1$s.%2$s_history', true);
+      $his$, _schema_name, _table_name);
+    execute history_sql;
+  end;
+  $_$;
+
+  -- this will generate a public.account_history that will hold the history of an account. 
+  call make_temporal_table('finance', 'account');
+#+end_src
+
+Once applied, ~public.account_history~ will contain every past version
+of every account, from which you can reconstruct the state of accounts
+over time. You can query the state of all account by doing something like:
+
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
+  select * from account 
+  UNION ALL
+  select * from account_history;
+#+end_src
+
+You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].
+
+*** Write/update throughput is too low
+
+If you want to maintain semantic enforcement of your data (which in our
+model is done via fkeys and constraint triggers) about the only thing
+you can do to optimize writes is to use indexes in a smart way. After
+all, ~indexes, if not carefully chosen, can kill performance in a
+write-heavy
+application~[cite:@gerogiannakis_postgres_index_queries_2019]
+
+**** Unused indexes
+
+A common problem is to have a bunch of unused indexes for critical
+tables, since they are not visible directly and experiments can be
+forgotten. So, make sure all indexes are being used (see
+[cite:@gerogiannakis_postgres_index_queries_2019][cite:@postgresql_pg_stat_all_indexes] for a solution based on
+PostgreSQL internal statistics):
+
+#+begin_src sql
+  SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes where schemaname='finance' ORDER BY idx_scan;
+    
+   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch 
+  ════════════╪═════════════════════╪═════════════════════════════════╪══════════╪══════════════╪═══════════════
+   finance    │ settled_transaction │ settled_transaction_pkey        │        0 │            0 │             0
+   finance    │ transfer_history    │ transfer_history_sys_period_idx │        0 │            0 │             0
+   finance    │ account             │ account_pkey                    │      100 │           80 │            60
+   finance    │ pending_transaction │ pending_transaction_pkey        │  1220000 │       120000 │        120000
+   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000    
+#+end_src
+
+- idx_scan :: How many times the index has been scanned (used). This can
+  be either directly by a application query e.g.
+  
+  #+begin_src sql
+    select * from finance.transfer where
+    (transfer_created_at, transaction_account, counterparty_account) =
+    ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
+  #+end_src
+
+  or indirectly due to a JOIN. For example, the primary key index
+  transfer_pkey has been scanned over 2210002 times.
+
+- idx_tup_read :: This is the number of index entries returned as a result
+  of an index scan. An easy-to-understand example is the primary key
+  (e.g. ~select * from finance.transfer where (transfer_created_at,
+  transaction_account, counterparty_account) = ('2025-11-25
+  18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
+  such transfer, then idx_tup_read will increase by 1. Modifying slightly
+  the query
+
+    #+begin_src sql
+      select * from finance.transfer
+       where (transfer_created_at, transaction_account, counterparty_account) in
+             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
+    #+end_src
+   idx_tup_read will increase by 2 (if both transfers exist). In both of
+   these queries, idx_scan will increase by 1.
+
+- idx_tup_fetch :: These are the number of rows fetched from the table
+  as a result of an index scan.  This is increased as a result of both
+  positive and false positive results.  For example, if both ids exist,
+  the query
+    #+begin_src sql
+      select * from finance.transfer
+       where (transfer_created_at, transaction_account, counterparty_account) in
+             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
+       and transfer_status='completed';
+    #+end_src
+   will increase idx_tup_fetch by 2 even if only one tuple is returned
+  to the client. The reason is that the tuples will need to be loaded
+  from disk to examine the value of ‘transfer_status’.
+
+**** HOT transfers
+
+In the design above, there should be no updates to transactions, be them
+pending or settled. Transfers on the other hand, will have their status
+changed a lot. So we should benefit from making that table consist of
+Heap-Only Tuples (HOT).
+
+#+begin_quote
+To allow for high concurrency, PostgreSQL uses multiversion concurrency
+control (MVCC) to store rows. However, MVCC has some downsides for
+update queries. Specifically, updates require new versions of rows to be
+added to tables. This can also require new index entries for each
+updated row, and removal of old versions of rows and their index entries
+can be expensive.[cite:@postgresql_hot_2025]
+#+end_quote
+
+Transfers are the ideal scenario for HOT, since the the indexed columns
+via the PK does not reach the column that will get updated:
+~transfer_status~. 
+
+#+begin_src sql
+  alter table finance.transfer set (fillfactor = 90);
+#+end_src
+
+This will give us the major benefit of not having to touch indexes,
+which is the bane of write heavy
+applications[cite:@gerogiannakis_postgres_index_queries_2019].
+
+**** Partitioning for speed 
+
+As we have seen, indexes are the bane of inserting information. Fitting
+all the necessary index nodes in memory is key for fast
+insertion/updates (remember that an update is also an insert).
+
+For tables where you are using sequential identifiers, the data is
+logically arranged on the right-most part of an index, avoiding page
+splitting and easily keeping all necessary nodes in memory.
+
+For tables that do not fit the above pattern, you have a problem
+specially when the indexes grow to outpace available memory, which can
+be the case with a high insert rate:
+
+#+begin_quote
+Unnecessary splits and rebalancing add space consumption and processing
+latency to write operations. This extra IO shows up in Write Ahead Log
+(WAL) generation as well.
+
+Buildkite reported a 50% reduction in write IO for the WAL by moving to
+time-ordered UUIDs.[cite:@atkinson_avoid_uuidv4_primary_keys_2025; @chan_buildkite_uuidv7_2023]
+#+end_quote
+
+We are designing here for both high insertion rates and to be able to
+calculate balances fast. To calculate account balances fast, we would
+have to index by ~transaction_account~, which are not aligned to the
+index, obviously. The solution for that is twofold:
+
+1. Index by transaction_account
+2. Partition by a range that would fit into the cache. Let's assume that
+   this would be a day. Such decision aligns neatly with a daily
+   balance, which is a common feature on financial systems.
+
+On our design, we have already created native partitioning for both
+transaction tables/types. We now need to plug in all the necessary
+tooling around to make sure it has the partitions underneath it and that
+they are maintained over time.[fn:3]
+[cite:@pg_partman_github;@aws_rds_postgresql_partitions]. Here's a
+snippet that creates partitions for an year in the past and in the
+future:
+
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
+    create schema partman;
+    CREATE EXTENSION IF NOT EXISTS pg_cron;
+    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
+
+    -- set partman for a table, creating the initial partitions
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.settled_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,
+        p_start_partition := '2025-01-01 00:00:00' 
+    );
+
+    -- repeat for pending transactions and transfers
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.pending_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,      
+        p_start_partition := '2025-01-01 00:00:00'    
+    );
+
+    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
+
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.transfer',
+        p_control      := 'transfer_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,      
+        p_start_partition := '2025-01-01 00:00:00',
+        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template 
+    );
+
+    UPDATE partman.part_config
+    SET infinite_time_partitions = true,
+        premake = 7                     
+      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
+
+  -- run maintenance every hour
+  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
+#+end_src
+
+
+*** TODO Transactional Queries
+Here are the transactional queries that I assume will compose the vast
+majority of such application cycle:
+
+1. Insert transfers/transactions
+2. Paginate over transfers/transactions 
+3. Update a transfer's state
+4. Get all transactions for a transfer
+
+*** TODO Analytical Queries
+Here are the analytical queries that I assume will compose the vast majority of
+such application cycle:
+
+~ALTER DATABASE X SET default_transaction_isolation = 'serializable';~
+
+1. Get balance at time X for account Y 
+
+
+*** Appendix: Code Generating test data
+:PROPERTIES:
+:CUSTOM_ID: pg_all_you_need_code
+:END:
+
+If you want to play around with the design here, run
+
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
+   -- tests
+
+  create or replace function finance.generate_pending_activity(
+    accounts_count int,
+    days int,
+    avg_transfers_per_day int
+  )
+  returns void
+  language plpgsql
+  as $$
+  declare
+    start_ts timestamptz := now() - (days || ' days')::interval;
+    end_ts   timestamptz := now();
+    accs     text[];
+    t_count bigint;
+  begin
+    with s as (
+      select ('acc_' || gs::text) as name
+      from generate_series(1, accounts_count) gs
+    )
+    insert into finance.account(account_name)
+    select name from s
+    on conflict do nothing;
+    select array_agg(account_name) into accs
+    from finance.account;
+    insert into finance.transfer (
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,
+      amount,
+      transfer_status
+    )
+    select
+      start_ts
+        + (random() * extract(epoch from (end_ts - start_ts))) * interval '1 second',
+      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
+      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
+      (10 + floor(random() * 10000))::bigint,
+      'pending'::finance.transfer_status
+      from generate_series(1, days * avg_transfers_per_day) on conflict do nothing;
+    select count(*) into t_count from finance.transfer;
+    raise notice '%', t_count;
+    insert into finance.pending_transaction(
+      transaction_created_at,
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,    
+      amount
+    )
+    select
+      lower(t.sys_period),        -- system-time when row was created
+      t.transfer_created_at,
+      t.transaction_account,
+      t.counterparty_account,    
+      t.amount
+    from finance.transfer t
+    where upper(t.sys_period) is null
+      and t.transfer_status = 'pending' on conflict do nothing;
+    return;
+  end;
+  $$;
+
+
+  create or replace function finance.complete_pending_activity(
+    completion_percent int
+  )
+  returns void
+  language plpgsql
+  as $$
+  declare
+    total_pending int;
+    target_count  int;
+  begin
+    -- Compute how many pending transfers exist
+    select count(*) into total_pending
+    from finance.transfer
+    where upper(sys_period) is null
+      and transfer_status = 'pending';
+    if total_pending = 0 then
+      return;
+    end if;
+    -- Determine how many to complete
+    target_count := ceil(total_pending * completion_percent / 100.0);
+    ---------------------------------------------------------------------
+    -- 1. Random sample of pending transfers
+    ---------------------------------------------------------------------
+    with to_complete as (
+      select t.transfer_created_at,
+             t.transaction_account,
+             t.counterparty_account
+      from finance.transfer t
+      where upper(t.sys_period) is null
+        and t.transfer_status = 'pending'
+      order by random()
+      limit target_count
+    )
+    ---------------------------------------------------------------------
+    -- 2. Mark selected transfers as completed (status != pending).
+    --    Your bitemporal trigger should automatically close old sys_period
+    --    and insert a new system-time row.
+    ---------------------------------------------------------------------
+    update finance.transfer t
+       set transfer_status = 'completed'
+    from to_complete c
+    where t.transfer_created_at    = c.transfer_created_at
+      and t.transaction_account    = c.transaction_account
+      and t.counterparty_account   = c.counterparty_account
+      and upper(t.sys_period) is null
+      and t.transfer_status = 'pending';
+    ---------------------------------------------------------------------
+    -- 3. Insert settled transactions corresponding to these now-completed
+    --    transfers. Use the new version of the transfer (status != pending).
+    ---------------------------------------------------------------------
+    insert into finance.settled_transaction (
+      transaction_created_at,
+      transfer_created_at,
+      transaction_account,
+      counterparty_account,    
+      amount
+    )
+    select
+      now(),                     -- transaction occurs now
+      t.transfer_created_at,
+      t.transaction_account,
+      t.counterparty_account,    
+      t.amount
+    from finance.transfer t  
+    where upper(t.sys_period) is null
+      and t.transfer_status = 'completed' on conflict do nothing;  -- ensure we use the new version
+    return;
+  end;
+  $$;
+#+end_src
+
+#+print_bibliography:
+
+*** scratch                                                        :noexport:
 
 #   --   create table finance.transfer_state_change (
 #   --     transfer_created_at        timestamptz not null,
@@ -767,454 +1239,6 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
 
 #+end_src
 
-Notice the constraint triggers: These enforce crucial business rules
-(pending transactions are associated with a transfer in the
-pending/returned state and settled transactions are never associated
-with pending transfers).
-
-Such constraints are almost never created at the data level, exposing
-applications to the risk of failing audits and worse.
-
-*** Size of the table
-
-Taking ~finance.settled_transaction~ as a reference, we have this total:
-
-| Type        | Quantity | Size | Total size |
-|-------------+----------+------+------------|
-| timestamptz |        2 |    8 |            |
-| text        |        2 |      |            |
-| bigint      |        1 |    1 |            |
-|-------------+----------+------+------------|
-| Total       |          |      |            |
-
-*** Auditing and reconstructing state
-
-Given the financial nature of the presumed business rules here, it
-stands to reason that you'd need the classical temporal requirements:
-
-#+begin_quote
-- Auditing all data changes and performing data forensics when necessary
-- Reconstructing state of the data as of any time in the past
-- Calculating trends over time
-- Maintaining a slowly changing dimension for decision support applications
-- Recovering from accidental data changes and application errors
-  Auditing all data changes and performing data forensics when necessary
-  [cite:@microsoft24:_tempor]
-#+end_quote
-
-For the design in [[*The setup][the setup]], the changes in /transfer/ are already
-capture, since they are part of the business rules. But accounts don't
-have such business requirement, yet we still want to capture such
-changes in the event of needing to debug or completely audit our system.
-
-This is usually handled with the combination of several logging tools
-outside of Postgres, increasing the operating cost and sometimes not
-achieving the desired features. PostgreSQL on the other hand supports
-several approaches for temporal auditing. For simplicity and portability
-(including RDS), I use the temporal_tables extension [cite:@nearform_temporal_tables].
-
-The extension automatically writes old versions of each row to a sibling
-~_history~ table on every ~UPDATE~ or ~DELETE~. Together with a
-tstzrange period, this gives you a full history suitable for ~AS OF~
-queries and state reconstruction. If you install the extension in a
-table with a simple function call, use this snippet:
-
-#+begin_src sql :tangle "only_postgres.sql" :comments yes
-  create or replace procedure make_temporal_table(in _schema_name text, in _table_name text)
-    language plpgsql
-  as $_$
-    declare
-      history_sql text;
-  begin
-    history_sql := format(
-      $his$
-      alter table %1$s.%2$s add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
-      alter table %1$s.%2$s alter column sys_period set not null;
-      create table if not exists %1$s.%2$s_history
-      (
-        like %1$s.%2$s
-      );
-      create index on %1$s.%2$s_history (sys_period);
-      drop trigger if exists %2$s_temporal on %1$s.%2$s;
-      create trigger %2$s_temporal
-      before insert or update or delete
-      on %1$s.%2$s
-      for each row
-      execute procedure versioning('sys_period', '%1$s.%2$s_history', true);
-      $his$, _schema_name, _table_name);
-    execute history_sql;
-  end;
-  $_$;
-
-  -- this will generate a public.account_history that will hold the history of an account. 
-  call make_temporal_table('finance', 'account');
-#+end_src
-
-Once applied, ~public.account_history~ will contain every past version
-of every account, from which you can reconstruct the state of accounts
-over time. You can query the state of all account by doing something like:
-
-#+begin_src sql :tangle "only_postgres.sql" :comments yes
-  select * from account 
-  UNION ALL
-  select * from account_history;
-#+end_src
-
-You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].
-
-*** Write/update throughput is too low
-
-If you want to maintain semantic enforcement of your data (which in our
-model is done via fkeys and constraint triggers) about the only thing
-you can do to optimize writes is to use indexes in a smart way. After
-all, ~indexes, if not carefully chosen, can kill performance in a
-write-heavy
-application~[cite:@gerogiannakis_postgres_index_queries_2019]
-
-**** Unused indexes
-
-A common problem is to have a bunch of unused indexes for critical
-tables, since they are not visible directly and experiments can be
-forgotten. So, make sure all indexes are being used (see
-[cite:@gerogiannakis_postgres_index_queries_2019][cite:@postgresql_pg_stat_all_indexes] for a solution based on
-PostgreSQL internal statistics):
-
-#+begin_src sql
-  SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes where schemaname='finance' ORDER BY idx_scan;
-    
-   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch 
-  ════════════╪═════════════════════╪═════════════════════════════════╪══════════╪══════════════╪═══════════════
-   finance    │ settled_transaction │ settled_transaction_pkey        │        0 │            0 │             0
-   finance    │ transfer_history    │ transfer_history_sys_period_idx │        0 │            0 │             0
-   finance    │ account             │ account_pkey                    │      100 │           80 │            60
-   finance    │ pending_transaction │ pending_transaction_pkey        │  1220000 │       120000 │        120000
-   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000    
-#+end_src
-
-- idx_scan :: How many times the index has been scanned (used). This can
-  be either directly by a application query e.g.
-  
-  #+begin_src sql
-    select * from finance.transfer where
-    (transfer_created_at, transaction_account, counterparty_account) =
-    ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
-  #+end_src
-
-  or indirectly due to a JOIN. For example, the primary key index
-  transfer_pkey has been scanned over 2210002 times.
-
-- idx_tup_read :: This is the number of index entries returned as a result
-  of an index scan. An easy-to-understand example is the primary key
-  (e.g. ~select * from finance.transfer where (transfer_created_at,
-  transaction_account, counterparty_account) = ('2025-11-25
-  18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
-  such transfer, then idx_tup_read will increase by 1. Modifying slightly
-  the query
-
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
-    #+end_src
-   idx_tup_read will increase by 2 (if both transfers exist). In both of
-   these queries, idx_scan will increase by 1.
-
-- idx_tup_fetch :: These are the number of rows fetched from the table
-  as a result of an index scan.  This is increased as a result of both
-  positive and false positive results.  For example, if both ids exist,
-  the query
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
-       and transfer_status='completed';
-    #+end_src
-   will increase idx_tup_fetch by 2 even if only one tuple is returned
-  to the client. The reason is that the tuples will need to be loaded
-  from disk to examine the value of ‘transfer_status’.
-
-**** HOT transfers
-
-In the design above, there should be no updates to transactions, be them
-pending or settled. Transfers on the other hand, will have their status
-changed a lot. So we should benefit from making that table consist of
-Heap-Only Tuples (HOT).
-
-#+begin_quote
-To allow for high concurrency, PostgreSQL uses multiversion concurrency
-control (MVCC) to store rows. However, MVCC has some downsides for
-update queries. Specifically, updates require new versions of rows to be
-added to tables. This can also require new index entries for each
-updated row, and removal of old versions of rows and their index entries
-can be expensive.[cite:@postgresql_hot_2025]
-#+end_quote
-
-Transfers are the ideal scenario for HOT, since the the indexed columns
-via the PK does not reach the column that will get updated:
-~transfer_status~. 
-
-#+begin_src sql
-  alter table finance.transfer set (fillfactor = 90);
-#+end_src
-
-This will give us the major benefit of not having to touch indexes,
-which is the bane of write heavy
-applications[cite:@gerogiannakis_postgres_index_queries_2019].
-
-**** Partitioning for speed 
-
-As we have seen, indexes are the bane of inserting information. Fitting
-all the necessary index nodes in memory is key for fast
-insertion/updates (remember that an update is also an insert).
-
-For tables where you are using sequential identifiers, the data is
-logically arranged on the right-most part of an index, avoiding page
-splitting and easily keeping all necessary nodes in memory.
-
-For tables that do not fit the above pattern, you have a problem
-specially when the indexes grow to outpace available memory, which can
-be the case with a high insert rate:
-
-#+begin_quote
-Unnecessary splits and rebalancing add space consumption and processing
-latency to write operations. This extra IO shows up in Write Ahead Log
-(WAL) generation as well.
-
-Buildkite reported a 50% reduction in write IO for the WAL by moving to
-time-ordered UUIDs.[cite:@atkinson_avoid_uuidv4_primary_keys_2025; @chan_buildkite_uuidv7_2023]
-#+end_quote
-
-We are designing here for both high insertion rates and to be able to
-calculate balances fast. To calculate account balances fast, we would
-have to index by ~transaction_account~, which are not aligned to the
-index, obviously. The solution for that is twofold:
-
-1. Index by transaction_account
-2. Partition by a range that would fit into the cache. Let's assume that
-   this would be a day. Such decision aligns neatly with a daily
-   balance, which is a common feature on financial systems.
-
-On our design, we have already created native partitioning for both
-transaction tables/types. We now need to plug in all the necessary
-tooling around to make sure it has the partitions underneath it and that
-they are maintained over time.[fn:3]
-[cite:@pg_partman_github;@aws_rds_postgresql_partitions]. Here's a
-snippet that creates partitions for an year in the past and in the
-future:
-
-#+begin_src sql :tangle "only_postgres.sql" :comments yes
-    create schema partman;
-    CREATE EXTENSION IF NOT EXISTS pg_cron;
-    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
-
-    -- set partman for a table, creating the initial partitions
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.settled_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,
-        p_start_partition := '2025-01-01 00:00:00' 
-    );
-
-    -- repeat for pending transactions and transfers
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.pending_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,      
-        p_start_partition := '2025-01-01 00:00:00'    
-    );
-
-    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
-
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.transfer',
-        p_control      := 'transfer_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,      
-        p_start_partition := '2025-01-01 00:00:00',
-        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template 
-    );
-
-    UPDATE partman.part_config
-    SET infinite_time_partitions = true,
-        premake = 7                     
-      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
-
-  -- run maintenance every hour
-  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
-#+end_src
-
-
-*** TODO Transactional Queries
-Here are the transactional queries that I assume will compose the vast
-majority of such application cycle:
-
-1. Insert transfers/transactions
-2. Paginate over transfers/transactions 
-3. Update a transfer's state
-4. Get all transactions for a transfer
-
-*** TODO Analytical Queries
-Here are the analytical queries that I assume will compose the vast majority of
-such application cycle:
-
-~ALTER DATABASE X SET default_transaction_isolation = 'serializable';~
-
-1. Get balance at time X for account Y 
-
-
-*** Appendix: Code Generating test data
-:PROPERTIES:
-:CUSTOM_ID: pg_all_you_need_code
-:END:
-
-If you want to play around with the design here, run
-
-#+begin_src sql :tangle "only_postgres.sql" :comments yes
-   -- tests
-
-  create or replace function finance.generate_pending_activity(
-    accounts_count int,
-    days int,
-    avg_transfers_per_day int
-  )
-  returns void
-  language plpgsql
-  as $$
-  declare
-    start_ts timestamptz := now() - (days || ' days')::interval;
-    end_ts   timestamptz := now();
-    accs     text[];
-    t_count bigint;
-  begin
-    with s as (
-      select ('acc_' || gs::text) as name
-      from generate_series(1, accounts_count) gs
-    )
-    insert into finance.account(account_name)
-    select name from s
-    on conflict do nothing;
-    select array_agg(account_name) into accs
-    from finance.account;
-    insert into finance.transfer (
-      transfer_created_at,
-      transaction_account,
-      counterparty_account,
-      amount,
-      transfer_status
-    )
-    select
-      start_ts
-        + (random() * extract(epoch from (end_ts - start_ts))) * interval '1 second',
-      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
-      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
-      (10 + floor(random() * 10000))::bigint,
-      'pending'::finance.transfer_status
-      from generate_series(1, days * avg_transfers_per_day) on conflict do nothing;
-    select count(*) into t_count from finance.transfer;
-    raise notice '%', t_count;
-    insert into finance.pending_transaction(
-      transaction_created_at,
-      transfer_created_at,
-      transaction_account,
-      counterparty_account,    
-      amount
-    )
-    select
-      lower(t.sys_period),        -- system-time when row was created
-      t.transfer_created_at,
-      t.transaction_account,
-      t.counterparty_account,    
-      t.amount
-    from finance.transfer t
-    where upper(t.sys_period) is null
-      and t.transfer_status = 'pending' on conflict do nothing;
-    return;
-  end;
-  $$;
-
-
-  create or replace function finance.complete_pending_activity(
-    completion_percent int
-  )
-  returns void
-  language plpgsql
-  as $$
-  declare
-    total_pending int;
-    target_count  int;
-  begin
-    -- Compute how many pending transfers exist
-    select count(*) into total_pending
-    from finance.transfer
-    where upper(sys_period) is null
-      and transfer_status = 'pending';
-    if total_pending = 0 then
-      return;
-    end if;
-    -- Determine how many to complete
-    target_count := ceil(total_pending * completion_percent / 100.0);
-    ---------------------------------------------------------------------
-    -- 1. Random sample of pending transfers
-    ---------------------------------------------------------------------
-    with to_complete as (
-      select t.transfer_created_at,
-             t.transaction_account,
-             t.counterparty_account
-      from finance.transfer t
-      where upper(t.sys_period) is null
-        and t.transfer_status = 'pending'
-      order by random()
-      limit target_count
-    )
-    ---------------------------------------------------------------------
-    -- 2. Mark selected transfers as completed (status != pending).
-    --    Your bitemporal trigger should automatically close old sys_period
-    --    and insert a new system-time row.
-    ---------------------------------------------------------------------
-    update finance.transfer t
-       set transfer_status = 'completed'
-    from to_complete c
-    where t.transfer_created_at    = c.transfer_created_at
-      and t.transaction_account    = c.transaction_account
-      and t.counterparty_account   = c.counterparty_account
-      and upper(t.sys_period) is null
-      and t.transfer_status = 'pending';
-    ---------------------------------------------------------------------
-    -- 3. Insert settled transactions corresponding to these now-completed
-    --    transfers. Use the new version of the transfer (status != pending).
-    ---------------------------------------------------------------------
-    insert into finance.settled_transaction (
-      transaction_created_at,
-      transfer_created_at,
-      transaction_account,
-      counterparty_account,    
-      amount
-    )
-    select
-      now(),                     -- transaction occurs now
-      t.transfer_created_at,
-      t.transaction_account,
-      t.counterparty_account,    
-      t.amount
-    from finance.transfer t  
-    where upper(t.sys_period) is null
-      and t.transfer_status = 'completed' on conflict do nothing;  -- ensure we use the new version
-    return;
-  end;
-  $$;
-#+end_src
-
-#+print_bibliography:
 ** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
 :EXPORT_DATE: 2025-11-26
