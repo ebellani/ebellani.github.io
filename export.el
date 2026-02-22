@@ -2,6 +2,8 @@
 
 (require 'ox)
 (require 'org)
+(require 'ox-hugo)
+(require 'citeproc)
 
 (defun ox-hugo/export-all (&optional org-files-root-dir dont-recurse)
   "Export all Org files (including nested) under ORG-FILES-ROOT-DIR.
