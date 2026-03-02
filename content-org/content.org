@@ -190,7 +190,6 @@ database server, which is the core rule of thumb of such decisions
    memory. [cite:@postgresql-partitioning-docs]
    #+end_quote
 
-# calculate size of a row
 2) Stable growth: Partitioning allows us to control the estimated size
    of the underlying tables. This will prove important for write
    throughput (more on that on section [[*Partitioning for speed][Partitioning for speed]]).
@@ -329,23 +328,44 @@ with pending transfers).
 Such constraints are almost never created at the data level, exposing
 applications to the risk of failing audits and worse.
 
-*** Size of the table
+*** On planning the capacity the partition
 
-Taking ~finance.transfer~ as a reference, we have this total:
+As can be seen on the [[laying_foundation][foundationnal code block]], we have 5 core
+tables
+1. ~finance.transfer~
+2. ~finance.transfer_history~
+3. ~finance.pending_transaction~
+4. ~finance.settled_transaction~
 
-| Name                        | Type        | Size(bytes) |
-|-----------------------------+-------------+-------------|
-| transfer_created_at         | timestamptz |           8 |
-| transaction_account_number  | text(12)    |          13 |
-| transaction_routing_number  | text(9)     |          10 |
-| counterparty_account_number | text(12)    |          13 |
-| counterparty_routing_number | text(9)     |          10 |
-| amount                      | bigint      |           8 |
-| status                      | text(10)    |          11 |
-|-----------------------------+-------------+-------------|
-| Total (plus row header)     |             |          97 |
+    Taking ~finance.transfer~ as a
+reference, we have this total (ignoring alignment issues
+[cite:@thomas2018rocksandsand]):
+
+| Name                           | Type        | Size(bytes) |
+|--------------------------------+-------------+-------------|
+| transfer_created_at            | timestamptz |           8 |
+| transaction_account_number     | text(12)    |          13 |
+| transaction_routing_number     | text(9)     |          10 |
+| counterparty_account_number    | text(12)    |          13 |
+| counterparty_routing_number    | text(9)     |          10 |
+| amount                         | bigint      |           8 |
+| status                         | text(10)    |          11 |
+|--------------------------------+-------------+-------------|
+| Total (plus 24 for row header) |             |          97 |
 #+TBLFM: @>$>=vsum(@I..@II)+24
 
+So, around 100 bytes per row. Suppose we want 3 days of transfers and 1
+day of transactions, that would be 6 (3 ~finance.transfer~ + 3
+~finance.transfer_history~) + 2 (1 ~finance.pending_transaction~ + 1
+~finance.settled_transaction~). Assuming 10k accounts each having 100
+transfer/pending/settled per day, that would necessitate ~7.5~ Gb of
+RAM. If we are ta talking something like a mid/large bank, 50
+million(https://international.nubank.com.br/company/pix-breaks-record-and-reaches-1-billion-monthly-transactions/)
+~38GB, and for
+VISA(https://annualreport.visa.com/chairman-and-ceo-message/default.aspx#:~:text=toggle%20all-,A%20strong%202025,901%20million%20transactions%20per%20day.)
+~700Gb.
+
+ADD INDEX SIZE
 
 *** Auditing and reconstructing state
 
