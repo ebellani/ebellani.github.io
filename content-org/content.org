@@ -205,7 +205,6 @@ database server, which is the core rule of thumb of such decisions
   alter default privileges in schema finance
     grant usage, select on sequences to application;
 
-
   create domain finance.routing_number as text
     check (value ~ '^[0-9]{9}$');
 
@@ -324,7 +323,7 @@ database server, which is the core rule of thumb of such decisions
 #+end_src
 
 
-*** Maintaining business rules via meaningful constraints 
+*** On maintaining business rules via meaningful constraints 
 
 #+begin_quote
 It is impossible to design and interrogate a database sensibly, and
@@ -346,19 +345,21 @@ possible[fn:3]:
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create or replace function finance.is_pending_transfer(
     p_transfer_created_at timestamptz,
-    p_transaction_account text,
-    p_counterparty_account text,
-    p_transaction_created_at timestamptz
+    p_account_number finance.account_number,
+    p_routing_number finance.routing_number,
+    p_counterparty_account_number finance.account_number,
+    p_counterparty_routing_number finance.routing_number
   )
     returns boolean language sql stable as $$
     select exists (
       select 1
         from finance.transfer t
-       where t.transfer_created_at     = p_transfer_created_at
-         and t.transaction_account     = p_transaction_account
-         and t.counterparty_account    = p_counterparty_account
-         and t.transaction_created_at  = p_transaction_created_at
-         and t.transfer_status         = 'pending'
+       where t.transfer_created_at         = p_transfer_created_at
+         and t.account_number              = p_account_number
+         and t.routing_number              = p_routing_number
+         and t.counterparty_account_number = p_counterparty_account_number
+         and t.counterparty_routing_number = p_counterparty_routing_number
+         and t.status                      = 'pending'
     );
   $$;
 
@@ -367,49 +368,54 @@ possible[fn:3]:
   begin
     if not finance.is_pending_transfer(
       NEW.transfer_created_at,
-      NEW.transaction_account,
-      NEW.counterparty_account,
-      NEW.transfer_status_changed_at
+      NEW.account_number,
+      NEW.routing_number,
+      NEW.counterparty_account_number,
+      NEW.counterparty_routing_number
     ) then
       raise exception
-        'Must reference a pending transfer (% %, %)',
-        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+        'Must reference a pending transfer (%, %, %, %, %)',
+        NEW.transfer_created_at, NEW.account_number, NEW.routing_number,
+        NEW.counterparty_account_number, NEW.counterparty_routing_number;
     end if;
     return NEW;
   end;
   $$;
-
 
   create or replace function finance.ensure_non_pending_transfer()
     returns trigger language plpgsql as $$
   begin
     if finance.is_pending_transfer(
       NEW.transfer_created_at,
-      NEW.transaction_account,
-      NEW.counterparty_account,
-      NEW.transfer_status_changed_at
+      NEW.account_number,
+      NEW.routing_number,
+      NEW.counterparty_account_number,
+      NEW.counterparty_routing_number
     ) then
       raise exception
-      'Cannot reference a pending transfer (% %, %)',
-        NEW.transfer_created_at, NEW.transaction_account, NEW.counterparty_account;
+        'Cannot reference a pending transfer (%, %, %, %, %)',
+        NEW.transfer_created_at, NEW.account_number, NEW.routing_number,
+        NEW.counterparty_account_number, NEW.counterparty_routing_number;
     end if;
     return NEW;
   end;
-
-  create constraint trigger settled_transaction_requires_non_pending_transfer
-    after insert on finance.settled_transaction
-    deferrable initially deferred
-    for each row  
-      execute function finance.ensure_non_pending_transfer();
+  $$;
 
   create constraint trigger pending_transaction_requires_pending_transfer
     after insert on finance.pending_transaction
     deferrable initially deferred
     for each row  
-      execute function finance.ensure_pending_transfer();  
+    execute function finance.ensure_pending_transfer();
+
+  create constraint trigger settled_transaction_requires_non_pending_transfer
+    after insert on finance.settled_transaction
+    deferrable initially deferred
+    for each row
+    execute function finance.ensure_non_pending_transfer();
+
 #+end_src
 
-*** On planning the capacity the partition
+*** On capacity planning
 
 As can be seen on the [[laying_foundation][foundationnal code block]], we have 5 core tables
 
@@ -425,8 +431,8 @@ reference, we have this total (ignoring alignment issues
 | Name                           | Type        | Size(bytes) |
 |--------------------------------+-------------+-------------|
 | transfer_created_at            | timestamptz |           8 |
-| transaction_account_number     | text(12)    |          13 |
-| transaction_routing_number     | text(9)     |          10 |
+| account_number                 | text(12)    |          13 |
+| routing_number                 | text(9)     |          10 |
 | counterparty_account_number    | text(12)    |          13 |
 | counterparty_routing_number    | text(9)     |          10 |
 | amount                         | bigint      |           8 |
@@ -442,12 +448,19 @@ day of transactions, that would be 6 (3 ~finance.transfer~ + 3
 
 Assuming 10k accounts each having 100 transfer/pending/settled per day,
 that would necessitate ~7.5~ Gb of RAM. If we are ta talking something
-like a mid/large bank, 50
-million(https://international.nubank.com.br/company/pix-breaks-record-and-reaches-1-billion-monthly-transactions/)
-~38GB, and for
-VISA(https://annualreport.visa.com/chairman-and-ceo-message/default.aspx#:~:text=toggle%20all-,A%20strong%202025,901%20million%20transactions%20per%20day.)
-~700Gb.
+like a mid/large bank like Nubank, 50 million[cite:@nubank2022pix]
+~38GB, and for a global payment processor like VISA ~700Gb
+[cite:@visa2025annual].
 
+As for indexes:
+#+begin_quote
+index entry has an overhead of 8 bytes. Add the average size of your
+indexed data (in the internal binary format).[cite:@StackOverflowAlbe2020indexsize]
+#+end_quote
+
+Given that in this design we are using a single index for each table
+(the btree backing the primary key), you can add 100% for the index
+size, doubling the amounts above.
 
 
 *** Auditing and reconstructing state
