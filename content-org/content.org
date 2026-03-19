@@ -206,7 +206,7 @@ database server, which is the core rule of thumb of such decisions
     grant usage, select on sequences to application;
 
 
-  create domain routing_number as text
+  create domain finance.routing_number as text
     check (value ~ '^[0-9]{9}$');
 
   create domain finance.account_number as text
@@ -227,86 +227,100 @@ database server, which is the core rule of thumb of such decisions
     	          'returned',                  
     		  'completed'));
 
-  create table finance.transfer (
-    transfer_created_at        timestamptz not null,
-    transaction_account_number finance.account_number not null,
-    transaction_routing_number finance.routing_number not null,
+  create table finance.transfer (  
+    transfer_created_at         timestamptz not null default now(),
+    account_number              finance.account_number not null,
+    routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
     counterparty_routing_number finance.routing_number not null,    
-    amount                     bigint not null,
-    status                     finance.transfer_status not null,
+    amount                      bigint not null,
+    status                      finance.transfer_status not null,
     primary key (
-      transaction_account_number,
-      transaction_routing_number,
-      transfer_created_at,    
-      counterparty_account    
+      account_number,
+      routing_number,
+      transfer_created_at,
+      counterparty_account_number,
+      counterparty_routing_number
     ),
-      -- connect to accounts, both the account and its counterparty
-      foreign key (
-        counterparty_account_number,
-        counterparty_routing_number
-      ) references finance.account (    
-        routing_number
-        account_number
-      ),
-      foreign key (
-        transaction_account_number,
-        transaction_routing_number
-      ) references finance.account (    
-        routing_number
-        account_number
-      )
+    -- connect to accounts, both the account and its counterparty
+    foreign key (
+      counterparty_account_number,
+      counterparty_routing_number
+    ) references finance.account (
+      account_number,
+      routing_number   
+    ),
+    foreign key (
+      account_number,
+      routing_number
+    ) references finance.account (
+      account_number,
+      routing_number
+    ),
+    -- Ensure account and counterparty are different, i.e., no transfers to itself
+    check (
+      (account_number, routing_number) <> (counterparty_account_number, counterparty_routing_number)
+    )  
   ) partition by range (transfer_created_at);
+
+  revoke update on finance.transfer from application;
+  grant update (status) on finance.transfer to application;
 
   comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
 
-  revoke update on finance.transfer from application;
-  grant update (transfer_status_changed_at, status, status_message) 
-    on finance.transfer to application;
-
   create table finance.settled_transaction (
-    transaction_created_at   timestamptz not null default now(),
-    transfer_created_at      timestamptz not null default now(),
-    transaction_account      text not null references account(account_name),
-    counterparty_account     text not null references account(account_name),  
-    amount                   bigint not null, 
-    foreign key (
-      transaction_account,    
-      transfer_created_at,    
-      counterparty_account,
+    transaction_created_at      timestamptz not null default now(),
+    transfer_created_at         timestamptz not null default now(),    
+    account_number              finance.account_number not null,
+    routing_number              finance.routing_number not null,
+    counterparty_account_number finance.account_number not null,
+    counterparty_routing_number finance.routing_number not null,        
+    amount                      bigint not null,
+    primary key (
+      account_number,
+      routing_number,
       transaction_created_at
-    ) references finance.transfer_state_change (    
-      transaction_account,
-      transfer_created_at,    
-      counterparty_account,
-      transfer_status_changed_at
+    ),
+    foreign key (
+      account_number,
+      routing_number,
+      transfer_created_at,
+      counterparty_account_number,
+      counterparty_routing_number
+    )
+    references finance.transfer (
+      account_number,
+      routing_number,
+      transfer_created_at,
+      counterparty_account_number,
+      counterparty_routing_number
     ) deferrable initially deferred
   ) partition by range (transaction_created_at);
 
   comment on table finance.settled_transaction is
     'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
 
-  revoke update on finance.transfer from application;
-  grant update (transfer_status_changed_at, status, status_message) 
-    on finance.transfer to application;
+  revoke update on finance.settled_transaction from application;
 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
-      counterparty_account,
-      transaction_created_at
-    ) references finance.transfer_state_change (    
-      transaction_account,
-      transfer_created_at,    
-      counterparty_account,
-      transfer_status_changed_at
+      account_number,
+      routing_number,
+      transfer_created_at,
+      counterparty_account_number,
+      counterparty_routing_number
+    )
+    references finance.transfer (
+      account_number,
+      routing_number,
+      transfer_created_at,
+      counterparty_account_number,
+      counterparty_routing_number
     ) deferrable initially deferred
   ) partition by range (transaction_created_at);
 
   comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you''re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
-
 #+end_src
 
 
@@ -424,15 +438,17 @@ reference, we have this total (ignoring alignment issues
 So, around 100 bytes per row. Suppose we want 3 days of transfers and 1
 day of transactions, that would be 6 (3 ~finance.transfer~ + 3
 ~finance.transfer_history~) + 2 (1 ~finance.pending_transaction~ + 1
-~finance.settled_transaction~). Assuming 10k accounts each having 100
-transfer/pending/settled per day, that would necessitate ~7.5~ Gb of
-RAM. If we are ta talking something like a mid/large bank, 50
+~finance.settled_transaction~).
+
+Assuming 10k accounts each having 100 transfer/pending/settled per day,
+that would necessitate ~7.5~ Gb of RAM. If we are ta talking something
+like a mid/large bank, 50
 million(https://international.nubank.com.br/company/pix-breaks-record-and-reaches-1-billion-monthly-transactions/)
 ~38GB, and for
 VISA(https://annualreport.visa.com/chairman-and-ceo-message/default.aspx#:~:text=toggle%20all-,A%20strong%202025,901%20million%20transactions%20per%20day.)
 ~700Gb.
 
-ADD INDEX SIZE
+
 
 *** Auditing and reconstructing state
 
