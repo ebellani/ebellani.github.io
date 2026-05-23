@@ -1,4 +1,3 @@
-
 #+TITLE: eduardo's website title
 #+bibliography: ./refs.bib
 #+options: broken-links:mark toc:nil
@@ -62,7 +61,7 @@ missed opportunities. Some intentionally absurd-but-familiar examples:
 #+begin_quote
 We need an audit trail, let's use {temporal/event sourcing DBMS}
 
-Our application is slow, let's cache that using {in-memory key-value database}  
+Our application is slow, let's cache that using {in-memory key-value database}
 #+end_quote
 
 And since a relational database like PostgreSQL is still considered
@@ -140,7 +139,7 @@ the requirements:
 
 #+caption: Increase account dashboard
 #+attr_html: :width 150%
-[[./increase.account_dashboard.png]]   
+[[./increase.account_dashboard.png]]
 
 #+caption: Increase details
 #+attr_html: :width 150%
@@ -150,6 +149,7 @@ From these 2 images, here is a list of requirements (functional and not)
 that I have extracted, which I consider to be common in financial
 systems like increase:
 
+<<full_list>>
 1. <<act>>Accounts are defined by immutable routing numbers and account numbers
    and have a status that can vary.
 2. <<lst>>Transactions and transfers are listed, paginated by their
@@ -166,44 +166,26 @@ systems like increase:
    transfers. Transfers are editable, and so we should be able to update
    them fast too.
 
-*** Laying the foundation 
+*** Laying the foundation
 
 In this section we build the core tables[fn:2] and the role necessary to
 restraint updates and achieve the immutability mentioned on the
 requirements (requirement [[act]] for example).
 
-Notice in particular the partitioning of the tables. This is necessary
-because we assume that our data will exceed the physical memory of the
-database server, which is a core rule of thumb of such decisions
-[cite:@postgresql-partitioning-docs]. Partiioning allows us to have:
+First, let's create the logical schema that will hold the database
+design, and the user[fn:3] and the initial domains that will provide the
+values we will be using and an auxiliary table for accounts:
 
-# https://www.adyen.com/knowledge-hub/introduction-to-table-partioning
-1) Query performance, specially for calculating the current balance or
-   listing transactions of particular time ranges (see requirements [[blc]]
-   and [[lst]]).
- #+begin_quote
-   Query performance can be improved dramatically in certain situations,
-   particularly when most of the heavily accessed rows of the table are
-   in a single partition or a small number of partitions. Partitioning
-   effectively substitutes for the upper tree levels of indexes, making
-   it more likely that the heavily-used parts of the indexes fit in
-   memory. [cite:@postgresql-partitioning-docs]
-   #+end_quote
-
-2) Stable growth, allowing us to control the estimated size of the
-   underlying tables. This will prove important for write throughput
-   (more on that on section [[*Partitioning for speed][Partitioning for speed]]).
-
-#+name: laying_foundation
+#+name: laying_foundation_domain
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create schema finance;
 
-  create role application;
-  grant usage on schema finance to application;
+  create role finance;
+  grant usage on schema finance to finance;
   alter default privileges in schema finance
-    grant select, insert, update, delete on tables to application;
+    grant select, insert, update, delete on tables to finance;
   alter default privileges in schema finance
-    grant usage, select on sequences to application;
+    grant usage, select on sequences to finance;
 
   create domain finance.routing_number as text
     check (value ~ '^[0-9]{9}$');
@@ -211,69 +193,94 @@ database server, which is a core rule of thumb of such decisions
   create domain finance.account_number as text
     check (value ~ '^[0-9]{12}+$');
 
+  create domain finance.transfer_status as text
+    check(value in ('pending',
+    	          'returned',
+    		  'completed'));
+
   create table finance.account(
     routing_number  finance.routing_number not null,
     account_number  finance.account_number not null,
     account_name    text not null,
-    primary key (routing_number, account_number)
+    account_active_period tstzrange not null default tstzrange(now(), 'infinity', '[)'),
+    primary key (routing_number,
+                 account_number,
+                 account_active_period without overlaps)
   );
 
   comment on table finance.account is
-    'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance.';
+    'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance. This relation holds the accounts that are active. No transfer may be created for accounts in the period that they were inactive.';
+#+end_src
 
-  create domain finance.transfer_status as text
-    check(value in ('pending',                                                                        
-    	          'returned',                  
-    		  'completed'));
+Then we move to the core tables. Below are the transfers, which
+represent the movement of money as an entity changing over time and are
+therefore updatable. Notice that we narrow the updatable space to what
+can change, the status.
 
-  create table finance.transfer (  
+#+name: laying_foundation_table_transfer
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create table finance.transfer (
+    transfer_valid_period       tstzrange not null default tstzrange(now(), 'infinity', '[)'),
+    account_number              finance.account_number not null,
+    routing_number              finance.routing_number not null,
+    counterparty_account_number finance.account_number not null,
+    counterparty_routing_number finance.routing_number not null,
+    amount                      bigint not null,
+    status                      finance.transfer_status not null,
+    -- temporal primary key: prevents overlapping transfers for same account pair
+    primary key (
+      account_number,
+      routing_number,
+      counterparty_account_number,
+      counterparty_routing_number,
+      transfer_valid_period without overlaps
+    ),
+    -- temporal foreign key: ensure counterparty account exists during transfer period
+    foreign key (
+      counterparty_account_number,
+      counterparty_routing_number,
+      period transfer_valid_period
+    ) references finance.account (
+      account_number,
+      routing_number,
+      period account_active_period
+    ),
+    -- temporal foreign key: ensure source account exists during transfer period
+    foreign key (
+      account_number,
+      routing_number,
+      period transfer_valid_period
+    ) references finance.account (
+      account_number,
+      routing_number,
+      period account_active_period
+    ),
+    -- ensure account and counterparty are different
+    check (
+      (account_number, routing_number) <> (counterparty_account_number, counterparty_routing_number)
+    )
+  ) partition by range (lower(transfer_valid_period));
+
+
+  revoke update on finance.transfer from finance;
+  grant update (status) on finance.transfer to finance;
+
+  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
+#+end_src
+
+Contrasted with the above, below we have transactions, which represent
+changes in the balances(current and available) of an account and are
+therefore immutable[fn:4].
+
+#+name: laying_foundation_table_txn
+#+begin_src sql
+  create table finance.settled_transaction (
+    transaction_created_at      timestamptz not null default now(),
     transfer_created_at         timestamptz not null default now(),
     account_number              finance.account_number not null,
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
-    counterparty_routing_number finance.routing_number not null,    
-    amount                      bigint not null,
-    status                      finance.transfer_status not null,
-    primary key (
-      account_number,
-      routing_number,
-      transfer_created_at,
-      counterparty_account_number,
-      counterparty_routing_number
-    ),
-    -- connect to accounts, both the account and its counterparty
-    foreign key (
-      counterparty_account_number,
-      counterparty_routing_number
-    ) references finance.account (
-      account_number,
-      routing_number   
-    ),
-    foreign key (
-      account_number,
-      routing_number
-    ) references finance.account (
-      account_number,
-      routing_number
-    ),
-    -- Ensure account and counterparty are different, i.e., no transfers to itself
-    check (
-      (account_number, routing_number) <> (counterparty_account_number, counterparty_routing_number)
-    )  
-  ) partition by range (transfer_created_at);
-
-  revoke update on finance.transfer from application;
-  grant update (status) on finance.transfer to application;
-
-  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
-
-  create table finance.settled_transaction (
-    transaction_created_at      timestamptz not null default now(),
-    transfer_created_at         timestamptz not null default now(),    
-    account_number              finance.account_number not null,
-    routing_number              finance.routing_number not null,
-    counterparty_account_number finance.account_number not null,
-    counterparty_routing_number finance.routing_number not null,        
+    counterparty_routing_number finance.routing_number not null,
     amount                      bigint not null,
     primary key (
       account_number,
@@ -294,12 +301,12 @@ database server, which is a core rule of thumb of such decisions
       counterparty_account_number,
       counterparty_routing_number
     ) deferrable initially deferred
-  ) partition by range (transaction_created_at);
+  );
 
   comment on table finance.settled_transaction is
     'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
 
-  revoke update on finance.settled_transaction from application;
+  revoke update, delete on finance.settled_transaction from finance;
 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
@@ -317,13 +324,14 @@ database server, which is a core rule of thumb of such decisions
       counterparty_account_number,
       counterparty_routing_number
     ) deferrable initially deferred
-  ) partition by range (transaction_created_at);
+  );
 
   comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you''re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+
+  revoke update, delete on finance.pending_transaction from finance;
 #+end_src
 
-
-*** On maintaining business rules via meaningful constraints 
+*** On maintaining business rules via meaningful constraints
 
 #+begin_quote
 It is impossible to design and interrogate a database sensibly, and
@@ -335,11 +343,9 @@ database...[cite:@pascal2026meaning]
 In our case, transactions need to be created only when the transfer is
 in the right state of the state machine, as indicated in requirement [[trf]].
 
-In the absence of SQL's ~assert~ (which is the case for
-Postgres[cite:@postgresql2026unsupported] but not for
-Oracle[cite:@oracle2026assertion]) we need to rely on constraint
+In the absence of SQL's ~assert~[fn:5] we need to rely on constraint
 triggers, and if possible maintain them as declarative as
-possible[fn:3]:
+possible[fn:6]:
 
 #+name: constraints
 #+begin_src sql :tangle only_postgres_code.sql :comments link
@@ -404,7 +410,7 @@ possible[fn:3]:
   create constraint trigger pending_transaction_requires_pending_transfer
     after insert on finance.pending_transaction
     deferrable initially deferred
-    for each row  
+    for each row
     execute function finance.ensure_pending_transfer();
 
   create constraint trigger settled_transaction_requires_non_pending_transfer
@@ -415,10 +421,10 @@ possible[fn:3]:
 
 #+end_src
 
-*** Auditing and reconstructing state
+*** On auditing and reconstructing state
 
 In order to implement feature [[trf]], need system-time temporal
-tables[fn:4]. PostgreSQL on the other hand supports
+tables[fn:7]. PostgreSQL on the other hand supports
 several approaches for temporal tables. For simplicity and portability
 (including RDS), we use the temporal_tables extension
 [cite:@nearform_temporal_tables].
@@ -445,17 +451,27 @@ table with a simple function call, use this snippet:
     execute procedure versioning('sys_period', 'finance.transfer_history', true);
 #+end_src
 
-Once applied, ~public.account_history~ will contain every past version
-of every account, from which you can reconstruct the state of accounts
-over time. You can query the state of all account by doing something like:
+Once applied, ~public.transfer_history~ will contain every past version
+of every transfer, from which you can reconstruct the state of transfers
+over time. You can query the state of all transfers by doing something
+like[fn:21]:
 
 #+begin_src sql :tangle "only_postgres.sql" :comments yes
-  select * from account 
+  select * from transfer
   UNION ALL
-  select * from account_history;
+  select * from transfer_history;
 #+end_src
 
-You can see a full tutorial on this library here [cite:@clarkdave2015_temporal_tables].
+*** On temporal referential constraints
+
+PostgreSQL 18 introduces native support for SQL:2011 temporal
+referential constraints. This native constraint ensures that a
+transaction can only reference a transfer that existed at the timethe
+transaction was created.
+
+
+This works through the PERIOD feature and WITHOUT OVERLAPS
+clause.
 
 *** On capacity planning
 
@@ -504,15 +520,89 @@ Given that in this design we are using a single index for each table
 (the btree backing the primary key), you can add 100% for the index
 size, doubling the amounts above.
 
-
-*** Write/update throughput is too low
+*** On write throughput
+:PROPERTIES:
+:CUSTOM_ID: on-write-throughput
+:END:
 
 If you want to maintain semantic enforcement of your data (which in our
-model is done via fkeys and constraint triggers) about the only thing
-you can do to optimize writes is to use indexes in a smart way. After
-all, ~indexes, if not carefully chosen, can kill performance in a
-write-heavy
+model is done via fkeys and constraint triggers) about the best thing
+you can do to optimize write throughpu is to lower the write
+amplication, specifically to use indexes in a smart way. After all,
+~indexes, if not carefully chosen, can kill performance in a write-heavy
 application~[cite:@gerogiannakis_postgres_index_queries_2019]
+
+**** Partitioning
+
+Paritioning becomes relevant because fitting all the necessary index
+nodes in memory is key for fast insertion/updates (remember that an
+update is also an insert).
+
+For tables where you are using sequential identifiers and are only
+inserting, you have good performance *because* you have good index
+locality. Poor index locality leads to space consumption and processing
+latency to write
+operations[cite:@atkinson_avoid_uuidv4_primary_keys_2025]. Fixing such
+issues can lead to surprising improvements such as a ~50% reduction in
+the WAL (Write Ahead Log) rate of the primary
+database~[cite:@chan_buildkite_uuidv7_2023].
+
+As we can see in the [[full_list][feature list]], we have 2 features represented as
+relations: [[laying_foundation_table_transfer][transfers]] and [[laying_foundation_table_txn][transactions]]. Both are sequentially ordered by
+their creation time but, crucially, transactions do not change while
+transfers do. *Therefore*, we should partition the transfers table to
+minimize index locality problems, but not the transaction tables.
+
+Here is the code to add partitions using pg_partman [cite:@pg_partman_github]:
+
+#+begin_src sql :tangle "only_postgres.sql" :comments yes
+    create schema partman;
+    CREATE EXTENSION IF NOT EXISTS pg_cron;
+    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
+
+    -- set partman for a table, creating the initial partitions
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.settled_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,
+        p_start_partition := '2025-01-01 00:00:00'
+    );
+
+    -- repeat for pending transactions and transfers
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.pending_transaction',
+        p_control      := 'transaction_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,
+        p_start_partition := '2025-01-01 00:00:00'
+    );
+
+    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
+
+    SELECT partman.create_parent(
+        p_parent_table := 'finance.transfer',
+        p_control      := 'transfer_created_at',
+        p_type         := 'range',
+        p_interval     := '1 day',
+        p_premake      := 7,
+        p_default_table := false,
+        p_start_partition := '2025-01-01 00:00:00',
+        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template
+    );
+
+    UPDATE partman.part_config
+    SET infinite_time_partitions = true,
+        premake = 7
+      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
+
+  -- run maintenance every hour
+  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
+#+end_src
 
 **** Unused indexes
 
@@ -524,19 +614,19 @@ PostgreSQL internal statistics):
 
 #+begin_src sql
   SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes where schemaname='finance' ORDER BY idx_scan;
-    
-   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch 
+
+   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch
   ════════════╪═════════════════════╪═════════════════════════════════╪══════════╪══════════════╪═══════════════
    finance    │ settled_transaction │ settled_transaction_pkey        │        0 │            0 │             0
    finance    │ transfer_history    │ transfer_history_sys_period_idx │        0 │            0 │             0
    finance    │ account             │ account_pkey                    │      100 │           80 │            60
    finance    │ pending_transaction │ pending_transaction_pkey        │  1220000 │       120000 │        120000
-   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000    
+   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000
 #+end_src
 
 - idx_scan :: How many times the index has been scanned (used). This can
   be either directly by a application query e.g.
-  
+
   #+begin_src sql
     select * from finance.transfer where
     (transfer_created_at, transaction_account, counterparty_account) =
@@ -596,7 +686,7 @@ can be expensive.[cite:@postgresql_hot_2025]
 
 Transfers are the ideal scenario for HOT, since the the indexed columns
 via the PK does not reach the column that will get updated:
-~transfer_status~. 
+~transfer_status~.
 
 #+begin_src sql
   alter table finance.transfer set (fillfactor = 90);
@@ -606,95 +696,9 @@ This will give us the major benefit of not having to touch indexes,
 which is the bane of write heavy
 applications[cite:@gerogiannakis_postgres_index_queries_2019].
 
-**** Partitioning for speed 
+**** Partitioning for speed
 
-As we have seen, indexes are the bane of inserting information. Fitting
-all the necessary index nodes in memory is key for fast
-insertion/updates (remember that an update is also an insert).
 
-For tables where you are using sequential identifiers, the data is
-logically arranged on the right-most part of an index, avoiding page
-splitting and easily keeping all necessary nodes in memory.
-
-For tables that do not fit the above pattern, you have a problem
-specially when the indexes grow to outpace available memory, which can
-be the case with a high insert rate:
-
-#+begin_quote
-Unnecessary splits and rebalancing add space consumption and processing
-latency to write operations. This extra IO shows up in Write Ahead Log
-(WAL) generation as well.
-
-Buildkite reported a 50% reduction in write IO for the WAL by moving to
-time-ordered UUIDs.[cite:@atkinson_avoid_uuidv4_primary_keys_2025; @chan_buildkite_uuidv7_2023]
-#+end_quote
-
-We are designing here for both high insertion rates and to be able to
-calculate balances fast. To calculate account balances fast, we would
-have to index by ~transaction_account~, which are not aligned to the
-index, obviously. The solution for that is twofold:
-
-1. Index by transaction_account
-2. Partition by a range that would fit into the cache. Let's assume that
-   this would be a day. Such decision aligns neatly with a daily
-   balance, which is a common feature on financial systems.
-
-On our design, we have already created native partitioning for both
-transaction tables/types. We now need to plug in all the necessary
-tooling around to make sure it has the partitions underneath it and that
-they are maintained over time.[fn:5]
-[cite:@pg_partman_github;@aws_rds_postgresql_partitions]. Here's a
-snippet that creates partitions for an year in the past and in the
-future:
-
-#+begin_src sql :tangle "only_postgres.sql" :comments yes
-    create schema partman;
-    CREATE EXTENSION IF NOT EXISTS pg_cron;
-    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
-
-    -- set partman for a table, creating the initial partitions
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.settled_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,
-        p_start_partition := '2025-01-01 00:00:00' 
-    );
-
-    -- repeat for pending transactions and transfers
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.pending_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,      
-        p_start_partition := '2025-01-01 00:00:00'    
-    );
-
-    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
-
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.transfer',
-        p_control      := 'transfer_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,      
-        p_start_partition := '2025-01-01 00:00:00',
-        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template 
-    );
-
-    UPDATE partman.part_config
-    SET infinite_time_partitions = true,
-        premake = 7                     
-      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
-
-  -- run maintenance every hour
-  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
-#+end_src
 
 
 *** TODO Transactional Queries
@@ -702,7 +706,7 @@ Here are the transactional queries that I assume will compose the vast
 majority of such application cycle:
 
 1. Insert transfers/transactions
-2. Paginate over transfers/transactions 
+2. Paginate over transfers/transactions
 3. Update a transfer's state
 4. Get all transactions for a transfer
 
@@ -712,7 +716,7 @@ such application cycle:
 
 ~ALTER DATABASE X SET default_transaction_isolation = 'serializable';~
 
-1. Get balance at time X for account Y 
+1. Get balance at time X for account Y
 
 
 *** Appendix: Code Generating test data
@@ -769,14 +773,14 @@ If you want to play around with the design here, run
       transaction_created_at,
       transfer_created_at,
       transaction_account,
-      counterparty_account,    
+      counterparty_account,
       amount
     )
     select
       lower(t.sys_period),        -- system-time when row was created
       t.transfer_created_at,
       t.transaction_account,
-      t.counterparty_account,    
+      t.counterparty_account,
       t.amount
     from finance.transfer t
     where upper(t.sys_period) is null
@@ -840,16 +844,16 @@ If you want to play around with the design here, run
       transaction_created_at,
       transfer_created_at,
       transaction_account,
-      counterparty_account,    
+      counterparty_account,
       amount
     )
     select
       now(),                     -- transaction occurs now
       t.transfer_created_at,
       t.transaction_account,
-      t.counterparty_account,    
+      t.counterparty_account,
       t.amount
-    from finance.transfer t  
+    from finance.transfer t
     where upper(t.sys_period) is null
       and t.transfer_status = 'completed' on conflict do nothing;  -- ensure we use the new version
     return;
@@ -864,28 +868,28 @@ If you want to play around with the design here, run
 #   --   create table finance.transfer_state_change (
 #   --     transfer_created_at        timestamptz not null,
 #   --     transaction_account        text not null references account(account_name),
-#   --     counterparty_account       text not null references account(account_name),  
+#   --     counterparty_account       text not null references account(account_name),
 #   --     transfer_status_changed_at timestamptz not null,
 #   --     status                     finance.transfer_status not null,
 #   --     status_message             text not null,
-#   --     primary key (    
-#   --       transaction_account,    
-#   --       transfer_created_at,    
+#   --     primary key (
+#   --       transaction_account,
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transfer_status_changed_at
 #   --     ),
 #   --     foreign key (
-#   --       transaction_account,    
-#   --       transfer_created_at,    
-#   --       counterparty_account    
-#   --     ) references finance.transfer (    
 #   --       transaction_account,
-#   --       transfer_created_at,    
-#   --       counterparty_account    
-#   --     ) deferrable initially deferred  
+#   --       transfer_created_at,
+#   --       counterparty_account
+#   --     ) references finance.transfer (
+#   --       transaction_account,
+#   --       transfer_created_at,
+#   --       counterparty_account
+#   --     ) deferrable initially deferred
 #   --   ) partition by range (transfer_created_at);
 
-    
+
 #   -- comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. Some of these changes might be tied to financial transactions, but not all. Essential to answer questions related to the state of the transfer.';
 
 
@@ -896,7 +900,7 @@ If you want to play around with the design here, run
 
 #   --   create or replace function finance.log_transfer_state_change()
 #   --     returns trigger language plpgsql as $$
-#   --     begin    
+#   --     begin
 #   --       insert into finance.transfer_state_change (
 #   --         transfer_created_at,
 #   --         transaction_account,
@@ -910,7 +914,7 @@ If you want to play around with the design here, run
 #   --         new.counterparty_account,
 #   --         new.transfer_status_changed_at,
 #   --         new.status,
-#   --         new.status_message        
+#   --         new.status_message
 #   --       );
 #   --     end;
 #   --   $$;
@@ -925,16 +929,16 @@ If you want to play around with the design here, run
 #   --     transaction_created_at   timestamptz not null default now(),
 #   --     transfer_created_at      timestamptz not null default now(),
 #   --     transaction_account      text not null references account(account_name),
-#   --     counterparty_account     text not null references account(account_name),  
-#   --     amount                   bigint not null, 
+#   --     counterparty_account     text not null references account(account_name),
+#   --     amount                   bigint not null,
 #   --     foreign key (
-#   --       transaction_account,    
-#   --       transfer_created_at,    
+#   --       transaction_account,
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transaction_created_at
-#   --     ) references finance.transfer_state_change (    
+#   --     ) references finance.transfer_state_change (
 #   --       transaction_account,
-#   --       transfer_created_at,    
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transfer_status_changed_at
 #   --     ) deferrable initially deferred
@@ -942,7 +946,7 @@ If you want to play around with the design here, run
 
 #   --   -- include amount on the primary key, performance hack to calculate balances
 #   --   create unique index idx_settled_transaction_pkey_covering_amount
-#   --     on finance.settled_transaction (transaction_account, transaction_created_at) 
+#   --     on finance.settled_transaction (transaction_account, transaction_created_at)
 #   --     include (amount);
 
 #   --   alter table finance.settled_transaction
@@ -954,13 +958,13 @@ If you want to play around with the design here, run
 #   --   create table finance.pending_transaction (
 #   --     like finance.settled_transaction including all,
 #   --     foreign key (
-#   --       transaction_account,    
-#   --       transfer_created_at,    
+#   --       transaction_account,
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transaction_created_at
-#   --     ) references finance.transfer_state_change (    
+#   --     ) references finance.transfer_state_change (
 #   --       transaction_account,
-#   --       transfer_created_at,    
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transfer_status_changed_at
 #   --     ) deferrable initially deferred
@@ -971,18 +975,18 @@ If you want to play around with the design here, run
 #   --   create table finance.transfer_pending_transaction(
 #   --     like finance.pending_transaction including excluding indexes,
 #   --     foreign key (
-#   --       transaction_account, transaction_created_at        
-#   --     ) references finance.pending_transaction (    
+#   --       transaction_account, transaction_created_at
+#   --     ) references finance.pending_transaction (
 #   --       transaction_account, transaction_created_at
 #   --     ) deferrable initially deferred,
 #   --     foreign key (
-#   --       transaction_account,    
-#   --       transfer_created_at,    
+#   --       transaction_account,
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transaction_created_at
-#   --     ) references finance.transfer_state_change (    
+#   --     ) references finance.transfer_state_change (
 #   --       transaction_account,
-#   --       transfer_created_at,    
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transfer_status_changed_at
 #   --     ) deferrable initially deferred,
@@ -994,21 +998,21 @@ If you want to play around with the design here, run
 #   --   create table finance.transfer_settled_transaction(
 #   --     like finance.transfer_pending_transaction including all,
 #   --     foreign key (
-#   --       transaction_account, transaction_created_at        
-#   --     ) references finance.settled_transaction (    
+#   --       transaction_account, transaction_created_at
+#   --     ) references finance.settled_transaction (
 #   --       transaction_account, transaction_created_at
 #   --     ) deferrable initially deferred,
 #   --     foreign key (
-#   --       transaction_account,    
-#   --       transfer_created_at,    
+#   --       transaction_account,
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transaction_created_at
-#   --     ) references finance.transfer_state_change (    
+#   --     ) references finance.transfer_state_change (
 #   --       transaction_account,
-#   --       transfer_created_at,    
+#   --       transfer_created_at,
 #   --       counterparty_account,
 #   --       transfer_status_changed_at
-#   --     ) deferrable initially deferred,  
+#   --     ) deferrable initially deferred,
 #   --   ) partition by range (transfer_created_at);
 
 #   --   comment on table finance.transfer_settled_transaction is 'A way to retrieve all settled transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
@@ -1036,7 +1040,7 @@ If you want to play around with the design here, run
 #   --   create constraint trigger settled_transaction_requires_non_pending_transfer
 #   --     after insert on finance.settled_transaction
 #   --     deferrable initially deferred
-#   --     for each row  
+#   --     for each row
 #   --     execute function finance.ensure_non_pending_transfer();
 
 #   --   create or replace function finance.ensure_pending_transfer()
@@ -1048,7 +1052,7 @@ If you want to play around with the design here, run
 #   --          where t.transfer_created_at     = NEW.transfer_created_at
 #   --            and t.transaction_account     = NEW.transaction_account
 #   --            and t.counterparty_account    = NEW.counterparty_account
-#   --            and t.transaction_created_at  = NEW.transfer_status_changed_at             
+#   --            and t.transaction_created_at  = NEW.transfer_status_changed_at
 #   --            and t.transfer_status in ('pending', 'returned')
 #   --       ) then
 #   --         raise exception
@@ -1062,11 +1066,11 @@ If you want to play around with the design here, run
 #   --   create constraint trigger pending_transaction_requires_pending_transfer
 #   --     after insert on finance.pending_transaction
 #   --     deferrable initially deferred
-#   --     for each row  
+#   --     for each row
 #    = 'pending'
 # --       ) then
 # --         raise exception
-# --   
+# --
 
 
 #+name: core_design
@@ -1090,8 +1094,8 @@ If you want to play around with the design here, run
     'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance.';
 
   create domain finance.transfer_status as text
-    check(value in ('pending',                                                                        
-  	          'returned',                  
+    check(value in ('pending',
+  	          'returned',
   		  'completed'));
 
   create table finance.transfer (
@@ -1102,45 +1106,45 @@ If you want to play around with the design here, run
     description                text not null,
     transfer_status_changed_at timestamptz not null default now(),
     status                     finance.transfer_status not null,
-    status_message             text not null,  
+    status_message             text not null,
     primary key (
-      transaction_account,    
-      transfer_created_at,    
-      counterparty_account    
+      transaction_account,
+      transfer_created_at,
+      counterparty_account
     )
   ) partition by range (transfer_created_at);
 
   comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
 
   revoke update on finance.transfer from application;
-  grant update (transfer_status_changed_at, status, status_message) 
+  grant update (transfer_status_changed_at, status, status_message)
     on finance.transfer to application;
 
   create table finance.transfer_state_change (
     transfer_created_at        timestamptz not null,
     transaction_account        text not null references account(account_name),
-    counterparty_account       text not null references account(account_name),  
+    counterparty_account       text not null references account(account_name),
     transfer_status_changed_at timestamptz not null,
     status                     finance.transfer_status not null,
     status_message             text not null,
-    primary key (    
-      transaction_account,    
-      transfer_created_at,    
+    primary key (
+      transaction_account,
+      transfer_created_at,
       counterparty_account,
       transfer_status_changed_at
     ),
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
-      counterparty_account    
-    ) references finance.transfer (    
       transaction_account,
-      transfer_created_at,    
-      counterparty_account    
-    ) deferrable initially deferred  
+      transfer_created_at,
+      counterparty_account
+    ) references finance.transfer (
+      transaction_account,
+      transfer_created_at,
+      counterparty_account
+    ) deferrable initially deferred
   ) partition by range (transfer_created_at);
 
-  
+
 comment on table finance.transfer_state_change is 'Represents the state changes that happen on the transfer. Some of these changes might be tied to financial transactions, but not all. Essential to answer questions related to the state of the transfer.';
 
 
@@ -1151,7 +1155,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
 
   create or replace function finance.log_transfer_state_change()
     returns trigger language plpgsql as $$
-    begin    
+    begin
       insert into finance.transfer_state_change (
         transfer_created_at,
         transaction_account,
@@ -1165,7 +1169,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
         new.counterparty_account,
         new.transfer_status_changed_at,
         new.status,
-        new.status_message        
+        new.status_message
       );
     end;
   $$;
@@ -1180,16 +1184,16 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
     transaction_created_at   timestamptz not null default now(),
     transfer_created_at      timestamptz not null default now(),
     transaction_account      text not null references account(account_name),
-    counterparty_account     text not null references account(account_name),  
-    amount                   bigint not null, 
+    counterparty_account     text not null references account(account_name),
+    amount                   bigint not null,
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
+      transaction_account,
+      transfer_created_at,
       counterparty_account,
       transaction_created_at
-    ) references finance.transfer_state_change (    
+    ) references finance.transfer_state_change (
       transaction_account,
-      transfer_created_at,    
+      transfer_created_at,
       counterparty_account,
       transfer_status_changed_at
     ) deferrable initially deferred
@@ -1197,7 +1201,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
 
   -- include amount on the primary key, performance hack to calculate balances
   create unique index idx_settled_transaction_pkey_covering_amount
-    on finance.settled_transaction (transaction_account, transaction_created_at) 
+    on finance.settled_transaction (transaction_account, transaction_created_at)
     include (amount);
 
   alter table finance.settled_transaction
@@ -1209,13 +1213,13 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
+      transaction_account,
+      transfer_created_at,
       counterparty_account,
       transaction_created_at
-    ) references finance.transfer_state_change (    
+    ) references finance.transfer_state_change (
       transaction_account,
-      transfer_created_at,    
+      transfer_created_at,
       counterparty_account,
       transfer_status_changed_at
     ) deferrable initially deferred
@@ -1226,18 +1230,18 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
   create table finance.transfer_pending_transaction(
     like finance.pending_transaction including excluding indexes,
     foreign key (
-      transaction_account, transaction_created_at        
-    ) references finance.pending_transaction (    
+      transaction_account, transaction_created_at
+    ) references finance.pending_transaction (
       transaction_account, transaction_created_at
     ) deferrable initially deferred,
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
+      transaction_account,
+      transfer_created_at,
       counterparty_account,
       transaction_created_at
-    ) references finance.transfer_state_change (    
+    ) references finance.transfer_state_change (
       transaction_account,
-      transfer_created_at,    
+      transfer_created_at,
       counterparty_account,
       transfer_status_changed_at
     ) deferrable initially deferred,
@@ -1249,21 +1253,21 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
   create table finance.transfer_settled_transaction(
     like finance.transfer_pending_transaction including all,
     foreign key (
-      transaction_account, transaction_created_at        
-    ) references finance.settled_transaction (    
+      transaction_account, transaction_created_at
+    ) references finance.settled_transaction (
       transaction_account, transaction_created_at
     ) deferrable initially deferred,
     foreign key (
-      transaction_account,    
-      transfer_created_at,    
+      transaction_account,
+      transfer_created_at,
       counterparty_account,
       transaction_created_at
-    ) references finance.transfer_state_change (    
+    ) references finance.transfer_state_change (
       transaction_account,
-      transfer_created_at,    
+      transfer_created_at,
       counterparty_account,
       transfer_status_changed_at
-    ) deferrable initially deferred,  
+    ) deferrable initially deferred,
   ) partition by range (transfer_created_at);
 
   comment on table finance.transfer_settled_transaction is 'A way to retrieve all settled transactions for a transfer quickly. See this as a sort of secondary index that connects tables that are partitioned by different data.';
@@ -1291,7 +1295,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
   create constraint trigger settled_transaction_requires_non_pending_transfer
     after insert on finance.settled_transaction
     deferrable initially deferred
-    for each row  
+    for each row
     execute function finance.ensure_non_pending_transfer();
 
   create or replace function finance.ensure_pending_transfer()
@@ -1303,7 +1307,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
          where t.transfer_created_at     = NEW.transfer_created_at
            and t.transaction_account     = NEW.transaction_account
            and t.counterparty_account    = NEW.counterparty_account
-           and t.transaction_created_at  = NEW.transfer_status_changed_at             
+           and t.transaction_created_at  = NEW.transfer_status_changed_at
            and t.transfer_status in ('pending', 'returned')
       ) then
         raise exception
@@ -1317,7 +1321,7 @@ comment on table finance.transfer_state_change is 'Represents the state changes 
   create constraint trigger pending_transaction_requires_pending_transfer
     after insert on finance.pending_transaction
     deferrable initially deferred
-    for each row  
+    for each row
     execute function finance.ensure_pending_transfer();
 
 #+end_src
@@ -1503,7 +1507,7 @@ and documenting how that evidence was collected and how the conclusion
 was reached. Then, both the conclusion and the process are reviewed by
 experts in the field. Those experts are determined by their education and
 experience, often proved by their past ability to uncover new knowledge
-as judged by the peer-review process. [fn:6]
+as judged by the peer-review process. [fn:9]
 #+end_quote
 
 The first paragraph is an example of something that is clearly part of
@@ -1544,7 +1548,7 @@ of science. It has 3 elements: a starting point, a process and an end.
 - The end is science, which is a system of correct knowledge, relative
   to the cause of beings and ultimately deduced through demonstration. Such
   science can be rational or experimental, and is structured in a
-  dependency hierarchy. [fn:7]
+  dependency hierarchy. [fn:10]
   [cite:@Sinibaldi2021]
 #+end_quote
 
@@ -1838,7 +1842,7 @@ domains in
 relations[cite:@pascal20:_under_codds_rules_rdbms_acces]. This is Codd's
 Information Principle #1. This principle isn't just fluffy theory: it
 can lead to very concrete wins in how we design, query, and maintain
-systems.[fn:8]
+systems.[fn:11]
 
 *** A practical case: Dependencies for Security Policies 
 
@@ -2725,7 +2729,7 @@ Crowdstrike's RCA[cite:@crowdstrike24:_exter_techn_root_cause_analy]
 
 It is becoming more common for companies to come out with stories on the
 downsides of distributed microservice
-architectures[fn:9][cite:@kolny23:_scalin_prime_video;
+architectures[fn:12][cite:@kolny23:_scalin_prime_video;
 @10.1145/3593856.3595909].
 
 Instead of hopping in this bandwagon, as tempting as this might be, I
@@ -2786,7 +2790,7 @@ actually see you, you are in danger of derailing in your career.
 
 To avoid that, here are 3 steps, and a reference:
 
-   1) Ask and *embrace* feedback from bosses, peers and followers[fn:10],
+   1) Ask and *embrace* feedback from bosses, peers and followers[fn:13],
    2) Expose your most cherished ideas to the most intense forms of public scrutiny you can find,
    3) See ways to measure yourself, such as 360 feedback mechanisms and
       validated personality assessments.
@@ -3205,7 +3209,7 @@ Lay like the folds of a bright girdle furled./
 
 The microservice architecture(MA) has taken a deep hold in the
 collective imagination of the software engineering community since at
-least 2014[fn:11]. This has happened despite serious and well documented
+least 2014[fn:14]. This has happened despite serious and well documented
 [[#drawbacks][drawbacks]].
 
 Such combination calls for an explanation. A sketch of such explanation
@@ -3309,7 +3313,7 @@ implement the pi-calculus without MA:
   instance of the application becomes an engineering feat.
 - It freezes APIs. Once a microservice establishes an API, it becomes
   hard to change without breaking the other services that consume the
-  API. Legacy APIs linger around, and new APIs are patched on top.[fn:12]
+  API. Legacy APIs linger around, and new APIs are patched on top.[fn:15]
 - It slows down application development. When making changes that affect
   multiple microservices, developers cannot implement and deploy the
   changes atomically. They have to carefully plan how to introduce the
@@ -3370,7 +3374,7 @@ The structure of this argument is usually like this:
 
 This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
-context-sensitive examples[fn:13]:
+context-sensitive examples[fn:16]:
 
 *** Selection bias
 
@@ -3911,7 +3915,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:13]
+Conceptual schema -> Logical schema -> Physical schema [fn:16]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -3988,7 +3992,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto's
-14 Themes of the Elite Private School Curriculum[fn:14]:
+14 Themes of the Elite Private School Curriculum[fn:17]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -4043,7 +4047,7 @@ of being materially successful in life by learning John Taylor Gatto's
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:15]
+the IT sector in particular, is nominalism.[fn:18]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -4078,7 +4082,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:16]
+terminology. [fn:19]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -4247,7 +4251,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:11]
+resources. [fn:14]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -4413,14 +4417,21 @@ this is the description of the blog section
 #+end_description
 
 * Footnotes
+[fn:21] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables] 
 
 [fn:1] Complexity here is defined as the quantity of interacting parts of a whole
 
 [fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[#pg_all_you_need_code][Appendix]] for ease of copy.
 
-[fn:3] Such constraints are almost never created at the data level, exposing applications to the risk of failing audits and worse.
+[fn:3] On oracle there are further complications. See [cite:@cybertec_schema_pg_oracle]
 
-[fn:4] Temporal tables can be used for several interesting features:
+[fn:4] For a refresh on what these kinds of balances are, see [[*The setup][the description in the setup section]]
+
+[fn:5] (which is the case for Postgres[cite:@postgresql2026unsupported] but not for Oracle[cite:@oracle2026assertion])
+
+[fn:6] Such constraints are almost never created at the data level, exposing applications to the risk of failing audits and worse.
+
+[fn:7] Temporal tables can be used for several interesting features:
       #+begin_quote
     - Auditing all data changes and performing data forensics when necessary
     - Reconstructing state of the data as of any time in the past
@@ -4430,31 +4441,31 @@ this is the description of the blog section
       Auditing all data changes and performing data forensics when necessary [cite:@microsoft24:_tempor]
       #+end_quote
 
-[fn:5] DO NOT manage your partitions by hand: Use pg_partman.
+[fn:8] DO NOT manage your partitions by hand: Use pg_partman.
 
-[fn:6] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
+[fn:9] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
 
-[fn:7] From the portuguese, translated by this author.
+[fn:10] From the portuguese, translated by this author.
 
-[fn:8] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
+[fn:11] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
 
-[fn:9] Including a claim of cost reductions of over 90%!
+[fn:12] Including a claim of cost reductions of over 90%!
 
-[fn:10] I like the terms superordinate, coordinates and subordinates, but
+[fn:13] I like the terms superordinate, coordinates and subordinates, but
 they are not in common usage
 
-[fn:11] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
+[fn:14] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:12] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
+[fn:15] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
 
-[fn:13] (schemas are synonymous to models in this context)
+[fn:16] (schemas are synonymous to models in this context)
 
-[fn:14] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:17] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:15] You will probably see me return to this topic in other posts.
+[fn:18] You will probably see me return to this topic in other posts.
 
-[fn:16] I got the idea of such table from a similar table found on
+[fn:19] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:17] The definitions come from [cite:@fallacies_iep], but the examples
+[fn:20] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this contex
