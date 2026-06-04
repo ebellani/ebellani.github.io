@@ -19,5 +19,12 @@ public: content
 run: content
 	hugo serve
 
+.PHONY: database
+database:
+	nix develop --impure .#postgres --command bash -c "devenv up"
 
-# empty
+.PHONY: clean_database
+clean_database:        
+	rm -rf .devenv
+
+
