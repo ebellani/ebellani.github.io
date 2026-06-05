@@ -213,8 +213,8 @@ As such, domains are the core building blocks for logical design.
 
 #+name: the_domains
 #+begin_src sql :tangle only_postgres_code.sql :comments link
-    create domain finance.routing_number as text
-    check (value ~ '^[0-9]{9}$');
+  create domain finance.routing_number as text
+  check (value ~ '^[0-9]{9}$');
 
   create domain finance.account_number as text
     check (value ~ '^[0-9]{12}$');
@@ -236,13 +236,16 @@ is the managed account side.
 
 Managed accounts can be deactivated and reactivated. This falls neatly
 within the set of temporal features introduced in SQL
-2011[cite:@10.1145/2380776.2380786], in partiucular application time,
+2011[cite:@10.1145/2380776.2380786], in particular application time,
 recently introduced in Postgres 18[cite:@postgresql_temporal_pk]. This
 feature allows us to represent accounts going in and out of activity
 without overlapping.[fn:4]
 
 #+name: the_account
 #+begin_src sql :tangle only_postgres_code.sql :comments link
+  -- To use temporal constraints, you need to install the btree_gist extension, which provides the necessary operator classes for creating GiST indexes on scalar data types:
+  create extension btree_gist;
+
   create table finance.managed_active_account(
     routing_number  finance.routing_number not null,
     account_number  finance.account_number not null,
@@ -265,7 +268,16 @@ without overlapping.[fn:4]
 
   comment on table finance.external_account is
     'External accounts represent counterparty accounts at other institutions. They are the other side of a transfer. Unlike managed accounts, they have no temporal active period since we do not control their lifecycle.';
+#+end_src
 
+And below we finish the accounts by making sure a managed account and an
+external account can't be the same. We need to use ~alter table~ instead
+of adding these ~check~ constraints on the table definitions because of
+the circular dependency (one table depends on the other, and vice
+versa).
+
+#+name: the_account_constraints
+#+begin_src sql :tangle only_postgres_code.sql :comments link
   -- Ensure managed and external accounts never share the same identity
   create or replace function finance.not_external_account(
     p_routing_number finance.routing_number,
@@ -299,14 +311,15 @@ without overlapping.[fn:4]
 
   alter table finance.external_account
     add constraint external_not_managed
-
+  check (finance.not_managed_account(routing_number, account_number));
   #+end_src
 
 **** Transfers, can change over a state machine while respecting temporal constraints
 
 Below are the transfers, which represents the movement of money between
-accounts. It can be seen as a state machine progressing over the
-transfer_status domain ~pending -> (completed | returned)~.
+managed accounts and external accounts. It can be seen as a state
+machine progressing over the transfer_status domain ~pending ->
+(completed | returned)~.
 
 Another crucial point here is the ~period~ keyword in the references
 section. This makes a transfer period be consistent with active
@@ -1169,7 +1182,7 @@ this is the description of the blog section
 
 [fn:3] On oracle there are further complications. See [cite:@cybertec_schema_pg_oracle]
 
-[fn:4] DEFINITION NOT FOUND.
+[fn:4] A good overview on the features for PostgresSQL 18 can be found on [cite:@neon_temporal_fk]
 
 [fn:5] For a refresh on what these kinds of balances are, see [[*The setup][the description in the setup section]]
 
@@ -1189,31 +1202,31 @@ this is the description of the blog section
 
 [fn:9] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables]
 
-[fn:10] The definitions come from [cite:@fallacies_iep], but the examples
-are adapted to this contex
+[fn:10] DO NOT manage your partitions by hand: Use pg_partman.
 
-[fn:11] I got the idea of such table from a similar table found on
-chapter 25 of  [cite:@10.5555/861613]
+[fn:11] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
 
-[fn:12] You will probably see me return to this topic in other posts.
+[fn:12] From the portuguese, translated by this author.
 
-[fn:13] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:13] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
 
-[fn:14] (schemas are synonymous to models in this context)
+[fn:14] Including a claim of cost reductions of over 90%!
 
-[fn:15] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
+[fn:15] I like the terms superordinate, coordinates and subordinates, but
+they are not in common usage
 
 [fn:16] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:17] I like the terms superordinate, coordinates and subordinates, but
-they are not in common usage
+[fn:17] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
 
-[fn:18] Including a claim of cost reductions of over 90%!
+[fn:18] (schemas are synonymous to models in this context)
 
-[fn:19] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
+[fn:19] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:20] From the portuguese, translated by this author.
+[fn:20] You will probably see me return to this topic in other posts.
 
-[fn:21] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
+[fn:21] I got the idea of such table from a similar table found on
+chapter 25 of  [cite:@10.5555/861613]
 
-[fn:22] DO NOT manage your partitions by hand: Use pg_partman.
+[fn:22] The definitions come from [cite:@fallacies_iep], but the examples
+are adapted to this contex
