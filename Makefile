@@ -24,7 +24,8 @@ database:
 	nix develop --impure .#postgres --command bash -c "devenv up"
 
 .PHONY: clean_database
-clean_database:        
-	rm -rf .devenv
+clean_database:
+	-process-compose down --unix-socket .devenv/pc.sock
+	rm -rf .devenv/state/postgres
 
 
