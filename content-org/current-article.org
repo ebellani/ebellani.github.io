@@ -41,7 +41,7 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** Yes, your company can scale with just regular PostgreSQL
+** All your company need is Postgres, a detailed example
 :PROPERTIES:
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug all-you-need-is-postgresql
 :EXPORT_FILE_NAME: all-you-need-is-postgresql
@@ -176,7 +176,7 @@ In this section we build the core tables[fn:2] and the role necessary to
 restraint updates and achieve the immutability mentioned on the
 requirements (requirement [[act]] for example).
 
-**** The foudation: schemas and user roles for modularity
+**** The foundation: schemas and user roles for modularity
 
 Modularity, defined by the capacity to have a many-to-many relation
 between implementations and
@@ -187,7 +187,7 @@ proper role[fn:3] can be used for defining very precise interfaces on top of
 database objects[cite:@swart19:_row_level_secur].
 
 #+name: the_schema_and_roles
-#+begin_src sql
+#+begin_src sql :tangle only_postgres_code.sql :comments link
   create schema finance;
 
   create role finance;
@@ -314,23 +314,24 @@ versa).
   check (finance.not_managed_account(routing_number, account_number));
   #+end_src
 
-**** Transfers, can change over a state machine while respecting temporal constraints
+**** Transfers, constrained by  a state machine and temporal periods
 
 Below are the transfers, which represents the movement of money between
-managed accounts and external accounts. It can be seen as a state
+managed accounts and external accounts. They can be seen as a state
 machine progressing over the transfer_status domain ~pending ->
 (completed | returned)~.
 
 Another crucial point here is the ~period~ keyword in the references
-section. This makes a transfer period be consistent with active
+section. This makes a transfer period be consistent with active managed
 accounts, implementing a core financial safety requirement declaratively
 in the most deepest level one can.
 
 #+name: laying_foundation_table_transfer
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create table finance.transfer (
-    transfer_created_at         timestamptz not null default now(),
     transfer_period             tstzrange not null default tstzrange(now(), 'infinity', '[)'),
+    transfer_created_at         timestamptz
+                                generated always as (lower(transfer_period)) stored,
     account_number              finance.account_number not null,
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
@@ -345,45 +346,134 @@ in the most deepest level one can.
       transfer_created_at,
       counterparty_routing_number,
       counterparty_account_number
-    ),
-    -- temporal foreign key: ensure counterparty account exists during transfer period
+    ),  
     foreign key (
       counterparty_routing_number,
-      counterparty_account_number,
-      period transfer_period
-    ) references finance.account (
+      counterparty_account_number
+    ) references finance.external_account (
       routing_number,
-      account_number,
-      period account_active_period
+      account_number    
     ),
-    -- temporal foreign key: ensure source account exists during transfer period
+    -- temporal foreign key: ensure managed account exists during transfer period
     foreign key (
       routing_number,
       account_number,
       period transfer_period
-    ) references finance.account (
+    ) references finance.managed_active_account (
       routing_number,
       account_number,
       period account_active_period
-    ),
-    -- ensure account and counterparty are different
-    check (
-      (account_number, routing_number) <> (counterparty_account_number, counterparty_routing_number)
     )
   );
 
   comment on table finance.transfer is
-    'Transfers represent money movement between accounts. Status follows state machine: pending -> (completed | returned). Period closes on terminal state.';
+    'Transfers represent money movement between an external account and a managed account. Status follows state machine: pending -> (completed | returned). Period closes on terminal state. transfer_created_at is a stored generated column derived from lower(transfer_period), eliminating redundancy while remaining usable in primary keys and foreign key references.';
 
+  revoke insert on finance.transfer from finance;
   revoke update on finance.transfer from finance;
+  -- transfer_period will be managed based on the status
+  grant insert (routing_number,
+                account_number,
+                counterparty_routing_number,
+                counterparty_account_number,
+                amount) on finance.transfer to finance;
   grant update (status) on finance.transfer to finance;
 #+end_src
+
+Note that ~transfer_created_at~ is a stored generated column:
+~lower(transfer_period)~ is an immutable function, and the lower bound
+of ~transfer_period~ never changes (the state machine trigger only
+closes the upper bound). This eliminates the redundancy between
+~transfer_created_at~ and ~lower(transfer_period)~ while keeping the
+column usable in primary keys and as a foreign key target.
+
+**** Transfer state history 
+:PROPERTIES:
+:CUSTOM_ID: transfer-state-history
+:END:
+
+In order to implement feature [[trf]], we need system-time temporal
+tables[fn:8]. PostgreSQL supports several approaches for temporal tables.
+For simplicity and portability (including RDS), we use the temporal_tables
+extension [cite:@nearform_temporal_tables].
+
+The extension automatically writes old versions of each row to a history
+table on every ~UPDATE~ or ~DELETE~. Together with a tstzrange period,
+this gives you a full history suitable for ~AS OF~ queries and state
+reconstruction. We create a focused history table that only tracks what
+we need: the transfer identity, status, and system-time period.
+
+#+name: transfer_temporal
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  -- Add system-time period column to transfer table
+  alter table finance.transfer add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
+  alter table finance.transfer alter column sys_period set not null;
+
+  -- Focused history table - only what we need for status transitions
+  create table if not exists finance.transfer_status_log (
+    like finance.transfer including all
+  );
+
+  comment on table finance.transfer_status_log is 
+    'Automatic log of all transfer status transitions via temporal_tables extension. Shows complete state machine history.';
+
+  create index on finance.transfer_status_log (sys_period);
+  create index on finance.transfer_status_log (routing_number, account_number, transfer_created_at, counterparty_routing_number, counterparty_account_number);
+
+  -- Use temporal_tables versioning procedure
+  create trigger transfer_save_status_history
+    before insert or update or delete
+    on finance.transfer
+    for each row
+    execute procedure versioning('sys_period', 'finance.transfer_status_log', true);
+#+end_src
+
+Once applied, ~finance.transfer_status_log~ will contain every past version
+of every transfer's status, from which you can reconstruct the state machine
+history over time.[fn:9]
+
+**** Account auditing
+
+Since we are on the subject of temporal tables, we might as well add
+support for auditing accounts. It lies outside our [[full_list][list of features]], but
+I think account disabling is a major event that should have strong
+auditing behind it, so we might as well add it.
+
+#+name: account_temporal
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  -- Add system-time period column to the account table
+  alter table finance.managed_active_account add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
+  alter table finance.managed_active_account alter column sys_period set not null;
+
+  -- Focused history table - only what we need for status transitions
+  create table if not exists finance.managed_active_account_log (
+    like finance.managed_active_account including all
+  );
+
+  comment on table finance.managed_active_account_log is 
+    'Automatic log of all account activity via temporal_tables extension.';
+
+  create index on finance.managed_active_account_log (sys_period);
+  create index on finance.managed_active_account_log (routing_number, account_number);
+
+  -- Use temporal_tables versioning procedure
+  create trigger account_save_history
+    before insert or update or delete
+    on finance.managed_active_account
+    for each row
+    execute procedure versioning('sys_period', 'finance.managed_active_account_log', true);
+#+end_src
+
 
 **** Transactions, the immutable events
 
 Contrasted with the above, below we have transactions, which represent
-changes in the balances(current and available) of an account and are
-therefore immutable[fn:5].
+changes in the balances (current and available) of an account and are
+therefore immutable[fn:5]. Transactions reference their originating
+transfer by identity (the transfer's natural key including
+~transfer_created_at~), not by period. There is no ~transfer_period~
+stored on transactions --- the transfer's temporal state is queried from
+the transfer table when needed.
 
 #+name: laying_foundation_table_txn
 #+begin_src sql :tangle only_postgres_code.sql :comments link
@@ -393,14 +483,13 @@ therefore immutable[fn:5].
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
     counterparty_routing_number finance.routing_number not null,
+    transfer_created_at         timestamptz not null,
     amount                      bigint not null,
-    transfer_period             tstzrange not null,
     primary key (
       account_number,
       routing_number,
       transaction_created_at
     ),
-    -- regular foreign key to transfer identity (not temporal)
     foreign key (
       routing_number,
       account_number,
@@ -414,22 +503,16 @@ therefore immutable[fn:5].
       transfer_created_at,
       counterparty_routing_number,
       counterparty_account_number
-    ) on update cascade,
-    -- check that transaction occurred within the transfer's period
-    check (transfer_period @> transaction_created_at)
+    )
   );
 
-  comment on column finance.settled_transaction.transfer_period is
-    'Snapshot of the transfer period at transaction creation time. Updated via cascade when transfer period closes.';
-
   comment on table finance.settled_transaction is
-    'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
+    'Settled transactions affect both your available balance and your current balance. They are immutable events --- no updates or deletes permitted.';
 
   revoke update, delete on finance.settled_transaction from finance;
 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
-    -- regular foreign key to transfer identity (not temporal)
     foreign key (
       routing_number,
       account_number,
@@ -443,91 +526,21 @@ therefore immutable[fn:5].
       transfer_created_at,
       counterparty_routing_number,
       counterparty_account_number
-    ) on update cascade,
-    -- check that transaction occurred within the transfer's period
-    check (transfer_period @> transaction_created_at)
+    )
   );
 
-  comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you''re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+  comment on table finance.pending_transaction is
+    'Pending transactions represent potential future credits or debits. They affect available balance but not current balance. Immutable once created.';
 
   revoke update, delete on finance.pending_transaction from finance;
-
-  -- Trigger to populate transfer_period on transaction insert
-  create or replace function finance.set_transaction_transfer_period()
-    returns trigger language plpgsql as $$
-  declare
-    v_transfer_period tstzrange;
-  begin
-    -- fetch current transfer period
-    select transfer_period into v_transfer_period
-      from finance.transfer
-     where routing_number              = NEW.routing_number
-       and account_number              = NEW.account_number
-       and transfer_created_at         = NEW.transfer_created_at
-       and counterparty_routing_number = NEW.counterparty_routing_number
-       and counterparty_account_number = NEW.counterparty_account_number;
-    
-    if not found then
-      raise exception 'Transfer not found for transaction';
-    end if;
-    
-    -- verify transaction is within transfer period
-    if not (v_transfer_period @> NEW.transaction_created_at) then
-      raise exception 'Transaction created_at % is outside transfer period %',
-        NEW.transaction_created_at, v_transfer_period;
-    end if;
-    
-    NEW.transfer_period := v_transfer_period;
-    return NEW;
-  end;
-  $$;
-
-  create trigger settled_transaction_set_period
-    before insert on finance.settled_transaction
-    for each row
-    execute function finance.set_transaction_transfer_period();
-
-  create trigger pending_transaction_set_period
-    before insert on finance.pending_transaction
-    for each row
-    execute function finance.set_transaction_transfer_period();
-
-  -- Trigger to cascade transfer period changes to transactions
-  create or replace function finance.cascade_transfer_period_to_transactions()
-    returns trigger language plpgsql as $$
-  begin
-    -- when transfer period changes, update all related transactions
-    if OLD.transfer_period <> NEW.transfer_period then
-      
-      update finance.settled_transaction
-         set transfer_period = NEW.transfer_period
-       where routing_number              = NEW.routing_number
-         and account_number              = NEW.account_number
-         and transfer_created_at         = NEW.transfer_created_at
-         and counterparty_routing_number = NEW.counterparty_routing_number
-         and counterparty_account_number = NEW.counterparty_account_number;
-      
-      update finance.pending_transaction
-         set transfer_period = NEW.transfer_period
-       where routing_number              = NEW.routing_number
-         and account_number              = NEW.account_number
-         and transfer_created_at         = NEW.transfer_created_at
-         and counterparty_routing_number = NEW.counterparty_routing_number
-         and counterparty_account_number = NEW.counterparty_account_number;
-    end if;
-    
-    return NEW;
-  end;
-  $$;
-
-  create trigger transfer_cascade_period
-    after update of transfer_period on finance.transfer
-    for each row
-    when (OLD.transfer_period <> NEW.transfer_period)
-    execute function finance.cascade_transfer_period_to_transactions();
 #+end_src
 
 *** On maintaining business rules via meaningful constraints
+
+Constraints should really be part of the foundation, but I have made
+them a separate section because they are usually seem as something apart
+from defining tables. In reality, a proper mathematical relation should
+embrace both intentionality (constraints) and extensionality (rows).
 
 #+begin_quote
 It is impossible to design and interrogate a database sensibly, and
@@ -536,14 +549,99 @@ without ... DBMS knowledge of the meaning assigned to the
 database...[cite:@pascal2026meaning]
 #+end_quote
 
-In our case, transactions need to be created only when the transfer is
-in the right state of the state machine, as indicated in requirement [[trf]].
+In our case, several business rules must hold across tables. In the
+absence of SQL's ~assert~[fn:6] we rely on constraint triggers keeping
+them as declarative as possible[fn:7].
 
-In the absence of SQL's ~assert~[fn:6] we need to rely on constraint
-triggers, and if possible maintain them as declarative as
-possible[fn:7]:
+**** The transfer state machine
 
-#+name: constraints
+#+name: state_machine
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create or replace function finance.enforce_transfer_state_machine()
+    returns trigger language plpgsql as $$
+  begin
+    if OLD.status = NEW.status then
+      return NEW;
+    end if;
+    
+    if OLD.status = 'pending' then
+      if NEW.status not in ('completed', 'returned') then
+        raise exception 'Invalid state transition: pending can only transition to completed or returned, not %', NEW.status;
+      end if;
+      NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[)');
+      
+    elsif OLD.status in ('completed', 'returned') then
+      raise exception 'Invalid state transition: % is a terminal state and cannot transition to %', OLD.status, NEW.status;
+    end if;
+    
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_enforce_state_machine
+    before update of status on finance.transfer
+    for each row
+    when (OLD.status <> NEW.status)
+    execute function finance.enforce_transfer_state_machine();
+#+end_src
+
+**** Transactions must fall within the transfer period
+
+A transaction's ~transaction_created_at~ must fall within the
+originating transfer's ~transfer_period~. This prevents creating
+transactions against transfers that haven't started yet or have already
+closed:
+
+#+name: constraint_within_period
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create or replace function finance.transaction_within_transfer_period()
+    returns trigger language plpgsql as $$
+  declare
+    v_transfer_period tstzrange;
+  begin
+    select transfer_period into v_transfer_period
+      from finance.transfer
+     where routing_number              = NEW.routing_number
+       and account_number              = NEW.account_number
+       and transfer_created_at         = NEW.transfer_created_at
+       and counterparty_routing_number = NEW.counterparty_routing_number
+       and counterparty_account_number = NEW.counterparty_account_number;
+
+    if not found then
+      raise exception 'Transfer not found for transaction';
+    end if;
+
+    if not (v_transfer_period @> NEW.transaction_created_at) then
+      raise exception
+        'Transaction created_at % is outside transfer period %',
+        NEW.transaction_created_at, v_transfer_period;
+    end if;
+
+    return NEW;
+  end;
+  $$;
+
+  create constraint trigger settled_transaction_within_transfer_period
+    after insert on finance.settled_transaction
+    deferrable initially deferred
+    for each row
+    execute function finance.transaction_within_transfer_period();
+
+  create constraint trigger pending_transaction_within_transfer_period
+    after insert on finance.pending_transaction
+    deferrable initially deferred
+    for each row
+    execute function finance.transaction_within_transfer_period();
+#+end_src
+
+**** Pending transactions require a pending transfer
+
+A pending transaction can only be created against a transfer that is
+still in the ~pending~ state. Settled transactions, conversely, can only
+be created against transfers that have left the ~pending~ state
+(i.e. ~completed~ or ~returned~):
+
+#+name: constraint_status_match
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create or replace function finance.is_pending_transfer(
     p_routing_number finance.routing_number,
@@ -614,167 +712,135 @@ possible[fn:7]:
     deferrable initially deferred
     for each row
     execute function finance.ensure_non_pending_transfer();
-
 #+end_src
 
-*** On temporal referential constraints
+**** No future transactions when closing a transfer
 
-PostgreSQL 18 introduces native support for SQL:2011 temporal
-referential constraints. This native constraint ensures that a
-transfer can only reference an active account that existed during the
-transfer's validity period.
+A transfer cannot transition to ~completed~ or ~returned~ if any of its
+transactions have a ~transaction_created_at~ that falls after the
+moment of closure. This prevents the state machine from closing a
+transfer's period and stranding transactions in the future:
 
-This works through the PERIOD feature in foreign key constraints.
-Transfers use temporal foreign keys to ensure both the source and
-counterparty accounts are active during the transfer period.
-
-Transactions, however, reference transfers by identity (not temporally)
-since there is only one transfer per account pair. Each transaction
-stores a snapshot of the transfer's period at creation time, which gets
-cascaded when the transfer period closes. This design correctly models
-that transactions point to a single transfer entity while maintaining
-temporal validity.
-
-*** On a transfer state machine
-
-#+name: state_machine
+#+name: constraint_no_future_txns
 #+begin_src sql :tangle only_postgres_code.sql :comments link
-  create or replace function finance.enforce_transfer_state_machine()
+  create or replace function finance.no_future_transactions_on_close()
     returns trigger language plpgsql as $$
   begin
-    if OLD.status = NEW.status then
-      return NEW;
+    if exists (
+      select 1 from finance.settled_transaction
+       where routing_number              = NEW.routing_number
+         and account_number              = NEW.account_number
+         and transfer_created_at         = NEW.transfer_created_at
+         and counterparty_routing_number = NEW.counterparty_routing_number
+         and counterparty_account_number = NEW.counterparty_account_number
+         and transaction_created_at > now()
+      union all
+      select 1 from finance.pending_transaction
+       where routing_number              = NEW.routing_number
+         and account_number              = NEW.account_number
+         and transfer_created_at         = NEW.transfer_created_at
+         and counterparty_routing_number = NEW.counterparty_routing_number
+         and counterparty_account_number = NEW.counterparty_account_number
+         and transaction_created_at > now()
+    ) then
+      raise exception
+        'Cannot close transfer (%, %, %): transaction(s) exist after current time',
+        NEW.routing_number, NEW.account_number, NEW.transfer_created_at;
     end if;
-    
-    if OLD.status = 'pending' then
-      if NEW.status not in ('completed', 'returned') then
-        raise exception 'Invalid state transition: pending can only transition to completed or returned, not %', NEW.status;
-      end if;
-      NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[)');
-      
-    elsif OLD.status in ('completed', 'returned') then
-      raise exception 'Invalid state transition: % is a terminal state and cannot transition to %', OLD.status, NEW.status;
-    end if;
-    
+
     return NEW;
   end;
   $$;
 
-  create trigger transfer_enforce_state_machine
-    before update of status on finance.transfer
+  create constraint trigger transfer_no_future_transactions_on_close
+    after update of status on finance.transfer
+    deferrable initially deferred
     for each row
-    when (OLD.status <> NEW.status)
-    execute function finance.enforce_transfer_state_machine();
+    when (NEW.status in ('completed', 'returned'))
+    execute function finance.no_future_transactions_on_close();
 #+end_src
 
-*** On auditing and reconstructing state
-
-In order to implement feature [[trf]], we need system-time temporal
-tables[fn:8]. PostgreSQL supports several approaches for temporal tables.
-For simplicity and portability (including RDS), we use the temporal_tables
-extension [cite:@nearform_temporal_tables].
-
-The extension automatically writes old versions of each row to a history
-table on every ~UPDATE~ or ~DELETE~. Together with a tstzrange period,
-this gives you a full history suitable for ~AS OF~ queries and state
-reconstruction. We create a focused history table that only tracks what
-we need: the transfer identity, status, and system-time period.
-
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-  -- Add system-time period column to transfer table
-  alter table finance.transfer add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
-  alter table finance.transfer alter column sys_period set not null;
-
-  -- Focused history table - only what we need for status transitions
-  create table if not exists finance.transfer_status_log (
-    routing_number              finance.routing_number not null,
-    account_number              finance.account_number not null,
-    transfer_created_at         timestamptz not null,
-    counterparty_routing_number finance.routing_number not null,
-    counterparty_account_number finance.account_number not null,
-    transfer_period             tstzrange not null,
-    status                      finance.transfer_status not null,
-    sys_period                  tstzrange not null
-  );
-
-  comment on table finance.transfer_status_log is 
-    'Automatic log of all transfer status transitions via temporal_tables extension. Shows complete state machine history.';
-
-  create index on finance.transfer_status_log (sys_period);
-  create index on finance.transfer_status_log (status);
-  create index on finance.transfer_status_log (routing_number, account_number, transfer_created_at, counterparty_routing_number, counterparty_account_number);
-
-  -- Use temporal_tables versioning procedure
-  create trigger transfer_save_status_history
-    before insert or update or delete
-    on finance.transfer
-    for each row
-    execute procedure versioning('sys_period', 'finance.transfer_status_log', true);
-#+end_src
-
-Once applied, ~finance.transfer_status_log~ will contain every past version
-of every transfer's status, from which you can reconstruct the state machine
-history over time. You can query the complete status history of all transfers
-by doing something like[fn:9]:
-
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-  select * from finance.transfer
-  UNION ALL
-  select * from finance.transfer_status_log;
-#+end_src
+These three constraint groups --- temporal containment, status matching,
+and future-transaction prevention --- together enforce the full lifecycle
+invariant: transactions can only exist within the temporal and logical
+boundaries of their originating transfer. In application code, this
+would typically require a coordination framework spanning multiple
+services. Here it is enforced declaratively at the deepest possible
+level.
 
 *** On capacity planning
 
-As can be seen on the [[laying_foundation][foundational code block]], we have 5 core tables
+In order to be able to efficiently modify transfers and run the
+constraints needed to keep transactions consistent with the business
+rules we should keep in the working set 2 days of
+transfers/transactions. The number 2 is chosen because wire transfers
+typically settle within one business day and while international
+transfers take one to five days, with most completing within
+two[cite:@paystand_wire_transfer_time] we.
 
-1. ~finance.transfer~
-2. ~finance.transfer_status_log~
-3. ~finance.pending_transaction~
-4. ~finance.settled_transaction~
+Taking ~finance.transfer~ as a reference (the widest row), we estimate
+the per-row size (ignoring alignment[cite:@thomas2018rocksandsand]):
 
-    Taking ~finance.transfer~ as a
-reference, we have this total (ignoring alignment issues
-[cite:@thomas2018rocksandsand]):
-
-| Name                           | Type        | Size(bytes) |
-|--------------------------------+-------------+-------------|
-| transfer_created_at            | timestamptz |           8 |
-| account_number                 | text(12)    |          13 |
-| routing_number                 | text(9)     |          10 |
-| counterparty_account_number    | text(12)    |          13 |
-| counterparty_routing_number    | text(9)     |          10 |
-| amount                         | bigint      |           8 |
-| status                         | text(10)    |          11 |
-|--------------------------------+-------------+-------------|
-| Total (plus 24 for row header) |             |          97 |
+| Name                        | Type        | Size (bytes) |
+|-----------------------------+-------------+--------------|
+| transfer_period             | tstzrange   |           32 |
+| transfer_created_at         | timestamptz |            8 |
+| account_number              | text(12)    |           13 |
+| routing_number              | text(9)     |           10 |
+| counterparty_account_number | text(12)    |           13 |
+| counterparty_routing_number | text(9)     |           10 |
+| amount                      | bigint      |            8 |
+| status                      | text(10)    |           11 |
+| sys_period                  | tstzrange   |           32 |
+|-----------------------------+-------------+--------------|
+| Total (plus 24 row header)  |             |          161 |
 #+TBLFM: @>$>=vsum(@I..@II)+24
 
-So, around 100 bytes per row. Suppose we want 3 days of transfers and 1
-day of transactions, that would be 6 (3 ~finance.transfer~ + 3
-~finance.transfer_status_log~) + 2 (1 ~finance.pending_transaction~ + 1
-~finance.settled_transaction~).
+So roughly 160 bytes per row. The log tables have the same width. The
+transaction tables are slightly narrower (no ~transfer_period~, no
+~status~), around 120 bytes per row.
 
-Assuming 10k accounts each having 100 transfer/pending/settled per day,
-that would necessitate ~7.5 GB of RAM. For a mid/large bank like Nubank
-with 50 million accounts: ~38GB. For a global payment processor like
-VISA: ~700GB.
+**** Working set estimation
 
-As for indexes:
-#+begin_quote
-index entry has an overhead of 8 bytes. Add the average size of your
-indexed data (in the internal binary format).[cite:@StackOverflowAlbe2020indexsize]
-#+end_quote
+The working set is the data that must be in ~shared_buffers~ for the
+system to perform well. As stated above, the working set will consist of
+2 days of transfers transactions.
 
-Given that in this design we are using a single index for each table
-(the btree backing the primary key), you can add 100% for the index
-size, doubling the amounts above. That gives us 15GB, 76GB, and 1.4TB
-respectively.
+Let's assume that a transfer row corresponds to 2 rows in
+~transfer_status_log~ (the initial insert plus a state change) and 3
+transactions (2 pending transactions and a settled transaction). That
+gives us 3 transfer like rows + 3 transaction rows.
 
-These fit comfortably in modern database servers (AWS RDS db.r6g.4xlarge
-has 128GB RAM, db.r6g.16xlarge has 512GB).
+Each index entry carries ~8 bytes of overhead plus the indexed
+data[cite:@StackOverflowAlbe2020indexsize]. In our design, most tables
+have one index: the B-tree backing the primary key (the temporal table
+has 2, but lets ignore that for the sake of simplicity). The primary key
+for ~finance.transfer~ indexes 5 columns totalling ~54 bytes, so each
+index entry is ~62 bytes. This amounts to roughly 40% of the row
+size. So, a safe rule of thumb: add a 1.4 multiplier to the table sizes
+to account for for index overhead.
 
-*The point*: You don't need partitioning, sharding, or distributed
-databases. You need appropriately sized hardware and good index design.
+This whole argument boils down to the byte sum of:
+
+#+name: daily_size
+#+begin_src calc :exports both
+ ((3 * 160) + (3 * 120)) * 1.4
+#+end_src
+
+#+RESULTS: daily_size
+: 1176.
+
+| Scale                                  | Transfers/day | Working set size for 2 days |
+|----------------------------------------+---------------+-----------------------------|
+| Startup                                | 10,000        | 22M                         |
+| Mid/large bank[cite:@nubank2022pix]    | 50,000,000    | 110G                        |
+| Global processor[cite:@visa2025annual] | 900,000,000   | 1.9T                        |
+#+TBLFM: $3='(file-size-human-readable (string-to-number (calc-eval (format "2 * (%s * %s)" (string-replace "," "" $2) (org-sbe daily_size)))))
+
+Up to a mid level bank one can fit the working set comfortably in modern
+cloud database servers. AWS RDS, for instance, supports up to 4TiB of
+memory per instance for PostgreSQL-compatible
+instances[cite:@aws_rds_instance_types].
 
 *** On write throughput
 :PROPERTIES:
@@ -791,8 +857,10 @@ application~[cite:@gerogiannakis_postgres_index_queries_2019]
 **** Enabling HOT Updates for Transfers
 
 By keeping ~transfer_period~ out of the primary key, we enable Heap-Only
-Tuple (HOT) updates when transfer status changes. This is critical because
-status transitions (pending → completed/returned) are frequent operations.
+Tuple (HOT) (https://www.postgresql.org/docs/current/storage-hot.html)
+updates when transfer status changes. This is critical because status
+transitions (pending to completed/returned) are common operations and we
+want to minimize write amplification.
 
 When a transfer's status changes, the ~transfer_period~ also closes, but
 since neither column is part of the primary key index, PostgreSQL can
@@ -802,22 +870,18 @@ perform a HOT update: the new tuple version is written to the same page
 Configure the table for HOT:
 
 #+begin_src sql
-  alter table finance.transfer set (fillfactor = 90);
+  alter table finance.transfer set (fillfactor = 70);
 #+end_src
 
-This reserves 10% free space per page, allowing updated tuples to fit on
+This reserves 30% free space per page, allowing updated tuples to fit on
 the same page. Combined with no indexes on ~status~ or ~transfer_period~,
 status updates become HOT-eligible, providing:
 
-- 2-3x faster updates compared to non-HOT updates
-- No index bloat from status changes
-- Better cache locality (updates stay on same page)
+- 2-3x faster updates compared to non-HOT updates (https://www.razsamuel.com/understanding-hot-updates-in-postgresql-a-benchmark-analysis/)
+- No table and index bloat from status changes
+- Make vacuum maintenance tasks on the table simpler
+- Smaller WAL file, since there is less activity overall.  (https://www.adyen.com/knowledge-hub/postgresql-hot-updates)
 
-The trade-off is minimal: each transaction insert performs a primary key
-lookup on ~finance.transfer~ to fetch the current ~transfer_period~. This
-is a single B-tree traversal on hot data (recent transfers stay in
-~shared_buffers~), which PostgreSQL handles trivially even at 10k+
-transactions/second.
 
 **** Primary Key Column Order
 
@@ -863,8 +927,9 @@ partition without breaking temporal foreign keys:
 
 #+begin_src sql
   create table finance.transfer (
-    transfer_created_at         timestamptz not null default now(),
     transfer_period             tstzrange not null default tstzrange(now(), 'infinity', '[)'),
+    transfer_created_at         timestamptz
+                                generated always as (lower(transfer_period)) stored,
     account_number              finance.account_number not null,
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
@@ -1003,6 +1068,18 @@ majority of such application cycle:
 2. Paginate over transfers/transactions
 3. Update a transfer's state
 4. Get all transactions for a transfer
+
+**** The history of a transfer
+
+As stated on section [[*On auditing and reconstructing state][On auditing and reconstructing state]], in order to
+implement feature [[trf]], we need to query the full state history of
+transfers:
+
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  select * from finance.transfer
+  UNION ALL
+  select * from finance.transfer_status_log;
+#+end_src
 
 *** TODO Analytical Queries
 Here are the analytical queries that I assume will compose the vast majority of
@@ -1164,6 +1241,120 @@ If you want to play around with the design here, run
 #+end_src
 
 #+print_bibliography:
+
+some tests
+
+#+begin_src sql
+
+-- 1. Create accounts
+INSERT INTO finance.managed_active_account (routing_number, account_number, account_name)
+VALUES ('123456789', '000000000001', 'Alice Checking');
+
+INSERT INTO finance.external_account (routing_number, account_number, account_name)
+VALUES ('987654321', '000000000002', 'Bob External');
+
+-- 2. Create a transfer (starts as pending, period open to infinity)
+INSERT INTO finance.transfer (
+  routing_number, account_number,
+  counterparty_routing_number, counterparty_account_number,
+  amount
+) VALUES (
+  '123456789', '000000000001',
+  '987654321', '000000000002',
+  50000
+);
+
+-- 3. Create a pending transaction against the pending transfer
+INSERT INTO finance.pending_transaction (
+  routing_number, account_number,
+  counterparty_routing_number, counterparty_account_number,
+  amount,
+  transfer_created_at
+) VALUES (
+  '123456789', '000000000001',
+  '987654321', '000000000002',
+  50000,
+  (SELECT transfer_created_at FROM finance.transfer
+    WHERE routing_number = '123456789'
+      AND account_number = '000000000001'
+    LIMIT 1)
+);
+
+-- 4. Inspect transfer before closing
+SELECT transfer_created_at, status, transfer_period, 
+       lower(transfer_period) AS period_lower,
+       upper(transfer_period) AS period_upper
+  FROM finance.transfer;
+
+-- 5. Close the transfer (pending -> completed)
+UPDATE finance.transfer
+   SET status = 'completed'
+ WHERE routing_number = '123456789'
+   AND account_number = '000000000001'
+   AND counterparty_routing_number = '987654321'
+   AND counterparty_account_number = '000000000002';
+
+-- 6. Inspect transfer after closing --- transfer_period should now be closed,
+--    but transfer_created_at (generated from lower) should be UNCHANGED
+SELECT transfer_created_at, status, transfer_period,
+       lower(transfer_period) AS period_lower,
+       upper(transfer_period) AS period_upper
+  FROM finance.transfer;
+
+-- 7. Verify the generated column didn't change
+--    transfer_created_at should equal lower(transfer_period) in both cases
+SELECT transfer_created_at = lower(transfer_period) AS generated_col_consistent
+  FROM finance.transfer;
+
+-- 8. Check the status log captured the old state
+SELECT * FROM finance.transfer_status_log;
+
+-- 9. Now create a settled transaction against the completed transfer
+INSERT INTO finance.settled_transaction (
+  routing_number, account_number,
+  counterparty_routing_number, counterparty_account_number,
+  amount,
+  transfer_created_at
+) VALUES (
+  '123456789', '000000000001',
+  '987654321', '000000000002',
+  50000,
+  (SELECT transfer_created_at FROM finance.transfer
+    WHERE routing_number = '123456789'
+      AND account_number = '000000000001'
+    LIMIT 1)
+);
+
+-- 10. Try a second transfer that gets returned instead
+INSERT INTO finance.transfer (
+  routing_number, account_number,
+  counterparty_routing_number, counterparty_account_number,
+  amount
+) VALUES (
+  '123456789', '000000000001',
+  '987654321', '000000000002',
+  25000
+);
+
+-- 11. Close it as returned
+UPDATE finance.transfer
+   SET status = 'returned'
+ WHERE routing_number = '123456789'
+   AND account_number = '000000000001'
+   AND counterparty_routing_number = '987654321'
+   AND counterparty_account_number = '000000000002'
+   AND status = 'pending';
+
+-- 12. Final state of all transfers
+SELECT transfer_created_at, status, transfer_period, amount
+  FROM finance.transfer
+ ORDER BY transfer_created_at;
+
+-- 13. Full status history
+SELECT * FROM finance.transfer_status_log
+ ORDER BY sys_period;
+#+end_src
+
 
 ** Index
 :PROPERTIES:
