@@ -1207,14 +1207,13 @@ numpages = {3}
                   {https://www.postgresql.org/docs/current/monitoring-stats.html#MONITORING-PG-STAT-ALL-INDEXES-VIEW} 
 }
 
-@misc{postgresql_hot_2025,
-  title =        {Heap-Only Tuples (HOT) (accessed 2025-12-17)},
+@misc{postgresql18_hot_2025,
+  title =        {Heap-Only Tuples (HOT)},
   author =       {{The PostgreSQL Global Development Group}},
   organization = {The PostgreSQL Global Development Group},
   year =         {2025},
-  note =         {PostgreSQL Documentation, current version},
-  url =
-                  {https://www.postgresql.org/docs/current/storage-hot.html}
+  note =         {PostgreSQL Documentation, version 18},
+  url =          {https://www.postgresql.org/docs/18/storage-hot.html}
 }
 
 @misc{gerogiannakis_postgres_index_queries_2019,
@@ -1420,6 +1419,22 @@ numpages = {3}
   urldate = {2025-06-05}
 }
 
+@online{samuel_hot_benchmark,
+  author       = {Raz Samuel},
+  title        = {Understanding HOT Updates in PostgreSQL: A Benchmark Analysis},
+  year         = {2024},
+  url          = {https://www.razsamuel.com/understanding-hot-updates-in-postgresql-a-benchmark-analysis/},
+  urldate      = {2026-06-13}
+}
+
+@online{adyen_hot_updates,
+  author =       {Derk van Veen & Dave Pitts},
+  title =        {Fighting PostgreSQL write amplification with HOT updates},
+  year =         {2022},
+  url = {https://www.adyen.com/knowledge-hub/postgresql-hot-updates},
+  urldate =      {2026-06-13}
+}
+
 @online{neon_temporal_fk,
   author =       {{Neon}},
   title =        {Temporal Constraints in {PostgreSQL} 18: Period Clause
@@ -1429,4 +1444,33 @@ numpages = {3}
                   {https://neon.com/postgresql/18/temporal-constraints#period-clause-temporal-foreign-keys},
   urldate =      {2026-05-30},
   organization = {Neon}
+}
+
+@online{cdata_transactional_vs_analytical,
+  author =       {Dibyendu Datta},
+  title =        {Transactional vs. Analytical Databases: How They
+                  Primarily Differ (Accessed: 2026-06-20)},
+  year =         {2024},
+  month =        may,
+  day =          16,
+  url =
+                  {https://www.cdata.com/blog/transactional-vs-analytical-databases},
+}
+
+@misc{winand_fetch_next_page,
+  author =       {Markus Winand},
+  title =        {Paging Through Results (Accessed: 2026-06-21)},
+  url =
+                  {https://use-the-index-luke.com/sql/partial-results/fetch-next-page}  
+}
+
+@misc{white15:_index_view_maint,
+  author =       {Paul White},
+  title =        {Indexed View Maintenance in SQL Server Execution Plans
+                  (Accessed: 2026-06-21)},
+  year =         {2015},
+  month =        {March},
+  day =          26,
+  url =
+                  {https://www.sql.kiwi/2015/03/indexed-view-maintenance-in-execution-plans/}
 }
