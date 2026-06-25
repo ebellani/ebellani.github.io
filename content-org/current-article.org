@@ -1432,6 +1432,195 @@ This is decoupling achieved at the data level, with no network hops, no
 serialization overhead, and no distributed consistency problems. The
 view /is/ the interface, and the base tables are the implementation.
 
+*** Benchmarking the startup scenario
+:PROPERTIES:
+:CUSTOM_ID: benchmarking
+:END:
+
+To validate the design under realistic conditions, we use ~pgbench~ with
+custom scripts that exercise the full write and read paths through the
+~finance.transfer_activity~ view. The scenario models the startup tier
+from [[*On capacity planning][the capacity planning section]]: 10,000 transfers per day with an
+80/20 read/write split.
+
+**** Seed data
+
+First, we seed 100 managed and 100 external accounts:
+
+#+name: pgbench_setup
+#+begin_src sql :tangle "pgbench_setup.sql" :comments yes
+  -- Seed external accounts
+  insert into finance.external_account (routing_number, account_number, account_name)
+  select lpad(i::text, 9, '0'),
+         lpad(i::text, 12, '0'),
+         'External Account ' || i
+    from generate_series(1, 100) as i
+  on conflict do nothing;
+
+  -- Seed managed accounts
+  insert into finance.managed_active_account (routing_number, account_number, account_name)
+  select lpad((i + 100)::text, 9, '0'),
+         lpad((i + 100)::text, 12, '0'),
+         'Managed Account ' || i
+    from generate_series(1, 100) as i
+  on conflict do nothing;
+#+end_src
+
+**** Write script: full transfer lifecycle
+
+Each invocation of this script exercises the complete lifecycle through
+the updatable view: create a transfer, insert a pending transaction,
+complete the transfer, and insert a settled transaction. Every
+constraint trigger, the state machine, the temporal foreign key, and the
+balance ledger triggers all fire on each run.
+
+#+name: pgbench_write
+#+begin_src sql :tangle "pgbench_write.sql" :comments yes
+  \set managed_id random(1, 100)
+  \set external_id random(1, 100)
+  \set amount random(100, 100000)
+
+  select lpad((:managed_id + 100)::text, 9, '0') as m_routing,
+         lpad((:managed_id + 100)::text, 12, '0') as m_account,
+         lpad(:external_id::text, 9, '0') as e_routing,
+         lpad(:external_id::text, 12, '0') as e_account
+  \gset
+
+  -- 1. Create transfer via the view
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number, amount)
+  values
+    ('transfer', :'m_routing', :'m_account',
+     :'e_routing', :'e_account', :amount);
+
+  -- 2. Retrieve the transfer we just created
+  select created_at as xfer_ts
+    from finance.transfer_activity
+   where kind = 'transfer'
+     and routing_number = :'m_routing'
+     and account_number = :'m_account'
+     and counterparty_routing_number = :'e_routing'
+     and counterparty_account_number = :'e_account'
+     and status = 'pending'
+   order by created_at desc
+   fetch first 1 row only
+  \gset
+
+  -- 3. Insert pending transaction via the view
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number,
+     created_at, amount)
+  values
+    ('pending_transaction', :'m_routing', :'m_account',
+     :'e_routing', :'e_account',
+     :'xfer_ts', :amount);
+
+  -- 4. Complete the transfer via the view
+  update finance.transfer_activity
+     set status = 'completed'
+   where kind = 'transfer'
+     and routing_number = :'m_routing'
+     and account_number = :'m_account'
+     and counterparty_routing_number = :'e_routing'
+     and counterparty_account_number = :'e_account'
+     and created_at = :'xfer_ts';
+
+  -- 5. Insert settled transaction via the view
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number,
+     created_at, amount)
+  values
+    ('settled_transaction', :'m_routing', :'m_account',
+     :'e_routing', :'e_account',
+     :'xfer_ts', :amount);
+#+end_src
+
+**** Read script: activity stream and balance
+
+Each invocation queries the transfer activity stream for a random
+account (paginated) and its latest balance:
+
+#+name: pgbench_read
+#+begin_src sql :tangle "pgbench_read.sql" :comments yes
+  \set managed_id random(1, 100)
+
+  select lpad((:managed_id + 100)::text, 9, '0') as m_routing,
+         lpad((:managed_id + 100)::text, 12, '0') as m_account
+  \gset
+
+  -- Read transfer activity stream (latest 20 entries)
+  select *
+    from finance.transfer_activity
+   where routing_number = :'m_routing'
+     and account_number = :'m_account'
+   order by created_at desc
+   fetch first 20 rows only;
+
+  -- Read latest balance
+  select current_total, available_total
+    from finance.balance_ledger
+   where routing_number = :'m_routing'
+     and account_number = :'m_account'
+   order by as_of desc
+   fetch first 1 row only;
+#+end_src
+
+**** Running the benchmark
+
+#+begin_src bash :exports code
+  # 1. Apply the full schema (Appendix A)
+  psql -f only_postgres_code.sql
+
+  # 2. Seed accounts
+  psql -f pgbench_setup.sql
+
+  # 3. Run 80/20 read/write mix for 60 seconds
+  #    @4 = weight 4 (80%), @1 = weight 1 (20%)
+  #    -c 10: 10 concurrent clients
+  #    -j 4:  4 worker threads
+  #    -P 5:  progress every 5 seconds
+  #    -T 60: run for 60 seconds
+  pgbench -f pgbench_read.sql@4 \
+          -f pgbench_write.sql@1 \
+          -c 10 -j 4 -T 60 -P 5
+#+end_src
+
+**** What the benchmark exercises
+
+| Step | Path through the system |
+|------+-------------------------|
+| Transfer insert | View ~INSTEAD OF~ trigger → ~finance.transfer~ → temporal_tables trigger → temporal FK against ~managed_active_account~ → FK against ~external_account~ |
+| Pending txn insert | View trigger → ~finance.pending_transaction~ → ~within_transfer_period~ constraint → ~requires_pending_transfer~ constraint → balance ledger trigger (available only) |
+| Transfer completion | View trigger → ~finance.transfer~ ~UPDATE~ → state machine trigger (closes period) → ~no_future_transactions_on_close~ constraint → temporal_tables history |
+| Settled txn insert | View trigger → ~finance.settled_transaction~ → ~within_transfer_period~ constraint → ~requires_non_pending_transfer~ constraint → balance ledger trigger (current + available) |
+| Read activity | View ~UNION ALL~ over 4 tables, ordered by ~created_at~ |
+| Read balance | Index-backed lookup on ~balance_ledger~ |
+| Serialization conflicts | Concurrent writes to same account → SSI aborts → pgbench reports as failures |
+
+**** Interpreting the results
+
+The pgbench output will report:
+
+- *tps (transactions per second)*: At the startup scale of 10,000
+  transfers/day (~0.12 TPS), even modest hardware should exceed this by
+  orders of magnitude, confirming headroom.
+- *number of failed transactions*: These are serialization failures from
+  SSI. They represent cases where concurrent writes to the same account
+  created a dependency cycle. In production, the application would retry
+  these with exponential
+  backoff[cite:@brooker15:_expon_backof_and_jitter]. The failure rate
+  tells you how often retries would be needed.
+- *latency (avg/stddev)*: Per-transaction latency including all trigger
+  and constraint overhead. This is the true cost of enforcing all
+  business rules at the data level.
+
+A healthy result looks like: high TPS relative to the 0.12 TPS
+requirement, low serialization failure rate (under 5%), and
+sub-millisecond average latency for reads.
+
 *** Conclusion
 
 We set out to show that the default assumption for your data problems
