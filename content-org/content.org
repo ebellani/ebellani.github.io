@@ -1711,7 +1711,7 @@ SQL engine and in relational theory properly understood.
 :CUSTOM_ID: appendix-a-full-code-suite
 :END:
 
-#+caption: Full code listing iosaehnt
+#+caption: Full code listing
 #+name: full_code
 #+begin_src sql :noweb yes :exports code  :tangle "full_code.sql" :comments yes
 <<the_schema_and_roles>>
