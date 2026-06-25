@@ -1,9 +1,9 @@
-#+TITLE: eduardo's website title
+#+title: eduardo's website title
 #+bibliography: ./refs.bib
 #+options: broken-links:mark toc:nil
-#+HUGO_BASE_DIR: ../
-#+HUGO_PAIRED_SHORTCODES: alert image
-#+AUTHOR: Eduardo Bellani
+#+hugo_base_dir: ../
+#+hugo_paired_shortcodes: alert image
+#+author: Eduardo Bellani
 
 * Pages
 :PROPERTIES:
@@ -49,7 +49,7 @@ reflect those of any past or present employer.
 :EXPORT_DATE: 2025-12-04
 :END:
 
-#+TOC: headlines 2 local
+#+toc: headlines 2 local
 
 *** Introduction
 
@@ -91,8 +91,6 @@ tools besides Postgres, based on my experience:
 - The transactional queries are too slow
 - The analytical queries are too slow
 - My app will be coupled to the Database
-- The Database schema is too rigid for my growing business
-- I need to notify other systems of changes on the fly
 
 To address these, I'm going to use a variation of the /Drosophila
 melanogaster/ of the database field: [[https://en.wikipedia.org/wiki/Suppliers_and_Parts_database][the classic Supplier and Parts]]
@@ -151,7 +149,7 @@ systems like increase:
 
 <<full_list>>
 1. <<act>>Accounts are defined by immutable routing numbers and account numbers
-   and have a status that can vary. 
+   and have a status that can vary.
 2. <<acct_discrimination>> Accounts are discriminated between external
    and managed, and one account must be one or the other
    exclusively. Transfers are made only between external and managed
@@ -194,13 +192,12 @@ database objects[cite:@swart19:_row_level_secur].
   grant usage on schema finance to finance;
   alter default privileges in schema finance
     grant select, insert, update, delete on tables to finance;
-  
+
   alter default privileges in schema finance
     grant usage, select on sequences to finance;
-  
 #+end_src
 
-**** Domains 
+**** Domains
 
 Database domains are usually scoffed at by practitioners, but that is a
 big mistake. Properly seen, they are
@@ -312,7 +309,7 @@ versa).
   alter table finance.external_account
     add constraint external_not_managed
   check (finance.not_managed_account(routing_number, account_number));
-  #+end_src
+#+end_src
 
 **** Transfers, constrained by  a state machine and temporal periods
 
@@ -387,7 +384,7 @@ closes the upper bound). This eliminates the redundancy between
 ~transfer_created_at~ and ~lower(transfer_period)~ while keeping the
 column usable in primary keys and as a foreign key target.
 
-**** Transfer state history 
+**** Transfer state history
 :PROPERTIES:
 :CUSTOM_ID: transfer-state-history
 :END:
@@ -563,17 +560,17 @@ them as declarative as possible[fn:7].
     if OLD.status = NEW.status then
       return NEW;
     end if;
-    
+  
     if OLD.status = 'pending' then
       if NEW.status not in ('completed', 'returned') then
         raise exception 'Invalid state transition: pending can only transition to completed or returned, not %', NEW.status;
       end if;
       NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[)');
-      
+    
     elsif OLD.status in ('completed', 'returned') then
       raise exception 'Invalid state transition: % is a terminal state and cannot transition to %', OLD.status, NEW.status;
     end if;
-    
+  
     return NEW;
   end;
   $$;
@@ -824,11 +821,12 @@ This whole argument boils down to the byte sum of:
 
 #+name: daily_size
 #+begin_src calc :exports both
- ((3 * 160) + (3 * 120)) * 1.4
+  ((3 * 160) + (3 * 120)) * 1.4
 #+end_src
 
-#+RESULTS: daily_size
+#+results: daily_size
 : 1176.
+
 
 | Scale                                  | Transfers/day | Working set size for 2 days |
 |----------------------------------------+---------------+-----------------------------|
@@ -904,50 +902,50 @@ PostgreSQL internal statistics):
 #+end_src
 
 - idx_scan :: How many times the index has been scanned (used). This can
-  be either directly by a application query e.g.
+     be either directly by a application query e.g.
 
-  #+begin_src sql
-    select * from finance.transfer where
-    (transfer_created_at, transaction_account, counterparty_account) =
-    ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
-  #+end_src
+     #+begin_src sql
+       select * from finance.transfer where
+       (transfer_created_at, transaction_account, counterparty_account) =
+       ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
+     #+end_src
 
-  or indirectly due to a JOIN. For example, the primary key index
-  transfer_pkey has been scanned over 2210002 times.
+     or indirectly due to a JOIN. For example, the primary key index
+     transfer_pkey has been scanned over 2210002 times.
 
 - idx_tup_read :: This is the number of index entries returned as a result
-  of an index scan. An easy-to-understand example is the primary key
-  (e.g. ~select * from finance.transfer where (transfer_created_at,
-  transaction_account, counterparty_account) = ('2025-11-25
-  18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
-  such transfer, then idx_tup_read will increase by 1. Modifying slightly
-  the query
+     of an index scan. An easy-to-understand example is the primary key
+     (e.g. ~select * from finance.transfer where (transfer_created_at,
+       transaction_account, counterparty_account) = ('2025-11-25
+       18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
+     such transfer, then idx_tup_read will increase by 1. Modifying slightly
+     the query
 
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
-    #+end_src
-   idx_tup_read will increase by 2 (if both transfers exist). In both of
-   these queries, idx_scan will increase by 1.
+     #+begin_src sql
+       select * from finance.transfer
+        where (transfer_created_at, transaction_account, counterparty_account) in
+              (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+              ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
+     #+end_src
+     idx_tup_read will increase by 2 (if both transfers exist). In both of
+     these queries, idx_scan will increase by 1.
 
 - idx_tup_fetch :: These are the number of rows fetched from the table
-  as a result of an index scan.  This is increased as a result of both
-  positive and false positive results.  For example, if both ids exist,
-  the query
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
-       and transfer_status='completed';
-    #+end_src
-   will increase idx_tup_fetch by 2 even if only one tuple is returned
-  to the client. The reason is that the tuples will need to be loaded
-  from disk to examine the value of ‘transfer_status’.
+     as a result of an index scan.  This is increased as a result of both
+     positive and false positive results.  For example, if both ids exist,
+     the query
+     #+begin_src sql
+       select * from finance.transfer
+        where (transfer_created_at, transaction_account, counterparty_account) in
+              (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+              ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
+        and transfer_status='completed';
+     #+end_src
+      will increase idx_tup_fetch by 2 even if only one tuple is returned
+     to the client. The reason is that the tuples will need to be loaded
+     from disk to examine the value of ‘transfer_status’.
 
-*** OLTP 
+*** OLTP
 
 In OLTP workloads, the DBMS needs to quickly read and write individual
 rows of data while ensuring data
@@ -969,7 +967,7 @@ the naive ~OFFSET~ approach[cite:@winand_fetch_next_page]:
 #+end_quote
 
 
-***** Proper pagination 
+***** Proper pagination
 In order to avoid the problems above, we need to leverage the primary
 key index directly by using values instead of offsets. Given that we are
 listing all transfers/transactions for a given account sorted by time,
@@ -978,13 +976,13 @@ to do an equality match on the first two columns and then a backward
 index scan from the cursor position on ~transfer_created_at~:
 
 #+begin_src sql
-select *
-  from finance.transfer
- where routing_number = ?
-   and account_number = ?
-   and transfer_created_at < ?
- order by transfer_created_at desc
- fetch first 10 rows only;  
+  select *
+    from finance.transfer
+   where routing_number = ?
+     and account_number = ?
+     and transfer_created_at < ?
+   order by transfer_created_at desc
+   fetch first 10 rows only;  
 #+end_src
 
 
@@ -999,63 +997,79 @@ to reflect the access pattern:
 
 **** The history of a transfer
 
-As stated on section [[*On auditing and reconstructing state][On auditing and reconstructing state]], in order to
+As stated on section [[.pre-processed.org::#d41d8c][On auditing and reconstructing state]], in order to
 implement feature [[trf]], we need to query the full state history of
-transfers intermingling it with the proper transactions:
+transfers intermingling it with the proper transactions. We define this
+as a view, since it represents a derived relation that will be reused
+throughout the system:
 
-#+name: finance_transfer_history
+#+name: finance_transfer_activity_view
 #+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create or replace view finance.transfer_activity as
   select 'transfer' as kind,
-         amount,
-         status,
-         transfer_created_at as created_at
-    from finance.transfer
-   where routing_number = ?
-     and account_number = ?
-     and transfer_created_at = ?
-     and counterparty_routing_number = ?
-     and counterparty_account_number = ?
+         t.routing_number,
+         t.account_number,
+         t.counterparty_routing_number,
+         t.counterparty_account_number,
+         t.amount,
+         t.status,
+         t.transfer_created_at as created_at
+    from finance.transfer t
 
   union all
 
-  select 'transfer' as kind,
-         amount,
-         status,
-         transfer_created_at as created_at
-    from finance.transfer_status_log
-   where routing_number = ?
-     and account_number = ?
-     and transfer_created_at = ?
-     and counterparty_routing_number = ?
-     and counterparty_account_number = ?
+  select 'transfer_history' as kind,
+         h.routing_number,
+         h.account_number,
+         h.counterparty_routing_number,
+         h.counterparty_account_number,
+         h.amount,
+         h.status,
+         h.transfer_created_at as created_at
+    from finance.transfer_status_log h
 
   union all
 
-  select 'transaction' as kind,       
-         amount,
+  select 'pending_transaction' as kind,
+         pt.routing_number,
+         pt.account_number,
+         pt.counterparty_routing_number,
+         pt.counterparty_account_number,
+         pt.amount,
          'pending' as status,
-         transaction_created_at as created_at
-    from finance.pending_transaction
-   where routing_number = ?
-     and account_number = ?
-     and transfer_created_at = ?
-     and counterparty_routing_number = ?
-     and counterparty_account_number = ?
+         pt.transaction_created_at as created_at
+    from finance.pending_transaction pt
 
   union all
 
-  select 'transaction' as kind,       
-         amount,
+  select 'settled_transaction' as kind,
+         st.routing_number,
+         st.account_number,
+         st.counterparty_routing_number,
+         st.counterparty_account_number,
+         st.amount,
          'settled' as status,
-         transaction_created_at as created_at
-    from finance.settled_transaction
+         st.transaction_created_at as created_at
+    from finance.settled_transaction st;
+
+  comment on view finance.transfer_activity is
+    'Unified view of the full history of transfers and their associated
+     transactions. Each row is tagged with a kind discriminator. Used for
+     transfer history display and as the foundation for the updatable
+     interface defined in the On decoupling section.';
+#+end_src
+
+Querying the full history of a specific transfer is now a simple filter
+on the view:
+
+#+begin_src sql
+  select *
+    from finance.transfer_activity
    where routing_number = ?
      and account_number = ?
-     and transfer_created_at = ?
      and counterparty_routing_number = ?
      and counterparty_account_number = ?
-         
-  order by created_at;
+   order by created_at;
 #+end_src
 
 *** OLAP
@@ -1070,9 +1084,9 @@ As a reminder, we need to compute two balances per account, queryable at
 any point in time:
 
 - Current balance :: the balance you earn interest on, derived from
-  settled transactions only.
+     settled transactions only.
 - Available balance :: the amount you're able to move out, derived from
-  both settled and pending transactions.
+     both settled and pending transactions.
 
 Obviously scanning the full transaction history and computing the sum
 using a row oriented DBMS like PostgreSQL would yield correct results,
@@ -1268,7 +1282,7 @@ under snapshot isolation. The solution is ~SERIALIZABLE~ isolation:
 
 #+name: serializable_isolation
 #+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-  alter database finance set default_transaction_isolation = 'serializable';
+  alter role finance set default_transaction_isolation = 'serializable';
 #+end_src
 
 Under PostgreSQL's Serializable Snapshot Isolation (SSI), the engine
@@ -1295,6 +1309,174 @@ backoff[cite:@brooker15:_expon_backof_and_jitter]. The alternative of
 risking silent data corruption is certainly not acceptable in a
 financial system.
 
+
+
+*** On decoupling
+
+Views are the canonical way to implement modularity in SQL DBMSes like
+PostgreSQL[cite:@bellani24:_how_decoupled]. As Codd originally
+envisioned, views provide logical data independence: application
+programs and terminal activities remain unaffected when the internal
+representation of data changes[cite:@10.1145/362384.362685]. In
+non-alien language: the relation between interfaces (views) and
+implementations (base tables) is many-to-many, which is precisely the
+definition of modularity[cite:@koppel23:_modul_matter_most_masses_acces].
+
+This means that instead of reaching for microservices to achieve
+decoupling --- with all their attendant costs in serialization overhead,
+distributed consistency problems, and operational
+complexity[cite:@10.1145/3593856.3595909] --- we can achieve the same
+logical property using views over a single PostgreSQL instance.
+
+The ~finance.transfer_activity~ view defined in [[*The history of a transfer][the history of a
+transfer]] section already provides a stable read interface. Now we make
+it updatable, turning it into the single interface through which
+applications insert transfers and transactions, and update transfer
+status:
+
+#+name: decoupling_transfer_activity_triggers
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create or replace function finance.transfer_activity_insert()
+    returns trigger language plpgsql as $$
+  begin
+    case NEW.kind
+      when 'transfer' then
+        insert into finance.transfer
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.amount);
+
+      when 'pending_transaction' then
+        insert into finance.pending_transaction
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           transfer_created_at, amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.created_at, NEW.amount);
+
+      when 'settled_transaction' then
+        insert into finance.settled_transaction
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           transfer_created_at, amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.created_at, NEW.amount);
+
+      else
+        raise exception 'Unknown kind: %. Must be transfer, pending_transaction, or settled_transaction', NEW.kind;
+    end case;
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_activity_insert_trigger
+    instead of insert on finance.transfer_activity
+    for each row
+    execute function finance.transfer_activity_insert();
+
+  create or replace function finance.transfer_activity_update()
+    returns trigger language plpgsql as $$
+  begin
+    if OLD.kind <> 'transfer' then
+      raise exception 'Only current transfers can be updated, not %', OLD.kind;
+    end if;
+
+    update finance.transfer
+       set status = NEW.status
+     where routing_number              = OLD.routing_number
+       and account_number              = OLD.account_number
+       and transfer_created_at         = OLD.created_at
+       and counterparty_routing_number = OLD.counterparty_routing_number
+       and counterparty_account_number = OLD.counterparty_account_number;
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_activity_update_trigger
+    instead of update on finance.transfer_activity
+    for each row
+    execute function finance.transfer_activity_update();
+#+end_src
+
+Applications interact with ~finance.transfer_activity~ as a single
+unified stream. They can:
+
+- *Read* the full history of a transfer and its transactions, filtered
+  by account and transfer identity, ordered by time.
+- *Insert* new transfers (~kind = 'transfer'~), pending transactions
+  (~kind = 'pending_transaction'~), or settled transactions (~kind =
+  'settled_transaction'~). The ~INSTEAD OF~ trigger routes each insert
+  to the correct underlying table, where all constraint triggers,
+  temporal foreign keys, and balance ledger maintenance fire as usual.
+  For transactions, ~created_at~ identifies the originating transfer.
+- *Update* a transfer's status by updating a row where ~kind =
+  'transfer'~. The ~INSTEAD OF~ trigger routes the status change to
+  ~finance.transfer~, where the state machine trigger and all constraint
+  triggers fire as usual.
+
+If the underlying table structure changes --- columns are renamed, new
+columns are added, tables are split or merged --- the view definition is
+updated once, and every application continues to work unchanged.
+
+This is decoupling achieved at the data level, with no network hops, no
+serialization overhead, and no distributed consistency problems. The
+view /is/ the interface, and the base tables are the implementation.
+
+*** Conclusion
+
+We set out to show that the default assumption for your data problems
+should be that your company can do fine with just PostgreSQL. Let's
+revisit each objection from [[*The setup][the setup]] and see how it was addressed:
+
+- *I'll need auditing and reconstructing state* :: System-time temporal
+  tables ([[#transfer-state-history][transfer state history]]) give you a complete, automatic audit
+  trail of every transfer status transition. No event store, no
+  append-only log infrastructure --- just a history table maintained by a
+  trigger.
+
+- *Write throughput is too low* :: By keeping the [[*On capacity planning][working set]] (2 days
+  of transfers and transactions) sized to fit in ~shared_buffers~, and
+  by aligning indexes with immutable columns to enable [[#on-write-throughput][HOT updates]] that
+  eliminate write amplification on transfer status transitions, we
+  maximize write performance without any external caching layer.
+
+- *The transactional queries are too slow* :: Keyset pagination over
+  composite primary keys, as shown in the [[*OLTP][OLTP section]], gives stable,
+  index-backed listing performance that doesn't degrade as you page
+  deeper. Transfer history queries are a single ~UNION ALL~ over
+  indexed tables.
+
+- *The analytical queries are too slow* :: The [[*OLAP][balance ledger]]
+  maintains running balance snapshots incrementally via triggers,
+  turning what would be a full-table aggregation into a single
+  index-backed lookup at any point in time.
+
+- *My app will be coupled to the Database* :: The [[*On decoupling][updatable view]]
+  ~finance.transfer_activity~ serves as a stable interface for reading
+  activity, inserting transfers and transactions, and updating transfer
+  status through a single unified stream. If the underlying tables
+  change, the view definition is updated once and every application
+  continues to work unchanged. This is modularity achieved at the data
+  level[cite:@bellani24:_how_decoupled], with no network hops, no
+  serialization overhead, and no distributed consistency
+  problems[cite:@10.1145/3593856.3595909].
+
+All of this runs on a single vanilla PostgreSQL 18 instance with
+standard extensions available on RDS. No distributed-systems cosplay, no
+infrastructure proliferation, no operational complexity tax. We have
+only scratched the surface of what is available both in PostgreSQL as a
+SQL engine and in relational theory properly understood.
+
 *** Appendix A: Full code suite
 :PROPERTIES:
 :CUSTOM_ID: appendix-a-full-code-suite
@@ -1313,27 +1495,27 @@ this is the description of the blog section
 
 [fn:1] Complexity here is defined as the quantity of interacting parts of a whole
 
-[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[#appendix-a-full-code-suite][Appendix A: Full code suite]]
+[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[blog/all-you-need-is-postgresql.pre-processed.org::#appendix-a-full-code-suite][Appendix A: Full code suite]]
 
 [fn:3] On oracle there are further complications. See [cite:@cybertec_schema_pg_oracle]
 
 [fn:4] A good overview on the features for PostgresSQL 18 can be found on [cite:@neon_temporal_fk]
 
-[fn:5] For a refresh on what these kinds of balances are, see [[*The setup][the description in the setup section]]
+[fn:5] For a refresh on what these kinds of balances are, see [[blog/all-you-need-is-postgresql.pre-processed.org::#the-setup][the description in the setup section]]
 
 [fn:6] (which is the case for Postgres[cite:@postgresql2026unsupported] but not for Oracle[cite:@oracle2026assertion])
 
 [fn:7] Such constraints are almost never created at the data level, exposing applications to the risk of failing audits and worse.
 
 [fn:8] Temporal tables can be used for several interesting features:
-      #+begin_quote
-    - Auditing all data changes and performing data forensics when necessary
-    - Reconstructing state of the data as of any time in the past
-    - Calculating trends over time
-    - Maintaining a slowly changing dimension for decision support applications
-    - Recovering from accidental data changes and application errors
-      Auditing all data changes and performing data forensics when necessary [cite:@microsoft24:_tempor]
-      #+end_quote
+#+begin_quote
+- Auditing all data changes and performing data forensics when necessary
+- Reconstructing state of the data as of any time in the past
+- Calculating trends over time
+- Maintaining a slowly changing dimension for decision support applications
+- Recovering from accidental data changes and application errors
+  Auditing all data changes and performing data forensics when necessary [cite:@microsoft24:_tempor]
+#+end_quote
 
 [fn:9] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables]
 
@@ -1346,7 +1528,7 @@ this is the description of the blog section
 [fn:13] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
 
 [fn:14] Including a claim of cost reductions of over 90%!
-0.
+1.
 [fn:15] I like the terms superordinate, coordinates and subordinates, but
 they are not in common usage
 
