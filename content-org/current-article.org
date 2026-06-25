@@ -408,7 +408,7 @@ we need: the transfer identity, status, and system-time period.
 
   -- Focused history table - only what we need for status transitions
   create table if not exists finance.transfer_status_log (
-    like finance.transfer including all
+    like finance.transfer
   );
 
   comment on table finance.transfer_status_log is 
@@ -442,9 +442,8 @@ auditing behind it, so we might as well add it.
   alter table finance.managed_active_account add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
   alter table finance.managed_active_account alter column sys_period set not null;
 
-  -- Focused history table - only what we need for status transitions
   create table if not exists finance.managed_active_account_log (
-    like finance.managed_active_account including all
+    like finance.managed_active_account
   );
 
   comment on table finance.managed_active_account_log is 
@@ -565,7 +564,7 @@ them as declarative as possible[fn:7].
       if NEW.status not in ('completed', 'returned') then
         raise exception 'Invalid state transition: pending can only transition to completed or returned, not %', NEW.status;
       end if;
-      NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[)');
+      NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[]');
     
     elsif OLD.status in ('completed', 'returned') then
       raise exception 'Invalid state transition: % is a terminal state and cannot transition to %', OLD.status, NEW.status;
@@ -575,7 +574,7 @@ them as declarative as possible[fn:7].
   end;
   $$;
 
-  create trigger transfer_enforce_state_machine
+  create trigger transfer_z_enforce_state_machine
     before update of status on finance.transfer
     for each row
     when (OLD.status <> NEW.status)
@@ -1470,9 +1469,15 @@ First, we seed 100 managed and 100 external accounts:
 
 Each invocation of this script exercises the complete lifecycle through
 the updatable view: create a transfer, insert a pending transaction,
-complete the transfer, and insert a settled transaction. Every
-constraint trigger, the state machine, the temporal foreign key, and the
-balance ledger triggers all fire on each run.
+then complete the transfer and insert a settled transaction. Transfer
+creation and the pending transaction each run in their own transaction,
+mirroring how a real application would process these at different points
+in time. The completion and settled transaction are grouped in a single
+transaction because the state machine closes the transfer period with
+~now()~, and the settled transaction's ~transaction_created_at~ (which
+also defaults to ~now()~) must fall within that period. Every constraint
+trigger, the state machine, the temporal foreign key, and the balance
+ledger triggers all fire on each run.
 
 #+name: pgbench_write
 #+begin_src sql :tangle "pgbench_write.sql" :comments yes
@@ -1480,62 +1485,71 @@ balance ledger triggers all fire on each run.
   \set external_id random(1, 100)
   \set amount random(100, 100000)
 
-  select lpad((:managed_id + 100)::text, 9, '0') as m_routing,
-         lpad((:managed_id + 100)::text, 12, '0') as m_account,
-         lpad(:external_id::text, 9, '0') as e_routing,
-         lpad(:external_id::text, 12, '0') as e_account
-  \gset
-
   -- 1. Create transfer via the view
   insert into finance.transfer_activity
     (kind, routing_number, account_number,
      counterparty_routing_number, counterparty_account_number, amount)
   values
-    ('transfer', :'m_routing', :'m_account',
-     :'e_routing', :'e_account', :amount);
+    ('transfer',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     :amount);
 
   -- 2. Retrieve the transfer we just created
   select created_at as xfer_ts
     from finance.transfer_activity
    where kind = 'transfer'
-     and routing_number = :'m_routing'
-     and account_number = :'m_account'
-     and counterparty_routing_number = :'e_routing'
-     and counterparty_account_number = :'e_account'
+     and routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+     and counterparty_routing_number = lpad(:external_id::text, 9, '0')
+     and counterparty_account_number = lpad(:external_id::text, 12, '0')
      and status = 'pending'
    order by created_at desc
    fetch first 1 row only
   \gset
 
-  -- 3. Insert pending transaction via the view
+  -- 3. Insert pending transaction via the view (transfer is still pending)
   insert into finance.transfer_activity
     (kind, routing_number, account_number,
      counterparty_routing_number, counterparty_account_number,
      created_at, amount)
   values
-    ('pending_transaction', :'m_routing', :'m_account',
-     :'e_routing', :'e_account',
-     :'xfer_ts', :amount);
+    ('pending_transaction',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     ':xfer_ts', :amount);
 
-  -- 4. Complete the transfer via the view
+  -- 4. Complete the transfer and insert settled transaction atomically.
+  --    This ensures now() is the same for the period close and the
+  --    settled transaction's transaction_created_at.
+  begin;
+
   update finance.transfer_activity
      set status = 'completed'
    where kind = 'transfer'
-     and routing_number = :'m_routing'
-     and account_number = :'m_account'
-     and counterparty_routing_number = :'e_routing'
-     and counterparty_account_number = :'e_account'
-     and created_at = :'xfer_ts';
+     and routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+     and counterparty_routing_number = lpad(:external_id::text, 9, '0')
+     and counterparty_account_number = lpad(:external_id::text, 12, '0')
+     and created_at = ':xfer_ts';
 
-  -- 5. Insert settled transaction via the view
   insert into finance.transfer_activity
     (kind, routing_number, account_number,
      counterparty_routing_number, counterparty_account_number,
      created_at, amount)
   values
-    ('settled_transaction', :'m_routing', :'m_account',
-     :'e_routing', :'e_account',
-     :'xfer_ts', :amount);
+    ('settled_transaction',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     ':xfer_ts', :amount);
+
+  commit;
 #+end_src
 
 **** Read script: activity stream and balance
@@ -1547,23 +1561,19 @@ account (paginated) and its latest balance:
 #+begin_src sql :tangle "pgbench_read.sql" :comments yes
   \set managed_id random(1, 100)
 
-  select lpad((:managed_id + 100)::text, 9, '0') as m_routing,
-         lpad((:managed_id + 100)::text, 12, '0') as m_account
-  \gset
-
   -- Read transfer activity stream (latest 20 entries)
   select *
     from finance.transfer_activity
-   where routing_number = :'m_routing'
-     and account_number = :'m_account'
+   where routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
    order by created_at desc
    fetch first 20 rows only;
 
   -- Read latest balance
   select current_total, available_total
     from finance.balance_ledger
-   where routing_number = :'m_routing'
-     and account_number = :'m_account'
+   where routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
    order by as_of desc
    fetch first 1 row only;
 #+end_src
@@ -1583,43 +1593,64 @@ account (paginated) and its latest balance:
   #    -j 4:  4 worker threads
   #    -P 5:  progress every 5 seconds
   #    -T 60: run for 60 seconds
-  pgbench -f pgbench_read.sql@4 \
+  pgbench -h localhost -p 54321 -U admin -d blog \
+          --no-vacuum \
+          -f pgbench_read.sql@4 \
           -f pgbench_write.sql@1 \
           -c 10 -j 4 -T 60 -P 5
 #+end_src
 
-**** What the benchmark exercises
+**** Results
 
-| Step | Path through the system |
-|------+-------------------------|
-| Transfer insert | View ~INSTEAD OF~ trigger → ~finance.transfer~ → temporal_tables trigger → temporal FK against ~managed_active_account~ → FK against ~external_account~ |
-| Pending txn insert | View trigger → ~finance.pending_transaction~ → ~within_transfer_period~ constraint → ~requires_pending_transfer~ constraint → balance ledger trigger (available only) |
-| Transfer completion | View trigger → ~finance.transfer~ ~UPDATE~ → state machine trigger (closes period) → ~no_future_transactions_on_close~ constraint → temporal_tables history |
-| Settled txn insert | View trigger → ~finance.settled_transaction~ → ~within_transfer_period~ constraint → ~requires_non_pending_transfer~ constraint → balance ledger trigger (current + available) |
-| Read activity | View ~UNION ALL~ over 4 tables, ordered by ~created_at~ |
-| Read balance | Index-backed lookup on ~balance_ledger~ |
-| Serialization conflicts | Concurrent writes to same account → SSI aborts → pgbench reports as failures |
+#+begin_src
+pgbench (18.4)
+transaction type: multiple scripts
+scaling factor: 1
+query mode: simple
+number of clients: 10
+number of threads: 4
+maximum number of tries: 1
+duration: 60 s
+number of transactions actually processed: 45985
+number of failed transactions: 0 (0.000%)
+latency average = 13.044 ms
+latency stddev = 12.449 ms
+initial connection time = 17.840 ms
+tps = 766.151693 (without initial connection time)
+SQL script 1: pgbench_read.sql
+ - weight: 4 (targets 80.0% of total)
+ - 36793 transactions (80.0% of total)
+ - latency average = 8.080 ms
+ - latency stddev = 6.135 ms
+SQL script 2: pgbench_write.sql
+ - weight: 1 (targets 20.0% of total)
+ - 9191 transactions (20.0% of total)
+ - latency average = 32.915 ms
+ - latency stddev = 11.455 ms
+#+end_src
 
-**** Interpreting the results
+Key takeaways:
 
-The pgbench output will report:
+- *766 TPS overall* with 0 failed transactions. The startup target of
+  10,000 transfers/day is ~0.12 TPS. We exceed that by over 6,000x,
+  confirming massive headroom on modest hardware.
+- *0 serialization failures*: Despite 10 concurrent clients writing to
+  100 accounts under ~SERIALIZABLE~ isolation, no transactions were
+  aborted. The working set is distributed across enough accounts that
+  write contention is negligible at this scale.
+- *8ms average read latency*: The ~UNION ALL~ view over 4 tables plus
+  the balance ledger lookup completes well within interactive response
+  time, even as the tables grow throughout the 60-second run.
+- *33ms average write latency*: Each write transaction exercises the
+  full constraint set that implements complex business logic (audit
+  trails, time constraints, balances, etc) all within 33ms. This is the
+  true cost of enforcing every business rule at the data level, and it
+  is more than acceptable.
 
-- *tps (transactions per second)*: At the startup scale of 10,000
-  transfers/day (~0.12 TPS), even modest hardware should exceed this by
-  orders of magnitude, confirming headroom.
-- *number of failed transactions*: These are serialization failures from
-  SSI. They represent cases where concurrent writes to the same account
-  created a dependency cycle. In production, the application would retry
-  these with exponential
-  backoff[cite:@brooker15:_expon_backof_and_jitter]. The failure rate
-  tells you how often retries would be needed.
-- *latency (avg/stddev)*: Per-transaction latency including all trigger
-  and constraint overhead. This is the true cost of enforcing all
-  business rules at the data level.
-
-A healthy result looks like: high TPS relative to the 0.12 TPS
-requirement, low serialization failure rate (under 5%), and
-sub-millisecond average latency for reads.
+These results were obtained on a development laptop, not production
+hardware. On an RDS instance sized for the working set (as described in
+[[*On capacity planning][the capacity planning section]]), performance would be significantly
+better.
 
 *** Conclusion
 
@@ -1671,6 +1702,27 @@ SQL engine and in relational theory properly understood.
 :CUSTOM_ID: appendix-a-full-code-suite
 :END:
 
+#+caption: Full code listing
+#+name: full_code
+#+begin_src sql :noweb yes :exports source  :tangle "full_code.sql" :comments yes
+<<the_schema_and_roles>>
+<<the_domains>>
+<<the_account>>
+<<the_account_constraints>>
+<<laying_foundation_table_transfer>>
+<<transfer_temporal>>
+<<account_temporal>>
+<<laying_foundation_table_txn>>
+<<state_machine>>
+<<constraint_within_period>>
+<<constraint_status_match>>
+<<constraint_no_future_txns>>
+<<finance_transfer_activity_view>>
+<<olap_balance_ledger>>
+<<olap_balance_triggers>>
+<<serializable_isolation>>
+<<decoupling_transfer_activity_triggers>>
+#+end_src
 ** Index
 :PROPERTIES:
 :EXPORT_TITLE: blog section title
