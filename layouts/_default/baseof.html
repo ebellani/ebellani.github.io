@@ -8,7 +8,7 @@
         {{- .Site.Title -}}
       {{ end }}
     </title>
-    {{ $style := resources.Get "css/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+    {{ $style := resources.Get "css/main.scss" | css.Sass | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $style.RelPermalink }}" />
     {{- template "_internal/opengraph.html" . -}}
   </head>

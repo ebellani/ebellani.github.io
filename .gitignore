@@ -19,3 +19,4 @@ hugo.linux
 *.db
 site.tar.gz
 *.orgids
+.aider*
