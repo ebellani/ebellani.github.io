@@ -241,7 +241,7 @@ without overlapping.[fn:4]
 #+name: the_account
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   -- To use temporal constraints, you need to install the btree_gist extension, which provides the necessary operator classes for creating GiST indexes on scalar data types:
-  create extension btree_gist;
+  create extension if not exists btree_gist;
 
   create table finance.managed_active_account(
     routing_number  finance.routing_number not null,
