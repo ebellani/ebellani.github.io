@@ -8,14 +8,16 @@
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Theory in practice: Why Treating Metadata as Relations Pays Off" />
-<meta property="og:description" content="Underpinning relational databases you find a very powerful principle: all your information should be represented as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
-A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on?" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2025-04-14T00:00:00+00:00" />
-<meta property="article:modified_time" content="2025-04-14T00:00:00+00:00" />
-
+    <link rel="stylesheet" href="/css/main.min.74d576bead74d290b22dc5650dd4860eed0047fdacf85a9cab4484b18aa0d98f.css" /><meta property="og:url" content="https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/">
+	<meta property="og:site_name" content="Eduardo&#39;s blog">
+	<meta property="og:title" content="Theory in practice: Why Treating Metadata as Relations Pays Off">
+	<meta property="og:description" content="Underpinning relational databases you find a very powerful principle: all your information should be represented as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
+A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on? In many environments, answering that might involve using external tools or writing scripts in another language. But in PostgreSQL, you can answer it with a simple query because PostgreSQL respects Codd’s principle and exposes metadata as part of its relational structure.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2025-04-14T00:00:00+00:00">
+		<meta property="article:modified_time" content="2025-04-14T00:00:00+00:00">
 </head>
   <body><nav>
   <img
@@ -41,8 +43,8 @@ A practical case: Dependencies for Security Policies This is clearly a metadata 
   </h2><p>Underpinning relational databases you find a very powerful principle:
 all your information should be represented as attributes drawn from
 domains in
-relations(<a href="#citeproc_bib_item_1">Pascal 2020</a>). This is Codd’s
-Information Principle #1. This principle isn’t just fluffy theory: it
+relations(<a href="#citeproc_bib_item_1">Pascal 2020</a>). This is Codd&rsquo;s
+Information Principle #1. This principle isn&rsquo;t just fluffy theory: it
 can lead to very concrete wins in how we design, query, and maintain
 systems.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <h2 id="a-practical-case-dependencies-for-security-policies">A practical case: Dependencies for Security Policies</h2>
@@ -50,7 +52,7 @@ systems.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref
 this view depend on? In many environments, answering that might involve
 using external tools or writing scripts in another language. But in
 PostgreSQL, you can answer it with a simple query <strong>because</strong> PostgreSQL
-respects Codd’s principle and exposes metadata as part of its relational
+respects Codd&rsquo;s principle and exposes metadata as part of its relational
 structure.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="w">  </span><span class="k">select</span><span class="w"> </span><span class="k">distinct</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">source_schema</span><span class="p">.</span><span class="n">nspname</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">source_object_schema_name</span><span class="p">,</span><span class="w">
@@ -79,13 +81,13 @@ no ETL jobs, no external tools. Just your relationally inspired SQL.</p>
 <p>This aligns with the foundational ideas behind relational databases and
 shows that following sound principles can yield practical advantages.</p>
 <h2 id="references">References</h2>
-<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+<div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Pascal, Fabian. 2020. “Understanding Codd’s 12 Rules for Rdbms (Accessed on 2025-04-14).” <a href="https://www.dbdebunk.com/2020/10/understanding-codds-12-rules-for-rdbms.html">https://www.dbdebunk.com/2020/10/understanding-codds-12-rules-for-rdbms.html</a>.</div>
 </div>
 <figure><img src="/ox-hugo/The%20Cathedral%20of%20the%20Archangel%20Michael%20in%20Bronnitsy.jpg"
-         alt="Figure 1: The Cathedral of the Archangel Michael in Bronnitsy underwent a relatively mild transformation: It was used as a state book archive - but the &amp;ldquo;book of books,&amp;rdquo; the Bible, surely couldn&amp;rsquo;t be found there."/><figcaption>
-            <p><span class="figure-number">Figure 1: </span>The Cathedral of the Archangel Michael in Bronnitsy underwent a relatively mild transformation: It was used as a state book archive - but the &ldquo;book of books,&rdquo; the Bible, surely couldn&rsquo;t be found there.</p>
-        </figcaption>
+			alt="Figure 1: The Cathedral of the Archangel Michael in Bronnitsy underwent a relatively mild transformation: It was used as a state book archive - but the &ldquo;book of books,&rdquo; the Bible, surely couldn&rsquo;t be found there."><figcaption>
+			<p><span class="figure-number">Figure 1: </span>The Cathedral of the Archangel Michael in Bronnitsy underwent a relatively mild transformation: It was used as a state book archive - but the &ldquo;book of books,&rdquo; the Bible, surely couldn&rsquo;t be found there.</p>
+		</figcaption>
 </figure>
 
 <div class="footnotes" role="doc-endnotes">
@@ -98,6 +100,8 @@ shows that following sound principles can yield practical advantages.</p>
 </div>
 
 
+
+   
 
    
 

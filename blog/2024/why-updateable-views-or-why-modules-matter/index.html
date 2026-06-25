@@ -8,15 +8,17 @@
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Why updateable views, or, Why modules matter?" />
-<meta property="og:description" content="Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&rsquo;s the full exchange.
-  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
- Logical independence the ability to change the form without affecting clients." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2024-06-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-06-06T00:00:00+00:00" />
-
+    <link rel="stylesheet" href="/css/main.min.74d576bead74d290b22dc5650dd4860eed0047fdacf85a9cab4484b18aa0d98f.css" /><meta property="og:url" content="https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/">
+	<meta property="og:site_name" content="Eduardo&#39;s blog">
+	<meta property="og:title" content="Why updateable views, or, Why modules matter?">
+	<meta property="og:description" content="Continuing a rich conversation that sparked [BROKEN LINK: blog/a-real-life-example-of-database-design.pre-processed.org] [BROKEN LINK: blog/how-to-use-the-relational-model-to-do-database-design.pre-processed.org], I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here’s the full exchange.
+Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one? This question seems to mistake logical and physical independence.
+Logical independence the ability to change the form without affecting clients. Physical independence the ability to change the implementation without changing the form. In an updateable view world, how would you explain deadlocks occurring to the developers consuming the model (since they can no longer “see” the physical tables that implement it)">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2024-06-06T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-06-06T00:00:00+00:00">
 </head>
   <body><nav>
   <img
@@ -39,7 +41,7 @@
 
 
     </small>
-  </h2><p><a href="https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29">Continuing</a> a rich conversation that sparked <a href="/blog/2024/a-real-life-example-of-database-design/">other</a> <a href="/blog/2024/how-to-use-the-relational-model-to-do-database-design/">posts</a>, I was asked to
+  </h2><p><a href="https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29">Continuing</a> a rich conversation that sparked [BROKEN LINK: blog/a-real-life-example-of-database-design.pre-processed.org] [BROKEN LINK: blog/how-to-use-the-relational-model-to-do-database-design.pre-processed.org], I was asked to
 justify updateable views which, to me, are analogous to module'
 signatures (a topic for another post). Here&rsquo;s the full exchange.</p>
 <blockquote>
@@ -102,13 +104,15 @@ multiple DBMS instances avoids consistency problems, which are widely
 considered the most expensive problems in the industry.</li>
 </ol>
 <figure><img src="/ox-hugo/st-maria-civil-war--comparision.jpg"
-         alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"/><figcaption>
-            <p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
-        </figcaption>
+			alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"><figcaption>
+			<p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
+		</figcaption>
 </figure>
 
 
 
+
+   
 
    
 

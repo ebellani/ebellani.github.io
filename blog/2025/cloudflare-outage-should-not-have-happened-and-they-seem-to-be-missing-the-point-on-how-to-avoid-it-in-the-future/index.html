@@ -8,15 +8,17 @@
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future" />
-<meta property="og:description" content="Yet again, another global IT outage happened (dèjá vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swaths of the internet with it(Booth 2025).
-And yes, like my previous analysis of the GCP and CrowdStrike&rsquo;s outages, this post critiques Cloudflare&rsquo;s root cause analysis (RCA), which &mdash; despite providing a great overview of what happened &mdash; misses the real lesson.
-Here’s the key section of their RCA:" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2025-11-26T00:00:00+00:00" />
-<meta property="article:modified_time" content="2025-11-26T00:00:00+00:00" />
-
+    <link rel="stylesheet" href="/css/main.min.74d576bead74d290b22dc5650dd4860eed0047fdacf85a9cab4484b18aa0d98f.css" /><meta property="og:url" content="https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/">
+	<meta property="og:site_name" content="Eduardo&#39;s blog">
+	<meta property="og:title" content="Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future">
+	<meta property="og:description" content="[BROKEN LINK: blog/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future.pre-processed.org], another global IT outage happened (dèjá vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swaths of the internet with it(Booth 2025).
+And yes, like my previous analysis of the GCP and CrowdStrike’s outages, this post critiques Cloudflare’s root cause analysis (RCA), which — despite providing a great overview of what happened — misses the real lesson.
+Here’s the key section of their RCA:">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2025-11-26T00:00:00+00:00">
+		<meta property="article:modified_time" content="2025-11-26T00:00:00+00:00">
 </head>
   <body><nav>
   <img
@@ -39,7 +41,7 @@ Here’s the key section of their RCA:" />
 
 
     </small>
-  </h2><p><a href="/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/">Yet again</a>, another global IT outage happened (dèjá vu strikes again in our
+  </h2><p>[BROKEN LINK: blog/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future.pre-processed.org], another global IT outage happened (dèjá vu strikes again in our
 industry). This time at
 cloudflare(<a href="#citeproc_bib_item_4">Prince 2025</a>). Again, taking down
 large swaths of the internet with
@@ -48,7 +50,7 @@ it(<a href="#citeproc_bib_item_2">Booth 2025</a>).</p>
 this post critiques Cloudflare&rsquo;s root cause analysis (RCA), which &mdash;
 despite providing a great overview of what happened &mdash; misses the real
 lesson.</p>
-<p>Here’s the key section of their RCA:</p>
+<p>Here&rsquo;s the key section of their RCA:</p>
 <blockquote>
 <p>Unfortunately, there were assumptions made in the past, that the list of
 columns returned by a query like this would only include the “default”
@@ -70,7 +72,7 @@ Management feature file generation logic to construct each input
 “feature” for the file mentioned at the beginning of this section.</p>
 <p>The query above would return a table of columns like the one displayed
 (simplified example):</p>
-<figure><img src="/ox-hugo/cf_table_sql_return.png"/>
+<figure><img src="/ox-hugo/cf_table_sql_return.png">
 </figure>
 
 <p>However, as part of the additional permissions that were granted to the
@@ -84,9 +86,9 @@ needs a distinct and a limit, since these seem to be crucial business
 rules.</p>
 <p>So, a new underlying security work manifested the (unintended) potential
 already there in the query. Since this was by definition unintended, the
-application code didn’t expect that value to be what it was, and reacted
+application code didn&rsquo;t expect that value to be what it was, and reacted
 poorly. This caused a crash loop across seemingly all of cloudflare&rsquo;s
-core systems. This bug wasn’t caught during rollout because the faulty
+core systems. This bug wasn&rsquo;t caught during rollout because the faulty
 code path required data that was assumed to be impossible to be
 generated.</p>
 <p>Sounds familiar? It should. Any senior engineer has seen this pattern
@@ -115,38 +117,40 @@ whole post is a great overview on trying to process data fast, without a
 single line on how to guarantee its logical correctness/consistency in
 the face of changes.</p>
 <p><strong>They are treating a logical problem as if it was a physical problem</strong></p>
-<p>I&rsquo;ll repeat the <a href="/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/">same advice</a> I offered in my previous article on GCP&rsquo;s outage:</p>
+<p>I&rsquo;ll repeat the [BROKEN LINK: blog/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future.pre-processed.org] I offered in my previous article on GCP&rsquo;s outage:</p>
 <h2 id="the-real-cause">The real cause</h2>
 <p>These kinds of outages stem from the uncontrolled interaction between
-application logic and database schema. You can’t reliably catch that
+application logic and database schema. You can&rsquo;t reliably catch that
 with more tests or rollouts or flags. You prevent it by
 construction—through analytical design.</p>
 <ol>
 <li>No nullable fields.</li>
-<li>(as a corollary of 1) full normalization of the database (<a href="/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/">The principles of database design, or, the Truth is out there</a>)</li>
+<li>(as a corollary of 1) full normalization of the database ([BROKEN LINK: blog/the-principles-of-database-design-or-the-truth-is-out-there.pre-processed.org])</li>
 <li>formally verified application code(<a href="#citeproc_bib_item_3">Chapman et al. 2024</a>)</li>
 </ol>
 <h2 id="conclusion">Conclusion</h2>
 <p>FAANG-style companies are unlikely to adopt formal methods or relational
-rigor wholesale. But for their most critical systems, they should. It’s
+rigor wholesale. But for their most critical systems, they should. It&rsquo;s
 the only way to make failures like this impossible by design, rather
 than just less likely.</p>
 <p>The internet would thank them. (Cloud users too—caveat emptor.)</p>
 <h2 id="references">References</h2>
-<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+<div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Bocharov, Alex. 2018. “Http Analytics for 6m Requests per Second Using Clickhouse.” <a href="https://blog.cloudflare.com/http-analytics-for-6m-requests-per-second-using-clickhouse/">https://blog.cloudflare.com/http-analytics-for-6m-requests-per-second-using-clickhouse/</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>Booth, Robert. 2025. “What Is Cloudflare — and Why Did Its Outage Take down so Many Websites?” <a href="https://www.theguardian.com/technology/2025/nov/18/what-is-cloudflare-and-why-did-its-outage-take-down-so-many-websites">https://www.theguardian.com/technology/2025/nov/18/what-is-cloudflare-and-why-did-its-outage-take-down-so-many-websites</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Chapman, Roderick, Claire Dross, Stuart Matthews, and Yannick Moy. 2024. “Co-Developing Programs and Their Proof of Correctness.” <i>Commun. Acm</i> 67 (3): 84–94. <a href="https://doi.org/10.1145/3624728">https://doi.org/10.1145/3624728</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_4"></a>Prince, Matthew. 2025. “Cloudflare Outage on November 18, 2025.” <a href="https://blog.cloudflare.com/18-november-2025-outage/">https://blog.cloudflare.com/18-november-2025-outage/</a>.</div>
 </div>
 <figure><img src="/ox-hugo/2560px-Dehio_212_Cluny.jpg"
-         alt="Figure 1: The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving"/><figcaption>
-            <p><span class="figure-number">Figure 1: </span>The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving</p>
-        </figcaption>
+			alt="Figure 1: The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving"><figcaption>
+			<p><span class="figure-number">Figure 1: </span>The Cluny library was one of the richest and most important in France and Europe. In 1790 during the French Revolution, the abbey was sacked and mostly destroyed, with only a small part surviving</p>
+		</figcaption>
 </figure>
 
 
 
+
+   
 
    
 

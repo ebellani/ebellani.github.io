@@ -8,16 +8,18 @@
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="CQRS as nominalism" />
-<meta property="og:description" content="A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
+    <link rel="stylesheet" href="/css/main.min.74d576bead74d290b22dc5650dd4860eed0047fdacf85a9cab4484b18aa0d98f.css" /><meta property="og:url" content="https://ebellani.github.io/blog/2023/cqrs-nominalism/">
+	<meta property="og:site_name" content="Eduardo&#39;s blog">
+	<meta property="og:title" content="CQRS as nominalism">
+	<meta property="og:description" content="A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
+So, what is Nominalism, and why does it matter? I’ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
 What is CQRS? Here is an authoritative word on it(Young 2010):
- Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2023/cqrs-nominalism/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2023-11-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-11-04T00:00:00+00:00" />
-
+Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2023-11-04T00:00:00+00:00">
+		<meta property="article:modified_time" content="2023-11-04T00:00:00+00:00">
 </head>
   <body><nav>
   <img
@@ -48,7 +50,7 @@ point is a somewhat popular architecture tactic, CQRS.</p>
 <p>What is CQRS? Here is an authoritative word on it(<a href="#citeproc_bib_item_4">Young 2010</a>):</p>
 <blockquote>
 <p>Command and Query Responsibility Segregation (CQRS) originated with
-Bertrand Meyer’s Command and Query Separation Principle</p>
+Bertrand Meyer&rsquo;s Command and Query Separation Principle</p>
 <p>&hellip;</p>
 <p>It states that every method should either be a command that performs an
 action, or a query that returns data to the caller, but not both. In
@@ -72,40 +74,40 @@ terminology. <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-n
   CQRS/DDD/Traditional computer science terms mapping
 </div>
 <table>
-<thead>
-<tr>
-<th>CQRS</th>
-<th>DDD</th>
-<th>Traditional</th>
-<th>Interpretation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Domain model</td>
-<td>Entity</td>
-<td>Variable</td>
-<td>A symbol that represents a value of a given type. Can represent  different values on different calls</td>
-</tr>
-<tr>
-<td>Read model</td>
-<td>Value Object</td>
-<td>Value</td>
-<td>An element of a set</td>
-</tr>
-<tr>
-<td>Command</td>
-<td>Aggregate command</td>
-<td>assignment operator</td>
-<td>Change the value of a variable</td>
-</tr>
-<tr>
-<td>Query</td>
-<td>Side effect free function</td>
-<td>function call</td>
-<td>Derive values from values</td>
-</tr>
-</tbody>
+	<thead>
+			<tr>
+					<th>CQRS</th>
+					<th>DDD</th>
+					<th>Traditional</th>
+					<th>Interpretation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Domain model</td>
+					<td>Entity</td>
+					<td>Variable</td>
+					<td>A symbol that represents a value of a given type. Can represent  different values on different calls</td>
+			</tr>
+			<tr>
+					<td>Read model</td>
+					<td>Value Object</td>
+					<td>Value</td>
+					<td>An element of a set</td>
+			</tr>
+			<tr>
+					<td>Command</td>
+					<td>Aggregate command</td>
+					<td>assignment operator</td>
+					<td>Change the value of a variable</td>
+			</tr>
+			<tr>
+					<td>Query</td>
+					<td>Side effect free function</td>
+					<td>function call</td>
+					<td>Derive values from values</td>
+			</tr>
+	</tbody>
 </table>
 <p>As this table shows, we have new names for old things, and people think
 that because of that they <strong>are</strong> different things. My point is that this
@@ -125,7 +127,7 @@ CQRS community did here.</p>
 the tradional concepts, since my point here is to show that <strong>they are
 the same thing</strong>.</p>
 <h2 id="references">References</h2>
-<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+<div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Date, C.J. 2003. <i>An Introduction to Database Systems</i>. 8th ed. USA: Addison-Wesley Longman Publishing Co., Inc.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>De Wulf, Maurice. 1911. “Nominalism, Realism, Conceptualism.” The Catholic Encyclopedia, Vol 11. <a href="https://www.newadvent.org/cathen/11090c.htm">https://www.newadvent.org/cathen/11090c.htm</a>.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Evans, Eric. 2014. <i>Domain-driven design reference: Definitions and pattern summaries</i>. Paperback. Dog Ear Pub Llc.</div>
@@ -145,6 +147,8 @@ chapter 25 of  (<a href="#citeproc_bib_item_1">Date 2003</a>)&#160;<a href="#fnr
 </div>
 
 
+
+   
 
    
 

@@ -1,469 +1,318 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Agere sequitur esse on Eduardo&#39;s blog</title>
-    <link>https://ebellani.github.io/</link>
-    <description>Recent content in Agere sequitur esse on Eduardo&#39;s blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 26 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
-      <link>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</link>
-      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</guid>
-      <description>Yet again, another global IT outage happened (dèjá vu strikes again in our industry). This time at cloudflare(Prince 2025). Again, taking down large swaths of the internet with it(Booth 2025).
-And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages, this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash; despite providing a great overview of what happened &amp;mdash; misses the real lesson.
-Here’s the key section of their RCA:</description>
-    </item>
-    
-    <item>
-      <title>On dealing with GPT results, or, Pots, Kettles And Hallucinations</title>
-      <link>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</link>
-      <pubDate>Sat, 18 Oct 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</guid>
-      <description>.org-center { margin-left: auto; margin-right: auto; text-align: center; } Hallucinations in GPTs can lead to the dissemination of false information, creating harmful outcomes in applications of critical decision making or leading to mistrust in AI. In a viral instance, The New York Times published an article about a lawyer who used ChatGPT to produce case citations without realizing they were fictional, or hallucinated. This incident highlights the danger of hallucinations in LLM-based queries; often the hallucinations are subtle and go easily unnoticed.</description>
-    </item>
-    
-    <item>
-      <title>What is mathematics? A classification based on universals</title>
-      <link>https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/</link>
-      <pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/</guid>
-      <description>I find that it is hard for me to motivate myself to learn a subject that one cannot define. So I made an effort to define mathematics, and the best source I have ever found was (Franklin 2014).
-To sum up my views on the topic: at the core of philosophical inquiry, one finds a deep division into 2 opposites as their regard to the universals, realism and nominalism(and its kantian variant, conceptualism)(De Wulf 1911).</description>
-    </item>
-    
-    <item>
-      <title>Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
-      <link>https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</link>
-      <pubDate>Sat, 14 Jun 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</guid>
-      <description>Another global IT outage happened, this time at Google Cloud Platform (team 2025), taking down with it large swaths of the internet (Zeff 2025). Like my previous analysis of the CrowdStrike outage, this post critiques GCP’s root cause analysis (RCA), which—despite detailed engineering steps—misses the real lesson.
-Here’s the key section of their RCA:
- Google and Google Cloud APIs are served through our Google API management and control planes. Distributed regionally, these management and control planes are responsible for ensuring each API request that comes in is authorized, has the policy and appropriate checks (like quota) to meet their endpoints.</description>
-    </item>
-    
-    <item>
-      <title>The principles of database design, or,  the Truth is out there</title>
-      <link>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</link>
-      <pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</guid>
-      <description>Every software project needs to represent the reality of the business he is embedded in. The way we can represent reality as limited rational beings is through propositions, i.e, declarative statements that affirm or deny something about reality. When a collection of such propositions is stored in a computer system, we call it a database.
-Such database needs to be designed to properly reflect reality. This can&amp;rsquo;t be automated, since the semantics of the situation need to be encoded in a way that can be processed by a computer.</description>
-    </item>
-    
-    <item>
-      <title>Theory in practice: Why Treating Metadata as Relations Pays Off</title>
-      <link>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</link>
-      <pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</guid>
-      <description>Underpinning relational databases you find a very powerful principle: all your information should be represented as attributes drawn from domains in relations(Pascal 2020). This is Codd’s Information Principle #1. This principle isn’t just fluffy theory: it can lead to very concrete wins in how we design, query, and maintain systems.1
-A practical case: Dependencies for Security Policies This is clearly a metadata question: Which other database objects does this view depend on?</description>
-    </item>
-    
-    <item>
-      <title>How to Replace LeetCode with Something That Actually Works</title>
-      <link>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</link>
-      <pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</guid>
-      <description>Recently there has been an interest in cheating(?) leetcode style interviews(Yang 2025). These articles highlight a longstanding issue in tech recruiting: puzzle-style assessments have little to no correlation with actual job performance(Konnikova 2013; McAllister 2013), and leetcode is nothing but algorithmic puzzles. This makes them a poor predictor of job performance. What leetcode does predict seems to be success at leetcode style interviews(Mroczka 2024). Go figure.
-If you are in power to stop doing these silly things and reach for something with actual evidence of working, here is a blueprint for performing a structured interview with a focus on programmers, but that can be adapted for other positions quite easily.</description>
-    </item>
-    
-    <item>
-      <title>Queries when you have a postgresql based system</title>
-      <link>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</link>
-      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</guid>
-      <description>Are you managing/developing a PostgreSQL based application? Here are some scripts that might make your life easier dealing with your installation:
-selectschema_name,relname,pg_size_pretty(table_size)from(selectpg_catalog.pg_namespace.nspnameasschema_name,relname,pg_total_relation_size(pg_catalog.pg_class.oid)astable_sizefrompg_catalog.pg_classjoinpg_catalog.pg_namespaceonrelnamespace=pg_catalog.pg_namespace.oid)twhereschema_namenotlike&amp;#39;pg_%&amp;#39;orderbytable_sizedesclimit5;Code Snippet 1: Check the 5 largests tables (courtesy of Supabase&#39;s dashboard)  select*fromcron.job_run_detailsorderbystart_timedesclimit5;Code Snippet 2: Check the current running cron jobs  selectact.query,act.datname,act.query_start,nspnameasschema_name,relnameasobject_name,l.pidfrompg_locksljoinpg_classcon(relation=c.oid)joinpg_namespacenspon(c.relnamespace=nsp.oid)joinpg_stat_activityacton(l.pid=act.pid)wherel.pidin(selectpidfrompg_stat_activitywheredatname=current_database()andquery!=current_query())orderbypid;Code Snippet 3: See what is being locked by what (pg_terminate can unlock things) </description>
-    </item>
-    
-    <item>
-      <title>How to have decoupled systems without setting your company on fire</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</link>
-      <pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</guid>
-      <description>Have you heard that having decoupled systems is paramount to dealing with complexity at the heart of software?
-Have you also seen companies waste piles of cash and lots of developer time trying to build decoupled systems?
-This article might be of your interest, since my goal is to teach you how to build decoupled systems cheaply and using technology that is battle tested and that will keep you in control.</description>
-    </item>
-    
-    <item>
-      <title>How to unlock motivation for high performance in your team</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-unlock-motivation-for-high-performance-in-your-team/</link>
-      <pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-unlock-motivation-for-high-performance-in-your-team/</guid>
-      <description>As an engineering manager(EM), one of your core tasks is to build and maintain a team of high performance. To accomplish this, it should be obvious that motivation is a key factor:
- Why do followers join some teams but not others? How do you get followers to exhibit enough of the critical behaviors needed for the team to succeed? And why are some leaders capable of getting followers to go above and beyond the call of duty?</description>
-    </item>
-    
-    <item>
-      <title>A simple way to deal with the principal threat to scalability</title>
-      <link>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</link>
-      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</guid>
-      <description>If you have a distributed system one of the main worries you probably have is scalability. Well, what is the principal threat to scalability in such systems is the conflict between transactions that are used to guarantee correct results in concurrent operations.
-Such conflicts are dealt with by concurrency control, either pessimistically via something like exclusive resource lock or optimistically via something like serializable snapshot isolation.
-Let me illustrate the threat with from the pessimistic point of view:</description>
-    </item>
-    
-    <item>
-      <title>Debunking Event Sourcing</title>
-      <link>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</link>
-      <pubDate>Fri, 23 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</guid>
-      <description>Are you looking into event sourcing? I hope this article gives you enough information for you to properly contrast it with what I consider an overall better alternative: temporal tables.
-The context: my last article (Are you considering Event Sourcing? Think again) has produced some heated responses. One of the responders published an article (Dear Temporal Table Developers ❤) explaining
- .. why temporal tables are &amp;hellip; an inferior choice, especially for systems that require scalability, flexibility, and resilience in an ever-changing world.</description>
-    </item>
-    
-    <item>
-      <title>Are you considering Event Sourcing? Think again.</title>
-      <link>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</link>
-      <pubDate>Fri, 16 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</guid>
-      <description>Are you considering doing event sourcing? Maybe you have read that it is necessary for your project or that you will have great benefits in doing so.
-If so, I ask you to think about an alternative. Maybe you already have something of equal capacity in the tooling that you use and could extract all the benefits for a fraction of the cost. What is that something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle, etc).</description>
-    </item>
-    
-    <item>
-      <title>Crowdstrike&#39;s outage should not have happened, and the company is missing the point on how to avoid it in the future</title>
-      <link>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</link>
-      <pubDate>Wed, 07 Aug 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</guid>
-      <description>A global IT outage occurred on [2024-07-18 Thu], with several industries having significant economic problems (see Appendix 1: The impact for some quotes on what happened). The outage what caused by a bug in the remote update system of the software of Crowdstrike, a popular Threat Intelligence/Response company.
-The company has published the Post Incident Review(Crowdstrike 2024a) right after the incident and has just released its root cause analysis (Crowdstrike 2024b).</description>
-    </item>
-    
-    <item>
-      <title>How to avoid frustration with software architecture</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</link>
-      <pubDate>Thu, 18 Jul 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</guid>
-      <description>It is becoming more common for companies to come out with stories on the downsides of distributed microservice architectures1(Kolny 2023; Ghemawat et al. 2023).
-Instead of hopping in this bandwagon, as tempting as this might be, I want to suggest how could one avoid being caught in such situation in the first place.
-Fundamentally, I think the problem that originated the current dissatisfaction with microservices is a double confusion:
- between the form (modules) and the matter (interacting running processes) of software and(Ainsworth 2024); between the the form (modules) of software and the form of software building organizations (teams, executing environments, deployment pipelines &amp;hellip;).</description>
-    </item>
-    
-    <item>
-      <title>How to avoid a common career pitfall</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</link>
-      <pubDate>Tue, 02 Jul 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</guid>
-      <description>If the way you think others see you is in stark contrast to how others actually see you, you are in danger of derailing in your career.
-To avoid that, here are 3 steps, and a reference:
- Ask and embrace feedback from bosses, peers and followers1, Expose your most cherished ideas to the most intense forms of public scrutiny you can find, See ways to measure yourself, such as 360 feedback mechanisms and validated personality assessments.</description>
-    </item>
-    
-    <item>
-      <title>Integrity Constraints and business value</title>
-      <link>https://ebellani.github.io/blog/2024/constraints-and-business-value/</link>
-      <pubDate>Wed, 26 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/constraints-and-business-value/</guid>
-      <description>Again with this database business? Let me try to motivate you dear reader before I start again with a illustrative case: SQL Injections!
- SQL injection is one of the oldest vulnerabilities still present in the OWASP TOP 10 (CyberSecura 2021) A well documented case puts the cost of one SQL Injection in USD 196k (Group 2014)  Ok, and how these are related to databases, and more specifically constraints? And what are these constraints?</description>
-    </item>
-    
-    <item>
-      <title>Substantial and accidental forms of a SQL expression</title>
-      <link>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</link>
-      <pubDate>Thu, 20 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</guid>
-      <description>Multiplicity of parts, variety, and unity of plan which
-combines the parts into a coherent whole, &amp;ndash;
-such are the elements of order found in all beauty.
-(De Wulf 2012)
- I have been working with data intensive applications for a while and of course that means exposure to a lot of SQL, both personally and training other developers.
-In these experiences I have noticed that it is sometimes harder than it should be to grasp what SQL is doing, specially since its accidental form makes understanding its substantial form so hard.</description>
-    </item>
-    
-    <item>
-      <title>Why updateable views, or, Why modules matter?</title>
-      <link>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</link>
-      <pubDate>Thu, 06 Jun 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</guid>
-      <description>Continuing a rich conversation that sparked other posts, I was asked to justify updateable views which, to me, are analogous to module&#39; signatures (a topic for another post). Here&amp;rsquo;s the full exchange.
-  Why is the logical model more likely to be correct and immutable from the perspective of the app than the physical one?   This question seems to mistake logical and physical independence.
- Logical independence the ability to change the form without affecting clients.</description>
-    </item>
-    
-    <item>
-      <title>A real life example of database design</title>
-      <link>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</link>
-      <pubDate>Mon, 27 May 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</guid>
-      <description>In a followup to How to use the relational model to do database design?, I was asked to provide an example to illustrate the point:
- Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car (it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD and also let say we allow truck types of cars with 6 wheels. Cars have various engine types and depending on the model of car, some colours are available and some are not.</description>
-    </item>
-    
-    <item>
-      <title>How to use the relational model to do database design?</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</link>
-      <pubDate>Sun, 26 May 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</guid>
-      <description>On a recent exchange I was asked the following:
- &amp;hellip; what you mean that you use the relation model to design? &amp;hellip;
- Let&amp;rsquo;s first start with the motivation: Why should one use the relational model(RM) to do database design? Here is my one line answer:
-It makes it possible to have and to maintain the integrity of your business rules.
-To illustrate this point, here are some examples of problems that one faces when one does not have such integrity:</description>
-    </item>
-    
-    <item>
-      <title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
-      <link>https://ebellani.github.io/blog/2024/microservices-as-reification/</link>
-      <pubDate>Sat, 04 May 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/microservices-as-reification/</guid>
-      <description>Reification: the treatment of something abstract as a material or concrete thing, as in the following lines from Matthew Arnold’s poem “Dover Beach”: (Britannica 2018)
-/The Sea of Faith
-Was once, too, at the full, and round earth’s shore
-Lay like the folds of a bright girdle furled./
-  The microservice architecture(MA) has taken a deep hold in the collective imagination of the software engineering community since at least 20141.</description>
-    </item>
-    
-    <item>
-      <title>A practical principle on politics (office or otherwise)</title>
-      <link>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</link>
-      <pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</guid>
-      <description>If you are involved in politics, as a voter or just as an office worker in an unfortunate situation, you would do well to remember this dictum:
- When a public figure tells you something that you want to hear, question his sincerity. When a public figure tells you something you don’t want to hear, believe him.(Lawler 2024)
-  Figure 1: The destruction of the original Church of Christ the Saviour in Moscow, Russia</description>
-    </item>
-    
-    <item>
-      <title>A point about FAANG points</title>
-      <link>https://ebellani.github.io/blog/2024/a-point-about-faang/</link>
-      <pubDate>Sun, 14 Apr 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/a-point-about-faang/</guid>
-      <description>As a technologist I often hear variations of the following phrase in my industry:
- Do it because some FAANG(Fernando 2023) company did it.
- The structure of this argument is usually like this:
- Technique or process X is great/bad, Company C does it like this, C is financially successful and famous, Therefore, you should do the same X as C does.  This is a mixture of the fallacies of selection bias, appeal to authority and false cause.</description>
-    </item>
-    
-    <item>
-      <title>What is really the matter with the &#39;database&#39;?</title>
-      <link>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</link>
-      <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</guid>
-      <description>How can we talk straight about a concept when the term that should signify it is equivocated all the time?
-I think this is a big part of the problem on discussions about databases. Here are some ways that the term database is widely used in the tech industry:
- A server I&#39;ll access the database in prod. An instance of a DBMS We are running PG 9.3 locally. A design My database will have a user table and a product table.</description>
-    </item>
-    
-    <item>
-      <title>The three traditional laws of being</title>
-      <link>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</link>
-      <pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</guid>
-      <description>The law of identity &amp;lsquo;Whatever is, is.&amp;rsquo; The law of non-contradiction &amp;lsquo;Nothing can both be and not be.&amp;rsquo; The law of excluded middle &amp;lsquo;Everything must either be or not be.&amp;rsquo; (Russell 1912)   Figure 1: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.
-  References .csl-entry{text-indent: -1.5em; margin-left: 1.5em;}Russell, Bertrand.</description>
-    </item>
-    
-    <item>
-      <title>Who should rule</title>
-      <link>https://ebellani.github.io/blog/2024/who-should-rule/</link>
-      <pubDate>Thu, 21 Mar 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/who-should-rule/</guid>
-      <description>If you want to become a (better) leader, you should master the four essential characteristics for leaders: integrity, judgment, competence, and vision(Hogan and Kaiser 2005):
- Integrity. A leader must be trusted to be followed. Decisiveness. Making reasonable decisions in a timely manner. Competence. Both your followers and your stakeholders must know that you not only mean well but that you can deliver. Vision. Setting goals under the right strategy is vital for team and company success against its competition.</description>
-    </item>
-    
-    <item>
-      <title>Principles of reliable applications</title>
-      <link>https://ebellani.github.io/blog/2024/principles-of-reliable-applications/</link>
-      <pubDate>Tue, 19 Mar 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/principles-of-reliable-applications/</guid>
-      <description>The following are adapted from(Perry 2020), using a more database centric approach:
-   Principle Implementation     Idempotence Client side ids; Session ids   Immutability Insert only DBMSes (system time in SQL 2016)   Location independence Natural keys   Versioning Additive structures; Temporal dimension on schemas     Figure 1: Gargoyles of Notre-Dame de Paris
-  References .csl-entry{text-indent: -1.5em; margin-left: 1.</description>
-    </item>
-    
-    <item>
-      <title>Pots, kettles and databases</title>
-      <link>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</link>
-      <pubDate>Sun, 17 Mar 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</guid>
-      <description>Sometimes you stumble upon small insights that illuminate a good chunk of things. Recently I think I have stumbled upon what I believe is a case of that, on the Hibernate manual(King 2024), of all places. The author of the manual itself makes it clear that it is a special section of the manual:
- In this section, we’re going to give you our opinion. If you’re only interested in facts, or if you prefer not to read things that might undermine the opinion you currently hold, please feel free to skip straight to the next chapter.</description>
-    </item>
-    
-    <item>
-      <title>What is database normalization and why should you do it?</title>
-      <link>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</link>
-      <pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</guid>
-      <description>A fully normalized database means one thing, and only one thing: your relations corresponds only one predicate under a given interpretation (i.e. your business rules).
-You should properly normalize your database because it:
-  Simplifies integrity enforcement and data manipulation; Avoids data redundancy and the risk of database inconsistency; Guarantees semantic correctness: no update anomalies. (Pascal 2016)   PS: As an example of the impact to the bottom line, think of it means to have to trust, but verify every piece of data you have.</description>
-    </item>
-    
-    <item>
-      <title>How I do development on PostgreSQL over Emacs</title>
-      <link>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</link>
-      <pubDate>Sat, 24 Feb 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</guid>
-      <description>These days I&amp;rsquo;m doing quite a lot of work in PostgreSql. Given that my tool of choice is Emacs, I had to learn how to make do. This post&amp;rsquo;s goal is to document that.
-First, I set up a connection
-(add-to-list &amp;#39;sql-connection-alist `(production-read-only (sql-product &amp;#39;postgres) (sql-user &amp;#34;prod_user&amp;#34;) (sql-server &amp;#34;data-aurora.cluster-ro.us-east-1.rds.amazonaws.com&amp;#34;) (sql-database &amp;#34;ProdDB&amp;#34;))) Since this uses psql under the covers and I want to not to have to type passwords all the time, I store the passwords in ~/.</description>
-    </item>
-    
-    <item>
-      <title>Performance and safety</title>
-      <link>https://ebellani.github.io/blog/2024/performance-and-safety/</link>
-      <pubDate>Tue, 20 Feb 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/performance-and-safety/</guid>
-      <description> The human mind is limited in its capacity to understand complexity. Concurrent software systems are among the most complex of all human creations. Therefore, when you trade safety for performance, you will probably get neither.  </description>
-    </item>
-    
-    <item>
-      <title>Renaming, not abstraction, is the problem of our industry</title>
-      <link>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</link>
-      <pubDate>Tue, 30 Jan 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</guid>
-      <description>abstraction (n.) (Latin abs, from trahere, to draw).
- I&amp;rsquo;ve seen people I consider good software engineers complaining that over-abstraction is a (the?) major problem in our industry today. Such points are usually raised when discussing software architecture in particular (one example: (iamprovidence 2023)).
-I&amp;rsquo;d like to defend abstraction, and how I don&amp;rsquo;t think it is possible to have over abstraction (in the same sense you cannot be overly good, or overly healthy).</description>
-    </item>
-    
-    <item>
-      <title>A dangerous book</title>
-      <link>https://ebellani.github.io/blog/2024/dangerous-book/</link>
-      <pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2024/dangerous-book/</guid>
-      <description>I recently commented on how the book (Kleppmann 2017) is a dangerous book, due to a subtle error on how it defines data models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:
- We must first explain how an economy can possibly work right before we can meaningfully ask what might go wrong
- What is a data model? Here are 3 definitions, in increasing level of detail:</description>
-    </item>
-    
-    <item>
-      <title>Measure, don’t guess.</title>
-      <link>https://ebellani.github.io/blog/2023/measure-dont-guess/</link>
-      <pubDate>Sat, 09 Dec 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/measure-dont-guess/</guid>
-      <description>&amp;hellip; when you trade safety for performance, you may get neither. Especially when it comes to concurrency, the intuition of many developers about where a performance problem lies or which approach will be faster or more scalable is often incorrect.
-It is therefore imperative that any performance tuning exercise be accompanied by concrete performance requirements (so you know both when to tune and when to stop tuning) and with a measurement program in place using a realistic configuration and load profile.</description>
-    </item>
-    
-    <item>
-      <title>Themes of the Elite Private School Curriculum</title>
-      <link>https://ebellani.github.io/blog/2023/theme-elite-schooling/</link>
-      <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/theme-elite-schooling/</guid>
-      <description>I think its fair to say that one can significantly improve one&amp;rsquo;s chances of being materially successful in life by learning John Taylor Gatto’s 14 Themes of the Elite Private School Curriculum1:
-  A theory of human nature (as embodied in history, philosophy, theology, literature and law).
-  Skill in the active literacies (writing, public speaking).
-  Insight into the major institutional forms (courts, corporations, military, education).</description>
-    </item>
-    
-    <item>
-      <title>CQRS as nominalism</title>
-      <link>https://ebellani.github.io/blog/2023/cqrs-nominalism/</link>
-      <pubDate>Sat, 04 Nov 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/cqrs-nominalism/</guid>
-      <description>A theme that I think is important to understand a lot of modernity and the IT sector in particular, is nominalism.1
-So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a concrete case and work my way to the abstract definition. The case in point is a somewhat popular architecture tactic, CQRS.
-What is CQRS? Here is an authoritative word on it(Young 2010):
- Command and Query Responsibility Segregation (CQRS) originated with Bertrand Meyer’s Command and Query Separation Principle</description>
-    </item>
-    
-    <item>
-      <title>How to stand out in your career, the shortest version I know</title>
-      <link>https://ebellani.github.io/blog/2023/stand-out-short/</link>
-      <pubDate>Mon, 18 Sep 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/stand-out-short/</guid>
-      <description>Someone asked me about this, so I feel it might help people out there.
-The short, no nonsense advise I give to people on standing out as a programmer:
- Generate results Make your boss look good Join a relevant open source project  </description>
-    </item>
-    
-    <item>
-      <title>Recruitment and Selection of high performing programmers</title>
-      <link>https://ebellani.github.io/blog/2023/rec-sel-programmers/</link>
-      <pubDate>Sat, 26 Aug 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/rec-sel-programmers/</guid>
-      <description>What could be more important for a technology company than great software? High performing software developers and their teams. After all, they are the ones who actually create and maintain that great software.
-But do they really make a difference? I&amp;rsquo;ll let the numbers speak for themselves. Here are the typical variations in:(Steve 2014)
- Individual performance 20 to 1, Team performance 10 to 1, Method performance 1.2 to 1.  One can find a compelling illustration of these data on (Oram and Wilson 2010).</description>
-    </item>
-    
-    <item>
-      <title>What is a good manager?</title>
-      <link>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</link>
-      <pubDate>Sat, 29 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</guid>
-      <description>It is hard to do science without proper definitions. So what is a manager?
-Abstracting from (Horstman 2016), my definition of a manager is the following:
- A manager continuously balances present output with creating the conditions of future output.
-  Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III
-  As one can see, this definition is similar to an investor. That is expected, since a manager is an investor of a company&amp;rsquo;s resources.</description>
-    </item>
-    
-    <item>
-      <title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
-      <link>https://ebellani.github.io/blog/2023/ai-intellectual-act/</link>
-      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/ai-intellectual-act/</guid>
-      <description>I have come across people claiming to fear being replaced by bots, specially chatGPT and other large language models (LLM). In this article I&amp;rsquo;ll take such statements at face value, despite my reservations about the sincerity of many of them.
-The short answer is to the question in the title is no, you will not get replaced. The longer answer is below.
- Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.</description>
-    </item>
-    
-    <item>
-      <title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>
-      <link>https://ebellani.github.io/blog/2023/vpn-qubes/</link>
-      <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://ebellani.github.io/blog/2023/vpn-qubes/</guid>
-      <description>In my view, Qubes OS lives up to its motto: A reasonably secure operating system. I use it for work and personal matters every day.
-One challenging bit, when you use it in a work setting specially, is to set up a VPN qube for your app qubes.
-There are probably other ways to do this, but the way I chose to structure my setup was the following:
- After you create your app qube for the VPN and assuming your template is Debian, go to the template terminal (Debian 11) and run:</description>
-    </item>
-    
-  </channel>
+	<channel>
+		<title>Agere sequitur esse on Eduardo&#39;s blog</title>
+		<link>https://ebellani.github.io/</link>
+		<description>Recent content in Agere sequitur esse on Eduardo&#39;s blog</description>
+		<generator>Hugo</generator>
+		<language>en-us</language>
+		
+		
+		
+		
+			<lastBuildDate>Thu, 25 Jun 2026 00:00:00 +0000</lastBuildDate>
+		
+			<atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>All you need is PostgreSQL</title>
+				<link>https://ebellani.github.io/blog/2026/all-you-need-is-postgresql/</link>
+				<pubDate>Thu, 25 Jun 2026 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2026/all-you-need-is-postgresql/</guid>
+				<description>&lt;div class=&#34;ox-hugo-toc toc local&#34;&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#introduction&#34;&gt;Introduction&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-setup&#34;&gt;The setup&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#laying-the-foundation&#34;&gt;Laying the foundation&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-foundation-schemas-and-user-roles-for-modularity&#34;&gt;The foundation: schemas and user roles for modularity&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#domains&#34;&gt;Domains&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#accounts-managed-and-external&#34;&gt;Accounts, managed and external&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#transfers-constrained-by-a-state-machine-and-temporal-periods&#34;&gt;Transfers, constrained by  a state machine and temporal periods&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#transfer-state-history&#34;&gt;Transfer state history&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#account-auditing&#34;&gt;Account auditing&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#transactions-the-immutable-events&#34;&gt;Transactions, the immutable events&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#on-maintaining-business-rules-via-meaningful-constraints&#34;&gt;On maintaining business rules via meaningful constraints&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-transfer-state-machine&#34;&gt;The transfer state machine&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#transactions-must-fall-within-the-transfer-period&#34;&gt;Transactions must fall within the transfer period&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#pending-transactions-require-a-pending-transfer&#34;&gt;Pending transactions require a pending transfer&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#no-future-transactions-when-closing-a-transfer&#34;&gt;No future transactions when closing a transfer&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#on-capacity-planning&#34;&gt;On capacity planning&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#working-set-estimation&#34;&gt;Working set estimation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#on-write-throughput&#34;&gt;On write throughput&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#enabling-hot-updates-for-transfers&#34;&gt;Enabling HOT Updates for Transfers&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#making-sure-there-are-no-unused-indexes&#34;&gt;Making sure there are no Unused indexes&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#oltp&#34;&gt;OLTP&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#listing&#34;&gt;Listing&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#the-history-of-a-transfer&#34;&gt;The history of a transfer&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#olap&#34;&gt;OLAP&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#balance-ledger&#34;&gt;Balance ledger&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#incremental-maintenance-via-triggers&#34;&gt;Incremental maintenance via triggers&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#on-serializable-isolation&#34;&gt;On serializable isolation&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#on-decoupling&#34;&gt;On decoupling&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#benchmarking&#34;&gt;Benchmarking the startup scenario&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#seed-data&#34;&gt;Seed data&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#write-script-full-transfer-lifecycle&#34;&gt;Write script: full transfer lifecycle&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#read-script-activity-stream-and-balance&#34;&gt;Read script: activity stream and balance&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#running-the-benchmark&#34;&gt;Running the benchmark&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#results&#34;&gt;Results&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#conclusion&#34;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#appendix-a-full-code-suite&#34;&gt;Appendix A: Full code suite&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/div&gt;&#xA;&lt;!--endtoc--&gt;&#xA;&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;There is a deep cultural reflex in modern engineering: whenever a&#xA;problem appears, reach for a packaged solution instead of thinking from&#xA;first principles. The result is architectural cargo culting and lots of&#xA;missed opportunities. Some intentionally absurd-but-familiar examples:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Cloudflare&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+				<link>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</link>
+				<pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/cloudflare-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</guid>
+				<description>&lt;p&gt;[BROKEN LINK: blog/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future.pre-processed.org], another global IT outage happened (dèjá vu strikes again in our&#xA;industry). This time at&#xA;cloudflare(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Prince 2025&lt;/a&gt;). Again, taking down&#xA;large swaths of the internet with&#xA;it(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Booth 2025&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;And yes, like my previous analysis of the GCP and CrowdStrike&amp;rsquo;s outages,&#xA;this post critiques Cloudflare&amp;rsquo;s root cause analysis (RCA), which &amp;mdash;&#xA;despite providing a great overview of what happened &amp;mdash; misses the real&#xA;lesson.&lt;/p&gt;&#xA;&lt;p&gt;Here&amp;rsquo;s the key section of their RCA:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>On dealing with GPT results, or, Pots, Kettles And Hallucinations</title>
+				<link>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</link>
+				<pubDate>Sat, 18 Oct 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/on-dealing-with-gpt-results-or-pots-kettles-and-hallucinations/</guid>
+				<description>&lt;style&gt;.org-center { margin-left: auto; margin-right: auto; text-align: center; }&lt;/style&gt;&#xA;&lt;div class=&#34;org-center&#34;&gt;&#xA;&lt;p&gt;Hallucinations in GPTs can lead to the dissemination of false&#xA;information, creating harmful outcomes in applications of critical&#xA;decision making or leading to mistrust in AI. In a viral instance, The&#xA;New York Times published an article about a lawyer who used ChatGPT to&#xA;produce case citations without realizing they were fictional, or&#xA;hallucinated. This incident highlights the danger of hallucinations in&#xA;LLM-based queries; often the hallucinations are subtle and go easily&#xA;unnoticed. Given these risks, an important question arises: &lt;strong&gt;Why do GPTs&#xA;hallucinate?&lt;/strong&gt; (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Waldo and Boussard 2024&lt;/a&gt;)&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>What is mathematics? A classification based on universals</title>
+				<link>https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/</link>
+				<pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/what-is-mathematics-a-classification-based-on-universals/</guid>
+				<description>&lt;p&gt;I find that it is hard for me to motivate myself to learn a subject that&#xA;one cannot define. So I made an effort to define mathematics, and the&#xA;best source I have ever found was (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Franklin 2014&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;To sum up my views on the topic: at the core of philosophical inquiry,&#xA;one finds a deep division into 2 opposites as their regard to the&#xA;universals, realism and nominalism(and its kantian variant,&#xA;conceptualism)(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;De Wulf 1911&lt;/a&gt;). Taking that into consideration&#xA;and (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Franklin 2014&lt;/a&gt;), Here is a taxonomy&#xA;of definitions for what is mathematics:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Google Cloud&#39;s outage should not have happened, and they seem to be missing the point on how to avoid it in the future</title>
+				<link>https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</link>
+				<pubDate>Sat, 14 Jun 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/google-cloud-s-outage-should-not-have-happened-and-they-seem-to-be-missing-the-point-on-how-to-avoid-it-in-the-future/</guid>
+				<description>&lt;p&gt;[BROKEN LINK: blog/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality.pre-processed.org], this time at Google Cloud Platform&#xA;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;team 2025&lt;/a&gt;), taking down with it large&#xA;swaths of the internet (&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Zeff 2025&lt;/a&gt;). Like my previous&#xA;analysis of the CrowdStrike outage, this post critiques GCP&amp;rsquo;s root cause&#xA;analysis (RCA), which—despite detailed engineering steps—misses the real&#xA;lesson.&lt;/p&gt;&#xA;&lt;p&gt;Here&amp;rsquo;s the key section of their RCA:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Google and Google Cloud APIs are served through our Google API&#xA;management and control planes. Distributed regionally, these management&#xA;and control planes are responsible for ensuring each API request that&#xA;comes in is authorized, has the policy and appropriate checks (like&#xA;quota) to meet their endpoints. The core binary that is part of this&#xA;policy check system is known as Service Control. Service Control is a&#xA;regional service that has a regional datastore that it reads quota and&#xA;policy information from. This datastore metadata gets replicated almost&#xA;instantly globally to manage quota policies for Google Cloud and our&#xA;customers.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>The principles of database design, or,  the Truth is out there</title>
+				<link>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</link>
+				<pubDate>Sat, 17 May 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/the-principles-of-database-design-or-the-truth-is-out-there/</guid>
+				<description>&lt;p&gt;Every software project needs to represent the reality of the business he&#xA;is embedded in. The way we can represent reality as limited rational&#xA;beings is through propositions, i.e, declarative statements that affirm&#xA;or deny something about reality. When a collection of such propositions&#xA;is stored in a computer system, we call it a database.&lt;/p&gt;&#xA;&lt;p&gt;Such database needs to be designed to properly reflect reality. This&#xA;can&amp;rsquo;t be automated, since the semantics of the situation need to be&#xA;encoded in a way that can be processed by a computer. Such then is the&#xA;goal of database design: to encode propositions in such a way that can&#xA;properly be processed by a database management system (DBMS).&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Theory in practice: Why Treating Metadata as Relations Pays Off</title>
+				<link>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</link>
+				<pubDate>Mon, 14 Apr 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/theory-in-practice-why-treating-metadata-as-relations-pays-off/</guid>
+				<description>&lt;p&gt;Underpinning relational databases you find a very powerful principle:&#xA;all your information should be represented as attributes drawn from&#xA;domains in&#xA;relations(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2020&lt;/a&gt;). This is Codd&amp;rsquo;s&#xA;Information Principle #1. This principle isn&amp;rsquo;t just fluffy theory: it&#xA;can lead to very concrete wins in how we design, query, and maintain&#xA;systems.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;a-practical-case-dependencies-for-security-policies&#34;&gt;A practical case: Dependencies for Security Policies&lt;/h2&gt;&#xA;&lt;p&gt;This is clearly a metadata question: Which other database objects does&#xA;this view depend on? In many environments, answering that might involve&#xA;using external tools or writing scripts in another language. But in&#xA;PostgreSQL, you can answer it with a simple query &lt;strong&gt;because&lt;/strong&gt; PostgreSQL&#xA;respects Codd&amp;rsquo;s principle and exposes metadata as part of its relational&#xA;structure.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to Replace LeetCode with Something That Actually Works</title>
+				<link>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</link>
+				<pubDate>Fri, 04 Apr 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/how-to-replace-leetcode-with-something-that-actually-works/</guid>
+				<description>&lt;p&gt;Recently there has been an interest in cheating(?) leetcode style&#xA;interviews(&lt;a href=&#34;#citeproc_bib_item_6&#34;&gt;Yang 2025&lt;/a&gt;). These articles highlight&#xA;a longstanding issue in tech recruiting: puzzle-style assessments have&#xA;little to no correlation with actual job&#xA;performance(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Konnikova 2013&lt;/a&gt;; &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;McAllister 2013&lt;/a&gt;), and leetcode is nothing but algorithmic&#xA;puzzles. This makes them a poor predictor of job performance. What&#xA;leetcode does predict seems to be success at leetcode style&#xA;interviews(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Mroczka 2024&lt;/a&gt;). Go figure.&lt;/p&gt;&#xA;&lt;p&gt;If you are in power to stop doing these silly things and reach for&#xA;something with actual evidence of working, here is a blueprint for&#xA;performing a structured interview with a focus on programmers, but that&#xA;can be adapted for other positions quite easily.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Queries when you have a postgresql based system</title>
+				<link>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</link>
+				<pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2025/queries-when-you-have-a-postgresql-based-system/</guid>
+				<description>&lt;p&gt;Are you managing/developing a PostgreSQL based application? Here are some scripts&#xA;that might make your life easier dealing with your installation:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;schema_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relname&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_size_pretty&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;table_size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_namespace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nspname&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;as&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;schema_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relname&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_total_relation_size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_class&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;oid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;as&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;table_size&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_class&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;              &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_namespace&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;on&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relnamespace&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_catalog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_namespace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;oid&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;schema_name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;not&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;like&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;pg_%&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;order&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;table_size&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;desc&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;limit&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;src-block-caption&#34;&gt;&#xA;  &lt;span class=&#34;src-block-number&#34;&gt;Code Snippet 1:&lt;/span&gt;&#xA;  Check the 5 largests tables (courtesy of Supabase&#39;s dashboard)&#xA;&lt;/div&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cron&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;job_run_details&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;order&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;start_time&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;desc&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;limit&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;src-block-caption&#34;&gt;&#xA;  &lt;span class=&#34;src-block-number&#34;&gt;Code Snippet 2:&lt;/span&gt;&#xA;  Check the current running cron jobs&#xA;&lt;/div&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;act&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;query&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;act&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;datname&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;act&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;query_start&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nspname&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;as&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;schema_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relname&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;as&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;object_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_locks&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_class&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;on&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relation&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;oid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_namespace&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nsp&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;on&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;relnamespace&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nsp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;oid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_stat_activity&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;act&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;on&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;act&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;         &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;select&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;            &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;from&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pg_stat_activity&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;           &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;where&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;datname&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;current_database&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;             &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;and&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;query&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;current_query&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;order&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;by&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pid&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;src-block-caption&#34;&gt;&#xA;  &lt;span class=&#34;src-block-number&#34;&gt;Code Snippet 3:&lt;/span&gt;&#xA;  See what is being locked by what (pg_terminate can unlock things)&#xA;&lt;/div&gt;</description>
+			</item>
+			<item>
+				<title>How to have decoupled systems without setting your company on fire</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</link>
+				<pubDate>Tue, 17 Dec 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-have-decoupled-systems-without-setting-your-company-on-fire/</guid>
+				<description>&lt;p&gt;Have you heard that having decoupled systems is paramount to &lt;code&gt;dealing with complexity at the heart of software&lt;/code&gt;?&lt;/p&gt;&#xA;&lt;p&gt;Have you also seen companies waste piles of cash and lots of developer&#xA;time trying to build decoupled systems?&lt;/p&gt;&#xA;&lt;p&gt;This article might be of your interest, since my goal is to teach you&#xA;how to build decoupled systems cheaply and using technology that is&#xA;battle tested and that will keep you in control. How? By&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to unlock motivation for high performance in your team</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-unlock-motivation-for-high-performance-in-your-team/</link>
+				<pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-unlock-motivation-for-high-performance-in-your-team/</guid>
+				<description>&lt;p&gt;As an engineering manager(EM), one of your core tasks is to build and&#xA;maintain a team of high performance. To accomplish this, it should be&#xA;obvious that motivation is a key factor:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Why do followers join some teams but not others? How do you get&#xA;followers to exhibit enough of the critical behaviors needed for the&#xA;team to succeed? And why are some leaders capable of getting followers&#xA;to go above and beyond the call of duty? The ability to motivate others&#xA;is a fundamental leadership skill and has strong connections to building&#xA;cohesive, goal-oriented teams and getting results through others. The&#xA;importance of follower motivation is suggested in findings that most&#xA;people believe they could give as much as 15 percent or 20 percent more&#xA;effort at work than they now do with no one, including their own bosses,&#xA;recognizing any difference. Perhaps even more startling, these workers&#xA;also believed they could give 15 percent or 20 percent less effort with&#xA;no one noticing any difference. Moreover, variation in work output&#xA;varies significantly across leaders and followers. The top 15 percent of&#xA;workers in any particular job may produce 20 to 50 percent more output&#xA;than the average worker, depending on the complexity of the job. Put&#xA;another way, the best computer programmers or salesclerks might write up&#xA;to 50 percent more programs or process 50 percent more customer orders.&#xA;(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;CURPHY et al. 2018&lt;/a&gt;)&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A simple way to deal with the principal threat to scalability</title>
+				<link>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</link>
+				<pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/a-simple-way-to-deal-with-the-principal-threat-to-scalability/</guid>
+				<description>&lt;p&gt;If you have a distributed system one of the main worries you probably&#xA;have is scalability. Well, what is the principal threat to scalability&#xA;in such systems is the conflict between transactions that are used to&#xA;guarantee correct results in concurrent operations.&lt;/p&gt;&#xA;&lt;p&gt;Such conflicts are dealt with by concurrency control, either&#xA;pessimistically via something like exclusive resource lock or&#xA;optimistically via something like serializable snapshot isolation.&lt;/p&gt;&#xA;&lt;p&gt;Let me illustrate the threat with from the pessimistic point of view:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Debunking Event Sourcing</title>
+				<link>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</link>
+				<pubDate>Fri, 23 Aug 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/debunking-event-sourcing/</guid>
+				<description>&lt;p&gt;Are you looking into event sourcing? I hope this article gives you&#xA;enough information for you to properly contrast it with what I consider&#xA;an overall better alternative: temporal tables.&lt;/p&gt;&#xA;&lt;p&gt;The context: my last article ([BROKEN LINK: blog/are-you-considering-event-sourcing-think-again.pre-processed.org]) has produced some heated responses. One of the responders&#xA;published an article (&lt;a href=&#34;https://medium.com/@ZaradarTR/dear-temporal-table-developers-a3f126c010c4#e4c4&#34;&gt;Dear Temporal Table Developers ❤&lt;/a&gt;) explaining&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;.. why temporal tables are &amp;hellip; an inferior choice, especially for&#xA;systems that require scalability, flexibility, and resilience in an&#xA;ever-changing world.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Are you considering Event Sourcing? Think again.</title>
+				<link>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</link>
+				<pubDate>Fri, 16 Aug 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</guid>
+				<description>&lt;p&gt;Are you considering doing event sourcing? Maybe you have read that it is&#xA;necessary for your project or that you will have great benefits in doing&#xA;so.&lt;/p&gt;&#xA;&lt;p&gt;If so, I ask you to think about an alternative. Maybe you already have&#xA;something of equal capacity in the tooling that you use and could&#xA;extract all the benefits for a fraction of the cost. What is that&#xA;something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle,&#xA;etc).&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Crowdstrike&#39;s outage should not have happened, and the company is missing the point on how to avoid it in the future</title>
+				<link>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</link>
+				<pubDate>Wed, 07 Aug 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</guid>
+				<description>&lt;p&gt;A global IT outage occurred on &lt;span class=&#34;timestamp-wrapper&#34;&gt;&lt;span class=&#34;timestamp&#34;&gt;[2024-07-18 Thu]&lt;/span&gt;&lt;/span&gt;, with several industries&#xA;having significant economic problems (see &lt;a href=&#34;#crowdstrike-appendix-1&#34;&gt;Appendix 1: The impact&lt;/a&gt; for&#xA;some quotes on what happened). The outage what caused by a bug in the&#xA;remote update system of the software of Crowdstrike, a popular Threat&#xA;Intelligence/Response company.&lt;/p&gt;&#xA;&lt;p&gt;The company has published the Post Incident&#xA;Review(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Crowdstrike 2024a&lt;/a&gt;) right&#xA;after the incident and has just released its root cause analysis&#xA;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;). Reading them has&#xA;led me to write this article, specially the proposed mitigations.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to avoid frustration with software architecture</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</link>
+				<pubDate>Thu, 18 Jul 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-avoid-frustration-with-software-architecture/</guid>
+				<description>&lt;p&gt;It is becoming more common for companies to come out with stories on the&#xA;downsides of distributed microservice&#xA;architectures&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kolny 2023&lt;/a&gt;; &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Ghemawat et al. 2023&lt;/a&gt;).&lt;/p&gt;&#xA;&lt;p&gt;Instead of hopping in this bandwagon, as tempting as this might be, I&#xA;want to suggest how could one avoid being caught in such situation in&#xA;the first place.&lt;/p&gt;&#xA;&lt;p&gt;Fundamentally, I think the problem that originated the current&#xA;dissatisfaction with microservices is a double confusion:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;between the form (modules) and the matter (interacting running&#xA;processes) of software and(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Ainsworth 2024&lt;/a&gt;);&lt;/li&gt;&#xA;&lt;li&gt;between the the form (modules) of software and the form of software&#xA;building organizations (teams, executing environments,&#xA;deployment pipelines &amp;hellip;).&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Interestingly enough, such structures are the 3 categories of software&#xA;architecture proposed in a standard Software Architecture&#xA;book:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to avoid a common career pitfall</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</link>
+				<pubDate>Tue, 02 Jul 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-avoid-a-common-career-pitfall/</guid>
+				<description>&lt;p&gt;If the way you think others see you is in stark contrast to how others&#xA;actually see you, you are in danger of derailing in your career.&lt;/p&gt;&#xA;&lt;p&gt;To avoid that, here are 3 steps, and a reference:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Ask and &lt;strong&gt;embrace&lt;/strong&gt; feedback from bosses, peers and followers&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;,&lt;/li&gt;&#xA;&lt;li&gt;Expose your most cherished ideas to the most intense forms of public scrutiny you can find,&lt;/li&gt;&#xA;&lt;li&gt;See ways to measure yourself, such as 360 feedback mechanisms and&#xA;validated personality assessments.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;It all boils down to reducing your own cognitive&#xA;dissonance(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Festinger 1957&lt;/a&gt;), which is:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Integrity Constraints and business value</title>
+				<link>https://ebellani.github.io/blog/2024/constraints-and-business-value/</link>
+				<pubDate>Wed, 26 Jun 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/constraints-and-business-value/</guid>
+				<description>&lt;p&gt;Again with this database business? Let me try to motivate you dear&#xA;reader before I start again with a illustrative case: SQL Injections!&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SQL injection is one of the oldest vulnerabilities still present in&#xA;the OWASP TOP 10 (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;CyberSecura 2021&lt;/a&gt;)&lt;/li&gt;&#xA;&lt;li&gt;A well documented case puts the cost of one SQL Injection in USD 196k&#xA;(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Group 2014&lt;/a&gt;)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Ok, and how these are related to databases, and more specifically&#xA;constraints? And what are these constraints?&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Substantial and accidental forms of a SQL expression</title>
+				<link>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</link>
+				<pubDate>Thu, 20 Jun 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/</guid>
+				<description>&lt;div class=&#34;verse&#34;&gt;&#xA;&lt;p&gt;Multiplicity of parts, variety, and unity of plan which&lt;br /&gt;&#xA;combines the parts into a coherent whole, &amp;ndash;&lt;br /&gt;&#xA;such are the elements of order found in all beauty.&lt;br /&gt;&#xA;(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;De Wulf 2012&lt;/a&gt;)&lt;br /&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;p&gt;I have been working with data intensive applications for a while and of&#xA;course that means exposure to a lot of SQL, both personally and training&#xA;other developers.&lt;/p&gt;&#xA;&lt;p&gt;In these experiences I have noticed that it is sometimes harder than it&#xA;should be to grasp what SQL is doing, specially since its accidental&#xA;form makes understanding its substantial form so hard. In this post I&amp;rsquo;m&#xA;going to try to help the reader separate the two and understand SQL&#xA;better.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Why updateable views, or, Why modules matter?</title>
+				<link>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</link>
+				<pubDate>Thu, 06 Jun 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/why-updateable-views-or-why-modules-matter/</guid>
+				<description>&lt;p&gt;&lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7203831867937091584?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7203924209067008000%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7203831867937091584%2C7204472979404005376%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287203924209067008000%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287204472979404005376%2Curn%3Ali%3Aactivity%3A7203831867937091584%29&#34;&gt;Continuing&lt;/a&gt; a rich conversation that sparked [BROKEN LINK: blog/a-real-life-example-of-database-design.pre-processed.org] [BROKEN LINK: blog/how-to-use-the-relational-model-to-do-database-design.pre-processed.org], I was asked to&#xA;justify updateable views which, to me, are analogous to module&#39;&#xA;signatures (a topic for another post). Here&amp;rsquo;s the full exchange.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Why is the logical model more likely to be correct and immutable from&#xA;the perspective of the app than the physical one?&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;This question seems to mistake logical and physical independence.&lt;/p&gt;&#xA;&lt;dl&gt;&#xA;&lt;dt&gt;Logical independence&lt;/dt&gt;&#xA;&lt;dd&gt;the ability to change the form without&#xA;affecting clients.&lt;/dd&gt;&#xA;&lt;dt&gt;Physical independence&lt;/dt&gt;&#xA;&lt;dd&gt;the ability to change the implementation&#xA;without changing the form.&lt;/dd&gt;&#xA;&lt;/dl&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;In an updateable view world, how would you explain deadlocks&#xA;occurring to the developers consuming the model (since they can no&#xA;longer &amp;ldquo;see&amp;rdquo; the physical tables that implement it)&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A real life example of database design</title>
+				<link>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</link>
+				<pubDate>Mon, 27 May 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/a-real-life-example-of-database-design/</guid>
+				<description>&lt;p&gt;In a followup to [BROKEN LINK: blog/how-to-use-the-relational-model-to-do-database-design.pre-processed.org],&#xA;I was asked to provide an example to illustrate the point:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Can you walk through a real life example of modelling, let&amp;rsquo;s say, a car&#xA;(it&amp;rsquo;s always a car isn&amp;rsquo;t it?).. Consider that the car may have 2WD, 4WD&#xA;and also let say we allow truck types of cars with 6 wheels. Cars have&#xA;various engine types and depending on the model of car, some colours are&#xA;available and some are not. How would you apply the logical design to&#xA;this idea and where would such a design lead you if you were to&#xA;implement it into the physical world?&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to use the relational model to do database design?</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</link>
+				<pubDate>Sun, 26 May 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-use-the-relational-model-to-do-database-design/</guid>
+				<description>&lt;p&gt;On a recent &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7199813569549328386?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7199820740962004992%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7199813569549328386%2C7200430915628462080%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287199820740962004992%2Curn%3Ali%3Aactivity%3A7199813569549328386%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287200430915628462080%2Curn%3Ali%3Aactivity%3A7199813569549328386%29%20&#34;&gt;exchange&lt;/a&gt; I was asked the following:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&amp;hellip; what you mean that you use the relation model to design? &amp;hellip;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s first start with the motivation: &lt;strong&gt;Why&lt;/strong&gt; should one use the&#xA;relational model(RM) to do database design? Here is my one line answer:&lt;/p&gt;&#xA;&lt;p&gt;&lt;em&gt;It makes it possible to have and to maintain the integrity of your&#xA;business rules.&lt;/em&gt;&lt;/p&gt;&#xA;&lt;p&gt;To illustrate this point, here are some examples of problems that one&#xA;faces when one does not have such integrity:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to (not) lock yourself into architectural drawbacks, or, Microservice architecture as the reification of Pi-Calculus</title>
+				<link>https://ebellani.github.io/blog/2024/microservices-as-reification/</link>
+				<pubDate>Sat, 04 May 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/microservices-as-reification/</guid>
+				<description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;em&gt;Reification&lt;/em&gt;: the treatment of something abstract as a material or&#xA;concrete thing, as in the following lines from Matthew Arnold&amp;rsquo;s poem&#xA;“Dover Beach”: (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Britannica 2018&lt;/a&gt;)&lt;/p&gt;&#xA;&lt;div class=&#34;verse&#34;&gt;&#xA;&lt;p&gt;&lt;em&gt;The Sea of Faith&lt;br /&gt;&#xA;Was once, too, at the full, and round earth&amp;rsquo;s shore&lt;br /&gt;&#xA;Lay like the folds of a bright girdle furled.&lt;/em&gt;&lt;br /&gt;&lt;/p&gt;&#xA;&lt;/div&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;The microservice architecture(MA) has taken a deep hold in the&#xA;collective imagination of the software engineering community since at&#xA;least 2014&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. This has happened despite serious and well documented&#xA;&lt;a href=&#34;#drawbacks&#34;&gt;drawbacks&lt;/a&gt;.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A practical principle on politics (office or otherwise)</title>
+				<link>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</link>
+				<pubDate>Sun, 28 Apr 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/a-practical-principle-on-politics--office-or-otherwise/</guid>
+				<description>&lt;p&gt;If you are involved in politics, as a voter or just as an office worker&#xA;in an unfortunate situation, you would do well to remember this dictum:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;When a public figure tells you something that you want to hear, question&#xA;his sincerity. When a public figure tells you something you don&amp;rsquo;t want&#xA;to hear, believe him.(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Lawler 2024&lt;/a&gt;)&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/Christ_saviour_explosion.jpg&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: The destruction of the original Church of Christ the Saviour in Moscow, Russia&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The destruction of the original Church of Christ the Saviour in Moscow, Russia&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A point about FAANG points</title>
+				<link>https://ebellani.github.io/blog/2024/a-point-about-faang/</link>
+				<pubDate>Sun, 14 Apr 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/a-point-about-faang/</guid>
+				<description>&lt;p&gt;As a technologist I often hear variations of the following phrase in my&#xA;industry:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Do it because some FAANG(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Fernando 2023&lt;/a&gt;) company did it.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;The structure of this argument is usually like this:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Technique or process X is great/bad,&lt;/li&gt;&#xA;&lt;li&gt;Company C does it like this,&lt;/li&gt;&#xA;&lt;li&gt;C is financially successful and famous,&lt;/li&gt;&#xA;&lt;li&gt;Therefore, you should do the same X as C does.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;This is a mixture of the fallacies of selection bias, appeal to&#xA;authority and false cause. Here are their definitions and some&#xA;context-sensitive examples&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>What is really the matter with the &#39;database&#39;?</title>
+				<link>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</link>
+				<pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/what-is-really-the-matter-with-the-database/</guid>
+				<description>&lt;p&gt;How can we talk straight about a concept when the term that should&#xA;signify it is equivocated all the time?&lt;/p&gt;&#xA;&lt;p&gt;I think this is a big part of the problem on discussions about&#xA;&lt;code&gt;databases&lt;/code&gt;. Here are some ways that the term &lt;code&gt;database&lt;/code&gt; is widely used&#xA;in the tech industry:&lt;/p&gt;&#xA;&lt;dl&gt;&#xA;&lt;dt&gt;A server&lt;/dt&gt;&#xA;&lt;dd&gt;&lt;code&gt;I&#39;ll access the database in prod.&lt;/code&gt;&lt;/dd&gt;&#xA;&lt;dt&gt;An instance of a  DBMS&lt;/dt&gt;&#xA;&lt;dd&gt;&lt;code&gt;We are running PG 9.3 locally.&lt;/code&gt;&lt;/dd&gt;&#xA;&lt;dt&gt;A design&lt;/dt&gt;&#xA;&lt;dd&gt;&lt;code&gt;My database will have a user table and a product table.&lt;/code&gt;&lt;/dd&gt;&#xA;&lt;dt&gt;A DBMS&lt;/dt&gt;&#xA;&lt;dd&gt;&lt;code&gt;Let&#39;s use MongoDB as a database!&lt;/code&gt;&lt;/dd&gt;&#xA;&lt;dt&gt;A storage strategy&lt;/dt&gt;&#xA;&lt;dd&gt;&lt;code&gt;I&#39;ll store these as protobufs in my database, it will be faster!&lt;/code&gt;&lt;/dd&gt;&#xA;&lt;dt&gt;A group of propositions&lt;/dt&gt;&#xA;&lt;dd&gt;(ok, almost no one uses it like this, but&#xA;it is what &lt;code&gt;database&lt;/code&gt; &lt;strong&gt;should&lt;/strong&gt; mean).&lt;/dd&gt;&#xA;&lt;/dl&gt;&#xA;&lt;p&gt;Here is a more authoritative source saying the same thing:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>The three traditional laws of being</title>
+				<link>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</link>
+				<pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/the-three-traditional-laws-of-being/</guid>
+				<description>&lt;dl&gt;&#xA;&lt;dt&gt;The law of identity&lt;/dt&gt;&#xA;&lt;dd&gt;&amp;lsquo;Whatever is, is.&amp;rsquo;&lt;/dd&gt;&#xA;&lt;dt&gt;The law of non-contradiction&lt;/dt&gt;&#xA;&lt;dd&gt;&amp;lsquo;Nothing can both be and not be.&amp;rsquo;&lt;/dd&gt;&#xA;&lt;dt&gt;The law of excluded middle&lt;/dt&gt;&#xA;&lt;dd&gt;&amp;lsquo;Everything must either be or not be.&amp;rsquo; (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Russell 1912&lt;/a&gt;)&lt;/dd&gt;&#xA;&lt;/dl&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/chartres-rose-window.jpg&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&#34; width=&#34;50%&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The North Rose window of Chartres Cathedral, France, 1190-1220 CE. The stained glass window shows scenes of Jesus Christ, the prophets and 12 kings of Judah.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Who should rule</title>
+				<link>https://ebellani.github.io/blog/2024/who-should-rule/</link>
+				<pubDate>Thu, 21 Mar 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/who-should-rule/</guid>
+				<description>&lt;p&gt;If you want to become a (better) leader, you should master the four&#xA;essential characteristics for leaders: integrity, judgment, competence,&#xA;and vision(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Hogan and Kaiser 2005&lt;/a&gt;):&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;Integrity&lt;/strong&gt;. A leader must be trusted to be followed.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Decisiveness&lt;/strong&gt;. Making reasonable decisions in a timely manner.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Competence&lt;/strong&gt;. Both your followers and your stakeholders must know&#xA;that you not only mean well but that you can deliver.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Vision&lt;/strong&gt;. Setting goals under the right strategy is vital for team&#xA;and company success against its competition.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/Saint-Sulpice-Nave-Paris.jpg&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: The nave of the Saint-Sulpice Church in Paris&#34; width=&#34;80%&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The nave of the Saint-Sulpice Church in Paris&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Principles of reliable applications</title>
+				<link>https://ebellani.github.io/blog/2024/principles-of-reliable-applications/</link>
+				<pubDate>Tue, 19 Mar 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/principles-of-reliable-applications/</guid>
+				<description>&lt;p&gt;The following are adapted from(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Perry 2020&lt;/a&gt;), using&#xA;a more database centric approach:&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;Principle&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;Implementation&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Idempotence&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Client side ids; Session ids&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Immutability&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Insert only DBMSes (system time in SQL 2016)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Location independence&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Natural keys&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Versioning&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Additive structures; Temporal dimension on schemas&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/notre-dame-gargoyle.jpg&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: Gargoyles of Notre-Dame de Paris&#34; width=&#34;50%&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Gargoyles of Notre-Dame de Paris&lt;/p&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;&#xA;&lt;div class=&#34;csl-bib-body&#34;&gt;&#xA;  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Perry, Michael L. 2020. &lt;i&gt;The art of immutable architecture: Theory and practice of data management in distributed systems&lt;/i&gt;. Paperback. Apress.&lt;/div&gt;&#xA;&lt;/div&gt;</description>
+			</item>
+			<item>
+				<title>Pots, kettles and databases</title>
+				<link>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</link>
+				<pubDate>Sun, 17 Mar 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/pots-kettles-and-databases/</guid>
+				<description>&lt;p&gt;Sometimes you stumble upon small insights that illuminate a good chunk&#xA;of things. Recently I think I have stumbled upon what I believe is a&#xA;case of that, on the Hibernate manual(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;King 2024&lt;/a&gt;), of&#xA;all places. The author of the manual itself makes it clear that it is a&#xA;special section of the manual:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;In this section, we&amp;rsquo;re going to give you our opinion. If you&amp;rsquo;re only&#xA;interested in facts, or if you prefer not to read things that might&#xA;undermine the opinion you currently hold, please feel free to skip&#xA;straight to the next chapter.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>What is database normalization and why should you do it?</title>
+				<link>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</link>
+				<pubDate>Sun, 25 Feb 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/what-is-database-normalization-and-why-should-you-do-it/</guid>
+				<description>&lt;p&gt;A fully normalized database means one thing, and &lt;strong&gt;only&lt;/strong&gt; one thing: your&#xA;relations corresponds only one predicate &lt;strong&gt;under a given interpretation&#xA;(i.e. your business rules)&lt;/strong&gt;.&lt;/p&gt;&#xA;&lt;p&gt;You should properly normalize your database because it:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Simplifies integrity enforcement and data manipulation;&lt;/li&gt;&#xA;&lt;li&gt;Avoids data redundancy and the risk of database inconsistency;&lt;/li&gt;&#xA;&lt;li&gt;Guarantees semantic correctness: no update&#xA;anomalies. (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Pascal 2016&lt;/a&gt;)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;PS: As an example of the impact to the bottom line, think of it means to&#xA;have to &lt;code&gt;trust, but verify&lt;/code&gt; every piece of data you have. How many&#xA;checks, and in how many places? What if you forget one of those?&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How I do development on PostgreSQL over Emacs</title>
+				<link>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</link>
+				<pubDate>Sat, 24 Feb 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/how-to-do-development-on-postgresql-over-emacs/</guid>
+				<description>&lt;p&gt;These days I&amp;rsquo;m doing quite a lot of work in PostgreSql. Given that my&#xA;tool of choice is Emacs, I had to learn how to make do. This post&amp;rsquo;s goal&#xA;is to document that.&lt;/p&gt;&#xA;&lt;p&gt;First, I set up a connection&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;add-to-list&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;sql-connection-alist&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;               &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;production-read-only&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-product&lt;/span&gt; &lt;span class=&#34;ss&#34;&gt;&amp;#39;postgres&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-user&lt;/span&gt;    &lt;span class=&#34;s&#34;&gt;&amp;#34;prod_user&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-server&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;data-aurora.cluster-ro.us-east-1.rds.amazonaws.com&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                                      &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;sql-database&lt;/span&gt;   &lt;span class=&#34;s&#34;&gt;&amp;#34;ProdDB&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)))&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Since this uses psql under the covers and I want to not to have to type&#xA;passwords all the time, I store the passwords in &lt;code&gt;~/.pgpass&lt;/code&gt;.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Performance and safety</title>
+				<link>https://ebellani.github.io/blog/2024/performance-and-safety/</link>
+				<pubDate>Tue, 20 Feb 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/performance-and-safety/</guid>
+				<description>&lt;ol&gt;&#xA;&lt;li&gt;The human mind is limited in its capacity to understand complexity.&lt;/li&gt;&#xA;&lt;li&gt;Concurrent software systems are among the most complex of all human creations.&lt;/li&gt;&#xA;&lt;li&gt;Therefore, when you trade safety for performance, you will probably get neither.&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+			</item>
+			<item>
+				<title>Renaming, not abstraction, is the problem of our industry</title>
+				<link>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</link>
+				<pubDate>Tue, 30 Jan 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/renaming-not-abstraction/</guid>
+				<description>&lt;blockquote&gt;&#xA;&lt;p&gt;abstraction (n.) (Latin abs, from trahere, to draw).&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;I&amp;rsquo;ve seen people I consider good software engineers complaining that&#xA;over-abstraction is a (the?) major problem in our industry today. Such&#xA;points are usually raised when discussing software architecture in&#xA;particular (one example: (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;iamprovidence 2023&lt;/a&gt;)).&lt;/p&gt;&#xA;&lt;p&gt;I&amp;rsquo;d like to defend abstraction, and how I don&amp;rsquo;t think it is possible to&#xA;have over abstraction (in the same sense you cannot be overly good, or&#xA;overly healthy).&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>A dangerous book</title>
+				<link>https://ebellani.github.io/blog/2024/dangerous-book/</link>
+				<pubDate>Thu, 04 Jan 2024 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2024/dangerous-book/</guid>
+				<description>&lt;p&gt;I recently &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7147881347099926528?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7147881347099926528%2C7148003385328271360%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287148003385328271360%2Curn%3Ali%3Aactivity%3A7147881347099926528%29&#34;&gt;commented&lt;/a&gt; on how the book (&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Kleppmann 2017&lt;/a&gt;)&#xA;is a dangerous book, due to a subtle error on how it defines data&#xA;models. I suppose it&amp;rsquo;s my burden to further clarify this point, and for&#xA;that I&amp;rsquo;ll use Hayek&amp;rsquo;s critical methodological maxim:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;We must first explain how an economy can possibly work right before we&#xA;can meaningfully ask what might go wrong&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;what-is-a-data-model&#34;&gt;What is a data model?&lt;/h2&gt;&#xA;&lt;p&gt;Here are 3 definitions, in increasing level of detail:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Measure, don&#39;t guess.</title>
+				<link>https://ebellani.github.io/blog/2023/measure-dont-guess/</link>
+				<pubDate>Sat, 09 Dec 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/measure-dont-guess/</guid>
+				<description>&lt;blockquote&gt;&#xA;&lt;p&gt;&amp;hellip; when you trade safety for performance, you may get&#xA;neither. Especially when it comes to concurrency, the intuition of many&#xA;developers about where a performance problem lies or which approach will&#xA;be faster or more scalable is often incorrect.&lt;/p&gt;&#xA;&lt;p&gt;It is therefore imperative that any performance tuning exercise be&#xA;accompanied by concrete performance requirements (so you know both when&#xA;to tune and when to stop tuning) and with a measurement program in place&#xA;using a realistic configuration and load profile.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Themes of the Elite Private School Curriculum</title>
+				<link>https://ebellani.github.io/blog/2023/theme-elite-schooling/</link>
+				<pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/theme-elite-schooling/</guid>
+				<description>&lt;p&gt;I think its fair to say that one can significantly improve one&amp;rsquo;s chances&#xA;of being materially successful in life by learning John Taylor Gatto&amp;rsquo;s&#xA;14 Themes of the Elite Private School Curriculum&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;A theory of human nature (as embodied in history, philosophy, theology,&#xA;literature and law).&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Skill in the active literacies (writing, public speaking).&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Insight into the major institutional forms (courts, corporations, military,&#xA;education).&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;Repeated exercises in the forms of good manners and politeness; based on&#xA;the notion that they are the foundation of all future relationships, all&#xA;future alliances, and access to places that you might want to go.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>CQRS as nominalism</title>
+				<link>https://ebellani.github.io/blog/2023/cqrs-nominalism/</link>
+				<pubDate>Sat, 04 Nov 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/cqrs-nominalism/</guid>
+				<description>&lt;p&gt;A theme that I think is important to understand a lot of modernity and&#xA;the IT sector in particular, is nominalism.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&#xA;&lt;p&gt;So, what is Nominalism, and why does it matter? I&amp;rsquo;ll start with a&#xA;concrete case and work my way to the abstract definition. The case in&#xA;point is a somewhat popular architecture tactic, CQRS.&lt;/p&gt;&#xA;&lt;p&gt;What is CQRS? Here is an authoritative word on it(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Young 2010&lt;/a&gt;):&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Command and Query Responsibility Segregation (CQRS) originated with&#xA;Bertrand Meyer&amp;rsquo;s Command and Query Separation Principle&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>How to stand out in your career, the shortest version I know</title>
+				<link>https://ebellani.github.io/blog/2023/stand-out-short/</link>
+				<pubDate>Mon, 18 Sep 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/stand-out-short/</guid>
+				<description>&lt;p&gt;Someone asked me about this, so I feel it might help people out there.&lt;/p&gt;&#xA;&lt;p&gt;The short, no nonsense advise I give to people on standing out as a&#xA;programmer:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Generate results&lt;/li&gt;&#xA;&lt;li&gt;Make your boss look good&lt;/li&gt;&#xA;&lt;li&gt;Join a relevant open source project&lt;/li&gt;&#xA;&lt;/ol&gt;</description>
+			</item>
+			<item>
+				<title>Recruitment and Selection of high performing programmers</title>
+				<link>https://ebellani.github.io/blog/2023/rec-sel-programmers/</link>
+				<pubDate>Sat, 26 Aug 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/rec-sel-programmers/</guid>
+				<description>&lt;p&gt;What could be more important for a technology company than great&#xA;software? High performing software developers and their teams. After&#xA;all, they are the ones who actually create and maintain that great&#xA;software.&lt;/p&gt;&#xA;&lt;h2 id=&#34;but-do-they-really-make-a-difference&#34;&gt;But do they really make a difference?&lt;/h2&gt;&#xA;&lt;p&gt;I&amp;rsquo;ll let the numbers speak for themselves. Here are the typical&#xA;variations in:(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Steve 2014&lt;/a&gt;)&lt;/p&gt;&#xA;&lt;dl&gt;&#xA;&lt;dt&gt;Individual performance&lt;/dt&gt;&#xA;&lt;dd&gt;20 to 1,&lt;/dd&gt;&#xA;&lt;dt&gt;Team performance&lt;/dt&gt;&#xA;&lt;dd&gt;10 to 1,&lt;/dd&gt;&#xA;&lt;dt&gt;Method performance&lt;/dt&gt;&#xA;&lt;dd&gt;1.2 to 1.&lt;/dd&gt;&#xA;&lt;/dl&gt;&#xA;&lt;p&gt;One can find a compelling illustration of these data on&#xA;(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Oram and Wilson 2010&lt;/a&gt;). Two organizations, similar resources,&#xA;similar goal, vastly different performance:&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>What is a good manager?</title>
+				<link>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</link>
+				<pubDate>Sat, 29 Jul 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/what-is-a-good-manager/</guid>
+				<description>&lt;p&gt;It is hard to do science without proper definitions. So what is a manager?&lt;/p&gt;&#xA;&lt;p&gt;Abstracting from (&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Horstman 2016&lt;/a&gt;), my definition of a&#xA;manager is the following:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;A manager continuously balances present output with creating the&#xA;conditions of future output.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/good-shepherd.png&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: The Good Sheperd, emblem found in a Roman catacomb, sec III&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;The Good Sheperd, emblem found in a Roman catacomb, sec III&lt;/p&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;As one can see, this definition is similar to an investor. That is&#xA;expected, since a manager is an investor of a company&amp;rsquo;s&#xA;resources. &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>Is chatGPT replacing you? or: The nature of the intellectual act</title>
+				<link>https://ebellani.github.io/blog/2023/ai-intellectual-act/</link>
+				<pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/ai-intellectual-act/</guid>
+				<description>&lt;p&gt;I have come across people claiming to fear being replaced by bots,&#xA;specially chatGPT and other &lt;code&gt;large language models (LLM)&lt;/code&gt;. In this&#xA;article I&amp;rsquo;ll take such statements at face value, despite my reservations&#xA;about the sincerity of many of them.&lt;/p&gt;&#xA;&lt;p&gt;The short answer is to the question in the title is no, you will not get&#xA;replaced. The longer answer is below.&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/mystic-ark-hires-1.jpg&#34;&#xA;&#x9;&#x9;&#x9;alt=&#34;Figure 1: Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Rudolph, Conrad. The Mystic Ark: Hugh of Saint Victor, Art, and Thought in the Twelfth Century.&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>An illustrated way to enable openVPN on Qubes OS 4.1.2</title>
+				<link>https://ebellani.github.io/blog/2023/vpn-qubes/</link>
+				<pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2023/vpn-qubes/</guid>
+				<description>&lt;p&gt;In my view, Qubes OS lives up to its motto: &lt;code&gt;A reasonably secure operating system&lt;/code&gt;. I use it for work and personal matters every day.&lt;/p&gt;&#xA;&lt;p&gt;One challenging bit, when you use it in a work setting specially, is to&#xA;set up a VPN qube for your &lt;a href=&#34;https://www.qubes-os.org/doc/glossary/#app-qube&#34;&gt;app qubes&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;There are probably other ways to do this, but the way I chose to&#xA;structure my setup was the following:&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;https://ebellani.github.io/ox-hugo/vpn_qubes.png&#34;&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;After you create your &lt;a href=&#34;https://www.qubes-os.org/doc/glossary/#app-qube&#34;&gt;app qube&lt;/a&gt; for the VPN and assuming your template is&#xA;Debian, go to the template terminal (Debian 11) and run:&lt;/p&gt;</description>
+			</item>
+	</channel>
 </rss>

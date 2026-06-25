@@ -8,18 +8,20 @@
 
     </title>
     
-    <link rel="stylesheet" href="/css/main.min.b0ac2a435097757bc0f52ca79b98b87531ff99fa1b4c88d169395513962577d9.css" /><meta property="og:title" content="Substantial and accidental forms of a SQL expression" />
-<meta property="og:description" content="Multiplicity of parts, variety, and unity of plan which
-combines the parts into a coherent whole, &ndash;
+    <link rel="stylesheet" href="/css/main.min.74d576bead74d290b22dc5650dd4860eed0047fdacf85a9cab4484b18aa0d98f.css" /><meta property="og:url" content="https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/">
+	<meta property="og:site_name" content="Eduardo&#39;s blog">
+	<meta property="og:title" content="Substantial and accidental forms of a SQL expression">
+	<meta property="og:description" content="Multiplicity of parts, variety, and unity of plan which
+combines the parts into a coherent whole, –
 such are the elements of order found in all beauty.
 (De Wulf 2012)
- I have been working with data intensive applications for a while and of course that means exposure to a lot of SQL, both personally and training other developers.
-In these experiences I have noticed that it is sometimes harder than it should be to grasp what SQL is doing, specially since its accidental form makes understanding its substantial form so hard." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ebellani.github.io/blog/2024/substantial-and-accidental-forms-of-a-sql-expression/" /><meta property="article:section" content="blog" />
-<meta property="article:published_time" content="2024-06-20T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-06-20T00:00:00+00:00" />
-
+I have been working with data intensive applications for a while and of course that means exposure to a lot of SQL, both personally and training other developers.
+In these experiences I have noticed that it is sometimes harder than it should be to grasp what SQL is doing, specially since its accidental form makes understanding its substantial form so hard. In this post I’m going to try to help the reader separate the two and understand SQL better.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="blog">
+		<meta property="article:published_time" content="2024-06-20T00:00:00+00:00">
+		<meta property="article:modified_time" content="2024-06-20T00:00:00+00:00">
 </head>
   <body><nav>
   <img
@@ -58,8 +60,8 @@ going to try to help the reader separate the two and understand SQL
 better.</p>
 <p>But first, some definitions of terms:</p>
 <blockquote>
-<p>&hellip; <strong>form</strong> is the principle of organization of a thing’s matter, or the
-thing’s intelligible nature, form can be of two kinds.</p>
+<p>&hellip; <strong>form</strong> is the principle of organization of a thing&rsquo;s matter, or the
+thing&rsquo;s intelligible nature, form can be of two kinds.</p>
 <p>&hellip; (it) can be <strong>substantial</strong>, organizing the matter into the
 kind of thing that the substance is.</p>
 <p>On the other hand, form can be <strong>accidental</strong>, organising some part of an
@@ -141,34 +143,34 @@ row, by this process:</p>
 </li>
 </ol>
 <table>
-<thead>
-<tr>
-<th>PNO</th>
-<th>TEXT1</th>
-<th>GMWT</th>
-<th>COLOR</th>
-<th>TEXT2</th>
-<th>MQTY</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>P1</td>
-<td>Weight in grams =</td>
-<td>5448</td>
-<td>Red</td>
-<td>Max Quantity =</td>
-<td>300</td>
-</tr>
-<tr>
-<td>P5</td>
-<td>Weight in grams =</td>
-<td>5448</td>
-<td>Blue</td>
-<td>Max Quantity =</td>
-<td>400</td>
-</tr>
-</tbody>
+	<thead>
+			<tr>
+					<th>PNO</th>
+					<th>TEXT1</th>
+					<th>GMWT</th>
+					<th>COLOR</th>
+					<th>TEXT2</th>
+					<th>MQTY</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>P1</td>
+					<td>Weight in grams =</td>
+					<td>5448</td>
+					<td>Red</td>
+					<td>Max Quantity =</td>
+					<td>300</td>
+			</tr>
+			<tr>
+					<td>P5</td>
+					<td>Weight in grams =</td>
+					<td>5448</td>
+					<td>Blue</td>
+					<td>Max Quantity =</td>
+					<td>400</td>
+			</tr>
+	</tbody>
 </table>
 <h2 id="so-what">So what</h2>
 <p>I hope the reader will leave with a better appreciation of what a SQL
@@ -181,18 +183,21 @@ expression becomes by SQL&rsquo;s introduction of operators that don&rsquo;t fit
 relational algebra (<code>GROUP BY</code> and <code>HAVING</code> clauses). Besides such, the
 <code>SELECT</code> expression is merely a <code>JOIN-&gt;RESTRICT-&gt;PROJECT</code> sequence.</p>
 <figure><img src="/ox-hugo/st-maria-civil-war--comparision-2.jpg"
-         alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"/><figcaption>
-            <p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
-        </figcaption>
+			alt="Figure 1: Santa Maria del Mar destroyed by communist arson, circa 1936"><figcaption>
+			<p><span class="figure-number">Figure 1: </span>Santa Maria del Mar destroyed by communist arson, circa 1936</p>
+		</figcaption>
 </figure>
 
 <h2 id="references">References</h2>
-<style>.csl-entry{text-indent: -1.5em; margin-left: 1.5em;}</style><div class="csl-bib-body">
+<div class="csl-bib-body">
   <div class="csl-entry"><a id="citeproc_bib_item_1"></a>Date, C. J., and Hugh Darwen. 1997. <i>A Guide to the Sql Standard (4th Ed.): A User’s Guide to the Standard Database Language Sql</i>. USA: Addison-Wesley Longman Publishing Co., Inc.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_2"></a>De Wulf, M. 2012. <i>The System of Thomas Aquinas</i>. Verlag Editiones Scholasticae.</div>
   <div class="csl-entry"><a id="citeproc_bib_item_3"></a>Kerrl, Gaven. n.d. “Aquinas: Metaphysics.” The Internet Encyclopedia of Philosophy. <a href="https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/">https://web.archive.org/web/20240313230721/https://iep.utm.edu/thomas-aquinas-metaphysics/</a>.</div>
 </div>
 
+
+
+   
 
    
 
