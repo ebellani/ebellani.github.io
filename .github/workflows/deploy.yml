@@ -16,7 +16,7 @@ jobs:
         uses: cachix/install-nix-action@v20
 
       - name: Build website
-        run: nix build .#website
+        run: nix build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
