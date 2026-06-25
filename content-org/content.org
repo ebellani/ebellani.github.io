@@ -41,15 +41,15 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** Yes, your company can scale with just regular PostgreSQL
+** All you need is PostgreSQL  
 :PROPERTIES:
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug all-you-need-is-postgresql
 :EXPORT_FILE_NAME: all-you-need-is-postgresql
 :CUSTOM_ID: all-you-need-is-postgresql
-:EXPORT_DATE: 2025-12-04
+:EXPORT_DATE: 2026-06-25
 :END:
 
-#+TOC: headlines 2 local
+#+toc: headlines 2 local
 
 *** Introduction
 
@@ -66,7 +66,7 @@ Our application is slow, let's cache that using {in-memory key-value database}
 
 And since a relational database like PostgreSQL is still considered
 mandatory,thanks mostly to its unmatched reputation, companies end up
-stacking product on top of product on top of Postgres. They inflate the
+stacking product on top of product on top of PostgreSQL. They inflate the
 number of moving parts, operational risk, headcount demand, and overall
 system entropy. Complexity[fn:1] grows, not because the problems demand it,
 but because someone reached for a tool they saw in a conference talk.
@@ -84,15 +84,13 @@ problems should be that *my company can do fine with just PostgreSQL*.
 *** The setup
 
 Here is a list of arguments that people put forth to reach for other
-tools besides Postgres, based on my experience:
+tools besides PostgreSQL, based on my experience:
 
 - I'll need auditing and reconstructing state
 - Write throughput is too low
 - The transactional queries are too slow
 - The analytical queries are too slow
 - My app will be coupled to the Database
-- The Database schema is too rigid for my growing business
-- I need to notify other systems of changes on the fly
 
 To address these, I'm going to use a variation of the /Drosophila
 melanogaster/ of the database field: [[https://en.wikipedia.org/wiki/Suppliers_and_Parts_database][the classic Supplier and Parts]]
@@ -101,7 +99,7 @@ the usual problematic tables: Financial Transaction and their
 originating transfers.
 
 For the rest of this article we will be constructing a database design
-based on modern Postgres that will achieve the general goals listed
+based on modern PostgreSQL that will achieve the general goals listed
 above and specific business requirements. Here is a requirements snippet
 from a very popular banking API company:
 
@@ -152,17 +150,21 @@ systems like increase:
 <<full_list>>
 1. <<act>>Accounts are defined by immutable routing numbers and account numbers
    and have a status that can vary.
-2. <<lst>>Transactions and transfers are listed, paginated by their
+2. <<acct_discrimination>> Accounts are discriminated between external
+   and managed, and one account must be one or the other
+   exclusively. Transfers are made only between external and managed
+   accounts.
+3. <<lst>>Transactions and transfers are listed, paginated by their
    respective creation times.
-3. <<blc>>Current and available balance are shown, both their present and
+4. <<blc>>Current and available balance are shown, both their present and
    historical daily values
-4. <<trf>>Transfers behave like a state machine where the progression
+5. <<trf>>Transfers behave like a state machine where the progression
    between states are exposed to the user. The user can see the full
    state history of a transfer and some of these states are linked to
    pending/settled transactions.
-5. <<txn>> The user can also see the details of a transaction, and see
+6. <<txn>> The user can also see the details of a transaction, and see
    the transfer that generated it.
-6. <<perf>> We should maximize write throughput of transactions and
+7. <<perf>> We should maximize write throughput of transactions and
    transfers. Transfers are editable, and so we should be able to update
    them fast too.
 
@@ -172,11 +174,17 @@ In this section we build the core tables[fn:2] and the role necessary to
 restraint updates and achieve the immutability mentioned on the
 requirements (requirement [[act]] for example).
 
-First, let's create the logical schema that will hold the database
-design, and the user[fn:3] and the initial domains that will provide the
-values we will be using and an auxiliary table for accounts:
+**** The foundation: schemas and user roles for modularity
 
-#+name: laying_foundation_domain
+Modularity, defined by the capacity to have a many-to-many relation
+between implementations and
+interfaces[cite:@koppel23:_modul_matter_most_masses_acces], is crucial
+for software development[cite:@yourdon1979structured]. Part of the base
+tools we have for that on SQL are schemas and roles. In particular, a
+proper role[fn:3] can be used for defining very precise interfaces on top of
+database objects[cite:@swart19:_row_level_secur].
+
+#+name: the_schema_and_roles
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create schema finance;
 
@@ -184,11 +192,26 @@ values we will be using and an auxiliary table for accounts:
   grant usage on schema finance to finance;
   alter default privileges in schema finance
     grant select, insert, update, delete on tables to finance;
+
   alter default privileges in schema finance
     grant usage, select on sequences to finance;
+#+end_src
 
+**** Domains
+
+Database domains are usually scoffed at by practitioners, but that is a
+big mistake. Properly seen, they are
+
+#+begin_quote
+an application of the abstract data type to database management. [cite:@pascal2019domains]
+#+end_quote
+
+As such, domains are the core building blocks for logical design.
+
+#+name: the_domains
+#+begin_src sql :tangle only_postgres_code.sql :comments link
   create domain finance.routing_number as text
-    check (value ~ '^[0-9]{9}$');
+  check (value ~ '^[0-9]{9}$');
 
   create domain finance.account_number as text
     check (value ~ '^[0-9]{12}$');
@@ -197,8 +220,30 @@ values we will be using and an auxiliary table for accounts:
     check(value in ('pending',
     	          'returned',
     		  'completed'));
+#+end_src
 
-  create table finance.account(
+The ~transfer_status~ in particular is crucial, since it represents the
+valid states that a state machine can have.
+
+**** Accounts, managed and external
+
+Managed Accounts are the accounts that are owned by the our system. When
+receiving a transfer, we control only one side of the transfer, and that
+is the managed account side.
+
+Managed accounts can be deactivated and reactivated. This falls neatly
+within the set of temporal features introduced in SQL
+2011[cite:@10.1145/2380776.2380786], in particular application time,
+recently introduced in PostgreSQL 18[cite:@postgresql_temporal_pk]. This
+feature allows us to represent accounts going in and out of activity
+without overlapping.[fn:4]
+
+#+name: the_account
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  -- To use temporal constraints, you need to install the btree_gist extension, which provides the necessary operator classes for creating GiST indexes on scalar data types:
+  create extension if not exists btree_gist;
+
+  create table finance.managed_active_account(
     routing_number  finance.routing_number not null,
     account_number  finance.account_number not null,
     account_name    text not null,
@@ -208,69 +253,232 @@ values we will be using and an auxiliary table for accounts:
                  account_active_period without overlaps)
   );
 
-  comment on table finance.account is
-    'Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance. This relation holds the accounts that are active. No transfer may be created for accounts in the period that they were inactive.';
+  comment on table finance.managed_active_account is
+    'Managed Accounts are what transactions are performed against. Think of your bank account. They store money, receive transfers, and send payments. They earn interest and have depository insurance. This relation holds the accounts that are active. No transfer may be created for accounts in the period that they were inactive.';
+
+  create table finance.external_account(
+    routing_number  finance.routing_number not null,
+    account_number  finance.account_number not null,
+    account_name    text not null,
+    primary key (routing_number, account_number)
+  );
+
+  comment on table finance.external_account is
+    'External accounts represent counterparty accounts at other institutions. They are the other side of a transfer. Unlike managed accounts, they have no temporal active period since we do not control their lifecycle.';
 #+end_src
 
-Then we move to the core tables. Below are the transfers, which
-represent the movement of money as an entity changing over time and are
-therefore updatable. Notice that we narrow the updatable space to what
-can change, the status.
+And below we finish the accounts by making sure a managed account and an
+external account can't be the same. We need to use ~alter table~ instead
+of adding these ~check~ constraints on the table definitions because of
+the circular dependency (one table depends on the other, and vice
+versa).
+
+#+name: the_account_constraints
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  -- Ensure managed and external accounts never share the same identity
+  create or replace function finance.not_external_account(
+    p_routing_number finance.routing_number,
+    p_account_number finance.account_number
+  )
+    returns boolean language sql stable as $$
+    select not exists (
+      select 1
+        from finance.external_account
+       where routing_number = p_routing_number
+         and account_number = p_account_number
+    );
+  $$;
+
+  create or replace function finance.not_managed_account(
+    p_routing_number finance.routing_number,
+    p_account_number finance.account_number
+  )
+    returns boolean language sql stable as $$
+    select not exists (
+      select 1
+        from finance.managed_active_account
+       where routing_number = p_routing_number
+         and account_number = p_account_number
+    );
+  $$;
+
+  alter table finance.managed_active_account
+    add constraint managed_not_external
+    check (finance.not_external_account(routing_number, account_number));
+
+  alter table finance.external_account
+    add constraint external_not_managed
+  check (finance.not_managed_account(routing_number, account_number));
+#+end_src
+
+**** Transfers, constrained by  a state machine and temporal periods
+
+Below are the transfers, which represents the movement of money between
+managed accounts and external accounts. They can be seen as a state
+machine progressing over the transfer_status domain ~pending ->
+(completed | returned)~.
+
+Another crucial point here is the ~period~ keyword in the references
+section. This makes a transfer period be consistent with active managed
+accounts, implementing a core financial safety requirement declaratively
+in the most deepest level one can.
 
 #+name: laying_foundation_table_transfer
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create table finance.transfer (
-    transfer_created_at         timestamptz not null default now(),
+    transfer_period             tstzrange not null default tstzrange(now(), 'infinity', '[)'),
+    transfer_created_at         timestamptz
+                                generated always as (lower(transfer_period)) stored,
     account_number              finance.account_number not null,
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
     counterparty_routing_number finance.routing_number not null,
     amount                      bigint not null,
-    status                      finance.transfer_status not null,
-    -- temporal primary key: prevents overlapping transfers for same account pair
+    status                      finance.transfer_status not null default 'pending',
+    -- Natural order: account identity, then time, then counterparty
+    -- This enables efficient time-range queries on account transfers
     primary key (
-      account_number,
       routing_number,
-      counterparty_account_number,
+      account_number,
+      transfer_created_at,
       counterparty_routing_number,
-      transfer_valid_period without overlaps
-    ),
-    -- temporal foreign key: ensure counterparty account exists during transfer period
+      counterparty_account_number
+    ),  
     foreign key (
-      counterparty_account_number,
       counterparty_routing_number,
-      period transfer_valid_period
-    ) references finance.account (
-      account_number,
+      counterparty_account_number
+    ) references finance.external_account (
       routing_number,
-      period account_active_period
+      account_number    
     ),
-    -- temporal foreign key: ensure source account exists during transfer period
+    -- temporal foreign key: ensure managed account exists during transfer period
     foreign key (
-      account_number,
       routing_number,
-      period transfer_valid_period
-    ) references finance.account (
       account_number,
+      period transfer_period
+    ) references finance.managed_active_account (
       routing_number,
+      account_number,
       period account_active_period
-    ),
-    -- ensure account and counterparty are different
-    check (
-      (account_number, routing_number) <> (counterparty_account_number, counterparty_routing_number)
     )
-  ) partition by range (transfer_created_at);
+  );
 
+  comment on table finance.transfer is
+    'Transfers represent money movement between an external account and a managed account. Status follows state machine: pending -> (completed | returned). Period closes on terminal state. transfer_created_at is a stored generated column derived from lower(transfer_period), eliminating redundancy while remaining usable in primary keys and foreign key references.';
 
+  revoke insert on finance.transfer from finance;
   revoke update on finance.transfer from finance;
+  -- transfer_period will be managed based on the status
+  grant insert (routing_number,
+                account_number,
+                counterparty_routing_number,
+                counterparty_account_number,
+                amount) on finance.transfer to finance;
   grant update (status) on finance.transfer to finance;
-
-  comment on table finance.transfer is 'Represents an attempt to transfer ownership of money. Since such transfer can have a rich lifecycle (approvals, reversals, etc) this entity can potentially be associated to multiple financial transactions. ';
 #+end_src
 
+Note that ~transfer_created_at~ is a stored generated column:
+~lower(transfer_period)~ is an immutable function, and the lower bound
+of ~transfer_period~ never changes (the state machine trigger only
+closes the upper bound). This eliminates the redundancy between
+~transfer_created_at~ and ~lower(transfer_period)~ while keeping the
+column usable in primary keys and as a foreign key target.
+
+**** Transfer state history
+:PROPERTIES:
+:CUSTOM_ID: transfer-state-history
+:END:
+
+In order to implement feature [[trf]], we need system-time temporal
+tables[fn:5]. PostgreSQL supports several approaches for temporal tables.
+For simplicity and portability (including RDS), we use the temporal_tables
+extension [cite:@nearform_temporal_tables].
+
+The extension automatically writes old versions of each row to a history
+table on every ~UPDATE~ or ~DELETE~. Together with a tstzrange period,
+this gives you a full history suitable for ~AS OF~ queries and state
+reconstruction. We create a focused history table that only tracks what
+we need: the transfer identity, status, and system-time period.
+
+#+name: transfer_temporal
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  -- Add system-time period column to transfer table
+  alter table finance.transfer add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
+  alter table finance.transfer alter column sys_period set not null;
+
+  -- Focused history table - only what we need for status transitions
+  create table if not exists finance.transfer_status_log (
+    like finance.transfer
+  );
+
+  comment on table finance.transfer_status_log is 
+    'Automatic log of all transfer status transitions via temporal_tables extension. Shows complete state machine history.';
+
+  alter table finance.transfer_status_log
+    add primary key (
+      routing_number,
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number,
+      sys_period
+    );
+  
+  -- Use temporal_tables versioning procedure
+  create trigger transfer_save_status_history
+    before insert or update or delete
+    on finance.transfer
+    for each row
+    execute procedure versioning('sys_period', 'finance.transfer_status_log', true);
+#+end_src
+
+Once applied, ~finance.transfer_status_log~ will contain every past version
+of every transfer's status, from which you can reconstruct the state machine
+history over time.[fn:6]
+
+**** Account auditing
+
+Since we are on the subject of temporal tables, we might as well add
+support for auditing accounts. It lies outside our [[full_list][list of features]], but
+I think account disabling is a major event that should have strong
+auditing behind it, so we might as well add it.
+
+#+name: account_temporal
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  -- Add system-time period column to the account table
+  alter table finance.managed_active_account add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);
+  alter table finance.managed_active_account alter column sys_period set not null;
+
+  create table if not exists finance.managed_active_account_log (
+    like finance.managed_active_account
+  );
+
+  comment on table finance.managed_active_account_log is 
+    'Automatic log of all account activity via temporal_tables extension.';
+
+  create index on finance.managed_active_account_log (sys_period);
+  create index on finance.managed_active_account_log (routing_number, account_number);
+
+  -- Use temporal_tables versioning procedure
+  create trigger account_save_history
+    before insert or update or delete
+    on finance.managed_active_account
+    for each row
+    execute procedure versioning('sys_period', 'finance.managed_active_account_log', true);
+#+end_src
+
+
+**** Transactions, the immutable events
+
 Contrasted with the above, below we have transactions, which represent
-changes in the balances(current and available) of an account and are
-therefore immutable[fn:4].
+changes in the balances (current and available) of an account and are
+therefore immutable.
+
+Transactions reference their originating transfer by identity (the
+transfer's natural key including ~transfer_created_at~), not by
+period. There is no ~transfer_period~ stored on transactions --- the
+transfer's temporal state is queried from the transfer table when
+needed.
 
 #+name: laying_foundation_table_txn
 #+begin_src sql :tangle only_postgres_code.sql :comments link
@@ -280,6 +488,7 @@ therefore immutable[fn:4].
     routing_number              finance.routing_number not null,
     counterparty_account_number finance.account_number not null,
     counterparty_routing_number finance.routing_number not null,
+    transfer_created_at         timestamptz not null,
     amount                      bigint not null,
     primary key (
       account_number,
@@ -287,52 +496,56 @@ therefore immutable[fn:4].
       transaction_created_at
     ),
     foreign key (
-      account_number,
       routing_number,
-      -- coerce a point to a range
-      period tstzrange(transaction_created_at, transaction_created_at, '[]'),
-      counterparty_account_number,
-      counterparty_routing_number
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number
     )
     references finance.transfer (
-      account_number,
       routing_number,
-      period transfer_valid_period,
-      counterparty_account_number,
-      counterparty_routing_number
-    ) deferrable initially deferred
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number
+    )
   );
 
   comment on table finance.settled_transaction is
-    'Implements settled transactions, such transactions affect your available balance (which is the amount you''re able to move out of your account), and consenquently also affect your current balance  (which is the balance you earn interest on). They are immutable events, so no history table is needed and no one should have update permissions. A settled transaction is never created for a pending transfer.';
+    'Settled transactions affect both your available balance and your current balance. They are immutable events --- no updates or deletes permitted.';
 
   revoke update, delete on finance.settled_transaction from finance;
 
   create table finance.pending_transaction (
     like finance.settled_transaction including all,
     foreign key (
-      account_number,
       routing_number,
-      -- coerce a point to a range
-      period tstzrange(transaction_created_at, transaction_created_at, '[]'),
-      counterparty_account_number,
-      counterparty_routing_number
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number
     )
     references finance.transfer (
-      account_number,
       routing_number,
-      period transfer_valid_period,
-      counterparty_account_number,
-      counterparty_routing_number
-    ) deferrable initially deferred
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number
+    )
   );
 
-  comment on table finance.pending_transaction is 'Pending transactions represent potential future credits or debits of money into your account and are a separate resource from settled transactions (despite their similar name). Pending Transactions do not affect your current balance (which is the balance you earn interest on), but do affect your available balance (which is the amount you''re able to move out of your account). What changes in terms of logical design are the constraints and the interpretation of the data. The columns are the same between pending and settled transactions.';
+  comment on table finance.pending_transaction is
+    'Pending transactions represent potential future credits or debits. They affect available balance but not current balance. Immutable once created.';
 
   revoke update, delete on finance.pending_transaction from finance;
 #+end_src
 
 *** On maintaining business rules via meaningful constraints
+
+Constraints should really be part of the foundation, but I have made
+them a separate section because they are usually seen as something apart
+from defining tables. In reality, a proper mathematical relation should
+embrace both intentionality (constraints) and extensionality (rows).
 
 #+begin_quote
 It is impossible to design and interrogate a database sensibly, and
@@ -341,31 +554,116 @@ without ... DBMS knowledge of the meaning assigned to the
 database...[cite:@pascal2026meaning]
 #+end_quote
 
-In our case, transactions need to be created only when the transfer is
-in the right state of the state machine, as indicated in requirement [[trf]].
+In our case, several business rules must hold across tables. In the
+absence of SQL's ~assert~[fn:7] we rely on constraint triggers keeping
+them as declarative as possible.
 
-In the absence of SQL's ~assert~[fn:5] we need to rely on constraint
-triggers, and if possible maintain them as declarative as
-possible[fn:6]:
+**** The transfer state machine
 
-#+name: constraints
+#+name: state_machine
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create or replace function finance.enforce_transfer_state_machine()
+    returns trigger language plpgsql as $$
+  begin
+    if OLD.status = NEW.status then
+      return NEW;
+    end if;
+  
+    if OLD.status = 'pending' then
+      if NEW.status not in ('completed', 'returned') then
+        raise exception 'Invalid state transition: pending can only transition to completed or returned, not %', NEW.status;
+      end if;
+      NEW.transfer_period := tstzrange(lower(OLD.transfer_period), now(), '[]');
+    
+    elsif OLD.status in ('completed', 'returned') then
+      raise exception 'Invalid state transition: % is a terminal state and cannot transition to %', OLD.status, NEW.status;
+    end if;
+  
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_z_enforce_state_machine
+    before update of status on finance.transfer
+    for each row
+    when (OLD.status <> NEW.status)
+    execute function finance.enforce_transfer_state_machine();
+#+end_src
+
+**** Transactions must fall within the transfer period
+
+A transaction's ~transaction_created_at~ must fall within the
+originating transfer's ~transfer_period~. This prevents creating
+transactions against transfers that haven't started yet or have already
+closed:
+
+#+name: constraint_within_period
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create or replace function finance.transaction_within_transfer_period()
+    returns trigger language plpgsql as $$
+  declare
+    v_transfer_period tstzrange;
+  begin
+    select transfer_period into v_transfer_period
+      from finance.transfer
+     where routing_number              = NEW.routing_number
+       and account_number              = NEW.account_number
+       and transfer_created_at         = NEW.transfer_created_at
+       and counterparty_routing_number = NEW.counterparty_routing_number
+       and counterparty_account_number = NEW.counterparty_account_number;
+
+    if not found then
+      raise exception 'Transfer not found for transaction';
+    end if;
+
+    if not (v_transfer_period @> NEW.transaction_created_at) then
+      raise exception
+        'Transaction created_at % is outside transfer period %',
+        NEW.transaction_created_at, v_transfer_period;
+    end if;
+
+    return NEW;
+  end;
+  $$;
+
+  create constraint trigger settled_transaction_within_transfer_period
+    after insert on finance.settled_transaction
+    deferrable initially deferred
+    for each row
+    execute function finance.transaction_within_transfer_period();
+
+  create constraint trigger pending_transaction_within_transfer_period
+    after insert on finance.pending_transaction
+    deferrable initially deferred
+    for each row
+    execute function finance.transaction_within_transfer_period();
+#+end_src
+
+**** Pending transactions require a pending transfer
+
+A pending transaction can only be created against a transfer that is
+still in the ~pending~ state. Settled transactions, conversely, can only
+be created against transfers that have left the ~pending~ state
+(i.e. ~completed~ or ~returned~):
+
+#+name: constraint_status_match
 #+begin_src sql :tangle only_postgres_code.sql :comments link
   create or replace function finance.is_pending_transfer(
-    p_transfer_created_at timestamptz,
-    p_account_number finance.account_number,
     p_routing_number finance.routing_number,
-    p_counterparty_account_number finance.account_number,
-    p_counterparty_routing_number finance.routing_number
+    p_account_number finance.account_number,
+    p_transfer_created_at timestamptz,
+    p_counterparty_routing_number finance.routing_number,
+    p_counterparty_account_number finance.account_number
   )
     returns boolean language sql stable as $$
     select exists (
       select 1
         from finance.transfer t
-       where t.transfer_created_at         = p_transfer_created_at
+       where t.routing_number              = p_routing_number
          and t.account_number              = p_account_number
-         and t.routing_number              = p_routing_number
-         and t.counterparty_account_number = p_counterparty_account_number
+         and t.transfer_created_at         = p_transfer_created_at
          and t.counterparty_routing_number = p_counterparty_routing_number
+         and t.counterparty_account_number = p_counterparty_account_number
          and t.status                      = 'pending'
     );
   $$;
@@ -374,16 +672,16 @@ possible[fn:6]:
     returns trigger language plpgsql as $$
   begin
     if not finance.is_pending_transfer(
-      NEW.transfer_created_at,
-      NEW.account_number,
       NEW.routing_number,
-      NEW.counterparty_account_number,
-      NEW.counterparty_routing_number
+      NEW.account_number,
+      NEW.transfer_created_at,
+      NEW.counterparty_routing_number,
+      NEW.counterparty_account_number
     ) then
       raise exception
         'Must reference a pending transfer (%, %, %, %, %)',
-        NEW.transfer_created_at, NEW.account_number, NEW.routing_number,
-        NEW.counterparty_account_number, NEW.counterparty_routing_number;
+        NEW.routing_number, NEW.account_number, NEW.transfer_created_at,
+        NEW.counterparty_routing_number, NEW.counterparty_account_number;
     end if;
     return NEW;
   end;
@@ -393,16 +691,16 @@ possible[fn:6]:
     returns trigger language plpgsql as $$
   begin
     if finance.is_pending_transfer(
-      NEW.transfer_created_at,
-      NEW.account_number,
       NEW.routing_number,
-      NEW.counterparty_account_number,
-      NEW.counterparty_routing_number
+      NEW.account_number,
+      NEW.transfer_created_at,
+      NEW.counterparty_routing_number,
+      NEW.counterparty_account_number
     ) then
       raise exception
         'Cannot reference a pending transfer (%, %, %, %, %)',
-        NEW.transfer_created_at, NEW.account_number, NEW.routing_number,
-        NEW.counterparty_account_number, NEW.counterparty_routing_number;
+        NEW.routing_number, NEW.account_number, NEW.transfer_created_at,
+        NEW.counterparty_routing_number, NEW.counterparty_account_number;
     end if;
     return NEW;
   end;
@@ -419,96 +717,136 @@ possible[fn:6]:
     deferrable initially deferred
     for each row
     execute function finance.ensure_non_pending_transfer();
-
 #+end_src
 
-*** On auditing and reconstructing state
+**** No future transactions when closing a transfer
 
-In order to implement feature [[trf]], need system-time temporal
-tables[fn:7]. PostgreSQL on the other hand supports
-several approaches for temporal tables. For simplicity and portability
-(including RDS), we use the temporal_tables extension
-[cite:@nearform_temporal_tables].
+A transfer cannot transition to ~completed~ or ~returned~ if any of its
+transactions have a ~transaction_created_at~ that falls after the
+moment of closure. This prevents the state machine from closing a
+transfer's period and stranding transactions in the future:
 
-The extension automatically writes old versions of each row to a sibling
-~_history~ table on every ~UPDATE~ or ~DELETE~. Together with a
-tstzrange period, this gives you a full history suitable for ~AS OF~
-queries and state reconstruction. If you install the extension in a
-table with a simple function call, use this snippet:
+#+name: constraint_no_future_txns
+#+begin_src sql :tangle only_postgres_code.sql :comments link
+  create or replace function finance.no_future_transactions_on_close()
+    returns trigger language plpgsql as $$
+  begin
+    if exists (
+      select 1 from finance.settled_transaction
+       where routing_number              = NEW.routing_number
+         and account_number              = NEW.account_number
+         and transfer_created_at         = NEW.transfer_created_at
+         and counterparty_routing_number = NEW.counterparty_routing_number
+         and counterparty_account_number = NEW.counterparty_account_number
+         and transaction_created_at > now()
+      union all
+      select 1 from finance.pending_transaction
+       where routing_number              = NEW.routing_number
+         and account_number              = NEW.account_number
+         and transfer_created_at         = NEW.transfer_created_at
+         and counterparty_routing_number = NEW.counterparty_routing_number
+         and counterparty_account_number = NEW.counterparty_account_number
+         and transaction_created_at > now()
+    ) then
+      raise exception
+        'Cannot close transfer (%, %, %): transaction(s) exist after current time',
+        NEW.routing_number, NEW.account_number, NEW.transfer_created_at;
+    end if;
 
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-  alter table finance.transfer add column if not exists sys_period tstzrange default tstzrange(current_timestamp, null);;
-  alter table finance.transfer alter column sys_period set not null;
+    return NEW;
+  end;
+  $$;
 
-  create table if not exists finance.transfer_history (like finance.transfer including all);
-  comment on table finance.transfer_history is 'the state history of the transfer. Useful for auditing and for features showing such state to the user';
-
-  create index on finance.transfer_history (sys_period);
-
-  create trigger transfer_save_history
-    before insert or update or delete
-    on finance.transfer
+  create constraint trigger transfer_no_future_transactions_on_close
+    after update of status on finance.transfer
+    deferrable initially deferred
     for each row
-    execute procedure versioning('sys_period', 'finance.transfer_history', true);
+    when (NEW.status in ('completed', 'returned'))
+    execute function finance.no_future_transactions_on_close();
 #+end_src
 
-Once applied, ~public.transfer_history~ will contain every past version
-of every transfer, from which you can reconstruct the state of transfers
-over time. You can query the state of all transfers by doing something
-like[fn:21]:
-
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-  select * from transfer
-  UNION ALL
-  select * from transfer_history;
-#+end_src
+These three constraint groups --- temporal containment, status matching,
+and future-transaction prevention --- together enforce the full lifecycle
+invariant: transactions can only exist within the temporal and logical
+boundaries of their originating transfer. In application code, this
+would typically require a coordination framework spanning multiple
+services. Here it is enforced declaratively at the deepest possible
+level.
 
 *** On capacity planning
 
-As can be seen on the [[laying_foundation][foundationnal code block]], we have 5 core tables
+In order to be able to efficiently modify transfers and run the
+constraints needed to keep transactions consistent with the business
+rules we should keep in the working set 2 days of
+transfers/transactions. The number 2 is chosen because wire transfers
+typically settle within one business day and while international
+transfers take one to five days, with most completing within
+two[cite:@paystand_wire_transfer_time] we.
 
-1. ~finance.transfer~
-2. ~finance.transfer_history~
-3. ~finance.pending_transaction~
-4. ~finance.settled_transaction~
+Taking ~finance.transfer~ as a reference (the widest row), we estimate
+the per-row size (ignoring alignment[cite:@thomas2018rocksandsand]):
 
-    Taking ~finance.transfer~ as a
-reference, we have this total (ignoring alignment issues
-[cite:@thomas2018rocksandsand]):
-
-| Name                           | Type        | Size(bytes) |
-|--------------------------------+-------------+-------------|
-| transfer_created_at            | timestamptz |           8 |
-| account_number                 | text(12)    |          13 |
-| routing_number                 | text(9)     |          10 |
-| counterparty_account_number    | text(12)    |          13 |
-| counterparty_routing_number    | text(9)     |          10 |
-| amount                         | bigint      |           8 |
-| status                         | text(10)    |          11 |
-|--------------------------------+-------------+-------------|
-| Total (plus 24 for row header) |             |          97 |
+| Name                        | Type        | Size (bytes) |
+|-----------------------------+-------------+--------------|
+| transfer_period             | tstzrange   |           32 |
+| transfer_created_at         | timestamptz |            8 |
+| account_number              | text(12)    |           13 |
+| routing_number              | text(9)     |           10 |
+| counterparty_account_number | text(12)    |           13 |
+| counterparty_routing_number | text(9)     |           10 |
+| amount                      | bigint      |            8 |
+| status                      | text(10)    |           11 |
+| sys_period                  | tstzrange   |           32 |
+|-----------------------------+-------------+--------------|
+| Total (plus 24 row header)  |             |          161 |
 #+TBLFM: @>$>=vsum(@I..@II)+24
 
-So, around 100 bytes per row. Suppose we want 3 days of transfers and 1
-day of transactions, that would be 6 (3 ~finance.transfer~ + 3
-~finance.transfer_history~) + 2 (1 ~finance.pending_transaction~ + 1
-~finance.settled_transaction~).
+So roughly 160 bytes per row. The log tables have the same width. The
+transaction tables are slightly narrower (no ~transfer_period~, no
+~status~), around 120 bytes per row.
 
-Assuming 10k accounts each having 100 transfer/pending/settled per day,
-that would necessitate ~7.5~ Gb of RAM. If we are ta talking something
-like a mid/large bank like Nubank, 50 million[cite:@nubank2022pix]
-~38GB, and for a global payment processor like VISA ~700Gb
-[cite:@visa2025annual].
+**** Working set estimation
 
-As for indexes:
-#+begin_quote
-index entry has an overhead of 8 bytes. Add the average size of your
-indexed data (in the internal binary format).[cite:@StackOverflowAlbe2020indexsize]
-#+end_quote
+The working set is the data that must be in ~shared_buffers~ for the
+system to perform well. As stated above, the working set will consist of
+2 days of transfers transactions.
 
-Given that in this design we are using a single index for each table
-(the btree backing the primary key), you can add 100% for the index
-size, doubling the amounts above.
+Let's assume that a transfer row corresponds to 2 rows in
+~transfer_status_log~ (the initial insert plus a state change) and 3
+transactions (2 pending transactions and a settled transaction). That
+gives us 3 transfer like rows + 3 transaction rows.
+
+Each index entry carries ~8 bytes of overhead plus the indexed
+data[cite:@StackOverflowAlbe2020indexsize]. In our design, most tables
+have one index: the B-tree backing the primary key (the temporal table
+has 2, but lets ignore that for the sake of simplicity). The primary key
+for ~finance.transfer~ indexes 5 columns totalling ~54 bytes, so each
+index entry is ~62 bytes. This amounts to roughly 40% of the row
+size. So, a safe rule of thumb: add a 1.4 multiplier to the table sizes
+to account for for index overhead.
+
+This whole argument boils down to the byte sum of:
+
+#+name: daily_size
+#+begin_src calc :exports both
+  ((3 * 160) + (3 * 120)) * 1.4
+#+end_src
+
+#+results: daily_size
+: 1176.
+
+
+| Scale                                  | Transfers/day | Working set size for 2 days |
+|----------------------------------------+---------------+-----------------------------|
+| Startup                                | 10,000        | 22M                         |
+| Mid/large bank[cite:@nubank2022pix]    | 50,000,000    | 110G                        |
+| Global processor[cite:@visa2025annual] | 900,000,000   | 1.9T                        |
+#+TBLFM: $3='(file-size-human-readable (string-to-number (calc-eval (format "2 * (%s * %s)" (string-replace "," "" $2) (org-sbe daily_size)))))
+
+Up to a mid level bank one can fit the working set comfortably in modern
+cloud database servers. AWS RDS, for instance, supports up to 4TiB of
+memory per instance for PostgreSQL-compatible
+instances[cite:@aws_rds_instance_types].
 
 *** On write throughput
 :PROPERTIES:
@@ -517,84 +855,41 @@ size, doubling the amounts above.
 
 If you want to maintain semantic enforcement of your data (which in our
 model is done via fkeys and constraint triggers) about the best thing
-you can do to optimize write throughpu is to lower the write
-amplication, specifically to use indexes in a smart way. After all,
+you can do to optimize write throughput is to lower the write
+amplification, specifically to use indexes in a smart way. After all,
 ~indexes, if not carefully chosen, can kill performance in a write-heavy
 application~[cite:@gerogiannakis_postgres_index_queries_2019]
 
-**** Partitioning
+**** Enabling HOT Updates for Transfers
 
-Paritioning becomes relevant because fitting all the necessary index
-nodes in memory is key for fast insertion/updates (remember that an
-update is also an insert).
+By keeping the primary key of the ~finance.transfer~ table aligned with
+the immutable columns, we enable Heap-Only Tuple
+(HOT)[cite:@postgresql18_hot_2025] updates for that table. Such HOT
+updates are important because status transitions (pending to
+completed/returned) are common operations and we want to minimize write
+amplification.
 
-For tables where you are using sequential identifiers and are only
-inserting, you have good performance *because* you have good index
-locality. Poor index locality leads to space consumption and processing
-latency to write
-operations[cite:@atkinson_avoid_uuidv4_primary_keys_2025]. Fixing such
-issues can lead to surprising improvements such as a ~50% reduction in
-the WAL (Write Ahead Log) rate of the primary
-database~[cite:@chan_buildkite_uuidv7_2023].
+What happens is that, because neither the transfer's ~status~ nor its
+~transfer_period~ participate in any indexes, PostgreSQL can write the
+new tuple version to the same page (if space permits) and also skip the
+index update entirely.
 
-As we can see in the [[full_list][feature list]], we have 2 features represented as
-relations: [[laying_foundation_table_transfer][transfers]] and [[laying_foundation_table_txn][transactions]]. Both are sequentially ordered by
-their creation time but, crucially, transactions do not change while
-transfers do. *Therefore*, we should partition the transfers table to
-minimize index locality problems, but not the transaction tables.
+We therefore need to make sure there is enough page space in the table:
 
-Here is the code to add partitions using pg_partman [cite:@pg_partman_github]:
-
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-    create schema partman;
-    CREATE EXTENSION IF NOT EXISTS pg_cron;
-    CREATE EXTENSION IF NOT EXISTS pg_partman SCHEMA partman;
-
-    -- set partman for a table, creating the initial partitions
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.settled_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,
-        p_start_partition := '2025-01-01 00:00:00'
-    );
-
-    -- repeat for pending transactions and transfers
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.pending_transaction',
-        p_control      := 'transaction_created_at',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,
-        p_start_partition := '2025-01-01 00:00:00'
-    );
-
-    CREATE TABLE partman.transfer_template (LIKE finance.transfer including all) WITH (fillfactor = 90);
-
-    SELECT partman.create_parent(
-        p_parent_table := 'finance.transfer',
-        p_control      := 'transfer_start_date',
-        p_type         := 'range',
-        p_interval     := '1 day',
-        p_premake      := 7,
-        p_default_table := false,
-        p_start_partition := '2025-01-01 00:00:00',
-        p_template_table  := 'partman.transfer_template' -- Forces partitions to use the fillfactor in the custom template
-    );
-
-    UPDATE partman.part_config
-    SET infinite_time_partitions = true,
-        premake = 7
-      WHERE parent_table in ('finance.settled_transaction', 'finance.pending_transaction', 'finance.transfer');
-
-  -- run maintenance every hour
-  SELECT cron.schedule('@hourly', $$CALL partman.run_maintenance_proc()$$);
+#+begin_src sql
+  alter table finance.transfer set (fillfactor = 70);
 #+end_src
 
-**** Unused indexes
+This reserves 30% free space per page, allowing updated tuples to fit on
+the same page. Combined with no indexes on ~status~ or ~transfer_period~,
+status updates become HOT-eligible, providing:
+
+- 2-3x faster updates compared to non-HOT updates[cite:@samuel_hot_benchmark]
+- No table and index bloat from status changes[cite:@adyen_hot_updates]
+- Simpler vacuum maintenance on the table[cite:@adyen_hot_updates]
+- Smaller WAL, since there is less write activity overall[cite:@adyen_hot_updates]
+
+**** Making sure there are no Unused indexes
 
 A common problem is to have a bunch of unused indexes for critical
 tables, since they are not visible directly and experiments can be
@@ -605,254 +900,840 @@ PostgreSQL internal statistics):
 #+begin_src sql
   SELECT schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes where schemaname='finance' ORDER BY idx_scan;
 
-   schemaname │       relname       │          indexrelname           │ idx_scan │ idx_tup_read │ idx_tup_fetch
-  ════════════╪═════════════════════╪═════════════════════════════════╪══════════╪══════════════╪═══════════════
-   finance    │ settled_transaction │ settled_transaction_pkey        │        0 │            0 │             0
-   finance    │ transfer_history    │ transfer_history_sys_period_idx │        0 │            0 │             0
-   finance    │ account             │ account_pkey                    │      100 │           80 │            60
-   finance    │ pending_transaction │ pending_transaction_pkey        │  1220000 │       120000 │        120000
-   finance    │ transfer            │ transfer_pkey                   │  2210002 │      1110002 │       1110000
+   schemaname │         relname          │              indexrelname               │ idx_scan │ idx_tup_read │ idx_tup_fetch
+  ════════════╪══════════════════════════╪═════════════════════════════════════════╪══════════╪══════════════╪═══════════════
+   finance    │ settled_transaction      │ settled_transaction_pkey                │        0 │            0 │             0
+   finance    │ transfer_status_log      │ transfer_status_log_sys_period_idx      │        0 │            0 │             0
+   finance    │ account                  │ account_pkey                            │      100 │           80 │            60
+   finance    │ pending_transaction      │ pending_transaction_pkey                │  1220000 │       120000 │        120000
+   finance    │ transfer                 │ transfer_pkey                           │  2210002 │      1110002 │       1110000
 #+end_src
 
 - idx_scan :: How many times the index has been scanned (used). This can
-  be either directly by a application query e.g.
+     be either directly by a application query e.g.
 
-  #+begin_src sql
-    select * from finance.transfer where
-    (transfer_created_at, transaction_account, counterparty_account) =
-    ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
-  #+end_src
+     #+begin_src sql
+       select * from finance.transfer where
+       (transfer_created_at, transaction_account, counterparty_account) =
+       ('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');
+     #+end_src
 
-  or indirectly due to a JOIN. For example, the primary key index
-  transfer_pkey has been scanned over 2210002 times.
+     or indirectly due to a JOIN. For example, the primary key index
+     transfer_pkey has been scanned over 2210002 times.
 
 - idx_tup_read :: This is the number of index entries returned as a result
-  of an index scan. An easy-to-understand example is the primary key
-  (e.g. ~select * from finance.transfer where (transfer_created_at,
-  transaction_account, counterparty_account) = ('2025-11-25
-  18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
-  such transfer, then idx_tup_read will increase by 1. Modifying slightly
-  the query
+     of an index scan. An easy-to-understand example is the primary key
+     (e.g. ~select * from finance.transfer where (transfer_created_at,
+       transaction_account, counterparty_account) = ('2025-11-25
+       18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15');~). If there is
+     such transfer, then idx_tup_read will increase by 1. Modifying slightly
+     the query
 
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
-    #+end_src
-   idx_tup_read will increase by 2 (if both transfers exist). In both of
-   these queries, idx_scan will increase by 1.
+     #+begin_src sql
+       select * from finance.transfer
+        where (transfer_created_at, transaction_account, counterparty_account) in
+              (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+              ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'));
+     #+end_src
+     idx_tup_read will increase by 2 (if both transfers exist). In both of
+     these queries, idx_scan will increase by 1.
 
 - idx_tup_fetch :: These are the number of rows fetched from the table
-  as a result of an index scan.  This is increased as a result of both
-  positive and false positive results.  For example, if both ids exist,
-  the query
-    #+begin_src sql
-      select * from finance.transfer
-       where (transfer_created_at, transaction_account, counterparty_account) in
-             (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
-             ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
-       and transfer_status='completed';
-    #+end_src
-   will increase idx_tup_fetch by 2 even if only one tuple is returned
-  to the client. The reason is that the tuples will need to be loaded
-  from disk to examine the value of ‘transfer_status’.
+     as a result of an index scan.  This is increased as a result of both
+     positive and false positive results.  For example, if both ids exist,
+     the query
+     #+begin_src sql
+       select * from finance.transfer
+        where (transfer_created_at, transaction_account, counterparty_account) in
+              (('2025-11-25 18:04:26.298329+00'::timestamptz, 'acc_8', 'acc_15'),
+              ('2025-11-25 01:39:36.594342+00'::timestamptz, 'acc_11', 'acc_9'))
+        and transfer_status='completed';
+     #+end_src
+      will increase idx_tup_fetch by 2 even if only one tuple is returned
+     to the client. The reason is that the tuples will need to be loaded
+     from disk to examine the value of ‘transfer_status’.
 
-**** HOT transfers
+*** OLTP
 
-In the design above, there should be no updates to transactions, be them
-pending or settled. Transfers on the other hand, will have their status
-changed a lot. So we should benefit from making that table consist of
-Heap-Only Tuples (HOT).
+In OLTP workloads, the DBMS needs to quickly read and write individual
+rows of data while ensuring data
+integrity[cite:@cdata_transactional_vs_analytical].
+
+Below we showcase some interesting OLTP workflows on the [[full_list][feature list]]:
+
+1. [[lst][Listing with pagination]]
+2. [[txn][Display details of a transfer, including the transactions that were generated]]
+
+**** Listing
+
+Listing should be simple enough, but it contains traps for if one uses
+the naive ~OFFSET~ approach[cite:@winand_fetch_next_page]:
 
 #+begin_quote
-To allow for high concurrency, PostgreSQL uses multiversion concurrency
-control (MVCC) to store rows. However, MVCC has some downsides for
-update queries. Specifically, updates require new versions of rows to be
-added to tables. This can also require new index entries for each
-updated row, and removal of old versions of rows and their index entries
-can be expensive.[cite:@postgresql_hot_2025]
+1. the pages drift when inserting new sales because the numbering is always done from scratch;
+2. the response time increases when browsing further back.
 #+end_quote
 
-Transfers are the ideal scenario for HOT, since the the indexed columns
-via the PK does not reach the column that will get updated:
-~transfer_status~.
+
+***** Proper pagination
+In order to avoid the problems above, we need to leverage the primary
+key index directly by using values instead of offsets. Given that we are
+listing all transfers/transactions for a given account sorted by time,
+this maps directly to the composite primary key index, allowing PostgreSQL
+to do an equality match on the first two columns and then a backward
+index scan from the cursor position on ~transfer_created_at~:
 
 #+begin_src sql
-  alter table finance.transfer set (fillfactor = 90);
+  select *
+    from finance.transfer
+   where routing_number = ?
+     and account_number = ?
+     and transfer_created_at < ?
+   order by transfer_created_at desc
+   fetch first 10 rows only;  
 #+end_src
 
-This will give us the major benefit of not having to touch indexes,
-which is the bane of write heavy
-applications[cite:@gerogiannakis_postgres_index_queries_2019].
 
-*** TODO Transactional Queries
-Here are the transactional queries that I assume will compose the vast
-majority of such application cycle:
+***** Primary Key Column Order
 
-1. Insert transfers/transactions
-2. Paginate over transfers/transactions
-3. Update a transfer's state
-4. Get all transactions for a transfer
+In order to enable the listing above, the primary key definition needs
+to reflect the access pattern:
 
-*** TODO Analytical Queries
-Here are the analytical queries that I assume will compose the vast majority of
-such application cycle:
+1. ~routing_number, account_number~ - identifies the account (most selective)
+2. ~transfer_created_at~ - enables efficient time-range queries on account transfers, which enables the pagination
+3. ~counterparty_routing_number, counterparty_account_number~ - completes the transfer identity
 
-~ALTER DATABASE X SET default_transaction_isolation = 'serializable';~
+**** The history of a transfer
 
-1. Get balance at time X for account Y
+In order to implement feature [[trf]], we need to query the full state
+history of transfers intermingling it with the proper transactions. We
+define this as a view, since it represents a derived relation that will
+be reused throughout the system:
 
+#+name: finance_transfer_activity_view
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create or replace view finance.transfer_activity as
+  select 'transfer' as kind,
+         t.routing_number,
+         t.account_number,
+         t.counterparty_routing_number,
+         t.counterparty_account_number,
+         t.amount,
+         t.status,
+         t.transfer_created_at as created_at
+    from finance.transfer t
 
-*** Appendix: Code Generating test data
+  union all
+
+  select 'transfer_history' as kind,
+         h.routing_number,
+         h.account_number,
+         h.counterparty_routing_number,
+         h.counterparty_account_number,
+         h.amount,
+         h.status,
+         h.transfer_created_at as created_at
+    from finance.transfer_status_log h
+
+  union all
+
+  select 'pending_transaction' as kind,
+         pt.routing_number,
+         pt.account_number,
+         pt.counterparty_routing_number,
+         pt.counterparty_account_number,
+         pt.amount,
+         'pending' as status,
+         pt.transaction_created_at as created_at
+    from finance.pending_transaction pt
+
+  union all
+
+  select 'settled_transaction' as kind,
+         st.routing_number,
+         st.account_number,
+         st.counterparty_routing_number,
+         st.counterparty_account_number,
+         st.amount,
+         'settled' as status,
+         st.transaction_created_at as created_at
+    from finance.settled_transaction st;
+
+  comment on view finance.transfer_activity is
+    'Unified view of the full history of transfers and their associated
+     transactions. Each row is tagged with a kind discriminator. Used for
+     transfer history display and as the foundation for the updatable
+     interface defined in the On decoupling section.';
+#+end_src
+
+Querying the full history of a specific transfer is now a simple filter
+on the view:
+
+#+begin_src sql
+  select *
+    from finance.transfer_activity
+   where routing_number = ?
+     and account_number = ?
+     and counterparty_routing_number = ?
+     and counterparty_account_number = ?
+   order by created_at;
+#+end_src
+
+*** OLAP
+
+In OLAP workloads, the DBMS needs manage large volumes of data while
+allowing for quick query response
+times[cite:@cdata_transactional_vs_analytical]. Calculating account
+balances, which is what we need to do in order to implement requirement
+[[blc]], fit squarely into that category.
+
+As a reminder, we need to compute two balances per account, queryable at
+any point in time:
+
+- Current balance :: the balance you earn interest on, derived from
+     settled transactions only.
+- Available balance :: the amount you're able to move out, derived from
+     both settled and pending transactions.
+
+Obviously scanning the full transaction history and computing the sum
+using a row oriented DBMS like PostgreSQL would yield correct results,
+but it would certainly not be ~quick~. Worse, as the transaction table
+grows, every balance query becomes a range scan over an ever-larger set
+of rows.
+
+One solution is to maintain a *balance ledger* incrementally via
+triggers. The principle is the same one behind incremental view
+maintenance: the cost of keeping derived data up to date is borne by the
+process changing the base data, with the extra operations added to the
+execution plan of the original
+insert[cite:@white15:_index_view_maint]. We shift work from read time to
+write time.
+
+In our case, this trade-off is acceptable: transactions are append-only
+(no updates or deletes), and per account, we don't expect a swarm of
+concurrent transactions. The write overhead of maintaining the balance
+ledger is small compared to the read savings of never having to
+aggregate the full transaction history.
+
+**** Balance ledger
+
+The ~finance.balance_ledger~ table stores a snapshot of both balances
+after every transaction. Each row records the cumulative totals as of
+that transaction's timestamp, enabling queries like "what was the
+balance at close of business yesterday?" via a single index-backed
+lookup.
+
+#+name: olap_balance_ledger
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create table finance.balance_ledger (
+    routing_number  finance.routing_number not null,
+    account_number  finance.account_number not null,
+    as_of           timestamptz not null,
+    current_total   bigint not null,
+    available_total bigint not null,
+    primary key (routing_number, account_number, as_of)
+  );
+
+  comment on table finance.balance_ledger is
+    'Running balance snapshots per account. Each row records the cumulative
+     current and available totals as of a given transaction timestamp.
+     Maintained incrementally by triggers on settled and pending transaction
+     inserts. Current total reflects settled transactions only. Available
+     total reflects both settled and pending transactions.';
+
+  revoke update, delete on finance.balance_ledger from finance;
+#+end_src
+
+**** Incremental maintenance via triggers
+
+When a settled transaction is inserted, both the current and available
+totals change. When a pending transaction is inserted, only the
+available total changes. Each trigger fetches the most recent ledger row
+for the account and appends a new snapshot with the updated running
+totals.
+
+#+name: olap_balance_triggers
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create or replace function finance.update_balance_on_settled()
+    returns trigger language plpgsql as $$
+  declare
+    v_current   bigint;
+    v_available bigint;
+  begin
+    select current_total, available_total
+      into v_current, v_available
+      from finance.balance_ledger
+     where routing_number = NEW.routing_number
+       and account_number = NEW.account_number
+     order by as_of desc
+     limit 1;
+
+    if not found then
+      v_current   := 0;
+      v_available := 0;
+    end if;
+
+    insert into finance.balance_ledger
+      (routing_number, account_number, as_of, current_total, available_total)
+    values
+      (NEW.routing_number, NEW.account_number, NEW.transaction_created_at,
+       v_current + NEW.amount, v_available + NEW.amount);
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger settled_update_balance
+    after insert on finance.settled_transaction
+    for each row
+    execute function finance.update_balance_on_settled();
+
+  create or replace function finance.update_balance_on_pending()
+    returns trigger language plpgsql as $$
+  declare
+    v_current   bigint;
+    v_available bigint;
+  begin
+    select current_total, available_total
+      into v_current, v_available
+      from finance.balance_ledger
+     where routing_number = NEW.routing_number
+       and account_number = NEW.account_number
+     order by as_of desc
+     limit 1;
+
+    if not found then
+      v_current   := 0;
+      v_available := 0;
+    end if;
+
+    insert into finance.balance_ledger
+      (routing_number, account_number, as_of, current_total, available_total)
+    values
+      (NEW.routing_number, NEW.account_number, NEW.transaction_created_at,
+       v_current, v_available + NEW.amount);
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger pending_update_balance
+    after insert on finance.pending_transaction
+    for each row
+    execute function finance.update_balance_on_pending();
+#+end_src
+
+With this design, querying the balance at any point in time is a simple
+index-backed lookup:
+
+#+begin_src sql
+  -- Balance as of a specific timestamp
+  select current_total, available_total
+    from finance.balance_ledger
+   where routing_number = ?
+     and account_number = ?
+     and as_of <= ?
+   order by as_of desc
+   fetch first 1 row only;
+
+  -- Latest balance
+  select current_total, available_total
+    from finance.balance_ledger
+   where routing_number = ?
+     and account_number = ?
+   order by as_of desc
+   fetch first 1 row only;
+#+end_src
+
+*** On serializable isolation
+
+The constraint triggers in [[*On maintaining business rules via meaningful constraints][the constraints section]] and the balance
+ledger triggers in [[*OLAP][the OLAP section]] share a common vulnerability under
+PostgreSQL's default ~READ COMMITTED~ isolation level: they all follow a
+read-then-write pattern. A transaction reads some state (a transfer's
+status, a transfer's period bounds, the latest balance row), makes a
+decision based on that state, and then writes. Under ~READ COMMITTED~,
+concurrent transactions can each read a snapshot that does not reflect
+the other's uncommitted changes, and both proceed to write, producing an
+inconsistent result.
+
+Concrete examples:
+
+- *Lost balance updates*: Two concurrent inserts into
+  ~settled_transaction~ for the same account both read the latest
+  ~balance_ledger~ row as ~current_total = 1000~. Both insert a new
+  ledger row with ~current_total = 1000 + amount~, when the second
+  should have been ~1000 + amount_A + amount_B~. The running total is
+  silently corrupted.
+
+- *Pending transaction against a closing transfer*:
+  ~ensure_pending_transfer~ reads the transfer as ~status = 'pending'~
+  and allows the insert. Concurrently, another transaction updates the
+  transfer to ~completed~. Both commit, and a pending transaction now
+  references a completed transfer.
+
+- *Transaction outside transfer period*:
+  ~transaction_within_transfer_period~ reads the transfer period as open
+  and allows the insert. Concurrently, the transfer's period is being
+  closed by a status transition. Both commit, and a transaction exists
+  outside its transfer's period.
+
+- *Future transaction slipping past closure*:
+  ~no_future_transactions_on_close~ checks for future transactions and
+  finds none. Concurrently, another transaction inserts one. Both
+  commit, and the transfer is closed with a transaction stranded after
+  the closure time.
+
+All of these are instances of the same fundamental problem: write skew
+under snapshot isolation. The solution is ~SERIALIZABLE~ isolation:
+
+#+name: serializable_isolation
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  alter role finance set default_transaction_isolation = 'serializable';
+#+end_src
+
+Under PostgreSQL's Serializable Snapshot Isolation (SSI), the engine
+tracks read-write dependencies between concurrent transactions. When it
+detects a dependency cycle that could produce a result impossible under
+any serial execution, it aborts one of the transactions with a
+serialization failure. The application must be prepared to retry aborted
+transactions, but the data invariants are never violated.
+
+This is a global setting because the problem is global: every
+read-then-write constraint trigger and every incremental balance update
+is vulnerable. Setting isolation per-transaction would require the
+application to know which transactions touch which tables, and a single
+missed annotation would silently open a consistency hole. The database
+default eliminates that risk.
+
+The cost is that some transactions will be aborted and must be retried.
+In our case, this cost is low: the serialization conflicts occur only
+between concurrent writes to the /same account/, and per account, we
+don't expect a swarm of concurrent transactions. The application can use
+straightforward retry logic such as exponential
+backoff[cite:@brooker15:_expon_backof_and_jitter]. The alternative of
+risking silent data corruption is certainly not acceptable in a
+financial system.
+
+*** On decoupling
+
+Views are the canonical way to implement modularity in SQL DBMSes like
+PostgreSQL[cite:@bellani24:_how_decoupled]. As Codd originally
+envisioned, views provide logical data independence: application
+programs and terminal activities remain unaffected when the internal
+representation of data changes[cite:@10.1145/362384.362685]. In
+non-alien language: the relation between interfaces (views) and
+implementations (base tables) is many-to-many, which is precisely the
+definition of modularity[cite:@koppel23:_modul_matter_most_masses_acces].
+
+This means that instead of reaching for microservices to achieve
+decoupling --- with all their attendant costs in serialization overhead,
+distributed consistency problems, and operational
+complexity[cite:@10.1145/3593856.3595909] --- we can achieve the same
+logical property using views over a single PostgreSQL instance.
+
+The ~finance.transfer_activity~ view defined in [[*The history of a transfer][the history of a
+transfer]] section already provides a stable read interface. Now we make
+it updatable, turning it into the single interface through which
+applications insert transfers and transactions, and update transfer
+status:
+
+#+name: decoupling_transfer_activity_triggers
+#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
+  create or replace function finance.transfer_activity_insert()
+    returns trigger language plpgsql as $$
+  begin
+    case NEW.kind
+      when 'transfer' then
+        insert into finance.transfer
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.amount);
+
+      when 'pending_transaction' then
+        insert into finance.pending_transaction
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           transfer_created_at, amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.created_at, NEW.amount);
+
+      when 'settled_transaction' then
+        insert into finance.settled_transaction
+          (routing_number, account_number,
+           counterparty_routing_number, counterparty_account_number,
+           transfer_created_at, amount)
+        values
+          (NEW.routing_number, NEW.account_number,
+           NEW.counterparty_routing_number, NEW.counterparty_account_number,
+           NEW.created_at, NEW.amount);
+
+      else
+        raise exception 'Unknown kind: %. Must be transfer, pending_transaction, or settled_transaction', NEW.kind;
+    end case;
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_activity_insert_trigger
+    instead of insert on finance.transfer_activity
+    for each row
+    execute function finance.transfer_activity_insert();
+
+  create or replace function finance.transfer_activity_update()
+    returns trigger language plpgsql as $$
+  begin
+    if OLD.kind <> 'transfer' then
+      raise exception 'Only current transfers can be updated, not %', OLD.kind;
+    end if;
+
+    update finance.transfer
+       set status = NEW.status
+     where routing_number              = OLD.routing_number
+       and account_number              = OLD.account_number
+       and transfer_created_at         = OLD.created_at
+       and counterparty_routing_number = OLD.counterparty_routing_number
+       and counterparty_account_number = OLD.counterparty_account_number;
+
+    return NEW;
+  end;
+  $$;
+
+  create trigger transfer_activity_update_trigger
+    instead of update on finance.transfer_activity
+    for each row
+    execute function finance.transfer_activity_update();
+#+end_src
+
+Applications interact with ~finance.transfer_activity~ as a single
+unified stream. They can:
+
+- *Read* the full history of a transfer and its transactions, filtered
+  by account and transfer identity, ordered by time.
+- *Insert* new transfers (~kind = 'transfer'~), pending transactions
+  (~kind = 'pending_transaction'~), or settled transactions (~kind =
+  'settled_transaction'~). The ~INSTEAD OF~ trigger routes each insert
+  to the correct underlying table, where all constraint triggers,
+  temporal foreign keys, and balance ledger maintenance fire as usual.
+  For transactions, ~created_at~ identifies the originating transfer.
+- *Update* a transfer's status by updating a row where ~kind =
+  'transfer'~. The ~INSTEAD OF~ trigger routes the status change to
+  ~finance.transfer~, where the state machine trigger and all constraint
+  triggers fire as usual.
+
+If the underlying table structure changes --- columns are renamed, new
+columns are added, tables are split or merged --- the view definition is
+updated once, and every application continues to work unchanged.
+
+This is decoupling achieved at the data level, with no network hops, no
+serialization overhead, and no distributed consistency problems. The
+view /is/ the interface, and the base tables are the implementation.
+
+*** Benchmarking the startup scenario
 :PROPERTIES:
-:CUSTOM_ID: pg_all_you_need_code
+:CUSTOM_ID: benchmarking
 :END:
 
-If you want to play around with the design here, run
+To validate the design under realistic conditions, we use ~pgbench~ with
+custom scripts that exercise the full write and read paths through the
+~finance.transfer_activity~ view. The scenario models the startup tier
+from [[*On capacity planning][the capacity planning section]]: 10,000 transfers per day with an
+80/20 read/write split.
 
-#+begin_src sql :tangle "only_postgres_code.sql" :comments yes
-   -- tests
+**** Seed data
 
-  create or replace function finance.generate_pending_activity(
-    accounts_count int,
-    days int,
-    avg_transfers_per_day int
-  )
-  returns void
-  language plpgsql
-  as $$
-  declare
-    start_ts timestamptz := now() - (days || ' days')::interval;
-    end_ts   timestamptz := now();
-    accs     text[];
-    t_count bigint;
-  begin
-    with s as (
-      select ('acc_' || gs::text) as name
-      from generate_series(1, accounts_count) gs
-    )
-    insert into finance.account(account_name)
-    select name from s
-    on conflict do nothing;
-    select array_agg(account_name) into accs
-    from finance.account;
-    insert into finance.transfer (
-      transfer_valid_period,
-      transfer_start_date,
-      transaction_account,
-      counterparty_account,
-      amount,
-      transfer_status
-    )
-    select
-      tstzrange(ts, 'infinity', '[)'),
-      ts,
-      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
-      accs[(random() * (array_length(accs, 1) - 1) + 1)::int],
-      (10 + floor(random() * 10000))::bigint,
-      'pending'::finance.transfer_status
-      from (
-        select start_ts + (random() * extract(epoch from (end_ts - start_ts))) * interval '1 second' as ts
-        from generate_series(1, days * avg_transfers_per_day)
-      ) sub on conflict do nothing;
-    select count(*) into t_count from finance.transfer;
-    raise notice '%', t_count;
-    insert into finance.pending_transaction(
-      transaction_created_at,
-      transfer_created_at,
-      transaction_account,
-      counterparty_account,
-      amount
-    )
-    select
-      lower(t.sys_period),        -- system-time when row was created
-      t.transfer_created_at,
-      t.transaction_account,
-      t.counterparty_account,
-      t.amount
-    from finance.transfer t
-    where upper(t.sys_period) is null
-      and t.transfer_status = 'pending' on conflict do nothing;
-    return;
-  end;
-  $$;
+First, we seed 100 managed and 100 external accounts:
+
+#+name: pgbench_setup
+#+begin_src sql :tangle "pgbench_setup.sql" :comments yes
+  -- Seed external accounts
+  insert into finance.external_account (routing_number, account_number, account_name)
+  select lpad(i::text, 9, '0'),
+         lpad(i::text, 12, '0'),
+         'External Account ' || i
+    from generate_series(1, 100) as i
+  on conflict do nothing;
+
+  -- Seed managed accounts
+  insert into finance.managed_active_account (routing_number, account_number, account_name)
+  select lpad((i + 100)::text, 9, '0'),
+         lpad((i + 100)::text, 12, '0'),
+         'Managed Account ' || i
+    from generate_series(1, 100) as i
+  on conflict do nothing;
+#+end_src
+
+**** Write script: full transfer lifecycle
+
+Each invocation of this script exercises the complete lifecycle through
+the updatable view: create a transfer, insert a pending transaction,
+then complete the transfer and insert a settled transaction. Transfer
+creation and the pending transaction each run in their own transaction,
+mirroring how a real application would process these at different points
+in time. The completion and settled transaction are grouped in a single
+transaction because the state machine closes the transfer period with
+~now()~, and the settled transaction's ~transaction_created_at~ (which
+also defaults to ~now()~) must fall within that period. Every constraint
+trigger, the state machine, the temporal foreign key, and the balance
+ledger triggers all fire on each run.
+
+#+name: pgbench_write
+#+begin_src sql :tangle "pgbench_write.sql" :comments yes
+  \set managed_id random(1, 100)
+  \set external_id random(1, 100)
+  \set amount random(100, 100000)
+
+  -- 1. Create transfer via the view
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number, amount)
+  values
+    ('transfer',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     :amount);
+
+  -- 2. Retrieve the transfer we just created
+  select created_at as xfer_ts
+    from finance.transfer_activity
+   where kind = 'transfer'
+     and routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+     and counterparty_routing_number = lpad(:external_id::text, 9, '0')
+     and counterparty_account_number = lpad(:external_id::text, 12, '0')
+     and status = 'pending'
+   order by created_at desc
+   fetch first 1 row only
+  \gset
+
+  -- 3. Insert pending transaction via the view (transfer is still pending)
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number,
+     created_at, amount)
+  values
+    ('pending_transaction',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     ':xfer_ts', :amount);
+
+  -- 4. Complete the transfer and insert settled transaction atomically.
+  --    This ensures now() is the same for the period close and the
+  --    settled transaction's transaction_created_at.
+  begin;
+
+  update finance.transfer_activity
+     set status = 'completed'
+   where kind = 'transfer'
+     and routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+     and counterparty_routing_number = lpad(:external_id::text, 9, '0')
+     and counterparty_account_number = lpad(:external_id::text, 12, '0')
+     and created_at = ':xfer_ts';
+
+  insert into finance.transfer_activity
+    (kind, routing_number, account_number,
+     counterparty_routing_number, counterparty_account_number,
+     created_at, amount)
+  values
+    ('settled_transaction',
+     lpad((:managed_id + 100)::text, 9, '0'),
+     lpad((:managed_id + 100)::text, 12, '0'),
+     lpad(:external_id::text, 9, '0'),
+     lpad(:external_id::text, 12, '0'),
+     ':xfer_ts', :amount);
+
+  commit;
+#+end_src
+
+**** Read script: activity stream and balance
+
+Each invocation queries the transfer activity stream for a random
+account (paginated) and its latest balance:
+
+#+name: pgbench_read
+#+begin_src sql :tangle "pgbench_read.sql" :comments yes
+  \set managed_id random(1, 100)
+
+  -- Read transfer activity stream (latest 20 entries)
+  select *
+    from finance.transfer_activity
+   where routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+   order by created_at desc
+   fetch first 20 rows only;
+
+  -- Read latest balance
+  select current_total, available_total
+    from finance.balance_ledger
+   where routing_number = lpad((:managed_id + 100)::text, 9, '0')
+     and account_number = lpad((:managed_id + 100)::text, 12, '0')
+   order by as_of desc
+   fetch first 1 row only;
+#+end_src
+
+**** Running the benchmark
+
+#+begin_src bash :exports code
+  # 1. Apply the full schema (Appendix A)
+  psql -f only_postgres_code.sql
+
+  # 2. Seed accounts
+  psql -f pgbench_setup.sql
+
+  # 3. Run 80/20 read/write mix for 60 seconds
+  #    @4 = weight 4 (80%), @1 = weight 1 (20%)
+  #    -c 10: 10 concurrent clients
+  #    -j 4:  4 worker threads
+  #    -P 5:  progress every 5 seconds
+  #    -T 60: run for 60 seconds
+  pgbench -h localhost -p 54321 -U admin -d blog \
+          --no-vacuum \
+          -f pgbench_read.sql@4 \
+          -f pgbench_write.sql@1 \
+          -c 10 -j 4 -T 60 -P 5
+#+end_src
+
+**** Results
+
+#+begin_src
+pgbench (18.4)
+transaction type: multiple scripts
+scaling factor: 1
+query mode: simple
+number of clients: 10
+number of threads: 4
+maximum number of tries: 1
+duration: 60 s
+number of transactions actually processed: 45985
+number of failed transactions: 0 (0.000%)
+latency average = 13.044 ms
+latency stddev = 12.449 ms
+initial connection time = 17.840 ms
+tps = 766.151693 (without initial connection time)
+SQL script 1: pgbench_read.sql
+ - weight: 4 (targets 80.0% of total)
+ - 36793 transactions (80.0% of total)
+ - latency average = 8.080 ms
+ - latency stddev = 6.135 ms
+SQL script 2: pgbench_write.sql
+ - weight: 1 (targets 20.0% of total)
+ - 9191 transactions (20.0% of total)
+ - latency average = 32.915 ms
+ - latency stddev = 11.455 ms
+#+end_src
+
+Key takeaways:
+
+- *766 TPS overall* with 0 failed transactions. The startup target of
+  10,000 transfers/day is ~0.12 TPS. We exceed that by over 6,000x,
+  confirming massive headroom on modest hardware.
+- *0 serialization failures*: Despite 10 concurrent clients writing to
+  100 accounts under ~SERIALIZABLE~ isolation, no transactions were
+  aborted. The working set is distributed across enough accounts that
+  write contention is negligible at this scale.
+- *8ms average read latency*: The ~UNION ALL~ view over 4 tables plus
+  the balance ledger lookup completes well within interactive response
+  time, even as the tables grow throughout the 60-second run.
+- *33ms average write latency*: Each write transaction exercises the
+  full constraint set that implements complex business logic (audit
+  trails, time constraints, balances, etc) all within 33ms. This is the
+  true cost of enforcing every business rule at the data level, and it
+  is more than acceptable.
+
+These results were obtained on a development laptop, not production
+hardware. On an RDS instance sized for the working set (as described in
+[[*On capacity planning][the capacity planning section]]), performance would be significantly
+better.
+
+*** Conclusion
+
+We set out to show that the default assumption for your data problems
+should be that your company can do fine with just PostgreSQL. Let's
+revisit each objection from [[*The setup][the setup]] and see how it was addressed:
+
+- *I'll need auditing and reconstructing state* :: System-time temporal
+  tables ([[#transfer-state-history][transfer state history]]) give you a complete, automatic audit
+  trail of every transfer status transition. No event store, no
+  append-only log infrastructure --- just a history table maintained by a
+  trigger.
+
+- *Write throughput is too low* :: By keeping the [[*On capacity planning][working set]] (2 days
+  of transfers and transactions) sized to fit in ~shared_buffers~, and
+  by aligning indexes with immutable columns to enable [[#on-write-throughput][HOT updates]] that
+  eliminate write amplification on transfer status transitions, we
+  maximize write performance without any external caching layer.
+
+- *The transactional queries are too slow* :: Keyset pagination over
+  composite primary keys, as shown in the [[*OLTP][OLTP section]], gives stable,
+  index-backed listing performance that doesn't degrade as you page
+  deeper. Transfer history queries are a single ~UNION ALL~ over
+  indexed tables.
+
+- *The analytical queries are too slow* :: The [[*OLAP][balance ledger]]
+  maintains running balance snapshots incrementally via triggers,
+  turning what would be a full-table aggregation into a single
+  index-backed lookup at any point in time.
+
+- *My app will be coupled to the Database* :: The [[*On decoupling][updatable view]]
+  ~finance.transfer_activity~ serves as a stable interface for reading
+  activity, inserting transfers and transactions, and updating transfer
+  status through a single unified stream. If the underlying tables
+  change, the view definition is updated once and every application
+  continues to work unchanged. This is modularity achieved at the data
+  level[cite:@bellani24:_how_decoupled], with no network hops, no
+  serialization overhead, and no distributed consistency
+  problems[cite:@10.1145/3593856.3595909].
+
+All of this runs on a single vanilla PostgreSQL 18 instance with
+standard extensions available on RDS. No distributed-systems cosplay, no
+infrastructure proliferation, no operational complexity tax. We have
+only scratched the surface of what is available both in PostgreSQL as a
+SQL engine and in relational theory properly understood.
+
+#+caption: 1936 fire in the Sagrada Familia, set by communist revolutionaries
+[[./sagrada-familia.png]]
 
 
-  create or replace function finance.complete_pending_activity(
-    completion_percent int
-  )
-  returns void
-  language plpgsql
-  as $$
-  declare
-    total_pending int;
-    target_count  int;
-  begin
-    -- Compute how many pending transfers exist
-    select count(*) into total_pending
-    from finance.transfer
-    where upper(sys_period) is null
-      and transfer_status = 'pending';
-    if total_pending = 0 then
-      return;
-    end if;
-    -- Determine how many to complete
-    target_count := ceil(total_pending * completion_percent / 100.0);
-    ---------------------------------------------------------------------
-    -- 1. Random sample of pending transfers
-    ---------------------------------------------------------------------
-    with to_complete as (
-      select t.transfer_created_at,
-             t.transaction_account,
-             t.counterparty_account
-      from finance.transfer t
-      where upper(t.sys_period) is null
-        and t.transfer_status = 'pending'
-      order by random()
-      limit target_count
-    )
-    ---------------------------------------------------------------------
-    -- 2. Mark selected transfers as completed (status != pending).
-    --    Your bitemporal trigger should automatically close old sys_period
-    --    and insert a new system-time row.
-    ---------------------------------------------------------------------
-    update finance.transfer t
-       set transfer_status = 'completed'
-    from to_complete c
-    where t.transfer_created_at    = c.transfer_created_at
-      and t.transaction_account    = c.transaction_account
-      and t.counterparty_account   = c.counterparty_account
-      and upper(t.sys_period) is null
-      and t.transfer_status = 'pending';
-    ---------------------------------------------------------------------
-    -- 3. Insert settled transactions corresponding to these now-completed
-    --    transfers. Use the new version of the transfer (status != pending).
-    ---------------------------------------------------------------------
-    insert into finance.settled_transaction (
-      transaction_created_at,
-      transfer_created_at,
-      transaction_account,
-      counterparty_account,
-      amount
-    )
-    select
-      now(),                     -- transaction occurs now
-      t.transfer_created_at,
-      t.transaction_account,
-      t.counterparty_account,
-      t.amount
-    from finance.transfer t
-    where upper(t.sys_period) is null
-      and t.transfer_status = 'completed' on conflict do nothing;  -- ensure we use the new version
-    return;
-  end;
-  $$;
+*** Appendix A: Full code suite
+:PROPERTIES:
+:CUSTOM_ID: appendix-a-full-code-suite
+:END:
+
+#+caption: Full code listing iosaehnt
+#+name: full_code
+#+begin_src sql :noweb yes :exports code  :tangle "full_code.sql" :comments yes
+<<the_schema_and_roles>>
+<<the_domains>>
+<<the_account>>
+<<the_account_constraints>>
+<<laying_foundation_table_transfer>>
+<<transfer_temporal>>
+<<account_temporal>>
+<<laying_foundation_table_txn>>
+<<state_machine>>
+<<constraint_within_period>>
+<<constraint_status_match>>
+<<constraint_no_future_txns>>
+<<finance_transfer_activity_view>>
+<<olap_balance_ledger>>
+<<olap_balance_triggers>>
+<<serializable_isolation>>
+<<decoupling_transfer_activity_triggers>>
 #+end_src
 
 #+print_bibliography:
-
-
 
 ** Cloudflare's outage should not have happened, and they seem to be missing the point on how to avoid it in the future 
 :PROPERTIES:
@@ -1035,7 +1916,7 @@ and documenting how that evidence was collected and how the conclusion
 was reached. Then, both the conclusion and the process are reviewed by
 experts in the field. Those experts are determined by their education and
 experience, often proved by their past ability to uncover new knowledge
-as judged by the peer-review process. [fn:9]
+as judged by the peer-review process. [fn:8]
 #+end_quote
 
 The first paragraph is an example of something that is clearly part of
@@ -1076,7 +1957,7 @@ of science. It has 3 elements: a starting point, a process and an end.
 - The end is science, which is a system of correct knowledge, relative
   to the cause of beings and ultimately deduced through demonstration. Such
   science can be rational or experimental, and is structured in a
-  dependency hierarchy. [fn:10]
+  dependency hierarchy. [fn:9]
   [cite:@Sinibaldi2021]
 #+end_quote
 
@@ -1370,7 +2251,7 @@ domains in
 relations[cite:@pascal20:_under_codds_rules_rdbms_acces]. This is Codd's
 Information Principle #1. This principle isn't just fluffy theory: it
 can lead to very concrete wins in how we design, query, and maintain
-systems.[fn:11]
+systems.[fn:10]
 
 *** A practical case: Dependencies for Security Policies 
 
@@ -2257,7 +3138,7 @@ Crowdstrike's RCA[cite:@crowdstrike24:_exter_techn_root_cause_analy]
 
 It is becoming more common for companies to come out with stories on the
 downsides of distributed microservice
-architectures[fn:12][cite:@kolny23:_scalin_prime_video;
+architectures[fn:11][cite:@kolny23:_scalin_prime_video;
 @10.1145/3593856.3595909].
 
 Instead of hopping in this bandwagon, as tempting as this might be, I
@@ -2318,7 +3199,7 @@ actually see you, you are in danger of derailing in your career.
 
 To avoid that, here are 3 steps, and a reference:
 
-   1) Ask and *embrace* feedback from bosses, peers and followers[fn:13],
+   1) Ask and *embrace* feedback from bosses, peers and followers[fn:12],
    2) Expose your most cherished ideas to the most intense forms of public scrutiny you can find,
    3) See ways to measure yourself, such as 360 feedback mechanisms and
       validated personality assessments.
@@ -2737,7 +3618,7 @@ Lay like the folds of a bright girdle furled./
 
 The microservice architecture(MA) has taken a deep hold in the
 collective imagination of the software engineering community since at
-least 2014[fn:14]. This has happened despite serious and well documented
+least 2014[fn:13]. This has happened despite serious and well documented
 [[#drawbacks][drawbacks]].
 
 Such combination calls for an explanation. A sketch of such explanation
@@ -2841,7 +3722,7 @@ implement the pi-calculus without MA:
   instance of the application becomes an engineering feat.
 - It freezes APIs. Once a microservice establishes an API, it becomes
   hard to change without breaking the other services that consume the
-  API. Legacy APIs linger around, and new APIs are patched on top.[fn:15]
+  API. Legacy APIs linger around, and new APIs are patched on top.[fn:14]
 - It slows down application development. When making changes that affect
   multiple microservices, developers cannot implement and deploy the
   changes atomically. They have to carefully plan how to introduce the
@@ -2902,7 +3783,7 @@ The structure of this argument is usually like this:
 
 This is a mixture of the fallacies of selection bias, appeal to
 authority and false cause. Here are their definitions and some
-context-sensitive examples[fn:16]:
+context-sensitive examples[fn:15]:
 
 *** Selection bias
 
@@ -3443,7 +4324,7 @@ which information is relevant to particular business cases. Those used
 to be called Conceptual Schemas. It is part of the classic data model
 progression[cite:@Steel1975b]:
 
-Conceptual schema -> Logical schema -> Physical schema [fn:16]
+Conceptual schema -> Logical schema -> Physical schema [fn:15]
 
 What are those? I can't do better than [cite:@pascal_guide]
 
@@ -3520,7 +4401,7 @@ wrong (and very costly) technology and business decisions.
 
 I think its fair to say that one can significantly improve one's chances
 of being materially successful in life by learning John Taylor Gatto's
-14 Themes of the Elite Private School Curriculum[fn:17]:
+14 Themes of the Elite Private School Curriculum[fn:16]:
 
 1. A theory of human nature (as embodied in history, philosophy, theology,
    literature and law).
@@ -3575,7 +4456,7 @@ of being materially successful in life by learning John Taylor Gatto's
 :END:
 
 A theme that I think is important to understand a lot of modernity and
-the IT sector in particular, is nominalism.[fn:18]
+the IT sector in particular, is nominalism.[fn:17]
 
 So, what is Nominalism, and why does it matter? I'll start with a
 concrete case and work my way to the abstract definition. The case in
@@ -3610,7 +4491,7 @@ CQRS is basically then an extension on CQS, but played on objects
 instead of methods. It leverages the notions of immutable and mutable
 objects, a feature it shares with a more encompassing approach,
 DDD[cite:@Evans_Eric2014-09-22_ddd_ref]. Here is a mapping of the
-terminology. [fn:19]
+terminology. [fn:18]
 
 #+caption: CQRS/DDD/Traditional computer science terms mapping
 | CQRS         | DDD                       | Traditional         | Interpretation                                                                                       |
@@ -3779,7 +4660,7 @@ conditions of future output.
 
 As one can see, this definition is similar to an investor. That is
 expected, since a manager is an investor of a company's
-resources. [fn:14]
+resources. [fn:13]
 
 As an illustration, a manager can usually deliver more results in the
 present by burning up people. This probably will increase turnover in
@@ -3945,11 +4826,10 @@ this is the description of the blog section
 #+end_description
 
 * Footnotes
-[fn:21] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables] 
 
 [fn:1] Complexity here is defined as the quantity of interacting parts of a whole
 
-[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[#pg_all_you_need_code][Appendix]] for ease of copy.
+[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[#appendix-a-full-code-suite][Appendix A]] for ease of copy.
 
 [fn:3] On oracle there are further complications. See [cite:@cybertec_schema_pg_oracle]
 
@@ -3969,31 +4849,31 @@ this is the description of the blog section
       Auditing all data changes and performing data forensics when necessary [cite:@microsoft24:_tempor]
       #+end_quote
 
-[fn:8] DO NOT manage your partitions by hand: Use pg_partman.
+[fn:8] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
 
-[fn:9] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
+[fn:9] From the portuguese, translated by this author.
 
-[fn:10] From the portuguese, translated by this author.
+[fn:10] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
 
-[fn:11] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
+[fn:11] Including a claim of cost reductions of over 90%!
 
-[fn:12] Including a claim of cost reductions of over 90%!
-
-[fn:13] I like the terms superordinate, coordinates and subordinates, but
+[fn:12] I like the terms superordinate, coordinates and subordinates, but
 they are not in common usage
 
-[fn:14] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
+[fn:13] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
 
-[fn:15] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
+[fn:14] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
 
-[fn:16] (schemas are synonymous to models in this context)
+[fn:15] (schemas are synonymous to models in this context)
 
-[fn:17] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+[fn:16] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
 
-[fn:18] You will probably see me return to this topic in other posts.
+[fn:17] You will probably see me return to this topic in other posts.
 
-[fn:19] I got the idea of such table from a similar table found on
+[fn:18] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:20] The definitions come from [cite:@fallacies_iep], but the examples
+[fn:19] The definitions come from [cite:@fallacies_iep], but the examples
 are adapted to this contex
+
+[fn:20] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables]

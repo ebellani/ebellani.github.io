@@ -41,12 +41,12 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
-** All your company need is Postgres, a detailed example
+** All you need is PostgreSQL
 :PROPERTIES:
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug all-you-need-is-postgresql
 :EXPORT_FILE_NAME: all-you-need-is-postgresql
 :CUSTOM_ID: all-you-need-is-postgresql
-:EXPORT_DATE: 2025-12-04
+:EXPORT_DATE: 2026-06-25
 :END:
 
 #+toc: headlines 2 local
@@ -66,7 +66,7 @@ Our application is slow, let's cache that using {in-memory key-value database}
 
 And since a relational database like PostgreSQL is still considered
 mandatory,thanks mostly to its unmatched reputation, companies end up
-stacking product on top of product on top of Postgres. They inflate the
+stacking product on top of product on top of PostgreSQL. They inflate the
 number of moving parts, operational risk, headcount demand, and overall
 system entropy. Complexity[fn:1] grows, not because the problems demand it,
 but because someone reached for a tool they saw in a conference talk.
@@ -84,7 +84,7 @@ problems should be that *my company can do fine with just PostgreSQL*.
 *** The setup
 
 Here is a list of arguments that people put forth to reach for other
-tools besides Postgres, based on my experience:
+tools besides PostgreSQL, based on my experience:
 
 - I'll need auditing and reconstructing state
 - Write throughput is too low
@@ -99,7 +99,7 @@ the usual problematic tables: Financial Transaction and their
 originating transfers.
 
 For the rest of this article we will be constructing a database design
-based on modern Postgres that will achieve the general goals listed
+based on modern PostgreSQL that will achieve the general goals listed
 above and specific business requirements. Here is a requirements snippet
 from a very popular banking API company:
 
@@ -234,7 +234,7 @@ is the managed account side.
 Managed accounts can be deactivated and reactivated. This falls neatly
 within the set of temporal features introduced in SQL
 2011[cite:@10.1145/2380776.2380786], in particular application time,
-recently introduced in Postgres 18[cite:@postgresql_temporal_pk]. This
+recently introduced in PostgreSQL 18[cite:@postgresql_temporal_pk]. This
 feature allows us to represent accounts going in and out of activity
 without overlapping.[fn:4]
 
@@ -390,7 +390,7 @@ column usable in primary keys and as a foreign key target.
 :END:
 
 In order to implement feature [[trf]], we need system-time temporal
-tables[fn:8]. PostgreSQL supports several approaches for temporal tables.
+tables[fn:5]. PostgreSQL supports several approaches for temporal tables.
 For simplicity and portability (including RDS), we use the temporal_tables
 extension [cite:@nearform_temporal_tables].
 
@@ -414,9 +414,16 @@ we need: the transfer identity, status, and system-time period.
   comment on table finance.transfer_status_log is 
     'Automatic log of all transfer status transitions via temporal_tables extension. Shows complete state machine history.';
 
-  create index on finance.transfer_status_log (sys_period);
-  create index on finance.transfer_status_log (routing_number, account_number, transfer_created_at, counterparty_routing_number, counterparty_account_number);
-
+  alter table finance.transfer_status_log
+    add primary key (
+      routing_number,
+      account_number,
+      transfer_created_at,
+      counterparty_routing_number,
+      counterparty_account_number,
+      sys_period
+    );
+  
   -- Use temporal_tables versioning procedure
   create trigger transfer_save_status_history
     before insert or update or delete
@@ -427,7 +434,7 @@ we need: the transfer identity, status, and system-time period.
 
 Once applied, ~finance.transfer_status_log~ will contain every past version
 of every transfer's status, from which you can reconstruct the state machine
-history over time.[fn:9]
+history over time.[fn:6]
 
 **** Account auditing
 
@@ -465,11 +472,13 @@ auditing behind it, so we might as well add it.
 
 Contrasted with the above, below we have transactions, which represent
 changes in the balances (current and available) of an account and are
-therefore immutable[fn:5]. Transactions reference their originating
-transfer by identity (the transfer's natural key including
-~transfer_created_at~), not by period. There is no ~transfer_period~
-stored on transactions --- the transfer's temporal state is queried from
-the transfer table when needed.
+therefore immutable.
+
+Transactions reference their originating transfer by identity (the
+transfer's natural key including ~transfer_created_at~), not by
+period. There is no ~transfer_period~ stored on transactions --- the
+transfer's temporal state is queried from the transfer table when
+needed.
 
 #+name: laying_foundation_table_txn
 #+begin_src sql :tangle only_postgres_code.sql :comments link
@@ -534,7 +543,7 @@ the transfer table when needed.
 *** On maintaining business rules via meaningful constraints
 
 Constraints should really be part of the foundation, but I have made
-them a separate section because they are usually seem as something apart
+them a separate section because they are usually seen as something apart
 from defining tables. In reality, a proper mathematical relation should
 embrace both intentionality (constraints) and extensionality (rows).
 
@@ -546,8 +555,8 @@ database...[cite:@pascal2026meaning]
 #+end_quote
 
 In our case, several business rules must hold across tables. In the
-absence of SQL's ~assert~[fn:6] we rely on constraint triggers keeping
-them as declarative as possible[fn:7].
+absence of SQL's ~assert~[fn:7] we rely on constraint triggers keeping
+them as declarative as possible[fn:8].
 
 **** The transfer state machine
 
@@ -970,7 +979,7 @@ the naive ~OFFSET~ approach[cite:@winand_fetch_next_page]:
 In order to avoid the problems above, we need to leverage the primary
 key index directly by using values instead of offsets. Given that we are
 listing all transfers/transactions for a given account sorted by time,
-this maps directly to the composite primary key index, allowing Postgres
+this maps directly to the composite primary key index, allowing PostgreSQL
 to do an equality match on the first two columns and then a backward
 index scan from the cursor position on ~transfer_created_at~:
 
@@ -996,11 +1005,10 @@ to reflect the access pattern:
 
 **** The history of a transfer
 
-As stated on section [[.pre-processed.org::#d41d8c][On auditing and reconstructing state]], in order to
-implement feature [[trf]], we need to query the full state history of
-transfers intermingling it with the proper transactions. We define this
-as a view, since it represents a derived relation that will be reused
-throughout the system:
+In order to implement feature [[trf]], we need to query the full state
+history of transfers intermingling it with the proper transactions. We
+define this as a view, since it represents a derived relation that will
+be reused throughout the system:
 
 #+name: finance_transfer_activity_view
 #+begin_src sql :tangle "only_postgres_code.sql" :comments yes
@@ -1285,12 +1293,11 @@ under snapshot isolation. The solution is ~SERIALIZABLE~ isolation:
 #+end_src
 
 Under PostgreSQL's Serializable Snapshot Isolation (SSI), the engine
-tracks read-write dependencies between concurrent
-transactions[LINK]. When it detects a dependency cycle that could
-produce a result impossible under any serial execution, it aborts one of
-the transactions with a serialization failure. The application must be
-prepared to retry aborted transactions, but the data invariants are
-never violated.
+tracks read-write dependencies between concurrent transactions. When it
+detects a dependency cycle that could produce a result impossible under
+any serial execution, it aborts one of the transactions with a
+serialization failure. The application must be prepared to retry aborted
+transactions, but the data invariants are never violated.
 
 This is a global setting because the problem is global: every
 read-then-write constraint trigger and every incremental balance update
@@ -1307,8 +1314,6 @@ straightforward retry logic such as exponential
 backoff[cite:@brooker15:_expon_backof_and_jitter]. The alternative of
 risking silent data corruption is certainly not acceptable in a
 financial system.
-
-
 
 *** On decoupling
 
@@ -1723,6 +1728,11 @@ SQL engine and in relational theory properly understood.
 <<serializable_isolation>>
 <<decoupling_transfer_activity_triggers>>
 #+end_src
+
+#+caption: 1936 fire in the Sagrada Familia, set by communist revolutionaries
+[[./sagrada-familia.png]]
+
+#+print_bibliography:
 ** Index
 :PROPERTIES:
 :EXPORT_TITLE: blog section title
@@ -1736,19 +1746,13 @@ this is the description of the blog section
 
 [fn:1] Complexity here is defined as the quantity of interacting parts of a whole
 
-[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[blog/all-you-need-is-postgresql.pre-processed.org::#appendix-a-full-code-suite][Appendix A: Full code suite]]
+[fn:2] A note on the code snippets: we will show code as we progress on the article, but the full code suite can be found on the [[#appendix-a-full-code-suite][Appendix A: Full code suite]]
 
 [fn:3] On oracle there are further complications. See [cite:@cybertec_schema_pg_oracle]
 
 [fn:4] A good overview on the features for PostgresSQL 18 can be found on [cite:@neon_temporal_fk]
 
-[fn:5] For a refresh on what these kinds of balances are, see [[blog/all-you-need-is-postgresql.pre-processed.org::#the-setup][the description in the setup section]]
-
-[fn:6] (which is the case for Postgres[cite:@postgresql2026unsupported] but not for Oracle[cite:@oracle2026assertion])
-
-[fn:7] Such constraints are almost never created at the data level, exposing applications to the risk of failing audits and worse.
-
-[fn:8] Temporal tables can be used for several interesting features:
+[fn:5] Temporal tables can be used for several interesting features:
 #+begin_quote
 - Auditing all data changes and performing data forensics when necessary
 - Reconstructing state of the data as of any time in the past
@@ -1758,33 +1762,38 @@ this is the description of the blog section
   Auditing all data changes and performing data forensics when necessary [cite:@microsoft24:_tempor]
 #+end_quote
 
-[fn:9] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables]
+[fn:6] You can see a full tutorial on this library on  [cite:@clarkdave2015_temporal_tables]
 
-[fn:10] DO NOT manage your partitions by hand: Use pg_partman.
+[fn:7] (which is the case for PostgreSQL[cite:@postgresql2026unsupported] but not for Oracle[cite:@oracle2026assertion])
 
-[fn:11] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
+[fn:8] Such constraints are almost never created at the data level, exposing applications to the risk of failing audits and worse.
 
-[fn:12] From the portuguese, translated by this author.
+[fn:9] The definitions come from [cite:@fallacies_iep], but the examples
+are adapted to this contex
 
-[fn:13] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
-
-[fn:14] Including a claim of cost reductions of over 90%!
-1.
-[fn:15] I like the terms superordinate, coordinates and subordinates, but
-they are not in common usage
-
-[fn:16] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
-
-[fn:17] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
-
-[fn:18] (schemas are synonymous to models in this context)
-
-[fn:19] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
-
-[fn:20] You will probably see me return to this topic in other posts.
-
-[fn:21] I got the idea of such table from a similar table found on
+[fn:10] I got the idea of such table from a similar table found on
 chapter 25 of  [cite:@10.5555/861613]
 
-[fn:22] The definitions come from [cite:@fallacies_iep], but the examples
-are adapted to this contex
+[fn:11] You will probably see me return to this topic in other posts.
+
+[fn:12] As listed in [[https://www.youtube.com/watch?v=IZBdv2yznmI][The Ultimate History Lesson]]
+
+[fn:13] (schemas are synonymous to models in this context)
+
+[fn:14] In a certain sense, all externally facing APIs face this. Microservices just make this problem worse by making everything ~external~ and not part of the same checkable runtime.
+
+[fn:15] https://trends.google.com/trends/explore?date=all&geo=US&q=microservices
+
+[fn:16] I like the terms superordinate, coordinates and subordinates, but
+they are not in common usage
+
+[fn:17] Including a claim of cost reductions of over 90%!
+1.
+
+[fn:18] Recently I had a conversation on linkedin: https://www.linkedin.com/feed/update/urn:li:ugcPost:7316402764975075328?commentUrn=urn%3Ali%3Acomment%3A%28ugcPost%3A7316402764975075328%2C7316457084038930432%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287316457084038930432%2Curn%3Ali%3AugcPost%3A7316402764975075328%29
+
+[fn:19] From the portuguese, translated by this author.
+
+[fn:20] Have you noticed that the second paragraph supports what the ancients did, in refeering to Plato and Aristotle?
+
+[fn:21] DO NOT manage your partitions by hand: Use pg_partman.
