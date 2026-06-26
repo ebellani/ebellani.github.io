@@ -1705,13 +1705,12 @@ SQL engine and in relational theory properly understood.
 #+caption: 1936 fire in the Sagrada Familia, set by communist revolutionaries
 [[./sagrada-familia.png]]
 
-
-*** Appendix A: Full code suite
+*** Appendix A: Full code suite.
 :PROPERTIES:
 :CUSTOM_ID: appendix-a-full-code-suite
 :END:
 
-#+caption: Full code listing
+#+caption: Full code listing.
 #+name: full_code
 #+begin_src sql :noweb yes :exports code  :tangle "full_code.sql" :comments yes
 <<the_schema_and_roles>>
