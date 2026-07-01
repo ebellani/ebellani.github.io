@@ -249,6 +249,21 @@ pre {
 main img {
   display: block;
   margin: 0.5rem auto;
+  max-width: 100%;
+}
+
+main figure {
+  margin: 1rem auto;
+  text-align: center;
+}
+
+main figcaption {
+  text-align: center;
+  font-size: 0.8rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: #555;
+  }
 }
 
 table {
@@ -431,7 +446,7 @@ ol li {
 
 dl {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-gap: 0.2rem 1rem;
 
   dt {
@@ -442,6 +457,11 @@ dl {
   dd {
     grid-column-start: 2;
     margin: 0;
+    min-width: 0;
+
+    pre {
+      margin: 0;
+    }
   }
 }
 
