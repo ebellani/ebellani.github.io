@@ -432,7 +432,7 @@ ol li {
 
 dl {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-gap: 0.2rem 1rem;
 
   dt {
@@ -443,6 +443,11 @@ dl {
   dd {
     grid-column-start: 2;
     margin: 0;
+    min-width: 0;
+
+    pre {
+      margin: 0;
+    }
   }
 }
 
