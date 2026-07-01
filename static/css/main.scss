@@ -190,13 +190,8 @@ pre code {
 pre {
   background-color: #eee;
   padding: 0.25rem 1rem;
-  margin: 0 -1rem;
+  margin: 0.25rem;
   overflow-x: auto;
-
-  @media(max-width: 1200px) {
-    padding: 0;
-    margin: 0;
-  }
 
   .cp, .c1 {
     color: #222;
