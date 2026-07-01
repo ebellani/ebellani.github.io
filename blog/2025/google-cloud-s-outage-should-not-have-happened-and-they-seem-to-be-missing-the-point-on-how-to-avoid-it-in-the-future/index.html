@@ -92,26 +92,26 @@ policy trigger that never occurred in staging</p>
 before. This is classic database/application mismatch and the age-old
 curse of <code>NULL</code>(<a href="#citeproc_bib_item_2">McGoveran 1993</a>). With this in mind,
 let&rsquo;s review how GCP is planning to prevent this from happening again:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-org" data-lang="org"><span class="line"><span class="cl">  <span class="k">1.</span> We will modularize Service Control&#39;s architecture, so the
-</span></span><span class="line"><span class="cl">     functionality is isolated and fails open. Thus, if a corresponding
-</span></span><span class="line"><span class="cl">     check fails, Service Control can still serve API requests.
-</span></span><span class="line"><span class="cl">  <span class="k">2.</span> We will audit all systems that consume globally replicated
-</span></span><span class="line"><span class="cl">     data. Regardless of the business need for near instantaneous
-</span></span><span class="line"><span class="cl">     consistency of the data globally (i.e. quota management settings are
-</span></span><span class="line"><span class="cl">     global), data replication needs to be propagated incrementally with
-</span></span><span class="line"><span class="cl">     sufficient time to validate and detect issues.
-</span></span><span class="line"><span class="cl">  <span class="k">3.</span> We will enforce all changes to critical binaries to be feature flag
-</span></span><span class="line"><span class="cl">     protected and disabled by default.
-</span></span><span class="line"><span class="cl">  <span class="k">4.</span> We will improve our static analysis and testing practices to
-</span></span><span class="line"><span class="cl">     correctly handle errors and if need be fail open.
-</span></span><span class="line"><span class="cl">  <span class="k">5.</span> We will audit and ensure our systems employ randomized exponential
-</span></span><span class="line"><span class="cl">     backoff.
-</span></span><span class="line"><span class="cl">  <span class="k">6.</span> We will improve our external communications, both automated and
-</span></span><span class="line"><span class="cl">     human, so our customers get the information they need asap to react
-</span></span><span class="line"><span class="cl">     to issues, manage their systems and help their customers.
-</span></span><span class="line"><span class="cl">  <span class="k">7.</span> We&#39;ll ensure our monitoring and communication infrastructure remains
-</span></span><span class="line"><span class="cl">     operational to serve customers even when Google Cloud and our primary
-</span></span><span class="line"><span class="cl">     monitoring products are down, ensuring business continuity.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-org" data-lang="org"><span class="line"><span class="cl"><span class="k">1.</span> We will modularize Service Control&#39;s architecture, so the
+</span></span><span class="line"><span class="cl">   functionality is isolated and fails open. Thus, if a corresponding
+</span></span><span class="line"><span class="cl">   check fails, Service Control can still serve API requests.
+</span></span><span class="line"><span class="cl"><span class="k">2.</span> We will audit all systems that consume globally replicated
+</span></span><span class="line"><span class="cl">   data. Regardless of the business need for near instantaneous
+</span></span><span class="line"><span class="cl">   consistency of the data globally (i.e. quota management settings are
+</span></span><span class="line"><span class="cl">   global), data replication needs to be propagated incrementally with
+</span></span><span class="line"><span class="cl">   sufficient time to validate and detect issues.
+</span></span><span class="line"><span class="cl"><span class="k">3.</span> We will enforce all changes to critical binaries to be feature flag
+</span></span><span class="line"><span class="cl">   protected and disabled by default.
+</span></span><span class="line"><span class="cl"><span class="k">4.</span> We will improve our static analysis and testing practices to
+</span></span><span class="line"><span class="cl">   correctly handle errors and if need be fail open.
+</span></span><span class="line"><span class="cl"><span class="k">5.</span> We will audit and ensure our systems employ randomized exponential
+</span></span><span class="line"><span class="cl">   backoff.
+</span></span><span class="line"><span class="cl"><span class="k">6.</span> We will improve our external communications, both automated and
+</span></span><span class="line"><span class="cl">   human, so our customers get the information they need asap to react
+</span></span><span class="line"><span class="cl">   to issues, manage their systems and help their customers.
+</span></span><span class="line"><span class="cl"><span class="k">7.</span> We&#39;ll ensure our monitoring and communication infrastructure remains
+</span></span><span class="line"><span class="cl">   operational to serve customers even when Google Cloud and our primary
+</span></span><span class="line"><span class="cl">   monitoring products are down, ensuring business continuity.
 </span></span></code></pre></div><p>These are all solid, reasonable steps. But here&rsquo;s the problem: they already do most of this—and the outage happened anyway.</p>
 <p>Why? Because of this admission, buried in their own RCA:</p>
 <blockquote>
