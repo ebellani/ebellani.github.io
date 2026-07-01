@@ -475,6 +475,22 @@ iframe, video {
   max-width: 100%;
 }
 
+.csl-bib-body {
+  counter-reset: csl-entry;
+}
+
+.csl-entry {
+  counter-increment: csl-entry;
+  margin-bottom: 0.75rem;
+  padding-left: 2.5rem;
+  text-indent: -2.5rem;
+  overflow-wrap: break-word;
+
+  &::before {
+    content: counter(csl-entry) ". ";
+  }
+}
+
 footer {
   text-align: center;
 }
