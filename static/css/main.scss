@@ -252,6 +252,20 @@ main img {
   max-width: 100%;
 }
 
+main figure {
+  margin: 1rem auto;
+  text-align: center;
+}
+
+main figcaption {
+  text-align: center;
+  font-size: 0.8rem;
+
+  @media (prefers-color-scheme: dark) {
+    color: #555;
+  }
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
