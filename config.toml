@@ -3,7 +3,6 @@ baseURL = "https://ebellani.github.io"
 languageCode = "en-us"
 
 pygmentsUseClasses = true
-assetDir = "static"
 
 [outputs]
   section = ["HTML", "ATOM"]
