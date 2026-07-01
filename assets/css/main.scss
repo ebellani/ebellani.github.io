@@ -266,6 +266,11 @@ table {
   width: 100%;
   border-collapse: collapse;
 
+  @media(max-width: 768px) {
+    display: block;
+    overflow-x: auto;
+  }
+
   th {
     text-align: left;
   }
