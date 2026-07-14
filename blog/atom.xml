@@ -5,13 +5,106 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2026-07-01T18:01:17Z</updated>
+  <updated>2026-07-14T16:29:16Z</updated>
   <author>
     
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>On keys, essences and performance</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2026/on-keys-essences-and-performance/"/>
+    <id>https://ebellani.github.io/blog/2026/on-keys-essences-and-performance/</id>
+    <published>2026-07-14T00:00:00Z</published>
+    <updated>2026-07-14T00:00:00Z</updated>
+    <summary>&lt;p&gt;A &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7482151625499820033?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482168072209092608%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482487327894765568%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287482168072209092608%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287482487327894765568%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&#34;&gt;recent exchange on linkedin&lt;/a&gt; about what data is and how to store it
+prompted me to write this small piece, since I consider the issue at
+hand quite fundamental to developing systems that reflect reality and therefore help people.&lt;/p&gt;
+&lt;p&gt;Here is what the author of the quote said:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I mean that actual data, as observed in the world around us - may not
+have natural keys as required by the model. Nor are data domains clearly
+definable. We can&amp;rsquo;t even agree what a country is - nor figure out how to
+properly track human languages or lock down standards for how the
+semantics of programming language are supposed to work. And what key can
+we even use to uniquely identify an individual - when legislation often
+forbids the storage of any keys? Normalisation is also a very poor way
+to organise data that needs to be analysed at speed (which is why almost
+no analytical systems use normalised models)&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;A &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7482151625499820033?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482168072209092608%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482487327894765568%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287482168072209092608%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287482487327894765568%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&#34;&gt;recent exchange on linkedin&lt;/a&gt; about what data is and how to store it
+prompted me to write this small piece, since I consider the issue at
+hand quite fundamental to developing systems that reflect reality and therefore help people.&lt;/p&gt;
+&lt;p&gt;Here is what the author of the quote said:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I mean that actual data, as observed in the world around us - may not
+have natural keys as required by the model. Nor are data domains clearly
+definable. We can&amp;rsquo;t even agree what a country is - nor figure out how to
+properly track human languages or lock down standards for how the
+semantics of programming language are supposed to work. And what key can
+we even use to uniquely identify an individual - when legislation often
+forbids the storage of any keys? Normalisation is also a very poor way
+to organise data that needs to be analysed at speed (which is why almost
+no analytical systems use normalised models)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I&amp;rsquo;ll break down the argument into its propositions and my answer to each
+is below.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;data as observed may not have natural keys as required by the (relational) model (RM)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I would define a key in the RM as &lt;code&gt;a part of the proposition denoted that allows for it to be uniquely referred to in the given Domain of Discourse&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;If one accepts that definition, how can something denoted not have a
+key? If one is denoting it, one needs to refer to it somehow
+unambiguously. Any system that deals with the data would do that, be it
+in the application layer or the DBMS layer.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;data domains are not clearly definable&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;This is the same issue as above, but on the predicate level instead
+of the proposition level. If we can refer to a proposition
+(e.g. Bob&amp;rsquo;s salary is 100) we can certainly refer to its predicate
+(E&amp;rsquo;s salary is X). And if we can&amp;rsquo;t, we cannot process it in any given
+system.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;legislation would disallow keys&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Then such legislation would force the predicate to change (maybe to
+aggregates only?). In other words, the legislation constrains the
+Domain of Discourse, but all the properties of such remain.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;normalization makes systems performs badly&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Normalization means that a given encoded relation refers to a single
+logical predicate. That bears no significance, at least in principle,
+to performance.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The necessity of keys and normalization is not a quirk of the relational
+model. It reflects something deeper about the world we are modeling (our
+Universe of Discourse). We must refer to things unambiguously, and for
+that things must possess stable, distinguishing essences.&lt;/p&gt;
+&lt;p&gt;The difficulty of identifying what a country is, or what constitutes an
+individual, is not evidence that essences do not exist. It is evidence
+that discovering them is hard. That is an epistemological challenge, not
+an ontological absence.&lt;/p&gt;
+&lt;p&gt;The relational model, far from imposing an artificial structure on
+formless data, simply makes explicit what any coherent discourse about
+reality already presupposes: that the world is composed of things with
+essences, and that we can know them&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/Temple_de_la_raison,_St_Martin,_Ivry-la-Bataille.jpg&#34;
+			alt=&#34;Figure 1: Defacement of the church of Saint-Martin by the French revolutionaries&#34;&gt;&lt;figcaption&gt;
+			&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Defacement of the church of Saint-Martin by the French revolutionaries&lt;/p&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>All you need is PostgreSQL</title>
@@ -3854,152 +3947,6 @@ eficiency)(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Team 2024&lt;/a&gt;; &lt
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Jungwirth, Paul A. 2019. “Survey of Sql:2011 Temporal Features.” Illuminated Computing. &lt;a href=&#34;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&#34;&gt;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Microsoft. 2024. “Temporal Tables.” Microsoft documentation. &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&#34;&gt;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Team, Event Store. 2024. “Benefits of Event Sourcing.” Event Store Blog. &lt;a href=&#34;https://www.eventstore.com/blog/benefits-of-event-sourcing&#34;&gt;https://www.eventstore.com/blog/benefits-of-event-sourcing&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Crowdstrike&#39;s outage should not have happened, and the company is missing the point on how to avoid it in the future</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/"/>
-    <id>https://ebellani.github.io/blog/2024/analyzing-crowdstrike-s-root-cause-analysis-or-on-missing-the-point-about-quality/</id>
-    <published>2024-08-07T00:00:00Z</published>
-    <updated>2024-08-07T00:00:00Z</updated>
-    <summary>&lt;p&gt;A global IT outage occurred on &lt;span class=&#34;timestamp-wrapper&#34;&gt;&lt;span class=&#34;timestamp&#34;&gt;[2024-07-18 Thu]&lt;/span&gt;&lt;/span&gt;, with several industries
-having significant economic problems (see &lt;a href=&#34;#crowdstrike-appendix-1&#34;&gt;Appendix 1: The impact&lt;/a&gt; for
-some quotes on what happened). The outage what caused by a bug in the
-remote update system of the software of Crowdstrike, a popular Threat
-Intelligence/Response company.&lt;/p&gt;
-&lt;p&gt;The company has published the Post Incident
-Review(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Crowdstrike 2024a&lt;/a&gt;) right
-after the incident and has just released its root cause analysis
-(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;). Reading them has
-led me to write this article, specially the proposed mitigations.&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;A global IT outage occurred on &lt;span class=&#34;timestamp-wrapper&#34;&gt;&lt;span class=&#34;timestamp&#34;&gt;[2024-07-18 Thu]&lt;/span&gt;&lt;/span&gt;, with several industries
-having significant economic problems (see &lt;a href=&#34;#crowdstrike-appendix-1&#34;&gt;Appendix 1: The impact&lt;/a&gt; for
-some quotes on what happened). The outage what caused by a bug in the
-remote update system of the software of Crowdstrike, a popular Threat
-Intelligence/Response company.&lt;/p&gt;
-&lt;p&gt;The company has published the Post Incident
-Review(&lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Crowdstrike 2024a&lt;/a&gt;) right
-after the incident and has just released its root cause analysis
-(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;). Reading them has
-led me to write this article, specially the proposed mitigations.&lt;/p&gt;
-&lt;p&gt;According to the RCA, the essence of what happened was an index out of
-bounds, which is a special case of a buffer overflow and considered an
-&lt;strong&gt;undefined behavior in C++&lt;/strong&gt;, the language that seems to be used to
-develop crowdstrike&amp;rsquo; system(&lt;a href=&#34;#citeproc_bib_item_6&#34;&gt;Stack 2024&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;Here then we get to the core of my argument: For a software of this
-criticality, such problem should &lt;strong&gt;not be possible&lt;/strong&gt;. The technology to
-ensure such has existed for decades already, as can be seen in this
-quote:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;hellip; we can continue to add contracts to the code until every subprogram
-has a fully functional specification. By this we mean that every
-subprogram has a postcondition that specifies the value of each of its
-outputs and a precondition as required to constrain the input
-space. Further type invariants may also be added over and above those
-already present from Gold level. Once the implementation has been
-completed against this full specification and all VCs generated by the
-analyzer have been proved, we have reached Platinum level of SPARK
-assurance.&lt;/p&gt;
-&lt;p&gt;Due to the additional effort involved in developing the specification
-and proof to this level, Platinum will only be appropriate for the most
-critical applications. However, it is worth considering a reduction in
-unit testing for functional verification if Platinum-level proof has
-been achieved, since we &lt;strong&gt;know that the program will return the correct
-result for all inputs, not just for those we have been able to
-test&lt;/strong&gt;. (&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Chapman et al. 2024&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Furthermore, all the technical mitigations proposed in the RCA (see the
-full list of problems found and their proposals in
-&lt;a href=&#34;#crowdstrike-appendix-2&#34;&gt;Appendix 2:  What happened&lt;/a&gt;) amount to just plugging holes. But safety
-cannot be achieved in such way, safety needs to be designed into the
-design, tools and languages used from the start of such endeavor.&lt;/p&gt;
-&lt;p&gt;If I were a client of Crowdstrike, I would be worried about the future.&lt;/p&gt;
-&lt;h2 id=&#34;crowdstrike-appendix-1&#34;&gt;Appendix 1: The impact&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A major IT fault has hit services and infrastructure around the world,
-with aviation, banking, healthcare and financial services among the
-sectors affected.(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Banfield-Nwachi 2024&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!--quoteend--&gt;
-&lt;blockquote&gt;
-&lt;p&gt;The CrowdStrike outage didn&amp;rsquo;t just delay flights and make it harder to
-order coffee. It also affected doctor&amp;rsquo;s offices and hospitals, 911
-emergency services, hotel check-in and key card systems, and work-issued
-computers that were online and grabbing updates when the flawed update
-was sent out. In addition to providing fixes for client PCs and virtual
-machines hosted in its Azure cloud, Microsoft says it has been working
-with Google Cloud Platform, Amazon Web Services, and &amp;ldquo;other cloud
-providers and stakeholders&amp;rdquo; to provide fixes to Windows VMs running in
-its competitors&amp;rsquo; clouds. (&lt;a href=&#34;#citeproc_bib_item_5&#34;&gt;Cunningham 2024&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!--quoteend--&gt;
-&lt;blockquote&gt;
-&lt;p&gt;While software updates may occasionally cause disturbances, significant
-incidents like the CrowdStrike event are infrequent. We currently
-estimate that CrowdStrike&amp;rsquo;s update affected 8.5 million Windows devices,
-or less than one percent of all Windows machines. While the percentage
-was small, the broad economic and societal impacts reflect the use of
-CrowdStrike by enterprises that run many critical services. (&lt;a href=&#34;#citeproc_bib_item_7&#34;&gt;Weston 2024&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;crowdstrike-appendix-2&#34;&gt;Appendix 2:  What happened&lt;/h2&gt;
-&lt;p&gt;Here is the list of problems found and their mitigations proposed by
-Crowdstrike&amp;rsquo;s RCA(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Crowdstrike 2024b&lt;/a&gt;)
-(slightly reworded for space eficiency):&lt;/p&gt;
-&lt;table&gt;
-	&lt;thead&gt;
-			&lt;tr&gt;
-					&lt;th&gt;Finding&lt;/th&gt;
-					&lt;th&gt;Mitigation&lt;/th&gt;
-			&lt;/tr&gt;
-	&lt;/thead&gt;
-	&lt;tbody&gt;
-			&lt;tr&gt;
-					&lt;td&gt;The number of input fields .. not validated at sensor compile time&lt;/td&gt;
-					&lt;td&gt;Validate the number of input fields at compile time&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Missing runtime array bounds check&lt;/td&gt;
-					&lt;td&gt;Add runtime input array bounds checks&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Lack of variety in testing&lt;/td&gt;
-					&lt;td&gt;Increase test coverage&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Inconsistency between validator and interpreter&lt;/td&gt;
-					&lt;td&gt;Fix the instance of inconsistency and add checks&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;No validation in the interpreter&lt;/td&gt;
-					&lt;td&gt;Add tests&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;No staged deployment&lt;/td&gt;
-					&lt;td&gt;Add staged deployment&lt;/td&gt;
-			&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/St%20Nedelya.jpg&#34;
-			alt=&#34;Figure 1: St Nedelya Church, partially destroyed in a terrorist attack by the Bulgarian Communist Party. 16 April 1925.&#34;&gt;&lt;figcaption&gt;
-			&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;St Nedelya Church, partially destroyed in a terrorist attack by the Bulgarian Communist Party. 16 April 1925.&lt;/p&gt;
-		&lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Banfield-Nwachi, Mabel. 2024. “Windows Global It Outage: What We Know so Far.” The Guardian. &lt;a href=&#34;https://www.theguardian.com/technology/article/2024/jul/19/windows-global-it-outage-what-we-know-so-far&#34;&gt;https://www.theguardian.com/technology/article/2024/jul/19/windows-global-it-outage-what-we-know-so-far&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Chapman, Roderick, Claire Dross, Stuart Matthews, and Yannick Moy. 2024. “Co-Developing Programs and Their Proof of Correctness.” &lt;i&gt;Commun. Acm&lt;/i&gt; 67 (3): 84–94. &lt;a href=&#34;https://doi.org/10.1145/3624728&#34;&gt;https://doi.org/10.1145/3624728&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Crowdstrike. 2024a. “Crowdstrike Preliminary Post Incident Review (Pir): Content Configuration Update Impacting the Falcon Sensor and the Windows Operating System (Bsod).” Crowdstrike blog. &lt;a href=&#34;https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf&#34;&gt;https://www.crowdstrike.com/wp-content/uploads/2024/07/CrowdStrike-PIR-Executive-Summary.pdf&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;———. 2024b. “External Technical Root Cause Analysis — Channel File 291.” Crowdstrike blog. &lt;a href=&#34;https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf&#34;&gt;https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Cunningham, Andrew. 2024. “Microsoft Says 8.5m Systems Hit by Crowdstrike Bsod, Releases Usb Recovery Tool.” Ars Technica. &lt;a href=&#34;https://arstechnica.com/information-technology/2024/07/microsoft-says-8-5m-systems-hit-by-crowdstrike-bsod-releases-usb-recovery-tool/&#34;&gt;https://arstechnica.com/information-technology/2024/07/microsoft-says-8-5m-systems-hit-by-crowdstrike-bsod-releases-usb-recovery-tool/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_6&#34;&gt;&lt;/a&gt;Stack, The. 2024. “Crowdstrike Promises Rca as c++ Null Pointer Claim Contested.” The stack. &lt;a href=&#34;https://www.thestack.technology/crowstrike-null-pointer-blamed-rca/&#34;&gt;https://www.thestack.technology/crowstrike-null-pointer-blamed-rca/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_7&#34;&gt;&lt;/a&gt;Weston, David. 2024. “Helping Our Customers through the Crowdstrike Outage.” Microsoft Official Blog. &lt;a href=&#34;https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/&#34;&gt;https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;
 </content>
     

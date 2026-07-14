@@ -10,9 +10,16 @@
 		
 		
 		
-			<lastBuildDate>Thu, 25 Jun 2026 00:00:00 +0000</lastBuildDate>
+			<lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
 		
 			<atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>On keys, essences and performance</title>
+				<link>https://ebellani.github.io/blog/2026/on-keys-essences-and-performance/</link>
+				<pubDate>Tue, 14 Jul 2026 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2026/on-keys-essences-and-performance/</guid>
+				<description>&lt;p&gt;A &lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7482151625499820033?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482168072209092608%29&amp;amp;replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482487327894765568%29&amp;amp;dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287482168072209092608%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&amp;amp;dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287482487327894765568%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&#34;&gt;recent exchange on linkedin&lt;/a&gt; about what data is and how to store it&#xA;prompted me to write this small piece, since I consider the issue at&#xA;hand quite fundamental to developing systems that reflect reality and therefore help people.&lt;/p&gt;&#xA;&lt;p&gt;Here is what the author of the quote said:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;I mean that actual data, as observed in the world around us - may not&#xA;have natural keys as required by the model. Nor are data domains clearly&#xA;definable. We can&amp;rsquo;t even agree what a country is - nor figure out how to&#xA;properly track human languages or lock down standards for how the&#xA;semantics of programming language are supposed to work. And what key can&#xA;we even use to uniquely identify an individual - when legislation often&#xA;forbids the storage of any keys? Normalisation is also a very poor way&#xA;to organise data that needs to be analysed at speed (which is why almost&#xA;no analytical systems use normalised models)&lt;/p&gt;</description>
+			</item>
 			<item>
 				<title>All you need is PostgreSQL</title>
 				<link>https://ebellani.github.io/blog/2026/all-you-need-is-postgresql/</link>
