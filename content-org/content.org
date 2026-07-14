@@ -41,6 +41,84 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** On keys, essences and performance
+:PROPERTIES:
+:EXPORT_FILE_NAME: on-keys-essences-performance
+:CUSTOM_ID: on-keys-essences-performance
+:EXPORT_DATE: 2026-07-14
+:END:
+
+A [[https://www.linkedin.com/feed/update/urn:li:activity:7482151625499820033?commentUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482168072209092608%29&replyUrn=urn%3Ali%3Acomment%3A%28activity%3A7482151625499820033%2C7482487327894765568%29&dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287482168072209092608%2Curn%3Ali%3Aactivity%3A7482151625499820033%29&dashReplyUrn=urn%3Ali%3Afsd_comment%3A%287482487327894765568%2Curn%3Ali%3Aactivity%3A7482151625499820033%29][recent exchange on linkedin]] about what data is and how to store it
+prompted me to write this small piece, since I consider the issue at
+hand quite fundamental to developing systems that reflect reality and therefore help people.
+
+Here is what the author of the quote said:
+
+#+begin_quote
+I mean that actual data, as observed in the world around us - may not
+have natural keys as required by the model. Nor are data domains clearly
+definable. We can't even agree what a country is - nor figure out how to
+properly track human languages or lock down standards for how the
+semantics of programming language are supposed to work. And what key can
+we even use to uniquely identify an individual - when legislation often
+forbids the storage of any keys? Normalisation is also a very poor way
+to organise data that needs to be analysed at speed (which is why almost
+no analytical systems use normalised models)
+#+end_quote
+
+I'll break down the argument into its propositions and my answer to each
+is below.
+
+1. ~data as observed may not have natural keys as required by the (relational) model (RM)~
+
+  I would define a key in the RM as ~a part of the proposition denoted that allows for it to be uniquely referred to in the given Domain of Discourse~.
+  
+  If one accepts that definition, how can something denoted not have a
+  key? If one is denoting it, one needs to refer to it somehow
+  unambiguously. Any system that deals with the data would do that, be it
+  in the application layer or the DBMS layer.
+
+2. ~data domains are not clearly definable~
+
+   This is the same issue as above, but on the predicate level instead
+   of the proposition level. If we can refer to a proposition
+   (e.g. Bob's salary is 100) we can certainly refer to its predicate
+   (E's salary is X). And if we can't, we cannot process it in any given
+   system.
+
+3. ~legislation would disallow keys~
+
+   Then such legislation would force the predicate to change (maybe to
+   aggregates only?). In other words, the legislation constrains the
+   Domain of Discourse, but all the properties of such remain.
+   
+4. ~normalization makes systems performs badly~
+
+   Normalization means that a given encoded relation refers to a single
+   logical predicate. That bears no significance, at least in principle,
+   to performance.
+
+*** Conclusion
+
+The necessity of keys and normalization is not a quirk of the relational
+model. It reflects something deeper about the world we are modeling (our
+Universe of Discourse). We must refer to things unambiguously, and for
+that things must possess stable, distinguishing essences.
+
+The difficulty of identifying what a country is, or what constitutes an
+individual, is not evidence that essences do not exist. It is evidence
+that discovering them is hard. That is an epistemological challenge, not
+an ontological absence.
+
+The relational model, far from imposing an artificial structure on
+formless data, simply makes explicit what any coherent discourse about
+reality already presupposes: that the world is composed of things with
+essences, and that we can know them
+
+#+caption: Defacement of the church of Saint-Martin by the French revolutionaries
+[[./Temple_de_la_raison,_St_Martin,_Ivry-la-Bataille.jpg]]
+
+
 ** All you need is PostgreSQL  
 :PROPERTIES:
 :EXPORT_HUGO_CUSTOM_FRONT_MATTER: :slug all-you-need-is-postgresql
