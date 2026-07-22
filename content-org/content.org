@@ -51,7 +51,7 @@ reflect those of any past or present employer.
 In the age of AI-assisted coding, it's easy to feel that deep knowledge of
 programming languages has become obsolete. Why spend years mastering language
 intricacies when an AI can generate code in any language on demand? I recently
-encountered this sentiment in a question from a junior developer:
+encountered this sentiment in a question from a fellow developer:
 
 #+begin_quote
 I feel like caring about programming languages and stuff is actually
