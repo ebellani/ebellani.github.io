@@ -10,9 +10,16 @@
 		
 		
 		
-			<lastBuildDate>Tue, 14 Jul 2026 00:00:00 +0000</lastBuildDate>
+			<lastBuildDate>Wed, 22 Jul 2026 00:00:00 +0000</lastBuildDate>
 		
 			<atom:link href="https://ebellani.github.io/rss.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>Why care about programming languages</title>
+				<link>https://ebellani.github.io/blog/2026/why-care-about-programming-languages/</link>
+				<pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
+				<guid>https://ebellani.github.io/blog/2026/why-care-about-programming-languages/</guid>
+				<description>&lt;p&gt;In the age of AI-assisted coding, it&amp;rsquo;s easy to feel that deep knowledge of&#xA;programming languages has become obsolete. Why spend years mastering language&#xA;intricacies when an AI can generate code in any language on demand? I recently&#xA;encountered this sentiment in a question from a junior developer:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;I feel like caring about programming languages and stuff is actually&#xA;very useless. &amp;hellip; Am I being too extreme?&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;I understand the concern, but I believe it misses something fundamental: a&#xA;programming language&amp;rsquo;s worth is derived from the ideas it embodies, not merely&#xA;its syntax or tooling. These ideas—concepts about how to structure thought,&#xA;manage complexity, and solve problems—remain essential regardless of who or&#xA;what writes the code.&lt;/p&gt;</description>
+			</item>
 			<item>
 				<title>On keys, essences and performance</title>
 				<link>https://ebellani.github.io/blog/2026/on-keys-essences-and-performance/</link>

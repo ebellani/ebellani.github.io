@@ -5,13 +5,84 @@
   
     <link href="https://ebellani.github.io/blog/atom.xml" rel="self" type="application/atom+xml" />
   
-  <updated>2026-07-14T16:29:16Z</updated>
+  <updated>2026-07-22T19:41:32Z</updated>
   <author>
     
     
   </author>
   <generator>Hugo</generator>
   <id>https://ebellani.github.io/blog/</id>
+  
+  <entry>
+    <title>Why care about programming languages</title>
+    <link rel="alternate" href="https://ebellani.github.io/blog/2026/why-care-about-programming-languages/"/>
+    <id>https://ebellani.github.io/blog/2026/why-care-about-programming-languages/</id>
+    <published>2026-07-22T00:00:00Z</published>
+    <updated>2026-07-22T00:00:00Z</updated>
+    <summary>&lt;p&gt;In the age of AI-assisted coding, it&amp;rsquo;s easy to feel that deep knowledge of
+programming languages has become obsolete. Why spend years mastering language
+intricacies when an AI can generate code in any language on demand? I recently
+encountered this sentiment in a question from a junior developer:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I feel like caring about programming languages and stuff is actually
+very useless. &amp;hellip; Am I being too extreme?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I understand the concern, but I believe it misses something fundamental: a
+programming language&amp;rsquo;s worth is derived from the ideas it embodies, not merely
+its syntax or tooling. These ideas—concepts about how to structure thought,
+manage complexity, and solve problems—remain essential regardless of who or
+what writes the code.&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;In the age of AI-assisted coding, it&amp;rsquo;s easy to feel that deep knowledge of
+programming languages has become obsolete. Why spend years mastering language
+intricacies when an AI can generate code in any language on demand? I recently
+encountered this sentiment in a question from a junior developer:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I feel like caring about programming languages and stuff is actually
+very useless. &amp;hellip; Am I being too extreme?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I understand the concern, but I believe it misses something fundamental: a
+programming language&amp;rsquo;s worth is derived from the ideas it embodies, not merely
+its syntax or tooling. These ideas—concepts about how to structure thought,
+manage complexity, and solve problems—remain essential regardless of who or
+what writes the code.&lt;/p&gt;
+&lt;p&gt;Here is my sample list of deep ideas from programming languages:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;on Rust, the borrow checker—reasoning about ownership and lifetimes&lt;/li&gt;
+&lt;li&gt;on Haskell, typeclasses—principled polymorphism and abstraction&lt;/li&gt;
+&lt;li&gt;on SML/OCaml, the module system—large-scale program organization and decoupling&lt;/li&gt;
+&lt;li&gt;on OOP languages, identity vs equality—understanding state and comparison&lt;/li&gt;
+&lt;li&gt;on SQL, relational theory/algebra—declarative data manipulation&lt;/li&gt;
+&lt;li&gt;on Prolog, first order predicate logic—logic-based problem solving&lt;/li&gt;
+&lt;li&gt;on C, arrays and pointers—understanding memory layout and indirection&lt;/li&gt;
+&lt;li&gt;on Lisp, syntax extensions—metaprogramming and language-oriented programming&lt;/li&gt;
+&lt;li&gt;on functional languages, first class functions—treating computation as values&lt;/li&gt;
+&lt;li&gt;on SML, Haskell and others, algebraic data types—modeling domains with types&lt;/li&gt;
+&lt;li&gt;on Clojure, maps and immutable data structures—persistent data and structural sharing&lt;/li&gt;
+&lt;li&gt;on OCaml, row polymorphism—static typing for extensible records&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each of these concepts represents a different way of thinking about computation.
+Learning them expands your mental toolkit for solving problems. When you
+understand the borrow checker, you think differently about resource management
+everywhere. When you grasp algebraic data types, you model domains more
+precisely. When you internalize first-class functions, you see abstraction
+opportunities others miss.&lt;/p&gt;
+&lt;p&gt;These ideas transcend any particular language or tool. They are the conceptual
+foundation that lets you evaluate AI-generated code, choose appropriate
+abstractions, and architect systems that remain maintainable as they grow. In
+the AI age, understanding these concepts becomes more important, not less—they
+are what separate those who merely prompt from those who truly engineer.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/ox-hugo/a-man-praying-in-a-ruined-catholic-church-in-la-vang-a-town-v0-2tvq7bb4yirx.jpg&#34;
+			alt=&#34;Figure 1: A man praying in a ruined Catholic church in La Vang, a town south of Quang Tri City, Vietnam on July 6, 1972&#34; width=&#34;75%&#34;&gt;&lt;figcaption&gt;
+			&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;A man praying in a ruined Catholic church in La Vang, a town south of Quang Tri City, Vietnam on July 6, 1972&lt;/p&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+</content>
+    
+    
+    <category term="blog"/>
+    
+  </entry>
   
   <entry>
     <title>On keys, essences and performance</title>
@@ -3865,88 +3936,6 @@ of physical and logical concerns and a vague desire for
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Kiehl, Chris. 2019. “Don’t Let the Internet Dupe You, Event Sourcing Is Hard (Accessed on 2024-08-23).” https://chriskiehl.com/. &lt;a href=&#34;https://chriskiehl.com/article/event-sourcing-is-hard&#34;&gt;https://chriskiehl.com/article/event-sourcing-is-hard&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Overeem, Michiel, Marten Spoor, and Slinger Jansen. 2017. “The Dark Side of Event Sourcing: Managing Data Conversion,” 193–204. &lt;a href=&#34;https://doi.org/10.1109/SANER.2017.7884621&#34;&gt;https://doi.org/10.1109/SANER.2017.7884621&lt;/a&gt;.&lt;/div&gt;
   &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_5&#34;&gt;&lt;/a&gt;Young, Gregory. 2017. “Versioning in an Event Sourced System (Accessed on 2024-08-23).” leanpub. &lt;a href=&#34;https://leanpub.com/esversioning&#34;&gt;https://leanpub.com/esversioning&lt;/a&gt;.&lt;/div&gt;
-&lt;/div&gt;
-</content>
-    
-    
-    <category term="blog"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Are you considering Event Sourcing? Think again.</title>
-    <link rel="alternate" href="https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/"/>
-    <id>https://ebellani.github.io/blog/2024/are-you-considering-event-sourcing-think-again/</id>
-    <published>2024-08-16T00:00:00Z</published>
-    <updated>2024-08-16T00:00:00Z</updated>
-    <summary>&lt;p&gt;Are you considering doing event sourcing? Maybe you have read that it is
-necessary for your project or that you will have great benefits in doing
-so.&lt;/p&gt;
-&lt;p&gt;If so, I ask you to think about an alternative. Maybe you already have
-something of equal capacity in the tooling that you use and could
-extract all the benefits for a fraction of the cost. What is that
-something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle,
-etc).&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Are you considering doing event sourcing? Maybe you have read that it is
-necessary for your project or that you will have great benefits in doing
-so.&lt;/p&gt;
-&lt;p&gt;If so, I ask you to think about an alternative. Maybe you already have
-something of equal capacity in the tooling that you use and could
-extract all the benefits for a fraction of the cost. What is that
-something? Your old SQL RDBMS (MySQL, PostgreSQL, SQL Server, Oracle,
-etc).&lt;/p&gt;
-&lt;p&gt;Here is the kicker: Temporal tables! Most SQL DBMSes already implement
-such feature(&lt;a href=&#34;#citeproc_bib_item_2&#34;&gt;Jungwirth 2019&lt;/a&gt;), and they basically allow
-you to reap all the benefits of ES while still keeping to your CRUD
-style of programming(&lt;a href=&#34;#citeproc_bib_item_1&#34;&gt;Esposito 2017&lt;/a&gt;). Think
-continuation passing style, but with an &lt;code&gt;async/await&lt;/code&gt; syntax that allows
-you think linearly.&lt;/p&gt;
-&lt;p&gt;To demonstrate the point, here is a table with the claimed benefits from
-each approach, from the vendors themselves(slightly reworded for space
-eficiency)(&lt;a href=&#34;#citeproc_bib_item_4&#34;&gt;Team 2024&lt;/a&gt;; &lt;a href=&#34;#citeproc_bib_item_3&#34;&gt;Microsoft 2024&lt;/a&gt;):&lt;/p&gt;
-&lt;table&gt;
-	&lt;thead&gt;
-			&lt;tr&gt;
-					&lt;th&gt;Temporal Tables&lt;/th&gt;
-					&lt;th&gt;Event Sourcing&lt;/th&gt;
-					&lt;th&gt;Meaning&lt;/th&gt;
-			&lt;/tr&gt;
-	&lt;/thead&gt;
-	&lt;tbody&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Auditing&lt;/td&gt;
-					&lt;td&gt;Auditing&lt;/td&gt;
-					&lt;td&gt;An immutable audit trail&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Recovering from application errors&lt;/td&gt;
-					&lt;td&gt;Testing &amp;amp; RCA&lt;/td&gt;
-					&lt;td&gt;Improving debugging by having &amp;lsquo;what if&amp;rsquo; scenarios&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Calculating trends&lt;/td&gt;
-					&lt;td&gt;Analytics Capabilities&lt;/td&gt;
-					&lt;td&gt;Temporal queries to see your past beliefs&lt;/td&gt;
-			&lt;/tr&gt;
-			&lt;tr&gt;
-					&lt;td&gt;Reconstructing data&lt;/td&gt;
-					&lt;td&gt;Zero data loss&lt;/td&gt;
-					&lt;td&gt;All state is preserved&lt;/td&gt;
-			&lt;/tr&gt;
-	&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;figure&gt;&lt;img src=&#34;/ox-hugo/spanish-holocaust.jpg&#34;
-			alt=&#34;Figure 1: Mock execution of Jesus Christ by the Death Brigade, communist revolutionaries led by Pascual Fresquet. Spain 1936.&#34;&gt;&lt;figcaption&gt;
-			&lt;p&gt;&lt;span class=&#34;figure-number&#34;&gt;Figure 1: &lt;/span&gt;Mock execution of Jesus Christ by the &lt;code&gt;Death Brigade&lt;/code&gt;, communist revolutionaries led by Pascual Fresquet. Spain 1936.&lt;/p&gt;
-		&lt;/figcaption&gt;
-&lt;/figure&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;div class=&#34;csl-bib-body&#34;&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_1&#34;&gt;&lt;/a&gt;Esposito, Dino. 2017. “Soft Updates with Temporal Tables.” MSDN Magazine. &lt;a href=&#34;https://learn.microsoft.com/en-us/archive/msdn-magazine/2017/march/cutting-edge-soft-updates-with-temporal-tables&#34;&gt;https://learn.microsoft.com/en-us/archive/msdn-magazine/2017/march/cutting-edge-soft-updates-with-temporal-tables&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_2&#34;&gt;&lt;/a&gt;Jungwirth, Paul A. 2019. “Survey of Sql:2011 Temporal Features.” Illuminated Computing. &lt;a href=&#34;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&#34;&gt;https://illuminatedcomputing.com/posts/2019/08/sql2011-survey/&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_3&#34;&gt;&lt;/a&gt;Microsoft. 2024. “Temporal Tables.” Microsoft documentation. &lt;a href=&#34;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&#34;&gt;https://learn.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables&lt;/a&gt;.&lt;/div&gt;
-  &lt;div class=&#34;csl-entry&#34;&gt;&lt;a id=&#34;citeproc_bib_item_4&#34;&gt;&lt;/a&gt;Team, Event Store. 2024. “Benefits of Event Sourcing.” Event Store Blog. &lt;a href=&#34;https://www.eventstore.com/blog/benefits-of-event-sourcing&#34;&gt;https://www.eventstore.com/blog/benefits-of-event-sourcing&lt;/a&gt;.&lt;/div&gt;
 &lt;/div&gt;
 </content>
     
