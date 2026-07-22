@@ -41,6 +41,61 @@ reflect those of any past or present employer.
 :EXPORT_HUGO_SECTION: blog
 :END:
 
+** Why care about programming languages
+:PROPERTIES:
+:EXPORT_FILE_NAME: why-care-about-programming-languages
+:CUSTOM_ID: why-care-about-programming-languages
+:EXPORT_DATE: 2026-07-22
+:END:
+
+In the age of AI-assisted coding, it's easy to feel that deep knowledge of
+programming languages has become obsolete. Why spend years mastering language
+intricacies when an AI can generate code in any language on demand? I recently
+encountered this sentiment in a question from a junior developer:
+
+#+begin_quote
+I feel like caring about programming languages and stuff is actually
+very useless. ... Am I being too extreme?
+#+end_quote
+
+I understand the concern, but I believe it misses something fundamental: a
+programming language's worth is derived from the ideas it embodies, not merely
+its syntax or tooling. These ideas—concepts about how to structure thought,
+manage complexity, and solve problems—remain essential regardless of who or
+what writes the code.
+
+Here is my sample list of deep ideas from programming languages:
+
+- on Rust, the borrow checker—reasoning about ownership and lifetimes
+- on Haskell, typeclasses—principled polymorphism and abstraction
+- on SML/OCaml, the module system—large-scale program organization and decoupling
+- on OOP languages, identity vs equality—understanding state and comparison
+- on SQL, relational theory/algebra—declarative data manipulation
+- on Prolog, first order predicate logic—logic-based problem solving
+- on C, arrays and pointers—understanding memory layout and indirection
+- on Lisp, syntax extensions—metaprogramming and language-oriented programming
+- on functional languages, first class functions—treating computation as values
+- on SML, Haskell and others, algebraic data types—modeling domains with types
+- on Clojure, maps and immutable data structures—persistent data and structural sharing
+- on OCaml, row polymorphism—static typing for extensible records
+
+Each of these concepts represents a different way of thinking about computation.
+Learning them expands your mental toolkit for solving problems. When you
+understand the borrow checker, you think differently about resource management
+everywhere. When you grasp algebraic data types, you model domains more
+precisely. When you internalize first-class functions, you see abstraction
+opportunities others miss.
+
+These ideas transcend any particular language or tool. They are the conceptual
+foundation that lets you evaluate AI-generated code, choose appropriate
+abstractions, and architect systems that remain maintainable as they grow. In
+the AI age, understanding these concepts becomes more important, not less—they
+are what separate those who merely prompt from those who truly engineer.
+
+#+caption: A man praying in a ruined Catholic church in La Vang, a town south of Quang Tri City, Vietnam on July 6, 1972
+#+attr_html: :width 75%
+[[./a-man-praying-in-a-ruined-catholic-church-in-la-vang-a-town-v0-2tvq7bb4yirx.jpg]]
+
 ** On keys, essences and performance
 :PROPERTIES:
 :EXPORT_FILE_NAME: on-keys-essences-performance
