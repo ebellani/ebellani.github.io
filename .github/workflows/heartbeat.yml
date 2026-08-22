@@ -1,0 +1,15 @@
+# .github/workflows/heartbeat.yml
+name: New Article Heartbeat
+
+on:
+  schedule:
+    - cron: '0 0 */3 * *'   # every 3 days, a new article
+  workflow_dispatch: {}    # lets you trigger manually to test
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Ping Better Stack heartbeat
+        run: curl -fsS -m 10 --retry 3 https://uptime.betterstack.com/api/v1/heartbeat/qCqaVxjr869xCx9ed7cvhY7u
