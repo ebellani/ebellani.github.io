@@ -1,15 +1,42 @@
-# .github/workflows/heartbeat.yml
 name: New Article Heartbeat
 
 on:
   schedule:
     - cron: '0 0 */3 * *'   # every 3 days, a new article
-  workflow_dispatch: {}    # lets you trigger manually to test
+  workflow_dispatch: {}
 
 jobs:
-  heartbeat:
+  check-writing:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # need full history to check last commit date on the file
 
-      - name: Ping Better Stack heartbeat
-        run: curl -fsS -m 10 --retry 3 https://uptime.betterstack.com/api/v1/heartbeat/qCqaVxjr869xCx9ed7cvhY7u
+      - name: Check if article file changed recently
+        id: check
+        run: |
+          FILE="./content-org/content.org
+          LAST_CHANGE=$(git log -1 --format=%ct -- "$FILE")
+          NOW=$(date +%s)
+          DIFF=$(( (NOW - LAST_CHANGE) / 3600 ))
+          echo "Hours since last change: $DIFF"
+          if [ "$DIFF" -lt 24 ]; then
+            echo "wrote=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "wrote=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Ping heartbeat (success)
+        if: steps.check.outputs.wrote == 'true'
+        run: curl -fsS -m 10 --retry 3 "$BETTERSTACK_HEARTBEAT_URL"
+        env:
+          BETTERSTACK_HEARTBEAT_URL: ${{ secrets.BETTERSTACK_HEARTBEAT_URL }}
+
+      - name: Ping heartbeat (fail — no writing detected)
+        if: steps.check.outputs.wrote == 'false'
+        run: curl -fsS -m 10 --retry 3 "${BETTERSTACK_HEARTBEAT_URL}/fail"
+        env:
+          BETTERSTACK_HEARTBEAT_URL: ${{ secrets.BETTERSTACK_HEARTBEAT_URL }}
+          
+
